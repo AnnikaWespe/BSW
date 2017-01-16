@@ -1,0 +1,68 @@
+page-login-component {
+  ion-input{
+    border-bottom: dotted grey 0.5px;
+  }
+input.text-input.text-input-md.ng-pristine.ng-valid{
+  margin : 5px 3px;
+}
+  .img-div{
+    background: url('/../../assets/icon/BSW_logo.svg')no-repeat;
+    height: 14vh;
+    width: 25vh;
+    overflow: hidden;
+    background-size: contain;
+    left:50%;
+    margin: 0 auto;
+  }
+  .distance-div{
+    height: 14vh;
+  }
+  .scroll-content{
+    background-color: #F4F5F9;
+  }
+  ion-item.item.item-block.item-md{
+    background-color: #F4F5F9;
+  }
+  div.center-text{
+    text-align: center;
+    p.no-login{
+      color: grey;
+      text-decoration: underline;
+      font-size: 85%;
+    }
+    p.no-account{
+      color: grey;
+      font-size: 85%;
+    }
+  }
+  .footer-md::before{
+    content: none;
+  }
+  ion-footer{
+    margin-bottom: 5vh;
+    padding: 0 4vw;
+  }
+  div.input-cover{
+    padding: 0;
+  }
+  div.input-fields-wrapper{
+  margin: 0 8vw;
+  font-size: larger;
+  }
+  div.card-number-wrapper{
+    position: relative;
+  }
+  ion-icon.camera{
+    position: absolute; top: 0; right: 0;
+  }
+  div.password-wrapper{
+    margin-top: 2vh;
+    position: relative;
+  }
+  div.forgot-hyperlink{
+    position: absolute; top: 1vh; right: 0;
+    color:#E61B5A;
+  }
+}
+
+

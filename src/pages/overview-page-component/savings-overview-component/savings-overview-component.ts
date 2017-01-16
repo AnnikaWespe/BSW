@@ -12,11 +12,14 @@ import {MonthlySavingsService} from './monthly-savings-service';
 export class SavingsOverviewComponent  implements OnInit{
 
   monthlySavings : MonthlySavings[];
+  numberOfMonths : number;
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private monthlySavingsService: MonthlySavingsService) {}
 
   ngOnInit(): void{
     this.monthlySavings = this.monthlySavingsService.getPastExpenses();
+    this.numberOfMonths= this.monthlySavings.length;
+
   }
 }

@@ -1,0 +1,15 @@
+<ion-slides>
+  <ion-slide *ngFor="let month of monthlySavings; let i = index">
+    <ion-row>
+      <ion-col width-33 class="notCurrentMonth">
+        <div *ngIf="i>0">{{monthlySavings[i-1].monthName}}</div>
+      </ion-col>
+      <ion-col width-33>
+        <div>{{month.monthName}}</div>
+      </ion-col>
+      <ion-col width-33 class="notCurrentMonth">
+        <div *ngIf="i<numberOfMonths-1">{{monthlySavings[i+1].monthName}}</div>
+      </ion-col>
+    </ion-row>
+  </ion-slide>
+</ion-slides>

@@ -2,8 +2,9 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
-import  {AddPurchaseComponent} from '../pages/add-purchase-component/add-purchase-component';
-import {OverviewComponent} from "../pages/overview-component/overview-component";
+import  {AddPurchaseComponent} from '../pages/add-purchase-page-component/add-purchase-component';
+import {OverviewComponent} from "../pages/overview-page-component/overview-component";
+import {LoginComponent} from "../pages/login-page-component/login-component";
 
 
 
@@ -14,7 +15,7 @@ import {OverviewComponent} from "../pages/overview-component/overview-component"
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = OverviewComponent;
+  rootPage: any = LoginComponent;
 
   pages: Array<{title: string, component: any}>;
 
