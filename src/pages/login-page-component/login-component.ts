@@ -14,7 +14,6 @@ export class LoginPageComponent {
 
   @ViewChild(Nav) nav: Nav;
 
-  logoUrl: string = "/../../assets/icon/BSW_logo.svg";
   constructor(public navCtrl: NavController, public navParams: NavParams) {}
 
   loadCameraPage(){
