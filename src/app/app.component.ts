@@ -2,9 +2,9 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
-import  {AddPurchaseComponent} from '../pages/add-purchase-page-component/add-purchase-component';
-import {OverviewComponent} from "../pages/overview-page-component/overview-component";
-import {LoginComponent} from "../pages/login-page-component/login-component";
+import  {AddPurchasePageComponent} from '../pages/add-purchase-page-component/add-purchase-component';
+import {OverviewPageComponent} from "../pages/overview-page-component/overview-component";
+import {LoginPageComponent} from "../pages/login-page-component/login-component";
 
 
 
@@ -15,7 +15,7 @@ import {LoginComponent} from "../pages/login-page-component/login-component";
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = LoginComponent;
+  rootPage: any = LoginPageComponent;
 
   pages: Array<{title: string, component: any}>;
 
@@ -24,8 +24,8 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Übersicht', component: OverviewComponent },
-      { title: 'Einkauf nachtragen', component: AddPurchaseComponent}
+      { title: 'Übersicht', component: OverviewPageComponent },
+      { title: 'Einkauf nachtragen', component: AddPurchasePageComponent}
     ];
 
   }

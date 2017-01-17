@@ -6,7 +6,7 @@ import { NavController, NavParams } from 'ionic-angular';
   selector: 'page-overview',
   templateUrl: 'overview-component.html',
 })
-export class OverviewComponent{
+export class OverviewPageComponent{
 
   title: string = "Übersicht";
 

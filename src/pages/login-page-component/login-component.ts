@@ -1,23 +1,24 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
 
-/*
-  Generated class for the LoginComponent page.
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
+import { Component, ViewChild } from '@angular/core';
+import { Nav, Platform, NavController, NavParams } from 'ionic-angular';
+
+import {OverviewPageComponent} from "../overview-page-component/overview-component";
+import {ScanNumberPageComponent} from "./scan-number-page-component/scan-number-page-component";
+
 @Component({
   selector: 'page-login-component',
   templateUrl: 'login-component.html',
 })
-export class LoginComponent {
+export class LoginPageComponent {
+
+  @ViewChild(Nav) nav: Nav;
 
   logoUrl: string = "/../../assets/icon/BSW_logo.svg";
   constructor(public navCtrl: NavController, public navParams: NavParams) {}
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad LoginComponentPage');
+  loadCameraPage(){
+    this.navCtrl.push(ScanNumberPageComponent);
   }
 
 }

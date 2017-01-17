@@ -5,7 +5,7 @@ import { NavController, NavParams } from 'ionic-angular';
   selector: 'add-purchase-page',
   templateUrl: 'add-purchase-component.html'
 })
-export class AddPurchaseComponent {
+export class AddPurchasePageComponent {
 
 	title: string = "Einkauf nachtragen";
 
