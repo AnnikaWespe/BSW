@@ -1,15 +1,33 @@
-<ion-menu [content]="content">
-  <div class="logo"></div>
+<ion-menu [content]="content" class="no-scroll">
 
-  <ion-content>
-    <ion-list>
-      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
+
+  <ion-content class="no-scroll">
+    <div class="logo-wrapper">
+      <div class="logo"></div>
+    </div>
+  <div class="list-wrapper">
+    <ion-list no-lines>
+      <button menuClose ion-item *ngFor="let p of pagesGeneral" (click)="openPage(p)">
+        <ion-icon name={{p.icon}}></ion-icon>
         {{p.title}}
       </button>
     </ion-list>
+    <ion-list no-lines>
+      <button menuClose ion-item *ngFor="let p of pagesPersonal" (click)="openPage(p)">
+        <div class="menu-title-wrapper">
+          <ion-icon name={{p.icon}}></ion-icon>
+          <div class="menu-title">{{p.title}}</div>
+        </div>
+      </button>
+    </ion-list>
+    <ion-footer>
+        <button menuClose ion-item (click)="openPage(pageExit)" class="logoutButton">
+          <ion-icon name={{pageExit.icon}}></ion-icon>
+          {{pageExit.title}}
+        </button>
+    </ion-footer>
+  </div>
   </ion-content>
-
 </ion-menu>
 
-<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
 <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

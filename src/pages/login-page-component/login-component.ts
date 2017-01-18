@@ -15,9 +15,13 @@ export class LoginPageComponent {
 
   @ViewChild(Nav) nav: Nav;
   barcodeData: BarcodeData;
+  scannedNumber: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.barcodeData = navParams.get('details');
+    if(this.barcodeData) {
+      this.scannedNumber = this.barcodeData.text;
+    }
   }
 
   loadCameraPage(){
@@ -25,9 +29,6 @@ export class LoginPageComponent {
   }
 
   pushOverviewPage(){
-    // push another page on to the navigation stack
-    // causing the nav controller to transition to the new page
-    // optional data can also be passed to the pushed page.
     this.navCtrl.setRoot(OverviewPageComponent);
   }
 

@@ -1,3 +1,7 @@
+body{
+  background-color: map-get($colors, light);
+}
+
 ion-header{
 	button {
 		background: transparent;
@@ -9,13 +13,43 @@ ion-header{
 
 ion-menu{
   div.logo{
-    background-color: black;
     background: url('/../assets/icon/BSW_logo.svg')no-repeat;
+    //background: url('file:///android_asset/www/assets/icon/BSW_logo.svg')no-repeat;
     height: 14vh;
     width: 25vh;
     overflow: hidden;
     background-size: contain;
+    left:50%;
+    margin: 0 auto;
+  }
+  div.logo-wrapper{
+    padding: 6vh 0;
+    background-color: white;
+  }
+  div.list-wrapper{
+    background-color: map-get($colors, light);
+    height: 100%;
+  }
+  .item-md{
+    background-color: inherit;
+  }
+  div.scroll-content{
+    overflow-y: hidden;
+  }
+  .logoutButton{
+    min-height: 20vh;
+  }
+  .footer-md::before{
+    content: none;
+  }
+  div.menu-title{
+    border-bottom: 1px solid grey;
   }
 }
 
+
+.menu-button-header, .search-button-header{
+  font-size: 4vh;
+  margin: 0 3vw;
+}
 

@@ -11,12 +11,12 @@ import {LoginPageComponent} from "../login-component";
 })
 export class ConfirmScanPageComponent {
 
-  @ViewChild(Nav) nav: Nav;
+  //@ViewChild(Nav) nav: Nav;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {}
 
   loadScanPage(){
-    BarcodeScanner.scan()
+  BarcodeScanner.scan()
       .then((result) => {
         if (!result.cancelled) {
           const barcodeData = new BarcodeData(result.text, result.format);
@@ -28,7 +28,7 @@ export class ConfirmScanPageComponent {
       })
   };
   scanDetails(details) {
-    this.nav.push(LoginPageComponent, {details: details});
+    this.navCtrl.push(LoginPageComponent, {details: details});
   }
 }
 

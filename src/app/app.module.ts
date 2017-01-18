@@ -8,8 +8,11 @@ import  { AddPurchasePageComponent} from '../pages/add-purchase-page-component/a
 import {SavingsOverviewComponent} from '../pages/overview-page-component/savings-overview-component/savings-overview-component';
 import {PartnersOverviewComponent} from '../pages/overview-page-component/partners-overview-component/partners-overview-component';
 import {ConfirmScanPageComponent} from '../pages/login-page-component/confirm-scan-page-component/confirm-scan-page-component';
-import {ScannerPageComponent} from '../pages/login-page-component/scanner-page-component/scanner-page-component';
-
+import {ActionsPageComponent} from "../pages/actions-page-component/actions-page-component";
+import {LogoutPageComponent} from "../pages/logout-page-component/logout-page-component";
+import {MyProfilePageComponent} from "../pages/my-profile-page-component/my-profile-page-component";
+import {PartnerPageComponent} from "../pages/partner-page-component/partner-page-component";
+import {SettingsPageComponent} from "../pages/settings-page-component/settings-page-component";
 
 @NgModule({
   declarations: [
@@ -20,7 +23,11 @@ import {ScannerPageComponent} from '../pages/login-page-component/scanner-page-c
     SavingsOverviewComponent,
     PartnersOverviewComponent,
     ConfirmScanPageComponent,
-    ScannerPageComponent
+    ActionsPageComponent,
+    LogoutPageComponent,
+    MyProfilePageComponent,
+    PartnerPageComponent,
+    SettingsPageComponent
   ],
   imports: [
     IonicModule.forRoot(MyApp)
@@ -32,7 +39,11 @@ import {ScannerPageComponent} from '../pages/login-page-component/scanner-page-c
     AddPurchasePageComponent,
     LoginPageComponent,
     ConfirmScanPageComponent,
-    ScannerPageComponent
+    ActionsPageComponent,
+    LogoutPageComponent,
+    MyProfilePageComponent,
+    PartnerPageComponent,
+    SettingsPageComponent
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
 })
