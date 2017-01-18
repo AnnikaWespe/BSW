@@ -7,7 +7,8 @@ import {OverviewPageComponent} from '../pages/overview-page-component/overview-c
 import  { AddPurchasePageComponent} from '../pages/add-purchase-page-component/add-purchase-component';
 import {SavingsOverviewComponent} from '../pages/overview-page-component/savings-overview-component/savings-overview-component';
 import {PartnersOverviewComponent} from '../pages/overview-page-component/partners-overview-component/partners-overview-component';
-import {ScanNumberPageComponent} from '../pages/login-page-component/scan-number-page-component/scan-number-page-component'
+import {ConfirmScanPageComponent} from '../pages/login-page-component/confirm-scan-page-component/confirm-scan-page-component';
+import {ScannerPageComponent} from '../pages/login-page-component/scanner-page-component/scanner-page-component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import {ScanNumberPageComponent} from '../pages/login-page-component/scan-number
     LoginPageComponent,
     SavingsOverviewComponent,
     PartnersOverviewComponent,
-    ScanNumberPageComponent
+    ConfirmScanPageComponent,
+    ScannerPageComponent
   ],
   imports: [
     IonicModule.forRoot(MyApp)
@@ -29,7 +31,8 @@ import {ScanNumberPageComponent} from '../pages/login-page-component/scan-number
     OverviewPageComponent,
     AddPurchasePageComponent,
     LoginPageComponent,
-    ScanNumberPageComponent
+    ConfirmScanPageComponent,
+    ScannerPageComponent
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
 })

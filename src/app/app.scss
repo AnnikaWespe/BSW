@@ -7,4 +7,15 @@ ion-header{
 	}
 }
 
+ion-menu{
+  div.logo{
+    background-color: black;
+    background: url('/../assets/icon/BSW_logo.svg')no-repeat;
+    height: 14vh;
+    width: 25vh;
+    overflow: hidden;
+    background-size: contain;
+  }
+}
+
 
