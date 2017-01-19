@@ -1,4 +1,4 @@
-body{
+ion-content{
   background-color: map-get($colors, light);
 }
 
@@ -9,6 +9,10 @@ ion-header{
 	ion-title{
 		text-align: center
 	}
+  .menu-button-header, .search-button-header{
+    font-size: 4vh;
+    margin: 0 3vw;
+  }
 }
 
 ion-menu{
@@ -37,19 +41,35 @@ ion-menu{
     overflow-y: hidden;
   }
   .logoutButton{
-    min-height: 20vh;
+    min-height: 12vh;
   }
   .footer-md::before{
     content: none;
   }
   div.menu-title{
     border-bottom: 1px solid grey;
+    width: 100%;
+    padding: 1vh 0 1vh 1vw;
+    margin-left: 2vw;
+  }
+  .menu-title-icon, .menu-title{
+    display: inline-block;
+    color: grey;
+  }
+  ion-icon{
+    width: 4vw;
+  }
+  .item-block{
+    line-height: 2vh;
+  }
+  .list-wrapper{
+    padding-top: 3vh;
+  }
+  ion-list.pages-personal{
+    margin-top: 4vh;
   }
 }
 
 
-.menu-button-header, .search-button-header{
-  font-size: 4vh;
-  margin: 0 3vw;
-}
+
 

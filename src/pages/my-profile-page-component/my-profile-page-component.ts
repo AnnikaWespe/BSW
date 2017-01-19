@@ -7,6 +7,6 @@ import { NavController, NavParams } from 'ionic-angular';
   templateUrl: 'my-profile-page-component.html'
 })
 export class MyProfilePageComponent {
-
+title: string = "Mein Profil"
   constructor(public navCtrl: NavController, public navParams: NavParams) {}
 }

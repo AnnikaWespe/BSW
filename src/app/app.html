@@ -8,22 +8,20 @@
   <div class="list-wrapper">
     <ion-list no-lines>
       <button menuClose ion-item *ngFor="let p of pagesGeneral" (click)="openPage(p)">
-        <ion-icon name={{p.icon}}></ion-icon>
-        {{p.title}}
+        <ion-icon name={{p.icon}} class="menu-title-icon" color="grey"></ion-icon>
+        <div class="menu-title">{{p.title}}</div>
       </button>
     </ion-list>
-    <ion-list no-lines>
+    <ion-list no-lines class="pages-personal">
       <button menuClose ion-item *ngFor="let p of pagesPersonal" (click)="openPage(p)">
-        <div class="menu-title-wrapper">
-          <ion-icon name={{p.icon}}></ion-icon>
+          <ion-icon name={{p.icon}} class="menu-title-icon" color="grey"></ion-icon>
           <div class="menu-title">{{p.title}}</div>
-        </div>
       </button>
     </ion-list>
     <ion-footer>
         <button menuClose ion-item (click)="openPage(pageExit)" class="logoutButton">
-          <ion-icon name={{pageExit.icon}}></ion-icon>
-          {{pageExit.title}}
+          <ion-icon name={{pageExit.icon}} class="menu-title-icon" color="grey"></ion-icon>
+          <div class="menu-title">{{pageExit.title}}</div>
         </button>
     </ion-footer>
   </div>
