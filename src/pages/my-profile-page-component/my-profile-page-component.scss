@@ -1,3 +1,43 @@
 my-profile-page-component {
-
+    div.list-wrapper{
+      background-color: map-get($colors, light);
+      height: 100%;
+    }
+    .item-md{
+      background-color: inherit;
+    }
+    div.scroll-content{
+      overflow-y: hidden;
+    }
+    div.menu-title{
+      width: 100%;
+      padding: 1vh 0 1vh 1vw;
+      margin-left: 2vw;
+    }
+    .menu-title-icon, .menu-title{
+      display: inline-block;
+      color: grey;
+      text-transform: none;
+      font-size: larger;
+    }
+    ion-icon{
+      width: 4vw;
+    }
+    .item-block{
+      line-height: 2vh;
+    }
+    .list-wrapper{
+      padding-top: 3vh;
+    }
+  button.title-button{
+    border: 1px solid grey;
+    text-align: left;
+    border-top: none;
+  }
+    div.profile-menu-title{
+      font-size: 3vh;
+    }
+  div.item-inner{
+    padding: 0px;
+  }
 }

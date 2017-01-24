@@ -5,13 +5,66 @@
         <ion-icon name="menu" color="grey" class="menu-button-header"></ion-icon>
       </button>
     </ion-buttons>
-
+    <ion-buttons end>
+      <button>
+        <ion-icon name="search" color="grey" class="search-button-header" style="visibility: hidden"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-title>
       {{title}}
     </ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content padding>
-  <savings-overview></savings-overview>
-  <partners-overview></partners-overview>
+<ion-content>
+    <div class="list-wrapper">
+      <ion-list no-lines>
+        <button ion-button block outline class="title-button" (click)="toggleContent(0)">
+          <ion-icon name="person" class="menu-title-icon" color="grey"></ion-icon>
+          <div class="menu-title">Mitgliedsdaten</div>
+        </button>
+        <div ion-item id="member" *ngIf="showContentOnPosition[0]">
+          <ion-row>
+            <ion-col>Straße</ion-col>
+            <ion-col>{{profileData.adressData.street}}</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>Hausnummer</ion-col>
+            <ion-col>{{profileData.adressData.houseNumber}}</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>PLZ</ion-col>
+            <ion-col>{{profileData.adressData.zipCode}}</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>Ort</ion-col>
+            <ion-col>{{profileData.adressData.city}}</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>Ortsteil</ion-col>
+            <ion-col>{{profileData.adressData.district}}</ion-col>
+          </ion-row>
+        </div>
+        <button ion-button full outline class="title-button" (click)="toggleContent(1)">
+          <ion-icon name="mail" class="menu-title-icon" color="grey"></ion-icon>
+          <div class="menu-title">Adressdaten</div>
+        </button>
+          <div ion-item id="adress" *ngIf="showContentOnPosition[1]">
+            Adress content
+          </div>
+        <button ion-button full outline class="title-button"(click)="toggleContent(2)">
+          <ion-icon name="card" class="menu-title-icon" color="grey"></ion-icon>
+          <div class="menu-title">Bankdaten</div>
+        </button>
+        <div ion-item id="bank" *ngIf="showContentOnPosition[2]">
+          BankContent
+        </div>
+        <button ion-button full outline class="title-button" (click)="toggleContent(3)">
+          <ion-icon name="star" class="menu-title-icon" color="grey"></ion-icon>
+          <div class="menu-title">Passwort</div>
+        </button>
+        <div ion-item id="password" *ngIf="showContentOnPosition[3]">
+          PasswordContent
+        </div>
+      </ion-list>
+    </div>
 </ion-content>

@@ -15,6 +15,10 @@ ion-header{
   }
 }
 
+ion-navbar.toolbar.toolbar-md{
+  background-color: map-get($colors, light);;
+}
+
 ion-menu{
   div.logo{
     background: url('/../assets/icon/BSW_logo.svg')no-repeat;
