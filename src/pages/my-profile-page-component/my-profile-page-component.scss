@@ -37,7 +37,34 @@ my-profile-page-component {
     div.profile-menu-title{
       font-size: 3vh;
     }
+    div.item.item-block.item-md{
+      background-color: white;
+    }
+    .button-md{
+      margin: 0;
+    }
+    .button-outline-md{
+      box-shadow: inherit;
+    }
+  form input, form select{
+    background-color: map-get($colors, light);
+    font-size: smaller;
+  }
+  form label{
+    font-size: smaller;
+  }
   div.item-inner{
-    padding: 0px;
+    padding-right: 0;
+  }
+  div.item-md{
+    padding-right: 0;
+    padding-left: 2vw;
+  }
+  button[type="submit"]{
+    background-color: map-get($colors, primary);
+    color: white;
+  }
+  .item-block{
+    min-height: 0;
   }
 }

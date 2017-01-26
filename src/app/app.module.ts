@@ -1,5 +1,6 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import {FormsModule} from '@angular/forms';
 
 import { MyApp } from './app.component';
 import {LoginPageComponent} from '../pages/login-page-component/login-component';
@@ -13,6 +14,7 @@ import {LogoutPageComponent} from "../pages/logout-page-component/logout-page-co
 import {MyProfilePageComponent} from "../pages/my-profile-page-component/my-profile-page-component";
 import {PartnerPageComponent} from "../pages/partner-page-component/partner-page-component";
 import {SettingsPageComponent} from "../pages/settings-page-component/settings-page-component";
+import {MembershipDataFormComponent} from "../pages/my-profile-page-component/user-detail/membership-data-form.component"
 
 @NgModule({
   declarations: [
@@ -27,10 +29,12 @@ import {SettingsPageComponent} from "../pages/settings-page-component/settings-p
     LogoutPageComponent,
     MyProfilePageComponent,
     PartnerPageComponent,
-    SettingsPageComponent
+    SettingsPageComponent,
+    MembershipDataFormComponent
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    FormsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
