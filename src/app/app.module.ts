@@ -1,6 +1,7 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import {FormsModule} from '@angular/forms';
+import {HttpModule, JsonpModule} from '@angular/http';
 
 import { MyApp } from './app.component';
 import {LoginPageComponent} from '../pages/login-page-component/login-component';
@@ -14,7 +15,10 @@ import {LogoutPageComponent} from "../pages/logout-page-component/logout-page-co
 import {MyProfilePageComponent} from "../pages/my-profile-page-component/my-profile-page-component";
 import {PartnerPageComponent} from "../pages/partner-page-component/partner-page-component";
 import {SettingsPageComponent} from "../pages/settings-page-component/settings-page-component";
-import {MembershipDataFormComponent} from "../pages/my-profile-page-component/user-detail/membership-data-form.component"
+import {MembershipDataFormComponent} from "../pages/my-profile-page-component/user-detail/membership-data-form.component";
+import {PartnerService} from '../pages/partner-page-component/partner-service';
+import {GetPartnersPost} from "../pages/partner-page-component/get-partners-Post";
+
 
 @NgModule({
   declarations: [
@@ -34,7 +38,9 @@ import {MembershipDataFormComponent} from "../pages/my-profile-page-component/us
   ],
   imports: [
     IonicModule.forRoot(MyApp),
-    FormsModule
+    FormsModule,
+    HttpModule,
+    JsonpModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -49,6 +55,6 @@ import {MembershipDataFormComponent} from "../pages/my-profile-page-component/us
     PartnerPageComponent,
     SettingsPageComponent
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService, GetPartnersPost]
 })
 export class AppModule {}
