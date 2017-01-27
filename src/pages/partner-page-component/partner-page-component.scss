@@ -1,3 +1,24 @@
 partner-page-component {
-
+  ion-col.filter-button{
+    height: 8vh;
+    background-color: map_get($colors, secondary-grey);
+  }
+  .left-button{
+     margin-right: 1.5px;
+   }
+  ion-row{
+    border-bottom: 1px solid map-get($colors, secondary);
+    position: relative;
+    text-align: center;
+  }
+  div.filter-button-text{
+    color: map_get($colors, secondary);
+    vertical-align: middle;
+    font-size: xx-small;
+    font-weight: bolder;
+    line-height: 6.5vh
+  }
+  ion-icon{
+    margin-left: 1vw;
+  }
 }

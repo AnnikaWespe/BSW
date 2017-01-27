@@ -10,7 +10,7 @@
         <ion-icon name="search" color="grey" class="search-button-header" style="visibility: hidden"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>
+    <ion-title class="header-title">
       {{title}}
     </ion-title>
   </ion-navbar>
@@ -77,7 +77,7 @@
         <ion-icon name="mail" class="menu-title-icon" color="grey"></ion-icon>
         <div class="menu-title">Adressdaten</div>
       </button>
-      <div ion-item id="adress" *ngIf="showContentOnPosition[1]">
+      <div ion-item id="adress" [@show]="showContentOnPosition[1]">
         <form>
           <ion-row>
             <ion-col width-50><label for="street">Straße</label></ion-col>
@@ -111,18 +111,17 @@
         <ion-icon name="card" class="menu-title-icon" color="grey"></ion-icon>
         <div class="menu-title">Bankdaten</div>
       </button>
-      <div ion-item id="bank" *ngIf="showContentOnPosition[2]">
+      <div ion-item id="bank" [@show]="showContentOnPosition[2]">
         BankContent
       </div>
       <button ion-button full outline class="title-button" (click)="toggleContent(3)">
         <ion-icon name="star" class="menu-title-icon" color="grey"></ion-icon>
         <div class="menu-title">Passwort</div>
       </button>
-      <div ion-item id="password" *ngIf="showContentOnPosition[3]">
+      <div ion-item id="password" [@show]="showContentOnPosition[3]">
         PasswordContent
       </div>
     </ion-list>
     {{diagnostic}}
   </div>
-
 </ion-content>

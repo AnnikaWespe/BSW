@@ -7,24 +7,27 @@ ion-header{
 		background: transparent;
 	}
 	ion-title{
-		text-align: center
+		text-align: center;
+    color: map-get($colors, secondary);
 	}
   .menu-button-header, .search-button-header{
     font-size: 4vh;
     margin: 0 3vw;
   }
-}
 
+}
+ion-header .toolbar-title-md{
+  color: map-get($colors, secondary);
+}
 ion-navbar.toolbar.toolbar-md{
   background-color: map-get($colors, light);;
 }
 
 ion-menu{
   div.logo{
-    background: url('/../assets/icon/BSW_logo.svg')no-repeat;
-    //background: url('file:///android_asset/www/assets/icon/BSW_logo.svg')no-repeat;
-    height: 14vh;
-    width: 25vh;
+    background: url('/../assets/icon/bsw-logo.png')no-repeat;
+    height: 16vh;
+    width: 32vh;
     overflow: hidden;
     background-size: contain;
     left:50%;

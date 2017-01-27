@@ -16,8 +16,15 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content padding>
-  <savings-overview></savings-overview>
-  <partners-overview></partners-overview>
+<ion-content>
+  <ion-row>
+    <ion-col class="filter-button left-button">
+      <div class="filter-button-text">KATEGORIE<ion-icon name="arrow-dropdown"></ion-icon></div>
+    </ion-col>
+    <ion-col class="filter-button">
+      <div class="filter-button-text">SORTIEREN<ion-icon name="arrow-dropdown"></ion-icon></div>
+    </ion-col>
+  </ion-row>
+<h3>{{location?.latitude}}, {{location?.longitude}}</h3>
 </ion-content>
 
