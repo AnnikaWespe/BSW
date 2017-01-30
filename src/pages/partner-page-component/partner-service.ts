@@ -33,8 +33,9 @@ export class PartnerService {
   }
 
   private extractData(res: Response) {
-    let body = res.json();
-    return body.data || {};
+    let body = res;
+    console.log("partners:" + body);
+    return body || {};
   }
 
   private handleError(error: Response | any) {
@@ -48,6 +49,6 @@ export class PartnerService {
       errMsg = error.message ? error.message : error.toString();
     }
     console.error(errMsg);
-    return Promise.reject(errMsg);
+    return Observable.throw(errMsg);
   }
 }

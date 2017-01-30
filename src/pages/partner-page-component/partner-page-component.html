@@ -25,7 +25,13 @@
       <div class="filter-button-text">SORTIEREN<ion-icon name="arrow-dropdown"></ion-icon></div>
     </ion-col>
   </ion-row>
-<h3>{{location?.latitude}}, {{location?.longitude}}</h3>
-  <button (click)="getLocationData()">get Location Data</button>
+  <div class="partner-div" *ngFor="let partner of partners">
+    <div class="partner-image-div"><img src="{{partner.logoUrl}}"></div>
+    <div class="partner-text-div">
+      <h3>{{partner.nameOrigin}}</h3>
+      <p>{{partner.description | truncate: 20}}</p>
+    </div>
+    <div class="partner-bonus-div">{{partner.pfBonus}}</div>
+  </div>
 </ion-content>
 

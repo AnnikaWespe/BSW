@@ -21,4 +21,7 @@ partner-page-component {
   ion-icon{
     margin-left: 1vw;
   }
+  div.partner-div{
+    background-color: map_get($colors,light);
+  }
 }

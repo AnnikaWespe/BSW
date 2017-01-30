@@ -6,15 +6,16 @@ import {PartnerService} from "./partner-service";
 
 @Component({
   selector: 'partner-page-component',
-  templateUrl: 'partner-page-component.html'
+  templateUrl: 'partner-page-component.html',
 })
 export class PartnerPageComponent implements OnInit {
   title: string = "Partner";
   errorMessage: string;
-  partners: {};
+  returnedObject: any;
+  partnersJson: any;
+  partners: any;
   mode = "Observable";
   location: {latitude: number, longitude: number};
-
   constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService) {
   }
 
@@ -41,8 +42,19 @@ export class PartnerPageComponent implements OnInit {
   getPartners(location) {
     this.partnerService.getPartners(location)
       .subscribe(
-        partners => this.partners = partners,
+        body => {this.returnedObject = body.json();
+          this.partnersJson = body;
+          this.partners = this.returnedObject.contentEntities;
+          console.log("partners: " + this.partners);
+          console.log("error: " + this.errorMessage);
+          this.processData();
+        },
         error => this.errorMessage = <any>error);
+
+  }
+
+  processData(){
+
   }
 }
 

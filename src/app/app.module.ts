@@ -18,6 +18,7 @@ import {SettingsPageComponent} from "../pages/settings-page-component/settings-p
 import {MembershipDataFormComponent} from "../pages/my-profile-page-component/user-detail/membership-data-form.component";
 import {PartnerService} from '../pages/partner-page-component/partner-service';
 import {GetPartnersPost} from "../pages/partner-page-component/get-partners-Post";
+import {TruncatePipe} from '../pages/partner-page-component/truncate'
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import {GetPartnersPost} from "../pages/partner-page-component/get-partners-Post
     MyProfilePageComponent,
     PartnerPageComponent,
     SettingsPageComponent,
-    MembershipDataFormComponent
+    MembershipDataFormComponent,
+TruncatePipe,
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -55,6 +57,7 @@ import {GetPartnersPost} from "../pages/partner-page-component/get-partners-Post
     PartnerPageComponent,
     SettingsPageComponent
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService, GetPartnersPost]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService, GetPartnersPost],
+
 })
 export class AppModule {}
