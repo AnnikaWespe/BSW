@@ -12,12 +12,14 @@ import {GetPartnersPost} from './get-partners-Post';
 @Injectable()
 export class PartnerService {
   private partnersUrl = 'https://www.bsw.de/appsearch';
+  private hardLatitude: number = 48.1340;
+  private hardLongitude: number = 11.5677
 
   constructor(private http: Http, private post: GetPartnersPost) {}
 
   getPartners(location): Observable <any> {
-    this.post.query.location.latitude = location.latitude.toFixed(4);
-    this.post.query.location.longitude = location.longitude.toFixed(4);
+    this.post.query.location.latitude = this.hardLatitude//location.latitude.toFixed(4);
+    this.post.query.location.longitude = this.hardLongitude//location.longitude.toFixed(4);
     return this.executeQuery(this.post);
   }
 

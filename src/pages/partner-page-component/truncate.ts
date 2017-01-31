@@ -1,16 +1,24 @@
-/**
- * Created by annikawestphaling on 30.01.17.
- */
-import {Pipe} from 'angular2/core'
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'truncate'
+  name: 'words'
 })
-export class TruncatePipe {
-  transform(value: string, args: string[]) : string {
-    let limit = args.length > 0 ? parseInt(args[0], 10) : 10;
-    let trail = args.length > 1 ? args[1] : '...';
+export class TruncateWordsPipe implements PipeTransform {
+  transform(value: string, limit: number = 40, trail: String = '…'): string {
+    let result = value;
 
-    return value.length > limit ? value.substring(0, limit) + trail : value;
+    if (value) {
+      let words = value.split(/\s+/);
+      if (words.length > Math.abs(limit)) {
+        if (limit < 0) {
+          limit *= -1;
+          result = trail + words.slice(words.length - limit, words.length).join(' ');
+        } else {
+          result = words.slice(0, limit).join(' ') + trail;
+        }
+      }
+    }
+
+    return result;
   }
 }

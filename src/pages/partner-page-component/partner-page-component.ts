@@ -23,12 +23,23 @@ export class PartnerPageComponent implements OnInit {
     this.getLocationData();
   };
 
+  /*x(){
+    Geolocation.getCurrentPosition().then((position) => {
+      this.location = position.coords;
+      this.getPartners(this.location);
+    }, (err) => {
+      console.log(err);
+    })
+  }*/
+
+
   getLocationData() {
     return new Promise((resolve, reject) => {
       Geolocation.getCurrentPosition({timeout: 20000, enableHighAccuracy: false})
         .then((position) => {
           this.location = position.coords;
           this.getPartners(this.location);
+          resolve();
         })
         .catch(
           (err) => {

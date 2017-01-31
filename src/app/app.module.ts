@@ -18,7 +18,7 @@ import {SettingsPageComponent} from "../pages/settings-page-component/settings-p
 import {MembershipDataFormComponent} from "../pages/my-profile-page-component/user-detail/membership-data-form.component";
 import {PartnerService} from '../pages/partner-page-component/partner-service';
 import {GetPartnersPost} from "../pages/partner-page-component/get-partners-Post";
-import {TruncatePipe} from '../pages/partner-page-component/truncate'
+import {TruncateWordsPipe} from '../pages/partner-page-component/truncate'
 
 
 @NgModule({
@@ -36,7 +36,7 @@ import {TruncatePipe} from '../pages/partner-page-component/truncate'
     PartnerPageComponent,
     SettingsPageComponent,
     MembershipDataFormComponent,
-TruncatePipe,
+TruncateWordsPipe,
   ],
   imports: [
     IonicModule.forRoot(MyApp),

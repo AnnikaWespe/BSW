@@ -25,13 +25,24 @@
       <div class="filter-button-text">SORTIEREN<ion-icon name="arrow-dropdown"></ion-icon></div>
     </ion-col>
   </ion-row>
-  <div class="partner-div" *ngFor="let partner of partners">
-    <div class="partner-image-div"><img src="{{partner.logoUrl}}"></div>
-    <div class="partner-text-div">
-      <h3>{{partner.nameOrigin}}</h3>
-      <p>{{partner.description | truncate: 20}}</p>
-    </div>
-    <div class="partner-bonus-div">{{partner.pfBonus}}</div>
+  <div class="category-filter-dropdown"></div>
+  <div class="partner-table-wrapper">
+    <ion-row class="partner-row" *ngFor="let partner of partners">
+      <ion-col class="image-col">
+        <div class="white-square">
+          <img src="{{partner.logoUrl}}">
+        </div>
+      </ion-col>
+      <ion-col class="text-row">
+        <div class="partner-text-div partner">
+          <p class="partner-title">{{partner.nameOrigin}}</p>
+          <p class="partner-description">{{partner.description | words : 10}}</p>
+        </div>
+      </ion-col>
+      <ion-col class="bonus-col">
+        <p>{{partner.bonusA}}</p>
+      </ion-col>
+    </ion-row>
   </div>
 </ion-content>
 
