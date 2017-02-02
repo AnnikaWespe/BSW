@@ -105,16 +105,20 @@ partner-page-component {
       width: 10vw;
     }
   }
-  div.category-filter-dropdown{
+  ion-content{
+    position: relative;
+  }
+  div.filter-dropdown{
     position: absolute;
     left: 0;
     width: 100%;
-    //height: 50vh;
-    background-color: green;
+    background-color: map_get($colors, light);
     z-index: 100;
-
-  }
-  ion-content{
-    position: relative;
+    padding-bottom: 3vh;
+    border-bottom: 1px solid grey;
+    div{
+      margin: 4vh 0 1vh 3vw;
+      font-size: medium;
+    }
   }
 }
