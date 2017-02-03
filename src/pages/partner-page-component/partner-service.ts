@@ -17,9 +17,15 @@ export class PartnerService {
 
   constructor(private http: Http, private post: GetPartnersPost) {}
 
-  getPartners(location): Observable <any> {
-    this.post.query.location.latitude = this.hardLatitude//location.latitude.toFixed(4);
-    this.post.query.location.longitude = this.hardLongitude//location.longitude.toFixed(4);
+  getPartners(location, bucket): Observable <any> {
+    this.post.query.location.latitude = location.latitude.toFixed(4);
+    this.post.query.location.longitude = location.longitude.toFixed(4);
+    this.post.ranges.bucketToFrom.OFFLINEPARTNER = bucket;
+    this.post.ranges.bucketToFrom.ONLINEPARTNER = bucket;
+    this.post.ranges.bucketToFrom.VEHICLEOFFER = bucket;
+    this.post.ranges.bucketToFrom.TRAVELOFFER = bucket;
+
+
     return this.executeQuery(this.post);
   }
 

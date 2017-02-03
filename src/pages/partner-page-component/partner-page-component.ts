@@ -8,63 +8,61 @@ import {PartnerService} from "./partner-service";
   selector: 'partner-page-component',
   templateUrl: 'partner-page-component.html',
 })
-export class PartnerPageComponent implements OnInit {
+export class PartnerPageComponent implements OnInit{
   title: string = "Partner";
   mode = "Observable";
 
   showDropdown: boolean[] = [false, false];
+  waitingForResults: boolean = true;
 
   errorMessage: string;
   returnedObject: any;
-  partnersJson: any;
   location: {latitude: number, longitude: number};
 
-  partners: any;
+  partners: any[] = [];
+  allpartners: any;
   offlinePartners: any;
   onlinePartners: any;
   travelPartners: any;
   vehiclePartners: any;
-  displayedPartners: any;
+  displayedPartners: any = this.allpartners;
 
-  numberOfOfflinePartners: number;
-  numberOfOnlinePartners: number;
-  numberOfTravelPartners: number;
-  numberOfVehiclePartners: number;
-  numberOfPartnersTotal: number;
+  category: string = "allpartners";
+  bucket: number = 0;
 
-  numberOfPagesTotal: number;
-  numberOfPagesOffline: number;
-  numberOfPagesOnline: number;
-  numberOfPagesTravel: number;
-  numberOfPagesVehicle: number;
-
-
-
+  statusText: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService) {
   }
+
+
+
 
   ngOnInit() {
     this.getLocationData();
   };
 
+
   getLocationData() {
     Geolocation.getCurrentPosition().then((position) => {
       this.location = position.coords;
-      this.getPartners(this.location);
+      this.getPartners(this.location, "allpartners");
     }, (err) => {
       console.log(err);
     })
   }
 
   getPartners(location) {
-    this.partnerService.getPartners(location)
+    this.partnerService.getPartners(location, this.bucket)
       .subscribe(
         body => {
           this.returnedObject = body.json();
-          this.partnersJson = body;
-          this.partners = this.returnedObject.contentEntities;
-          this.displayedPartners = this.partners;
+          if(this.category == "allpartners"){
+
+          }
+          else
+          this.partners = this.partners.concat(this.returnedObject.contentEntities);
+          this.waitingForResults = false;
 
           this.onlinePartners = this.returnedObject.originalSearchResults.bucketToSearchResult.ONLINEPARTNER.contentEntities;
           this.offlinePartners = this.returnedObject.originalSearchResults.bucketToSearchResult.OFFLINEPARTNER.contentEntities;
@@ -86,7 +84,15 @@ export class PartnerPageComponent implements OnInit {
     this.toggleVisibility(0);
   }
 
+  doInfinite(infiniteScroll){
+    console.log("loadnextpartners");
+    this.bucket += 1;
+    this.getPartners(this.location);
+    infiniteScroll.complete();
+  }
 }
+
+
 
 
 

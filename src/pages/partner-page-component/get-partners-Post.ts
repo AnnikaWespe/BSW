@@ -1,7 +1,3 @@
-import {jsonpFactory} from "@angular/http/src/http_module";
-/**
- * Created by annikawestphaling on 26.01.17.
- */
 
 export class GetPartnersPost {
   public query = {
