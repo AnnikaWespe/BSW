@@ -30,11 +30,11 @@
         </ion-col>
       </ion-row>
       <div class="filter-dropdown" *ngIf="showDropdown[0]">
-        <div (click)="display('partners')">Alle Treffer</div>
-        <div (click)="display('onlinePartners')">Online-Partner</div>
-        <div (click)="display('localPartners')">Vor-Ort-Partner</div>
-        <div (click)="display('travelPartners')">Reiseangebote</div>
-        <div (click)="display('vehiclePartners')">Autoangebote</div>
+        <div (click)="filter('allpartners')">Alle Treffer</div>
+        <div (click)="filter('ONLINEPARTNER')">Online-Partner</div>
+        <div (click)="filter('OFFLINEPARTNER')">Vor-Ort-Partner</div>
+        <div (click)="filter('TRAVELOFFER')">Reiseangebote</div>
+        <div (click)="filter('VEHICLEOFFER')">Autoangebote</div>
       </div>
       <div class="filter-dropdown" *ngIf="showDropdown[1]">
         <div>A - Z</div>

@@ -13,23 +13,13 @@ import {GetPartnersPost} from './get-partners-Post';
 export class PartnerService {
   private partnersUrl = 'https://www.bsw.de/appsearch';
   private hardLatitude: number = 48.1340;
-  private hardLongitude: number = 11.5677
+  private hardLongitude: number = 11.5677;
 
-  constructor(private http: Http, private post: GetPartnersPost) {}
+
+  constructor(private http: Http) {}
 
   getPartners(location, bucket): Observable <any> {
-    this.post.query.location.latitude = location.latitude.toFixed(4);
-    this.post.query.location.longitude = location.longitude.toFixed(4);
-    this.post.ranges.bucketToFrom.OFFLINEPARTNER = bucket;
-    this.post.ranges.bucketToFrom.ONLINEPARTNER = bucket;
-    this.post.ranges.bucketToFrom.VEHICLEOFFER = bucket;
-    this.post.ranges.bucketToFrom.TRAVELOFFER = bucket;
-
-
-    return this.executeQuery(this.post);
-  }
-
-  executeQuery(post): Observable<any> {
+    let post = new GetPartnersPost(location, bucket);
     let headers = new Headers({'Content-Type': 'application/json'});
     let options = new RequestOptions({headers: headers});
     let getPartnersPostJson = JSON.stringify(post);
@@ -39,6 +29,7 @@ export class PartnerService {
       .map(this.extractData)
       .catch(this.handleError)
   }
+
 
   private extractData(res: Response) {
     let body = res;

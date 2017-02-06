@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
 import {PartnerService} from "./partner-service";
@@ -16,16 +16,12 @@ export class PartnerPageComponent implements OnInit{
   waitingForResults: boolean = true;
 
   errorMessage: string;
-  returnedObject: any;
+
   location: {latitude: number, longitude: number};
+  locationFound: boolean = false;
 
   partners: any[] = [];
-  allpartners: any;
-  offlinePartners: any;
-  onlinePartners: any;
-  travelPartners: any;
-  vehiclePartners: any;
-  displayedPartners: any = this.allpartners;
+  displayedPartners: any[] = [];
 
   category: string = "allpartners";
   bucket: number = 0;
@@ -46,7 +42,8 @@ export class PartnerPageComponent implements OnInit{
   getLocationData() {
     Geolocation.getCurrentPosition().then((position) => {
       this.location = position.coords;
-      this.getPartners(this.location, "allpartners");
+      this.getPartners(this.location);
+      this.locationFound = true;
     }, (err) => {
       console.log(err);
     })
@@ -56,18 +53,15 @@ export class PartnerPageComponent implements OnInit{
     this.partnerService.getPartners(location, this.bucket)
       .subscribe(
         body => {
-          this.returnedObject = body.json();
+          let returnedObject = body.json();
           if(this.category == "allpartners"){
-
+            this.displayedPartners = this.displayedPartners.concat(returnedObject.contentEntities);
           }
-          else
-          this.partners = this.partners.concat(this.returnedObject.contentEntities);
+          else{
+            this.displayedPartners = this.displayedPartners.concat(returnedObject.originalSearchResults.bucketToSearchResult[this.category].contentEntities);
+          };
           this.waitingForResults = false;
-
-          this.onlinePartners = this.returnedObject.originalSearchResults.bucketToSearchResult.ONLINEPARTNER.contentEntities;
-          this.offlinePartners = this.returnedObject.originalSearchResults.bucketToSearchResult.OFFLINEPARTNER.contentEntities;
-          this.travelPartners = this.returnedObject.originalSearchResults.bucketToSearchResult.TRAVELOFFER.contentEntities;
-          this.vehiclePartners = this.returnedObject.originalSearchResults.bucketToSearchResult.VEHICLEOFFER.contentEntities;
+          console.log(this.displayedPartners);
         },
         error => this.errorMessage = <any>error);
 
@@ -76,12 +70,17 @@ export class PartnerPageComponent implements OnInit{
   toggleVisibility(position) {
     let isVisible = this.showDropdown[position];
     this.showDropdown = [false, false];
-    this.showDropdown[position] = !isVisible;
+    this.showDropdown[position] = !this.showDropdown[position];
   }
 
-  display(partnerType){
-    this.displayedPartners = this[partnerType];
-    this.toggleVisibility(0);
+  filter(partnerType){
+      if(this.locationFound){
+        this.category = partnerType;
+        this.displayedPartners = [];
+        this.getPartners(this.location);
+        this.toggleVisibility(0);
+        this.waitingForResults = true;
+      }
   }
 
   doInfinite(infiniteScroll){
@@ -94,6 +93,20 @@ export class PartnerPageComponent implements OnInit{
 
 
 
+@Component({})
+class SomeComponent {
+  @ViewChild('container') container;
+  @ViewChild('dropdown') dropdown;
 
+  constructor() {
+    document.addEventListener('click', this.offClickHandler.bind(this)); // bind on doc
+  }
+
+  offClickHandler(event:any) {
+    if (!this.container.nativeElement.contains(event.target)) { // check click origin
+      this.dropdown.nativeElement.style.display = "none";
+    }
+  }
+}
 
 

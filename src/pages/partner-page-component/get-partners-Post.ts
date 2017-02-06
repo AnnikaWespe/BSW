@@ -26,6 +26,12 @@ export class GetPartnersPost {
   showmap = true;
   template = "unified";
 
-  constructor() {};
+  constructor(location, bucket) {
+    this.query.location.latitude = location.latitude.toFixed(4);
+    this.query.location.longitude = location.longitude.toFixed(4);
+    this.ranges.bucketToFrom.OFFLINEPARTNER = bucket;
+    this.ranges.bucketToFrom.ONLINEPARTNER = bucket;
+    this.ranges.bucketToFrom.VEHICLEOFFER = bucket;
+    this.ranges.bucketToFrom.TRAVELOFFER = bucket;
+  };
 }
-
