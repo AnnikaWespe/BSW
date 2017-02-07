@@ -12,8 +12,6 @@ import {GetPartnersPost} from './get-partners-Post';
 @Injectable()
 export class PartnerService {
   private partnersUrl = 'https://www.bsw.de/appsearch';
-  private hardLatitude: number = 48.1340;
-  private hardLongitude: number = 11.5677;
 
   constructor(private http: Http) {}
 

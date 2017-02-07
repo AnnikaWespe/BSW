@@ -26,7 +26,7 @@ export class GetPartnersPost {
   showmap = true;
   template = "unified";
 
-  constructor(location = {latitude: 48.1340, longitude: 11.5677}, bucket = 0) {
+  constructor(location = {latitude: 0, longitude: 0}, bucket = 0) {
     this.query.location.latitude = location.latitude.toFixed(4);
     this.query.location.longitude = location.longitude.toFixed(4);
     this.ranges.bucketToFrom.OFFLINEPARTNER = bucket;

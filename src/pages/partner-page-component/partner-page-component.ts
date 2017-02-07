@@ -43,10 +43,11 @@ export class PartnerPageComponent implements OnInit{
   getLocationData() {
     Geolocation.getCurrentPosition().then((position) => {
       this.location = position.coords;
-      this.getPartners(this.location);
       this.locationFound = true;
+      this.getPartners(this.location);
     }, (err) => {
       console.log(err);
+      this.getPartners(this.location);
     })
   }
 
@@ -71,7 +72,7 @@ export class PartnerPageComponent implements OnInit{
   toggleVisibility(position) {
     let isVisible = this.showDropdown[position];
     this.showDropdown = [false, false];
-    this.showDropdown[position] = !this.showDropdown[position];
+    this.showDropdown[position] = !isVisible;
   }
 
   filter(partnerType){
@@ -92,7 +93,9 @@ export class PartnerPageComponent implements OnInit{
   }
 
   chooseLocationManually(){
+    event.stopPropagation();
     this.navCtrl.push(ChooseLocationManuallyComponent);
+    this.hideDropdown();
   }
 
   hideDropdown(){

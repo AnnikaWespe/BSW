@@ -11,7 +11,7 @@
     </ion-title>
     <ion-buttons end>
       <button>
-        <ion-icon name="search" color="grey" class="search-button-header"></ion-icon>
+        <ion-icon name="search" color="grey" class="search-button-header" (click)="openSearchInterface()"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -35,8 +35,8 @@
     <div class="filterBy" (click)="filter('VEHICLEOFFER')">Autoangebote</div>
   </div>
   <div class="filter-dropdown" *ngIf="showDropdown[1]">
-    <div>A - Z</div>
-    <div>Z - A</div>
+    <div class="filterBy">A - Z</div>
+    <div class="filterBy">Z - A</div>
   </div>
 </ion-header>
 

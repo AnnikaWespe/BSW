@@ -134,6 +134,7 @@ partner-page-component {
       float: right;
       margin-right: 5vw;
       padding: 0 2vw 0 2vw;
+      border: 1px solid map-get($colors, secondary);
     }
   }
   div.initialSpinner{
