@@ -1,0 +1,31 @@
+
+<ion-header>
+  <ion-navbar primary>
+    <ion-buttons left>
+      <button menuToggle>
+        <ion-icon name="menu" color="grey" class="menu-button-header"></ion-icon>
+      </button>
+    </ion-buttons>
+
+    <ion-title>
+      {{title}}
+    </ion-title>
+    <ion-buttons end>
+      <button>
+        <ion-icon name="search" color="grey" class="search-button-header"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <sebm-google-map [latitude]="lat" [longitude]="lng" [zoom] = "zoom">
+  </sebm-google-map>
+  <div class="searchbar-wrapper">
+    <ion-input placeholder="Ort eingeben oder auf Karte tippen"></ion-input>
+    <ion-icon name="close-circle" class="my-searchbar-icon"></ion-icon>
+  </div>
+</ion-content>
+
+
+
+

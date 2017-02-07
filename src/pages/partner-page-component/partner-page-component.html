@@ -15,35 +15,38 @@
       </button>
     </ion-buttons>
   </ion-navbar>
+  <ion-row>
+  <ion-col class="filter-button left-button" (click)="toggleVisibility(0)">
+    <div class="filter-button-text">KATEGORIE
+      <ion-icon name="arrow-dropdown"></ion-icon>
+    </div>
+  </ion-col>
+  <ion-col class="filter-button" (click)="toggleVisibility(1)">
+    <div class="filter-button-text">SORTIEREN
+      <ion-icon name="arrow-dropdown"></ion-icon>
+    </div>
+  </ion-col>
+</ion-row>
+  <div class="filter-dropdown" *ngIf="showDropdown[0]">
+    <div class="filterBy" (click)="filter('allpartners')">Alle Treffer</div>
+    <div class="filterBy" (click)="filter('ONLINEPARTNER')">Online-Partner</div>
+    <div class="filterBy" (click)="filter('OFFLINEPARTNER')">Vor-Ort-Partner<div class="manuallyChooseLocation" (click)="chooseLocationManually()">ORT MANUELL WÄHLEN</div></div>
+    <div class="filterBy" (click)="filter('TRAVELOFFER')">Reiseangebote</div>
+    <div class="filterBy" (click)="filter('VEHICLEOFFER')">Autoangebote</div>
+  </div>
+  <div class="filter-dropdown" *ngIf="showDropdown[1]">
+    <div>A - Z</div>
+    <div>Z - A</div>
+  </div>
 </ion-header>
+
+
+
 <ion-content>
-      <ion-row>
-        <ion-col class="filter-button left-button" (click)="toggleVisibility(0)">
-          <div class="filter-button-text">KATEGORIE
-            <ion-icon name="arrow-dropdown"></ion-icon>
-          </div>
-        </ion-col>
-        <ion-col class="filter-button" (click)="toggleVisibility(1)">
-          <div class="filter-button-text">SORTIEREN
-            <ion-icon name="arrow-dropdown"></ion-icon>
-          </div>
-        </ion-col>
-      </ion-row>
-      <div class="filter-dropdown" *ngIf="showDropdown[0]">
-        <div (click)="filter('allpartners')">Alle Treffer</div>
-        <div (click)="filter('ONLINEPARTNER')">Online-Partner</div>
-        <div (click)="filter('OFFLINEPARTNER')">Vor-Ort-Partner</div>
-        <div (click)="filter('TRAVELOFFER')">Reiseangebote</div>
-        <div (click)="filter('VEHICLEOFFER')">Autoangebote</div>
-      </div>
-      <div class="filter-dropdown" *ngIf="showDropdown[1]">
-        <div>A - Z</div>
-        <div>Z - A</div>
-      </div>
       <div class="initialSpinner">
         <ion-spinner *ngIf="waitingForResults" class="initialSpinner"></ion-spinner>
       </div>
-      <div class="partner-table-wrapper">
+      <div class="partner-table-wrapper" (click)="hideDropdown()">
         <ion-row class="partner-row" *ngFor="let partner of displayedPartners">
           <ion-col class="image-col">
             <div class="white-square">
@@ -61,7 +64,7 @@
           </ion-col>
         </ion-row>
       </div>
-  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" icon="ion-loading-c">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </ion-content>

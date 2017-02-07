@@ -2,6 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
 import {PartnerService} from "./partner-service";
+import {ChooseLocationManuallyComponent} from "./choose-location-manually/choose-location-manually";
 
 
 @Component({
@@ -78,7 +79,7 @@ export class PartnerPageComponent implements OnInit{
         this.category = partnerType;
         this.displayedPartners = [];
         this.getPartners(this.location);
-        this.toggleVisibility(0);
+        this.hideDropdown();
         this.waitingForResults = true;
       }
   }
@@ -89,24 +90,17 @@ export class PartnerPageComponent implements OnInit{
     this.getPartners(this.location);
     infiniteScroll.complete();
   }
-}
 
-
-
-@Component({})
-class SomeComponent {
-  @ViewChild('container') container;
-  @ViewChild('dropdown') dropdown;
-
-  constructor() {
-    document.addEventListener('click', this.offClickHandler.bind(this)); // bind on doc
+  chooseLocationManually(){
+    this.navCtrl.push(ChooseLocationManuallyComponent);
   }
 
-  offClickHandler(event:any) {
-    if (!this.container.nativeElement.contains(event.target)) { // check click origin
-      this.dropdown.nativeElement.style.display = "none";
-    }
+  hideDropdown(){
+    this.showDropdown = [false, false];
   }
 }
+
+
+
 
 

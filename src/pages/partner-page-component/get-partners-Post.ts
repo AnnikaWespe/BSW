@@ -4,8 +4,8 @@ export class GetPartnersPost {
     searchTerm: "",
     verbatim: true,
     location: {
-      latitude: 52.5247,
-      longitude: 13.4054,
+      latitude: null,
+      longitude: null,
       radius: 50.0,
       cityName: ""
     }
@@ -13,10 +13,10 @@ export class GetPartnersPost {
 
   ranges = {
     bucketToFrom: {
-      "ONLINEPARTNER": "0",
-      "OFFLINEPARTNER": "0",
-      "VEHICLEOFFER": "0",
-      "TRAVELOFFER": "0"
+      "ONLINEPARTNER": 0,
+      "OFFLINEPARTNER": 0,
+      "VEHICLEOFFER": 0,
+      "TRAVELOFFER": 0
     },
     rangeSize: 25
   };
@@ -26,7 +26,7 @@ export class GetPartnersPost {
   showmap = true;
   template = "unified";
 
-  constructor(location, bucket) {
+  constructor(location = {latitude: 48.1340, longitude: 11.5677}, bucket = 0) {
     this.query.location.latitude = location.latitude.toFixed(4);
     this.query.location.longitude = location.longitude.toFixed(4);
     this.ranges.bucketToFrom.OFFLINEPARTNER = bucket;

@@ -1,0 +1,27 @@
+choose-location-manually {
+  .sebm-google-map-container {
+    height: 100%;
+    z-index: 1;
+  }
+  ion-input{
+      position:absolute;
+      z-index:3;
+      background-color: white;
+      line-height: 3vh;
+      width: 90%;
+    border-radius: 1vw;
+  }
+  div.searchbar-wrapper{
+    position: absolute;
+    top: 3vh;
+    left: 3vh;
+    z-index: 99;
+    width: 80vw;
+  }
+  ion-icon.my-searchbar-icon{
+    z-index: 120;
+    position: absolute;
+    right: 10vw;
+    top: 1vw;
+  }
+}

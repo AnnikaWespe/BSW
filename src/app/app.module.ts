@@ -1,7 +1,8 @@
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule, ErrorHandler, ApplicationRef } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import {FormsModule} from '@angular/forms';
 import {HttpModule, JsonpModule} from '@angular/http';
+import { AgmCoreModule } from 'angular2-google-maps/core';
 
 import { MyApp } from './app.component';
 import {LoginPageComponent} from '../pages/login-page-component/login-component';
@@ -19,6 +20,7 @@ import {MembershipDataFormComponent} from "../pages/my-profile-page-component/us
 import {PartnerService} from '../pages/partner-page-component/partner-service';
 import {GetPartnersPost} from "../pages/partner-page-component/get-partners-Post";
 import {TruncateWordsPipe} from '../pages/partner-page-component/truncate'
+import {ChooseLocationManuallyComponent} from "../pages/partner-page-component/choose-location-manually/choose-location-manually";
 
 
 @NgModule({
@@ -36,13 +38,17 @@ import {TruncateWordsPipe} from '../pages/partner-page-component/truncate'
     PartnerPageComponent,
     SettingsPageComponent,
     MembershipDataFormComponent,
-TruncateWordsPipe,
+    ChooseLocationManuallyComponent,
+    TruncateWordsPipe,
   ],
   imports: [
     IonicModule.forRoot(MyApp),
     FormsModule,
     HttpModule,
-    JsonpModule
+    JsonpModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyBAHcgksDNzLfzvKC0ZjnoQZeivSQbE1Iw'
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -55,9 +61,10 @@ TruncateWordsPipe,
     LogoutPageComponent,
     MyProfilePageComponent,
     PartnerPageComponent,
-    SettingsPageComponent
+    SettingsPageComponent,
+    ChooseLocationManuallyComponent
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService, GetPartnersPost],
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService],
 
 })
 export class AppModule {}

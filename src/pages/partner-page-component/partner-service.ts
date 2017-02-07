@@ -15,11 +15,10 @@ export class PartnerService {
   private hardLatitude: number = 48.1340;
   private hardLongitude: number = 11.5677;
 
-
   constructor(private http: Http) {}
 
   getPartners(location, bucket): Observable <any> {
-    let post = new GetPartnersPost(location, bucket);
+    let post = new GetPartnersPost();
     let headers = new Headers({'Content-Type': 'application/json'});
     let options = new RequestOptions({headers: headers});
     let getPartnersPostJson = JSON.stringify(post);

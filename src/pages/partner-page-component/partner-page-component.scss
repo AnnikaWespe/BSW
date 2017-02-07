@@ -1,4 +1,7 @@
 partner-page-component {
+  div.scroll-content{
+    margin-top: 0;
+  }
   ion-col.filter-button{
     height: 8vh;
     background-color: map_get($colors, secondary-grey);
@@ -114,11 +117,23 @@ partner-page-component {
     width: 100%;
     background-color: map_get($colors, light);
     z-index: 100;
-    padding-bottom: 3vh;
+    padding: 1vh 0 1vh 0;
     border-bottom: 1px solid grey;
-    div{
-      margin: 4vh 0 1vh 3vw;
+    div.filterBy{
+      margin-left: 1vh;
+      line-height: 7vh;
       font-size: medium;
+    }
+    div.manuallyChooseLocation{
+      color: map_get($colors, secondary);
+      vertical-align: middle;
+      font-size: xx-small;
+      font-weight: bolder;
+      line-height: 6.5vh;
+      background-color: map_get($colors, secondary-grey);
+      float: right;
+      margin-right: 5vw;
+      padding: 0 2vw 0 2vw;
     }
   }
   div.initialSpinner{
