@@ -1,27 +1,34 @@
 <ion-header>
   <ion-navbar primary>
     <ion-buttons left>
-      <button menuToggle>
+      <button menuToggle *ngIf="!searchInterfaceOpen">
         <ion-icon name="menu" color="grey" class="menu-button-header"></ion-icon>
       </button>
+      <button *ngIf="searchInterfaceOpen" (click)="closeSearchInterface()">
+        <ion-icon name="arrow-back" color="grey" class="menu-button-header"></ion-icon>
+      </button>
     </ion-buttons>
-
-    <ion-title>
+    <ion-title *ngIf="!searchInterfaceOpen">
       {{title}}
     </ion-title>
+    <input id="mySearchInputField"
+           placeholder="Geben Sie einen Suchbegriff ein"
+           (keyup) = "inputToSuggestions($event)"
+           [(ngModel)]="searchTerm"
+           *ngIf="searchInterfaceOpen">
     <ion-buttons end>
       <button>
-        <ion-icon name="search" color="grey" class="search-button-header" (click)="openSearchInterface()"></ion-icon>
+        <ion-icon name={{iconRight}} color="grey" class="search-button-header" (click)="functionRightIcon()"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
-  <ion-row>
-  <ion-col class="filter-button left-button" (click)="toggleVisibility(0)">
+  <ion-row *ngIf="!searchInterfaceOpen">
+  <ion-col class="filter-button left-button" (click)="toggleVisibilityDropdowns(0)">
     <div class="filter-button-text">KATEGORIE
       <ion-icon name="arrow-dropdown"></ion-icon>
     </div>
   </ion-col>
-  <ion-col class="filter-button" (click)="toggleVisibility(1)">
+  <ion-col class="filter-button" (click)="toggleVisibilityDropdowns(1)">
     <div class="filter-button-text">SORTIEREN
       <ion-icon name="arrow-dropdown"></ion-icon>
     </div>
@@ -43,6 +50,10 @@
 
 
 <ion-content>
+  <div [style.margin-top]="getMargin()">
+    <div class="suggestions-wrapper" *ngIf="searchSuggestionsOpen">
+      <div *ngFor="let item of searchTermCompletion" class="suggestion" (click)="completeSearchTerm(item.displayText)">{{item.displayText}}</div>
+    </div>
       <div class="initialSpinner">
         <ion-spinner *ngIf="waitingForResults" class="initialSpinner"></ion-spinner>
       </div>
@@ -64,8 +75,9 @@
           </ion-col>
         </ion-row>
       </div>
-  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" icon="ion-loading-c">
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>
+  </div>
 </ion-content>
 

@@ -119,6 +119,7 @@ partner-page-component {
     z-index: 100;
     padding: 1vh 0 1vh 0;
     border-bottom: 1px solid grey;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     div.filterBy{
       margin-left: 1vh;
       line-height: 7vh;
@@ -135,7 +136,20 @@ partner-page-component {
       margin-right: 5vw;
       padding: 0 2vw 0 2vw;
       border: 1px solid map-get($colors, secondary);
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
+  }
+  input#mySearchInputField{
+    background-color: transparent;
+    width: 100%;
+    border: none;
+  }
+  div.suggestions-wrapper{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 1vh 0 1vh 0;
+  }
+  div.suggestion{
+    padding: 1vh 0 1vh 2vw;
   }
   div.initialSpinner{
     margin: auto;
@@ -147,5 +161,8 @@ partner-page-component {
   ion-spinner.initialSpinner{
     width: 19% !important;
     height: 85px !important;
+  }
+  div.scroll-content{
+    margin-top: 0px !important;
   }
 }

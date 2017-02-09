@@ -1,4 +1,4 @@
-import { NgModule, ErrorHandler, ApplicationRef } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import {FormsModule} from '@angular/forms';
 import {HttpModule, JsonpModule} from '@angular/http';
@@ -18,9 +18,9 @@ import {PartnerPageComponent} from "../pages/partner-page-component/partner-page
 import {SettingsPageComponent} from "../pages/settings-page-component/settings-page-component";
 import {MembershipDataFormComponent} from "../pages/my-profile-page-component/user-detail/membership-data-form.component";
 import {PartnerService} from '../pages/partner-page-component/partner-service';
-import {GetPartnersPost} from "../pages/partner-page-component/get-partners-Post";
 import {TruncateWordsPipe} from '../pages/partner-page-component/truncate'
 import {ChooseLocationManuallyComponent} from "../pages/partner-page-component/choose-location-manually/choose-location-manually";
+import {SearchCompletionService} from "../pages/partner-page-component/search-completion/search-completion-service";
 
 
 @NgModule({
@@ -64,7 +64,7 @@ import {ChooseLocationManuallyComponent} from "../pages/partner-page-component/c
     SettingsPageComponent,
     ChooseLocationManuallyComponent
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService],
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService, SearchCompletionService],
 
 })
 export class AppModule {}
