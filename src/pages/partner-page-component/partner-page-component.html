@@ -22,7 +22,7 @@
       </button>
     </ion-buttons>
   </ion-navbar>
-  <ion-row *ngIf="!searchInterfaceOpen">
+  <ion-row *ngIf="!searchSuggestionsOpen">
   <ion-col class="filter-button left-button" (click)="toggleVisibilityDropdowns(0)">
     <div class="filter-button-text">KATEGORIE
       <ion-icon name="arrow-dropdown"></ion-icon>
@@ -61,17 +61,17 @@
         <ion-row class="partner-row" *ngFor="let partner of displayedPartners">
           <ion-col class="image-col">
             <div class="white-square">
-              <img src="{{partner.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
+              <img src="{{partner?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
             </div>
           </ion-col>
           <ion-col class="text-row">
             <div class="partner-text-div partner">
-              <p class="partner-title">{{partner.nameOrigin}}</p>
-              <p class="partner-description">{{partner.description | words : 10}}</p>
+              <p class="partner-title">{{partner?.nameOrigin}}</p>
+              <p class="partner-description">{{partner?.description | words : 10}}</p>
             </div>
           </ion-col>
           <ion-col class="bonus-col">
-            <p>{{partner.bonusA}}</p>
+            <p>{{partner?.bonusA}}</p>
           </ion-col>
         </ion-row>
       </div>

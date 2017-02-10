@@ -145,8 +145,14 @@ partner-page-component {
     border: none;
   }
   div.suggestions-wrapper{
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    border-bottom: 1px solid grey;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     padding: 1vh 0 1vh 0;
+    background-color: white;
   }
   div.suggestion{
     padding: 1vh 0 1vh 2vw;

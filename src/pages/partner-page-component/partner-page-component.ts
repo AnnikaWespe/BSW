@@ -20,16 +20,15 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
 
   errorMessage: string;
 
-  location: {latitude: number, longitude: number};
+  location: {latitude: number, longitude: number} = {latitude: 0, longitude: 0};
   locationFound: boolean = false;
 
   partners: any[] = [];
   displayedPartners: any[] = [];
+  resetPartnersArray: boolean = true;
 
   category: string = "allpartners";
   bucket: number = 0;
-
-  statusText: string;
 
   searchInterfaceOpen: boolean = false;
   searchSuggestionsOpen: boolean = false;
@@ -37,12 +36,9 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   iconRight: string = "search";
   searchTermCompletion: SearchTermCompletion[];
   noMatchesFound = [new SearchTermCompletion("Leider keine Übereinstimmung")];
-  searchTerm: string;
-  public focusTrigger = new EventEmitter<boolean>();
+  searchTerm: string = "";
 
 
-
-  values: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService, private searchCompletionService: SearchCompletionService, private renderer: Renderer) {
   }
@@ -60,81 +56,82 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     Geolocation.getCurrentPosition().then((position) => {
       this.location = position.coords;
       this.locationFound = true;
-      this.getPartners(this.location, "");
+      this.getPartners();
     }, (err) => {
       console.log(err);
-      this.getPartners(this.location, "");
+      this.getPartners();
     })
   }
 
-  getPartners(location, searchTerm) {
-    this.partnerService.getPartners(location, this.bucket)
+  getPartners() {
+    this.displayedPartners = [];
+    this.waitingForResults = true;
+    this.searchSuggestionsOpen = false;
+    this.partnerService.getPartners(this.location, this.bucket, this.searchTerm)
       .subscribe(
         body => {
           let returnedObject = body.json();
-          if (this.category == "allpartners") {
-            this.displayedPartners = this.displayedPartners.concat(returnedObject.contentEntities);
-          }
-          else {
-            this.displayedPartners = this.displayedPartners.concat(returnedObject.originalSearchResults.bucketToSearchResult[this.category].contentEntities);
-          }
-          ;
-          this.waitingForResults = false;
-          console.log(this.displayedPartners);
+          this.getRightCategoryPartners(returnedObject);
         },
         error => this.errorMessage = <any>error);
+  }
 
+  getRightCategoryPartners(returnedObject) {
+    if (this.category == "allpartners") {
+      this.displayedPartners = this.displayedPartners.concat(returnedObject.contentEntities);
+    }
+    else {
+      this.displayedPartners = this.displayedPartners.concat(returnedObject.originalSearchResults.bucketToSearchResult[this.category].contentEntities);
+    }
+    ;
+    this.waitingForResults = false;
   }
 
   filter(partnerType) {
     if (this.locationFound) {
       this.category = partnerType;
-      this.displayedPartners = [];
-      this.getPartners(this.location, "");
+      this.resetPartnersArray = true;
+      this.getPartners();
       this.hideDropdown();
       this.waitingForResults = true;
     }
   }
 
-  doInfinite(infiniteScroll) {
-    console.log("loadnextpartners");
-    this.bucket += 1;
-    this.getPartners(this.location, "");
-    infiniteScroll.complete();
-  }
-
-
   inputToSuggestions(event: any) {
-    this.getSearchSuggestions(event.target.value);
+    if(event.keyCode !== 13) {this.getSearchSuggestions(event.target.value)};
+    if (event.keyCode === 8 && this.searchTerm === "") {
+      this.searchSuggestionsOpen = false;
+      this.resetPartnersArray = true;
+      this.getPartners();
+    }
+    if(event.keyCode == 13 && this.searchTerm.length > 1){
+      this.resetPartnersArray = true;
+      this.getPartners();
+    }
   }
 
-  getSearchSuggestions(searchTerm) {
-    this.searchCompletionService.getSuggestions(searchTerm, this.location.latitude || 0, this.location.longitude || 0)
+  getSearchSuggestions(searchTermSnippet) {
+    this.searchCompletionService.getSuggestions(searchTermSnippet, this.location.latitude, this.location.longitude)
       .subscribe(
         data => {
           this.searchTermCompletion = data.results;
-          if (data.results) {this.searchSuggestionsOpen = true}
-          else {this.searchTermCompletion = this.noMatchesFound};
+          if (data.results) {
+            this.searchSuggestionsOpen = true
+          }
+          else {
+            this.searchTermCompletion = this.noMatchesFound
+          }
+          ;
           ;
         },
         error => this.errorMessage = <any>error)
   }
 
-  completeSearchTerm(text){
-  this.searchTerm = text;
-  this.searchSuggestionsOpen = false;
-  }
-
-
-  getMargin() {
-    return this.searchInterfaceOpen ? "54px" : "108px";
-  }
-
-  closeSearchInterface() {
-    this.searchInterfaceOpen = false;
-    this.iconLeft = "menu";
-    this.iconRight = "search";
-    this.searchTerm = "";
+  completeSearchTerm(text) {
+    this.searchTerm = text;
+    this.searchSuggestionsOpen = false;
+    this.resetPartnersArray = true;
+    this.getPartners();
   }
 
   chooseLocationManually() {
@@ -143,35 +140,63 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     this.hideDropdown();
   }
 
+  functionRightIcon() {
+    if (!this.searchInterfaceOpen) {
+      this.searchInterfaceOpen = true;
+      this.iconLeft = "arrow-back";
+      this.iconRight = "close-circle";
+      this.hideDropdown();
+    }
+    else {
+      this.searchTerm = "";
+      this.searchSuggestionsOpen = false;
+      this.resetPartnersArray = true;
+      this.getPartners();
+    }
+  }
+
+
+  //pure DOM methods
+
+  private setFocus() {
+    let searchInputField = document.getElementById('mySearchInputField');
+    if (searchInputField) {
+      searchInputField.focus();
+    }
+  }
+
   hideDropdown() {
     this.showDropdown = [false, false];
   }
 
   toggleVisibilityDropdowns(position) {
-  let isVisible = this.showDropdown[position];
-  this.showDropdown = [false, false];
-  this.showDropdown[position] = !isVisible;
-}
-
-  functionRightIcon() {
-    if (!this.searchInterfaceOpen) {
-      this.searchInterfaceOpen = true;
-      this.iconLeft = "arrow-back";
-      this.iconRight = "search";
-      this.hideDropdown();
-    }
-    else {
-      this.closeSearchInterface()
-    }
+    let isVisible = this.showDropdown[position];
+    this.showDropdown = [false, false];
+    this.showDropdown[position] = !isVisible;
   }
 
-  private setFocus() {
-    let searchInputField = document.getElementById('mySearchInputField');
-    if(searchInputField) {
-      searchInputField.focus();
-    }
+  getMargin() {
+    return this.searchSuggestionsOpen ? "54px" : "108px";
   }
 
+  closeSearchInterface() {
+    this.searchInterfaceOpen = false;
+    this.searchSuggestionsOpen = false;
+    this.hideDropdown();
+    this.iconLeft = "menu";
+    this.iconRight = "search";
+    this.searchTerm = "";
+    this.resetPartnersArray = true;
+    this.getPartners();
+  }
+
+  doInfinite(infiniteScroll) {
+    console.log("loadnextpartners");
+    this.bucket += 1;
+    this.resetPartnersArray = true;
+    this.getPartners();
+    infiniteScroll.complete();
+  }
 }
 
 
