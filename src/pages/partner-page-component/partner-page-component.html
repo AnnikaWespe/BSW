@@ -22,7 +22,7 @@
       </button>
     </ion-buttons>
   </ion-navbar>
-  <ion-row *ngIf="!searchSuggestionsOpen">
+  <ion-row *ngIf="!searchSuggestionsOpen" class="filter-button-row">
   <ion-col class="filter-button left-button" (click)="toggleVisibilityDropdowns(0)">
     <div class="filter-button-text">KATEGORIE
       <ion-icon name="arrow-dropdown"></ion-icon>
@@ -37,7 +37,7 @@
   <div class="filter-dropdown" *ngIf="showDropdown[0]">
     <div class="filterBy" (click)="filter('allpartners')">Alle Treffer</div>
     <div class="filterBy" (click)="filter('ONLINEPARTNER')">Online-Partner</div>
-    <div class="filterBy" (click)="filter('OFFLINEPARTNER')">Vor-Ort-Partner<div class="manuallyChooseLocation" (click)="chooseLocationManually()">ORT MANUELL WÄHLEN</div></div>
+    <div class="filterBy" (click)="filter('OFFLINEPARTNER')" [class.disabled] = "!locationChosen && !locationFound">Vor-Ort-Partner<div class="chooseLocationManually" (click)="chooseLocationManually()">ORT MANUELL WÄHLEN</div></div>
     <div class="filterBy" (click)="filter('TRAVELOFFER')">Reiseangebote</div>
     <div class="filterBy" (click)="filter('VEHICLEOFFER')">Autoangebote</div>
   </div>
@@ -76,7 +76,9 @@
         </ion-row>
       </div>
   <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
-    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    <ion-infinite-scroll-content>
+      <ion-spinner class="initialSpinner"></ion-spinner>
+    </ion-infinite-scroll-content>
   </ion-infinite-scroll>
   </div>
 </ion-content>

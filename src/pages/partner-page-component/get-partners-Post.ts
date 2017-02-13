@@ -28,8 +28,8 @@ export class GetPartnersPost {
 
   constructor(location = {latitude: 0, longitude: 0}, bucket = 0, searchTerm) {
     this.query.searchTerm = searchTerm;
-    this.query.location.latitude = location.latitude.toFixed(4);
-    this.query.location.longitude = location.longitude.toFixed(4);
+    this.query.location.latitude = location.latitude;
+    this.query.location.longitude = location.longitude;
     this.ranges.bucketToFrom.OFFLINEPARTNER = bucket;
     this.ranges.bucketToFrom.ONLINEPARTNER = bucket;
     this.ranges.bucketToFrom.VEHICLEOFFER = bucket;

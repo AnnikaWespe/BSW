@@ -9,10 +9,11 @@ partner-page-component {
   .left-button{
      margin-right: 1.5px;
    }
-  ion-row{
+  ion-row.filter-button-row{
     border-bottom: 1px solid map-get($colors, secondary);
     position: relative;
     text-align: center;
+    background-color: white;
   }
   div.filter-button-text{
     color: map_get($colors, secondary);
@@ -124,8 +125,11 @@ partner-page-component {
       margin-left: 1vh;
       line-height: 7vh;
       font-size: medium;
+      &.disabled{
+        color: grey;
+      }
     }
-    div.manuallyChooseLocation{
+    div.chooseLocationManually{
       color: map_get($colors, secondary);
       vertical-align: middle;
       font-size: xx-small;

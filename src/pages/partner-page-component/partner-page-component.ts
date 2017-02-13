@@ -5,6 +5,7 @@ import {PartnerService} from "./partner-service";
 import {ChooseLocationManuallyComponent} from "./choose-location-manually/choose-location-manually";
 import {SearchTermCompletion} from './search-completion/SearchTermCompletion';
 import {SearchCompletionService} from "./search-completion/search-completion-service";
+import {AlertController} from 'ionic-angular';
 
 
 @Component({
@@ -20,8 +21,10 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
 
   errorMessage: string;
 
-  location: {latitude: number, longitude: number} = {latitude: 0, longitude: 0};
+  location: {latitude: string, longitude: string} = {latitude: "0", longitude: "0"};
+  chosenLocation: {latitude: string, longitude: string};
   locationFound: boolean = false;
+  locationChosen: boolean = false;
 
   partners: any[] = [];
   displayedPartners: any[] = [];
@@ -39,8 +42,9 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   searchTerm: string = "";
 
 
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService, private searchCompletionService: SearchCompletionService, private renderer: Renderer) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService,
+              private searchCompletionService: SearchCompletionService, private renderer: Renderer, public alertCtrl: AlertController) {
+              this.chosenLocation = navParams.get('location');
   }
 
   public ngAfterViewChecked() {
@@ -48,24 +52,55 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
-    this.getLocationData();
+    if(this.chosenLocation){
+      this.location = this.chosenLocation;
+      this.locationChosen = true;
+      this.getPartners();
+    }
+    else{
+      this.getLocationData();
+    }
   };
 
+  showPrompt() {
+    let prompt = this.alertCtrl.create({
+      title: 'Kein Standort gefunden',
+      message: "Wollen Sie Ihren Standort manuell eingeben?",
+      buttons: [
+        {
+          text: 'Ohne Standort fortfahren',
+          handler: data => {
+            this.getPartners();
+          }
+        },
+        {
+          text: 'Ja',
+          handler: data => {
+            this.navCtrl.push(ChooseLocationManuallyComponent);
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
 
   getLocationData() {
     Geolocation.getCurrentPosition().then((position) => {
-      this.location = position.coords;
+      this.location.latitude = position.coords.latitude.toFixed(4);
+      this.location.longitude = position.coords.longitude.toFixed(4)
       this.locationFound = true;
       this.getPartners();
     }, (err) => {
       console.log(err);
-      this.getPartners();
+      this.showPrompt();
     })
   }
 
   getPartners() {
-    this.displayedPartners = [];
-    this.waitingForResults = true;
+    if (this.resetPartnersArray == true){
+      this.displayedPartners = [];
+      this.waitingForResults = true;
+    }
     this.searchSuggestionsOpen = false;
     this.partnerService.getPartners(this.location, this.bucket, this.searchTerm)
       .subscribe(
@@ -83,12 +118,12 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     else {
       this.displayedPartners = this.displayedPartners.concat(returnedObject.originalSearchResults.bucketToSearchResult[this.category].contentEntities);
     }
-    ;
+    console.log("length of displayed partners array:" + this.displayedPartners.length)
     this.waitingForResults = false;
   }
 
   filter(partnerType) {
-    if (this.locationFound) {
+    if(partnerType !== 'OFFLINEPARTNER' || this.locationFound || this.chosenLocation){
       this.category = partnerType;
       this.resetPartnersArray = true;
       this.getPartners();
@@ -121,8 +156,6 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
           else {
             this.searchTermCompletion = this.noMatchesFound
           }
-          ;
-          ;
         },
         error => this.errorMessage = <any>error)
   }
@@ -136,7 +169,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
 
   chooseLocationManually() {
     event.stopPropagation();
-    this.navCtrl.push(ChooseLocationManuallyComponent);
+    this.navCtrl.push(ChooseLocationManuallyComponent, {location: this.location});
     this.hideDropdown();
   }
 
@@ -193,7 +226,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   doInfinite(infiniteScroll) {
     console.log("loadnextpartners");
     this.bucket += 1;
-    this.resetPartnersArray = true;
+    this.resetPartnersArray = false;
     this.getPartners();
     infiniteScroll.complete();
   }

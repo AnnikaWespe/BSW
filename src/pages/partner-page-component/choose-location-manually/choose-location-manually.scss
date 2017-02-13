@@ -8,20 +8,34 @@ choose-location-manually {
       z-index:3;
       background-color: white;
       line-height: 3vh;
-      width: 90%;
-    border-radius: 1vw;
+      width: 94vw;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
   div.searchbar-wrapper{
     position: absolute;
     top: 3vh;
-    left: 3vh;
+    left: 3vw;
     z-index: 99;
     width: 80vw;
+
   }
   ion-icon.my-searchbar-icon{
     z-index: 120;
     position: absolute;
     right: 10vw;
     top: 1vw;
+    line-height: 3vh;
+  }
+  .gm-sm {
+    display: none !important;
+  }
+
+  .back-button {
+    color: map_get($colors, grey);
+  }
+  input#searchLocation{
+    background-color: transparent;
+    width: 100%;
+    border: none;
   }
 }

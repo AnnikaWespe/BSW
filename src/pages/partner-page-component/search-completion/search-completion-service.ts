@@ -8,7 +8,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class SearchCompletionService {
   constructor (private http: Http) {}
-  getSuggestions (searchTerm, latitude = 0, longitude = 0): Observable<any> {
+  getSuggestions (searchTerm, latitude = "0", longitude = "0"): Observable<any> {
     let rootOfUrl = "https://www.bsw.de/autocomplete/completephrasep?prefix=";
     let requestUrl : string = rootOfUrl + searchTerm + "&hal&radius=50&latitude=" + latitude + "&longitude=" + longitude + "&callback=www.bsw.de";
     console.log(requestUrl);
@@ -24,7 +24,7 @@ export class SearchCompletionService {
     return body || { };
   }
   private handleError (error: Response | any) {
-    // In a real world app, we might use a remote logging infrastructure
+    // TODO: In a real world app, we might use a remote logging infrastructure
     let errMsg: string;
     if (error instanceof Response) {
       const body = error.json() || '';

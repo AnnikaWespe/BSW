@@ -21,6 +21,7 @@ import {PartnerService} from '../pages/partner-page-component/partner-service';
 import {TruncateWordsPipe} from '../pages/partner-page-component/truncate'
 import {ChooseLocationManuallyComponent} from "../pages/partner-page-component/choose-location-manually/choose-location-manually";
 import {SearchCompletionService} from "../pages/partner-page-component/search-completion/search-completion-service";
+import {ChooseLocationManuallyModal} from "../pages/partner-page-component/choose-location-manually/choose-location-manually-modal/choose-location-manually-modal";
 
 
 @NgModule({
@@ -62,7 +63,7 @@ import {SearchCompletionService} from "../pages/partner-page-component/search-co
     MyProfilePageComponent,
     PartnerPageComponent,
     SettingsPageComponent,
-    ChooseLocationManuallyComponent
+    ChooseLocationManuallyComponent,
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService, SearchCompletionService],
 

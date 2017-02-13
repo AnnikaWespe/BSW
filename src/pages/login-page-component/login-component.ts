@@ -18,7 +18,7 @@ export class LoginPageComponent {
   scannedNumber: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.barcodeData = navParams.get('details');
+    this.barcodeData = navParams.get('barcodeData');
     if(this.barcodeData) {
       this.scannedNumber = this.barcodeData.text;
     }
@@ -32,5 +32,8 @@ export class LoginPageComponent {
     this.navCtrl.setRoot(OverviewPageComponent);
   }
 
+  saveLocation(){
+
+  }
 }
 

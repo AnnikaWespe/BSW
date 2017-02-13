@@ -20,15 +20,15 @@ export class ConfirmScanPageComponent {
       .then((result) => {
         if (!result.cancelled) {
           const barcodeData = new BarcodeData(result.text, result.format);
-          this.scanDetails(barcodeData);
+          this.backToLoginPage(barcodeData);
         }
       })
       .catch((err) => {
         alert(err);
       })
   };
-  scanDetails(details) {
-    this.navCtrl.push(LoginPageComponent, {details: details});
+  backToLoginPage(barcodeData) {
+    this.navCtrl.push(LoginPageComponent, {barcodeData: barcodeData});
   }
 }
 

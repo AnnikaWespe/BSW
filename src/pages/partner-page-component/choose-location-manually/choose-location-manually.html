@@ -1,29 +1,33 @@
-
 <ion-header>
   <ion-navbar primary>
     <ion-buttons left>
-      <button menuToggle>
+      <button menuToggle ion-button icon-only>
         <ion-icon name="menu" color="grey" class="menu-button-header"></ion-icon>
       </button>
     </ion-buttons>
-
-    <ion-title>
-      {{title}}
-    </ion-title>
+    <input id="searchLocation"
+           placeholder="Ort eingeben oder auf Karte tippen"
+           (keyup) = "inputToSuggestions($event)"
+           [(ngModel)]="searchTerm">
     <ion-buttons end>
       <button>
-        <ion-icon name="search" color="grey" class="search-button-header"></ion-icon>
+        <ion-icon name="checkmark" color="grey" class="search-button-header" (click) = "saveLocation()" *ngIf="checkButtonVisible"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
+
+
 <ion-content>
-  <sebm-google-map [latitude]="lat" [longitude]="lng" [zoom] = "zoom">
+  <sebm-google-map
+    [latitude]="latitudeCenter"
+    [longitude]="longitudeCenter"
+    [zoom] = "zoom"
+    (mapClick) = "mapClicked($event)"
+    [streetViewControl] = "false"
+    [zoomControl] = "false">
+    <sebm-google-map-marker [latitude] = "parseFloat(latitude)" [longitude] = "parseFloat(longitude)"></sebm-google-map-marker>
   </sebm-google-map>
-  <div class="searchbar-wrapper">
-    <ion-input placeholder="Ort eingeben oder auf Karte tippen"></ion-input>
-    <ion-icon name="close-circle" class="my-searchbar-icon"></ion-icon>
-  </div>
 </ion-content>
 
 
