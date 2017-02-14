@@ -22,6 +22,8 @@ import {TruncateWordsPipe} from '../pages/partner-page-component/truncate'
 import {ChooseLocationManuallyComponent} from "../pages/partner-page-component/choose-location-manually/choose-location-manually";
 import {SearchCompletionService} from "../pages/partner-page-component/search-completion/search-completion-service";
 import {ChooseLocationManuallyModal} from "../pages/partner-page-component/choose-location-manually/choose-location-manually-modal/choose-location-manually-modal";
+import {GoogleMapsAPIWrapper} from "angular2-google-maps/core";
+import {StyledMap} from "../pages/partner-page-component/choose-location-manually/styledMap";
 
 
 @NgModule({
@@ -41,6 +43,7 @@ import {ChooseLocationManuallyModal} from "../pages/partner-page-component/choos
     MembershipDataFormComponent,
     ChooseLocationManuallyComponent,
     TruncateWordsPipe,
+    StyledMap
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -65,7 +68,7 @@ import {ChooseLocationManuallyModal} from "../pages/partner-page-component/choos
     SettingsPageComponent,
     ChooseLocationManuallyComponent,
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService, SearchCompletionService],
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService, SearchCompletionService, GoogleMapsAPIWrapper],
 
 })
 export class AppModule {}

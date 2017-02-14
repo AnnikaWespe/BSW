@@ -24,11 +24,14 @@
     [longitude]="longitudeCenter"
     [zoom] = "zoom"
     (mapClick) = "mapClicked($event)"
-    [streetViewControl] = "false"
     [zoomControl] = "false">
     <sebm-google-map-marker [latitude] = "parseFloat(latitude)" [longitude] = "parseFloat(longitude)"></sebm-google-map-marker>
+    <styled-map></styled-map>
   </sebm-google-map>
 </ion-content>
+
+<!--    [streetViewControl] = "false" -->
+
 
 
 
