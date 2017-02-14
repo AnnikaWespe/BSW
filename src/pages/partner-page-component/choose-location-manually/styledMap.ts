@@ -14,7 +14,11 @@ export class StyledMap {
 
       let stylesArray : any = [
         {
-             clickableIcons: false 
+          featureType: "poi",
+          elementType: "labels",
+          stylers: [
+            { visibility: "off" }
+          ]
         }
       ];
 
