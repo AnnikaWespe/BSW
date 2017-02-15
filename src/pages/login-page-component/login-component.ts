@@ -1,7 +1,7 @@
 
 
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, NavController, NavParams } from 'ionic-angular';
+import { Nav, NavController, NavParams } from 'ionic-angular';
 
 import {OverviewPageComponent} from "../overview-page-component/overview-component";
 import {ConfirmScanPageComponent} from "./confirm-scan-page-component/confirm-scan-page-component";

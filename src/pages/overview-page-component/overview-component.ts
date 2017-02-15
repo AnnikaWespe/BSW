@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
-import {SavingsOverviewComponent} from '../pages/overview-page-component/savings-overview-component/savings-overview-component';
-
 
 @Component({
   providers: [],

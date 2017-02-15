@@ -10,7 +10,7 @@ ion-header{
 		text-align: center;
     color: map-get($colors, secondary);
 	}
-  .menu-button-header, .search-button-header{
+  .menu-button-header, .search-button-header, .add-favourite-button-header{
     font-size: 4vh;
     margin: 0 3vw;
   }
@@ -19,13 +19,17 @@ ion-header{
 ion-header .toolbar-title-md{
   color: map-get($colors, secondary);
 }
+
+.back-button .disable-hover .bar-button .bar-button-md .back-button-md .bar-button-default .bar-button-default-md .show-back-button{
+  color: map-get($colors, secondary);
+}
 ion-navbar.toolbar.toolbar-md{
-  background-color: map-get($colors, light);;
+  background-color: map-get($colors, light);
 }
 
 ion-menu{
   div.logo{
-    background: url('/../assets/icon/bsw-logo.png')no-repeat;
+    background: url('../assets/icon/bsw-logo.png')no-repeat;
     height: 16vh;
     width: 32vh;
     overflow: hidden;

@@ -1,6 +1,7 @@
 partner-page-component {
   div.scroll-content{
     margin-top: 0;
+    background-color: map_get($colors, light);
   }
   ion-col.filter-button{
     height: 8vh;
@@ -25,6 +26,7 @@ partner-page-component {
   ion-icon{
     margin-left: 1vw;
   }
+
   div.partner-div{
     background-color: map_get($colors,light);
     overflow: hidden;

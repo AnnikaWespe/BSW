@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import {Component} from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'membership-data-form',

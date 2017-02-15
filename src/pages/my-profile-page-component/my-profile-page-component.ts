@@ -1,4 +1,4 @@
-import {Component, Input, trigger, state, style, animate, transition, keyframes} from '@angular/core';
+import {Component, trigger, state, style } from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 
 import {UserDetailProvider} from './user-detail/user-detail-provider';

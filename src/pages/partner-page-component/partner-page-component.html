@@ -57,8 +57,8 @@
       <div class="initialSpinner">
         <ion-spinner *ngIf="waitingForResults" class="initialSpinner"></ion-spinner>
       </div>
-      <div class="partner-table-wrapper" (click)="hideDropdown()">
-        <ion-row class="partner-row" *ngFor="let partner of displayedPartners">
+      <div class="partner-table-wrapper" (click)="hideDropdown($event)">
+        <ion-row class="partner-row" *ngFor="let partner of displayedPartners" (click)="openPartnerDetail(partner)">
           <ion-col class="image-col">
             <div class="white-square">
               <img src="{{partner?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">

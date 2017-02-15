@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, NavController, NavParams } from 'ionic-angular';
+import { Component} from '@angular/core';
+import { NavController, NavParams } from 'ionic-angular';
 import {BarcodeScanner} from 'ionic-native';
 
 import {BarcodeData} from "./BarcodeData";

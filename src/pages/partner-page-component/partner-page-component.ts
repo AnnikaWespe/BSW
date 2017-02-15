@@ -1,11 +1,12 @@
-import {Component, OnInit, ViewChild, ElementRef, Renderer, EventEmitter, AfterViewChecked} from '@angular/core';
+import {Component, OnInit, Renderer, AfterViewChecked} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
 import {PartnerService} from "./partner-service";
-import {ChooseLocationManuallyComponent} from "./choose-location-manually/choose-location-manually";
+import {ChooseLocationManuallyComponent} from "./choose-location-manually/choose-location-manually-component";
 import {SearchTermCompletion} from './search-completion/SearchTermCompletion';
 import {SearchCompletionService} from "./search-completion/search-completion-service";
 import {AlertController} from 'ionic-angular';
+import {PartnerDetailComponent} from "./partner-detail-component/partner-detail-component";
 
 
 @Component({
@@ -188,6 +189,11 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  openPartnerDetail(partner = null){
+    console.log("you pushed me");
+    this.navCtrl.push(PartnerDetailComponent);
+  }
+
 
   //pure DOM methods
 
@@ -198,8 +204,11 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  hideDropdown() {
-    this.showDropdown = [false, false];
+  hideDropdown(event = null) {
+    if(this.showDropdown !== [false, false]){
+      this.showDropdown = [false, false];
+      if (event) event.stopPropagation()
+    }
   }
 
   toggleVisibilityDropdowns(position) {

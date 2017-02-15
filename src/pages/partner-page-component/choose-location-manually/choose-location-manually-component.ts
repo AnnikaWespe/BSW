@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import {SebmGoogleMap, SebmGoogleMapMarker} from 'angular2-google-maps/core';
 import {NavController, NavParams} from "ionic-angular";
 import {PartnerPageComponent} from "../partner-page-component";
 import {GoogleMapsAPIWrapper} from "angular2-google-maps/core";
 
 @Component({
   selector: 'choose-location-manually',
-  templateUrl: 'choose-location-manually.html'
+  templateUrl: 'choose-location-manually-component.html'
 })
 export class ChooseLocationManuallyComponent {
 

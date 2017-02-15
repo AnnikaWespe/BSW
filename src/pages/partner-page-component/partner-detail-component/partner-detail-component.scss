@@ -1,0 +1,12 @@
+page-partner-detail-component {
+  .bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default{
+    color: map_get($colors, grey) !important;
+  }
+  img.big-logo-img{
+    position: absolute;
+    left: 50%;
+    margin-left: -40vw;
+    width: 80vw;
+    height: auto;
+  }
+}
