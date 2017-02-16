@@ -1,9 +1,4 @@
-<!--
-  Generated template for the PartnerDetailComponent page.
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
   <ion-navbar primary>
     <ion-title>
@@ -19,6 +14,16 @@
 
 
 <ion-content>
-<img src="https://bild.avs.de/avsprod/1/11/025/671/bsw-advocado-11025671.png" class="big-logo-img">
-  
+  <div class="my-image-wrapper">
+    <img src="https://bild.avs.de/avsprod/1/11/025/671/bsw-advocado-11025671.png" class="big-logo-img">
+  </div>
+  <div class="online-partner-div">
+    <div class="title-div">
+      <h3 class="title-div-title">Matt Optik</h3>
+      <p>Augenoptik, Brillen, Kontaktlinsen, Ferngläser</p>
+      <p>Karlsplatz 12, 92323 Eschenbach</p>
+      <button (click)="goToPartnerDetailMap()">Zur Karte</button>
+    </div>
+  </div>
+  <div class="offline-partner-div"></div>
 </ion-content>

@@ -5,7 +5,7 @@ import { GoogleMapsAPIWrapper } from 'angular2-google-maps/core';
   selector: 'styled-map'
 })
 
-export class StyledMap {
+export class StyledMapChooseManually {
 
   constructor(private _wrapper: GoogleMapsAPIWrapper) {
 
@@ -24,7 +24,7 @@ export class StyledMap {
 
       m.setOptions({
         streetViewControl: false,
-        styles: stylesArray
+        //styles: stylesArray
       });
       console.log("native Map found");
     });

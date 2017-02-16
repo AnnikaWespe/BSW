@@ -7,6 +7,7 @@ import {SearchTermCompletion} from './search-completion/SearchTermCompletion';
 import {SearchCompletionService} from "./search-completion/search-completion-service";
 import {AlertController} from 'ionic-angular';
 import {PartnerDetailComponent} from "./partner-detail-component/partner-detail-component";
+import {LocationService} from "../../app/locationService";
 
 
 @Component({
@@ -57,6 +58,10 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
       this.location = this.chosenLocation;
       this.locationChosen = true;
       this.getPartners();
+      LocationService.latitude = this.location.latitude;
+      LocationService.longitude = this.location.longitude;
+      LocationService.locationExact = true;
+      LocationService.locationFound = true;
     }
     else{
       this.getLocationData();
@@ -72,6 +77,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
           text: 'Ohne Standort fortfahren',
           handler: data => {
             this.getPartners();
+            LocationService.locationFound = false;
           }
         },
         {
@@ -91,6 +97,10 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
       this.location.longitude = position.coords.longitude.toFixed(4)
       this.locationFound = true;
       this.getPartners();
+      LocationService.latitude = this.location.latitude;
+      LocationService.longitude = this.location.longitude;
+      LocationService.locationExact = true;
+      LocationService.locationFound = true;
     }, (err) => {
       console.log(err);
       this.showPrompt();
@@ -190,7 +200,6 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   }
 
   openPartnerDetail(partner = null){
-    console.log("you pushed me");
     this.navCtrl.push(PartnerDetailComponent);
   }
 

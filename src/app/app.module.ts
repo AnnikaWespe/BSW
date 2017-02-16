@@ -22,8 +22,11 @@ import {TruncateWordsPipe} from '../pages/partner-page-component/truncate'
 import {ChooseLocationManuallyComponent} from "../pages/partner-page-component/choose-location-manually/choose-location-manually-component";
 import {SearchCompletionService} from "../pages/partner-page-component/search-completion/search-completion-service";
 import {GoogleMapsAPIWrapper} from "angular2-google-maps/core";
-import {StyledMap} from "../pages/partner-page-component/choose-location-manually/styledMap";
+import {StyledMapChooseManually} from "../pages/partner-page-component/choose-location-manually/styledMapChooseManually";
 import {PartnerDetailComponent} from "../pages/partner-page-component/partner-detail-component/partner-detail-component";
+import {PartnerDetailMap} from "../pages/partner-page-component/partner-detail-component/partner-detail-map/partner-detail-map";
+import {StyledMapPartnerDetails} from "../pages/partner-page-component/partner-detail-component/partner-detail-map/styledMapPartnerDetails";
+
 
 
 @NgModule({
@@ -43,8 +46,10 @@ import {PartnerDetailComponent} from "../pages/partner-page-component/partner-de
     MembershipDataFormComponent,
     ChooseLocationManuallyComponent,
     TruncateWordsPipe,
-    StyledMap,
-    PartnerDetailComponent
+    StyledMapChooseManually,
+    PartnerDetailComponent,
+    PartnerDetailMap,
+    StyledMapPartnerDetails
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -53,7 +58,7 @@ import {PartnerDetailComponent} from "../pages/partner-page-component/partner-de
     JsonpModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBAHcgksDNzLfzvKC0ZjnoQZeivSQbE1Iw'
-    })
+    }),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -68,7 +73,8 @@ import {PartnerDetailComponent} from "../pages/partner-page-component/partner-de
     PartnerPageComponent,
     SettingsPageComponent,
     ChooseLocationManuallyComponent,
-    PartnerDetailComponent
+    PartnerDetailComponent,
+    PartnerDetailMap
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService, SearchCompletionService, GoogleMapsAPIWrapper],
 

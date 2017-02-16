@@ -18,6 +18,7 @@ export class ChooseLocationManuallyComponent {
   checkButtonVisible = false;
   zoom: number = 6;
   title: string = 'Standort auswählen';
+  locationExact: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private _wrapper: GoogleMapsAPIWrapper) {
     this.location = navParams.get('location');
@@ -34,12 +35,13 @@ export class ChooseLocationManuallyComponent {
     this.longitude = $event.coords.lng.toFixed(4);
     this.latitude = $event.coords.lat.toFixed(4);
     console.log(this.longitude + " " + this.latitude);
-    $event.preventDefault;
-    return 0;
+    this.locationExact = true;
   }
-  inputToSuggestions(){}
+  inputToSuggestions(){
+    this.locationExact = false;
+  }
   saveLocation(){
-    this.navCtrl.setRoot(PartnerPageComponent, {location: {latitude: this.latitude, longitude: this.longitude}});
+    this.navCtrl.setRoot(PartnerPageComponent, {location: {latitude: this.latitude, longitude: this.longitude, locationExact: this.locationExact}});
   }
 
   parseFloat(string){

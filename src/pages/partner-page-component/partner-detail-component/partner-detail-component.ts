@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import {PartnerDetailMap} from "./partner-detail-map/partner-detail-map";
 
-/*
-  Generated class for the PartnerDetailComponent page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: 'page-partner-detail-component',
   templateUrl: 'partner-detail-component.html'
@@ -14,9 +9,7 @@ import { NavController, NavParams } from 'ionic-angular';
 export class PartnerDetailComponent {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {}
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad PartnerDetailComponentPage');
+  goToPartnerDetailMap(){
+    this.navCtrl.push(PartnerDetailMap);
   }
-
 }
