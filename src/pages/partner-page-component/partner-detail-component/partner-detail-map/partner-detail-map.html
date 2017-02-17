@@ -5,8 +5,8 @@
       Matt Optik
     </ion-title>
     <ion-buttons end>
-      <button>
-        <ion-icon name="star.name" color="star.color" class="add-favourite-button-header" (click)="toggleFavorites()"></ion-icon>
+      <button (click)="toggleFavorites()">
+        <ion-icon [name]="star.name" [color]="star.color" class="add-favourite-button-header"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -27,10 +27,8 @@
     <styled-map-partner-details></styled-map-partner-details>
   </sebm-google-map>
   <div class="goToRoute">
-    <div class="route-wrapper">
       <div class="route">
           <a href="#" class="btn-pill">Route</a>
-      </div>
     </div>
     <div class="icons">
       <div class="public-transport transport">

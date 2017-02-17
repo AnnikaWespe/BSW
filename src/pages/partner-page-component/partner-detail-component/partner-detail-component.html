@@ -5,8 +5,8 @@
       Matt Optik
     </ion-title>
     <ion-buttons end>
-      <button>
-        <ion-icon name="star-outline" color="grey" class="add-favourite-button-header"></ion-icon>
+      <button (click)="toggleFavorites()">
+        <ion-icon [name]="star.name" [color]="star.color" class="add-favourite-button-header"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>

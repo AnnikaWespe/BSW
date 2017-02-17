@@ -8,8 +8,24 @@ import {PartnerDetailMap} from "./partner-detail-map/partner-detail-map";
 })
 export class PartnerDetailComponent {
 
+  starInactive: {} = {
+    name: "star-outline",
+    color: "grey"
+  };
+  starActive: {} = {
+    name: "star",
+    color: "primary"
+  };
+  star: {} = this.starInactive;
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {}
   goToPartnerDetailMap(){
     this.navCtrl.push(PartnerDetailMap);
+  }
+
+  toggleFavorites(){
+    console.log("you clicked the star");
+    if (this.star == this.starActive) {this.star = this.starInactive;}
+    else {this.star = this.starActive};
   }
 }

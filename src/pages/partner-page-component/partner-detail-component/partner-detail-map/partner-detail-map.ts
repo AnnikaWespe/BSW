@@ -19,7 +19,7 @@ export class PartnerDetailMap {
   };
   starActive: {} = {
   name: "star",
-  color: "yellow"
+  color: "primary"
   };
   star: {} = this.starInactive;
 
@@ -31,7 +31,8 @@ export class PartnerDetailMap {
     console.log(LocationService.latitude + " " + LocationService.longitude)
   }
   toggleFavorites(){
-    if (this.star == this.starActive) this.star = this.starInactive;
-    else this.star = this.starActive;
+    console.log("you clicked the star");
+    if (this.star == this.starActive) {this.star = this.starInactive;}
+    else {this.star = this.starActive};
   }
 }
