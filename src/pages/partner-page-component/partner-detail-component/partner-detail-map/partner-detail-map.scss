@@ -1,4 +1,7 @@
 page-partner-detail-map {
+  ion-content{
+    background-color: map_get($colors, light);
+  }
   .bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default{
     color: map_get($colors, grey) !important;
   }
@@ -14,6 +17,8 @@ page-partner-detail-map {
   div.route{
     display: inline-block;
     margin-left: 4vw;
+    position: relative;
+    top: -1.5vh;
     .btn-pill{
       text-decoration: none;
       color: map_get($colors, primary);

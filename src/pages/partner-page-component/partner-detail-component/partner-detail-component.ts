@@ -24,7 +24,6 @@ export class PartnerDetailComponent {
   }
 
   toggleFavorites(){
-    console.log("you clicked the star");
     if (this.star == this.starActive) {this.star = this.starInactive;}
     else {this.star = this.starActive};
   }
