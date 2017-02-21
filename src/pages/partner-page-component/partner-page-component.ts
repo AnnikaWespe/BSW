@@ -200,7 +200,9 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   }
 
   openPartnerDetail(partner = null){
-    this.navCtrl.push(PartnerDetailComponent);
+    if(!this.searchInterfaceOpen){
+      this.navCtrl.push(PartnerDetailComponent);
+    }
   }
 
 
@@ -216,7 +218,6 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   hideDropdown(event = null) {
     if(this.showDropdown !== [false, false]){
       this.showDropdown = [false, false];
-      if (event) event.stopPropagation()
     }
   }
 

@@ -30,7 +30,7 @@ export class StyledMapPartnerDetails implements OnInit{
 
       let bounds = new google.maps.LatLngBounds();
       let origin = LocationService.latitude + ', ' + LocationService.longitude;
-      let destination = "49, 11";
+      let destination = "48, 11";
       let directionsService = new google.maps.DirectionsService();
 
       let requestCar = new request(google.maps.DirectionsTravelMode.DRIVING);
@@ -51,7 +51,7 @@ export class StyledMapPartnerDetails implements OnInit{
         return(string);
       }
 
-      bounds.extend({lat: 49, lng: 11});
+      bounds.extend({lat: 48, lng: 11});
       if(LocationService.locationFound){
         bounds.extend({lat: Number(LocationService.latitude), lng: Number(LocationService.longitude)});
       }

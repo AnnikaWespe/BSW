@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import {LocationService} from "../../../../app/locationService";
 
+declare let device: any;
+
+
 
 @Component({
   selector: 'page-partner-detail-map',
@@ -34,4 +37,15 @@ export class PartnerDetailMap {
     if (this.star == this.starActive) {this.star = this.starInactive;}
     else {this.star = this.starActive};
   }
+  openExternalMapApp(){
+    if(device.platform == "Android"){
+      window.open("geo:48,11?q=48,11(Hier wollen Sie hin)", '_system', 'location=yes');
+    }
+    else {
+      window.open("http://maps.apple.com/?ll=48,11");
+    }
+  }
+
 }
+
+// ,
