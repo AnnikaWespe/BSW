@@ -46,7 +46,7 @@
   </div>
   <div class="filter-dropdown" *ngIf="showDropdown[1]">
     <div class="filterBy">A - Z</div>
-    <div class="filterBy">Z - A</div>
+    <div class="filterBy" (click)="showPartner(partner)">Z - A</div>
   </div>
 </ion-header>
 
@@ -60,25 +60,10 @@
       <div class="initialSpinner">
         <ion-spinner *ngIf="waitingForResults" class="initialSpinner" (click) = "hideDropdown()"></ion-spinner>
       </div>
-      <div class="partner-table-wrapper" (click)="hideDropdown()">
-        <ion-row class="partner-row" *ngFor="let partner of displayedPartners" (click)="showPartner(partner)">
-          <ion-col class="image-col">
-            <div class="white-square">
-              <img src="{{partner?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
-            </div>
-          </ion-col>
-          <ion-col class="text-row">
-            <div class="partner-text-div partner">
-              <p class="partner-title">{{partner?.nameOrigin}}</p>
-              <p class="partner-description">{{partner?.description | words : 10}}</p>
-            </div>
-          </ion-col>
-          <ion-col class="bonus-col">
-            <p>{{partner?.bonusA}}</p>
-          </ion-col>
-        </ion-row>
-      </div>
-  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <div class="partner-table-wrapper" (click)="clickhideDropdown()">
+      <partner-table [partners]="displayedPartners"></partner-table>
+    </div>
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content>
       <ion-spinner class="initialSpinner"></ion-spinner>
     </ion-infinite-scroll-content>

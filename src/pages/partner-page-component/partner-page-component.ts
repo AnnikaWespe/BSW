@@ -210,7 +210,8 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   }
 
   showPartner(partner = 0) {
-    console.log(this.showDropdown);
+    //TODO: nächste Zeile löschen
+    this.navCtrl.push(PartnerDetailComponent);
     if (this.showDropdown[0] === false && this.showDropdown[1] === false) {
       this.navCtrl.push(PartnerDetailComponent)
     }

@@ -1,1 +1,16 @@
+  <ion-row class="partner-row" *ngFor="let partner of partners" (click)="showPartner(partner)">
+    <ion-col class="image-col">
+      <div class="white-square">
+        <img src="{{partner?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
+      </div>
+    </ion-col>
+    <ion-col class="text-row">
+      <div class="partner-text-div partner">
+        <p class="partner-title">{{partner?.nameOrigin}}</p>
+      </div>
+    </ion-col>
+    <ion-col class="bonus-col">
+      <p>{{partner?.bonusA}}</p>
+    </ion-col>
+  </ion-row>
 

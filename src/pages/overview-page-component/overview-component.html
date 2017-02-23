@@ -16,8 +16,56 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content padding>
-  <savings-overview></savings-overview>
-  <partners-overview></partners-overview>
+<ion-content>
+    <div class="bars">
+      <ion-row>
+        <ion-col>
+          <div class="buffer" [style.height]="heightBlueBarRedBar()[2]"></div>
+          <p>{{balance| currency:'EUR':true:'1.2-2'}}</p>
+          <div class="blue bar" [style.height]="heightBlueBarRedBar()[0]"></div>
+        </ion-col>
+        <ion-col>
+          <div class="buffer" [style.height]="heightBlueBarRedBar()[3]"></div>
+          <p>{{bonusThisYear | currency:'EUR':true:'1.2-2'}}</p>
+          <div class="red bar" [style.height]="heightBlueBarRedBar()[1]"></div>
+        </ion-col>
+      </ion-row>
+    </div>
+<div class="moneyDetailsAccount">
+  <ion-row class="money-detail-row balance-row">
+    <ion-col class="icon-col">
+      <ion-icon name = "star"></ion-icon>
+    </ion-col>
+    <ion-col class="text-col">
+      <div class="text-div">
+        <p class="description">Aktueller Stand Bonuskonto</p>
+      </div>
+    </ion-col>
+    <ion-col class="bonus-col">
+      <p>{{balance| currency:'EUR':true:'1.2-2'}}</p>
+    </ion-col>
+  </ion-row>
+  <ion-row class="money-detail-row">
+    <ion-col class="icon-col">
+      <ion-icon name = "star"></ion-icon>
+    </ion-col>
+    <ion-col class="text-col">
+      <div class="text-div">
+        <p class="description">Gesamte BSW Boni - 2017</p>
+      </div>
+    </ion-col>
+    <ion-col class="bonus-col">
+      <p>{{bonusThisYear | currency:'EUR':true:'1.2-2'}}</p>
+    </ion-col>
+  </ion-row>
+  <ion-row class="title-row">
+    <ion-col class="title">
+      <p>Favoriten</p>
+    </ion-col>
+    <ion-col class="more">
+      <ion-icon name = "more"></ion-icon>
+    </ion-col>
+  </ion-row>
+</div>
 </ion-content>
 

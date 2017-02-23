@@ -1,3 +1,67 @@
 page-overview {
 
+  ion-col{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    p{
+      margin: 0 2vw 1vh 0 ;
+    }
+  }
+
+  div.bars{
+    margin: 6vh 5vw 0 5vw;
+  }
+  div.bar{
+    height: 14vh;
+    width: 44vw;
+    &.blue{
+      background-color: map_get($colors, light-blue);
+      margin-right: 2vw;
+    }
+    &.red{
+      background-color: map_get($colors, primary);
+    }
+  }
+  div.moneyDetailsAccount{
+    background-color: map_get($colors, light);
+  }
+  div.text-div{
+    text-align: left;
+  }
+  ion-row.money-detail-row{
+    height: 8vh;
+    line-height: 8vh;
+  }
+  ion-col.icon-col{
+    max-width: 20vw;
+  }
+  ion-col.text-col{
+    max-width: 60vw;
+  }
+  ion-col.bonus-col{
+    max-width: 20vw;
+  }
+  ion-row.balance-row{
+    ion-col.text-col, ion-col.bonus-col{
+      border-bottom: 1px solid grey;
+    }
+  }
+  ion-row.title-row{
+    background-color: map-get($colors, light-grey);
+    height: 8vh;
+  }
+  ion-col.more{
+    color: map-get($colors, font-grey);
+    font-size: large;
+    line-height: 8vh;
+    max-width: 10vw;
+    color: #3B3B3B;
+  }
+  ion-col.title{
+    color: #3B3B3B;
+    font-size: large;
+    line-height: 8vh;
+    text-align: left;
+  }
 }

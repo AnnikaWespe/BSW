@@ -26,18 +26,18 @@ input.text-input.text-input-md.ng-pristine.ng-valid{
   div.center-text{
     text-align: center;
     p.no-login{
-      color: grey;
+      color: map_get($colors, font-grey);
       text-decoration: underline;
       font-size: 85%;
     }
     p.no-account{
       margin-top: 1vh;
-      color: grey;
+      color: map_get($colors, font-grey);
       font-size: 85%;
     }
     p.no-member{
       margin-bottom: 1vh;
-      color: grey;
+      color: map_get($colors, font-grey);
       font-size: 85%;
     }
   }
