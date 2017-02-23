@@ -8,6 +8,7 @@ import {SearchCompletionService} from "./search-completion/search-completion-ser
 import {AlertController} from 'ionic-angular';
 import {PartnerDetailComponent} from "./partner-detail-component/partner-detail-component";
 import {LocationService} from "../../app/locationService";
+import {PartnerMapComponent} from "./partner-map/partner-map";
 
 
 @Component({
@@ -28,11 +29,15 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   locationFound: boolean = false;
   locationChosen: boolean = false;
 
+  activeFilterFromMenu: string;
+  iconToggleMapAndList: string = "heart";
+  showMap: boolean = false;
+
   partners: any[] = [];
   displayedPartners: any[] = [];
   resetPartnersArray: boolean = true;
 
-  category: string = "allpartners";
+  category: string;
   bucket: number = 0;
 
   searchInterfaceOpen: boolean = false;
@@ -46,7 +51,9 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService,
               private searchCompletionService: SearchCompletionService, private renderer: Renderer, public alertCtrl: AlertController) {
-              this.chosenLocation = navParams.get('location');
+    this.activeFilterFromMenu = navParams.get('filterParameter');
+    this.chosenLocation = navParams.get('location');
+    this.category = this.activeFilterFromMenu;
   }
 
   public ngAfterViewChecked() {
@@ -54,7 +61,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
-    if(this.chosenLocation){
+    if (this.chosenLocation) {
       this.location = this.chosenLocation;
       this.locationChosen = true;
       this.getPartners();
@@ -63,7 +70,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
       LocationService.locationExact = true;
       LocationService.locationFound = true;
     }
-    else{
+    else {
       this.getLocationData();
     }
   };
@@ -108,7 +115,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   }
 
   getPartners() {
-    if (this.resetPartnersArray == true){
+    if (this.resetPartnersArray == true) {
       this.displayedPartners = [];
       this.waitingForResults = true;
     }
@@ -134,23 +141,26 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   }
 
   filter(partnerType) {
-    if(partnerType !== 'OFFLINEPARTNER' || this.locationFound || this.chosenLocation){
+    if (partnerType !== 'OFFLINEPARTNER' || this.locationFound || this.chosenLocation) {
       this.category = partnerType;
       this.resetPartnersArray = true;
       this.getPartners();
-      this.hideDropdown();
+      this.showDropdown = [false, false];
       this.waitingForResults = true;
     }
   }
 
   inputToSuggestions(event: any) {
-    if(event.keyCode !== 13) {this.getSearchSuggestions(event.target.value)};
+    if (event.keyCode !== 13) {
+      this.getSearchSuggestions(event.target.value)
+    }
+    ;
     if (event.keyCode === 8 && this.searchTerm === "") {
       this.searchSuggestionsOpen = false;
       this.resetPartnersArray = true;
       this.getPartners();
     }
-    if(event.keyCode == 13 && this.searchTerm.length > 1){
+    if (event.keyCode == 13 && this.searchTerm.length > 1) {
       this.resetPartnersArray = true;
       this.getPartners();
     }
@@ -181,7 +191,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   chooseLocationManually() {
     event.stopPropagation();
     this.navCtrl.push(ChooseLocationManuallyComponent, {location: this.location});
-    this.hideDropdown();
+    this.showDropdown = [false, false];
   }
 
   functionRightIcon() {
@@ -189,7 +199,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
       this.searchInterfaceOpen = true;
       this.iconLeft = "arrow-back";
       this.iconRight = "close-circle";
-      this.hideDropdown();
+      this.showDropdown = [false, false];
     }
     else {
       this.searchTerm = "";
@@ -199,14 +209,21 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  openPartnerDetail(partner = null){
-    if(!this.searchInterfaceOpen){
-      this.navCtrl.push(PartnerDetailComponent);
+  showPartner(partner = 0) {
+    console.log(this.showDropdown);
+    if (this.showDropdown[0] === false && this.showDropdown[1] === false) {
+      this.navCtrl.push(PartnerDetailComponent)
     }
   }
 
+  toggleMapAndList(){
+    console.log("toggleMapAndList");
+    this.showMap = !this.showMap;
+  }
 
-  //pure DOM methods
+
+
+//pure DOM methods
 
   private setFocus() {
     let searchInputField = document.getElementById('mySearchInputField');
@@ -215,11 +232,10 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  hideDropdown(event = null) {
-    if(this.showDropdown !== [false, false]){
-      this.showDropdown = [false, false];
-    }
+  hideDropdown() {
+    this.showDropdown = [false, false];
   }
+
 
   toggleVisibilityDropdowns(position) {
     let isVisible = this.showDropdown[position];
@@ -234,7 +250,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   closeSearchInterface() {
     this.searchInterfaceOpen = false;
     this.searchSuggestionsOpen = false;
-    this.hideDropdown();
+    this.showDropdown = [false, false];
     this.iconLeft = "menu";
     this.iconRight = "search";
     this.searchTerm = "";
