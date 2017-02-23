@@ -11,7 +11,6 @@ import  { AddPurchasePageComponent} from '../pages/add-purchase-page-component/a
 import {SavingsOverviewComponent} from '../pages/overview-page-component/savings-overview-component/savings-overview-component';
 import {PartnersOverviewComponent} from '../pages/overview-page-component/partners-overview-component/partners-overview-component';
 import {ConfirmScanPageComponent} from '../pages/login-page-component/confirm-scan-page-component/confirm-scan-page-component';
-import {ActionsPageComponent} from "../pages/actions-page-component/actions-page-component";
 import {LogoutPageComponent} from "../pages/logout-page-component/logout-page-component";
 import {MyProfilePageComponent} from "../pages/my-profile-page-component/my-profile-page-component";
 import {PartnerPageComponent} from "../pages/partner-page-component/partner-page-component";
@@ -25,6 +24,8 @@ import {GoogleMapsAPIWrapper} from "angular2-google-maps/core";
 import {StyledMapChooseManually} from "../pages/partner-page-component/choose-location-manually/styledMapChooseManually";
 import {PartnerDetailComponent} from "../pages/partner-page-component/partner-detail-component/partner-detail-component";
 import {PartnerDetailMap} from "../pages/partner-page-component/partner-detail-component/partner-detail-map/partner-detail-map";
+import {PartnerMapComponent} from "../pages/partner-page-component/partner-map/partner-map";
+import {PartnerTableComponent} from "../components/partner-table/partner-table";
 import {StyledMapPartnerDetailsDirective} from "../pages/partner-page-component/partner-detail-component/partner-detail-map/styled-map-partner-details-directive";
 
 
@@ -37,7 +38,6 @@ import {StyledMapPartnerDetailsDirective} from "../pages/partner-page-component/
     SavingsOverviewComponent,
     PartnersOverviewComponent,
     ConfirmScanPageComponent,
-    ActionsPageComponent,
     LogoutPageComponent,
     MyProfilePageComponent,
     PartnerPageComponent,
@@ -48,7 +48,9 @@ import {StyledMapPartnerDetailsDirective} from "../pages/partner-page-component/
     StyledMapChooseManually,
     PartnerDetailComponent,
     PartnerDetailMap,
-    StyledMapPartnerDetailsDirective
+    StyledMapPartnerDetailsDirective,
+    PartnerMapComponent,
+    PartnerTableComponent
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -66,14 +68,15 @@ import {StyledMapPartnerDetailsDirective} from "../pages/partner-page-component/
     AddPurchasePageComponent,
     LoginPageComponent,
     ConfirmScanPageComponent,
-    ActionsPageComponent,
     LogoutPageComponent,
     MyProfilePageComponent,
     PartnerPageComponent,
     SettingsPageComponent,
     ChooseLocationManuallyComponent,
     PartnerDetailComponent,
-    PartnerDetailMap
+    PartnerDetailMap,
+    PartnerMapComponent,
+    PartnerTableComponent
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService, SearchCompletionService, GoogleMapsAPIWrapper],
 
