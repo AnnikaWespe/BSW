@@ -44,9 +44,15 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   searchTerm: string = "";
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService,
-              private searchCompletionService: SearchCompletionService, private renderer: Renderer, public alertCtrl: AlertController) {
-              this.chosenLocation = navParams.get('location');
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private partnerService: PartnerService,
+    private searchCompletionService: SearchCompletionService,
+    private renderer: Renderer,
+    public alertCtrl: AlertController
+  ) {
+    this.chosenLocation = navParams.get('location');
   }
 
   public ngAfterViewChecked() {

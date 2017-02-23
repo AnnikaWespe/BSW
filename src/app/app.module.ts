@@ -25,8 +25,7 @@ import {GoogleMapsAPIWrapper} from "angular2-google-maps/core";
 import {StyledMapChooseManually} from "../pages/partner-page-component/choose-location-manually/styledMapChooseManually";
 import {PartnerDetailComponent} from "../pages/partner-page-component/partner-detail-component/partner-detail-component";
 import {PartnerDetailMap} from "../pages/partner-page-component/partner-detail-component/partner-detail-map/partner-detail-map";
-import {StyledMapPartnerDetails} from "../pages/partner-page-component/partner-detail-component/partner-detail-map/styledMapPartnerDetails";
-
+import {StyledMapPartnerDetailsDirective} from "../pages/partner-page-component/partner-detail-component/partner-detail-map/styled-map-partner-details-directive";
 
 
 @NgModule({
@@ -49,7 +48,7 @@ import {StyledMapPartnerDetails} from "../pages/partner-page-component/partner-d
     StyledMapChooseManually,
     PartnerDetailComponent,
     PartnerDetailMap,
-    StyledMapPartnerDetails
+    StyledMapPartnerDetailsDirective
   ],
   imports: [
     IonicModule.forRoot(MyApp),
