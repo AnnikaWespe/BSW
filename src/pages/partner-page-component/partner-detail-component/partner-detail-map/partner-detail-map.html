@@ -1,4 +1,3 @@
-
 <ion-header>
   <ion-navbar primary>
     <ion-title>
@@ -11,6 +10,7 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
+
 <ion-content>
   <sebm-google-map
     [latitude]="49"
@@ -24,8 +24,10 @@
                             [editable]="true"
                             *ngIf="locationFound">
     </sebm-google-map-circle>
-    <styled-map-partner-details></styled-map-partner-details>
+
+    <styled-map-partner-details (travelTimePublicUpdated)="handleTravelTimePublicUpdated($event)"></styled-map-partner-details>
   </sebm-google-map>
+
   <div class="goToRoute">
       <div class="route">
           <p (click)="openExternalMapApp()" class="btn-pill">Route</p>
@@ -41,15 +43,18 @@
       </div>
       <div class="pedestrian transport">
         <ion-icon name = "walk" color = "primary"></ion-icon>
-        <p>< 1 Min</p>
+        <p><1 Min</p>
       </div>
     </div>
   </div>
+
   <div class="adress-div">
     <h3>Matt Optik</h3>
     <p>Augenoptik, Brillen, Kontaktlinsen, Ferngläser</p>
     <p>Karlsplatz 12, 12345 Eschenbach</p>
   </div>
+
   <div>{{travelTimePublic}}</div>
+
 </ion-content>
 

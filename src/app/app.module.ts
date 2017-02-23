@@ -24,10 +24,9 @@ import {GoogleMapsAPIWrapper} from "angular2-google-maps/core";
 import {StyledMapChooseManually} from "../pages/partner-page-component/choose-location-manually/styledMapChooseManually";
 import {PartnerDetailComponent} from "../pages/partner-page-component/partner-detail-component/partner-detail-component";
 import {PartnerDetailMap} from "../pages/partner-page-component/partner-detail-component/partner-detail-map/partner-detail-map";
-import {StyledMapPartnerDetails} from "../pages/partner-page-component/partner-detail-component/partner-detail-map/styledMapPartnerDetails";
 import {PartnerMapComponent} from "../pages/partner-page-component/partner-map/partner-map";
 import {PartnerTableComponent} from "../components/partner-table/partner-table";
-
+import {StyledMapPartnerDetailsDirective} from "../pages/partner-page-component/partner-detail-component/partner-detail-map/styled-map-partner-details-directive";
 
 
 @NgModule({
@@ -49,7 +48,7 @@ import {PartnerTableComponent} from "../components/partner-table/partner-table";
     StyledMapChooseManually,
     PartnerDetailComponent,
     PartnerDetailMap,
-    StyledMapPartnerDetails,
+    StyledMapPartnerDetailsDirective,
     PartnerMapComponent,
     PartnerTableComponent
   ],
