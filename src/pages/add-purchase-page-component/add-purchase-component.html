@@ -17,18 +17,21 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-  <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-  </p>
-
-  <ion-card>
-    <ion-card-content>
-
-      <button (click)="scanRecipe()">Take a Picture</button>
-
-      Latest Picture:
+      <ion-card class="explanation">
+        <ion-card-content>
+          <b>
+            Haben Sie bei einem unserer Partner eingekauft, und Ihren Bonus noch nicht angefordert?
+          </b>
+          <br><br>
+          Sie können hier einen Scan des Kassenzettels erstellen. Wenn alles passt,
+          wählen Sie im nächsten Schritt Ihr Emailprogramm aus einer Liste aus, und
+          schicken dann eine vorausgefüllte Email an das BSW.<br>
+          Fertig!
+        </ion-card-content>
+      </ion-card>
+      <button (click)="scanRecipe()">Kassenzettel einscannen</button>
       <img [src]="base64Image" *ngIf="base64Image" />
-      <button (click)="sendEmail()">Weiter</button>
-    </ion-card-content>
-  </ion-card>
-  <p *ngIf="successMessage">{{successMessage}}</p>
+      <p *ngIf="base64Image">Klicken Sie auf "Weiter" oder nehmen Sie ein anderes Foto auf.</p>
+      <button (click)="sendEmail()" *ngIf="base64Image">Weiter</button>
+      <p *ngIf="successMessage">{{successMessage}}</p>
 </ion-content>

@@ -22,7 +22,7 @@
                             [fillColor]="'red'"
                             [circleDraggable]="true"
                             [editable]="true"
-                            *ngIf="locationFound">
+                            *ngIf="locationAvailable">
     </sebm-google-map-circle>
 
     <styled-map-partner-details (travelTimePublicUpdated)="handleTravelTimePublicUpdated($event)"></styled-map-partner-details>

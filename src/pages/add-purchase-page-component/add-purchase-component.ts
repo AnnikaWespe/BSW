@@ -10,7 +10,7 @@ declare let window: any;
 export class AddPurchasePageComponent {
 
 	title: string = "Einkauf nachtragen";
-	successMessage: string = "hallo";
+	successMessage: string = "";
 	public base64Image: string;
 
 

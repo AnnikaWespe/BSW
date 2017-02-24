@@ -1,6 +1,6 @@
 import {OnInit, Directive, Output, EventEmitter} from '@angular/core';
 import { GoogleMapsAPIWrapper } from 'angular2-google-maps/core';
-import {LocationService} from '../../../../app/locationService';
+import {LocationService} from '../../../../services/locationService';
 declare let google: any;
 
 class Request {
@@ -44,7 +44,7 @@ export class StyledMapPartnerDetailsDirective implements OnInit{
     let bounds = new google.maps.LatLngBounds();
 
     bounds.extend({lat: 48, lng: 11});
-    if(LocationService.locationFound){
+    if(LocationService.locationAvailable){
       bounds.extend({lat: Number(LocationService.latitude), lng: Number(LocationService.longitude)});
     }
     map.setOptions({

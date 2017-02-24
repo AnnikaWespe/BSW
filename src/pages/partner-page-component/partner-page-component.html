@@ -40,7 +40,7 @@
   <div class="filter-dropdown" *ngIf="showDropdown[0]">
     <div class="filterBy" (click)="filter('allpartners')">Alle Treffer</div>
     <div class="filterBy" (click)="filter('ONLINEPARTNER')">Online-Partner</div>
-    <div class="filterBy" (click)="filter('OFFLINEPARTNER')" [class.disabled] = "!locationChosen && !locationFound">Vor-Ort-Partner<div class="chooseLocationManually" (click)="chooseLocationManually()">ORT MANUELL WÄHLEN</div></div>
+    <div class="filterBy" (click)="filter('OFFLINEPARTNER')" [class.disabled] = "!locationChosen && !locationAvailable">Vor-Ort-Partner<div class="chooseLocationManually" (click)="chooseLocationManually()">ORT MANUELL WÄHLEN</div></div>
     <div class="filterBy" (click)="filter('TRAVELOFFER')">Reiseangebote</div>
     <div class="filterBy" (click)="filter('VEHICLEOFFER')">Autoangebote</div>
   </div>
@@ -57,8 +57,8 @@
     <div class="suggestions-wrapper" *ngIf="searchSuggestionsOpen">
       <div *ngFor="let item of searchTermCompletion" class="suggestion" (click)="completeSearchTerm(item.displayText)">{{item.displayText}}</div>
     </div>
-      <div class="initialSpinner">
-        <ion-spinner *ngIf="waitingForResults" class="initialSpinner" (click) = "hideDropdown()"></ion-spinner>
+      <div class="initialSpinner"*ngIf="waitingForResults">
+        <ion-spinner  class="initialSpinner" (click) = "hideDropdown()"></ion-spinner>
       </div>
     <div class="partner-table-wrapper" (click)="clickhideDropdown()">
       <partner-table [partners]="displayedPartners"></partner-table>

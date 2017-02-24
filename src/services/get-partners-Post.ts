@@ -26,7 +26,7 @@ export class GetPartnersPost {
   showmap = true;
   template = "unified";
 
-  constructor(location = {latitude: 0, longitude: 0}, bucket = 0, searchTerm) {
+  constructor(location = {latitude: 52.5219, longitude: 13.4132}, bucket = 0, searchTerm) {
     this.query.searchTerm = searchTerm;
     this.query.location.latitude = location.latitude;
     this.query.location.longitude = location.longitude;

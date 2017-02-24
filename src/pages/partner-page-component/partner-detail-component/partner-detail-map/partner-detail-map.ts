@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import {LocationService} from "../../../../app/locationService";
+import {LocationService} from "../../../../services/locationService";
 
 declare let device: any;
 
@@ -29,7 +29,7 @@ export class PartnerDetailMap {
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.currentLatitude = parseFloat(LocationService.latitude);
     this.currentLongitude = parseFloat(LocationService.longitude);
-    this.locationFound = LocationService.locationFound;
+    this.locationFound = LocationService.locationAvailable;
     this.locationExact = LocationService.locationExact;
     console.log("PartnerDetailMap: ", LocationService.latitude + " " + LocationService.longitude)
   }

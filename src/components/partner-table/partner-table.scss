@@ -22,6 +22,7 @@ partner-table {
   p.partner-title{
     font-weight: bold;
     line-height: 12.5vh;
+    margin: 0;
   }
   p.partner-description{
     margin: 0;
@@ -44,6 +45,9 @@ partner-table {
     margin-left: auto;
     margin-right: auto;
 
+  }
+  ion-col.text-col{
+    padding: 0 0 0 5px;
   }
   ion-col.image-col{
     height: 12vh;

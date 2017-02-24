@@ -1,14 +1,14 @@
 import {Component, OnInit, Renderer, AfterViewChecked} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
-import {PartnerService} from "./partner-service";
+import {PartnerService} from "../../services/partner-service";
 import {ChooseLocationManuallyComponent} from "./choose-location-manually/choose-location-manually-component";
 import {SearchTermCompletion} from './search-completion/SearchTermCompletion';
 import {SearchCompletionService} from "./search-completion/search-completion-service";
 import {AlertController} from 'ionic-angular';
 import {PartnerDetailComponent} from "./partner-detail-component/partner-detail-component";
-import {LocationService} from "../../app/locationService";
-import {PartnerMapComponent} from "./partner-map/partner-map";
+import {LocationService} from "../../services/locationService";
+
 
 
 @Component({
@@ -24,7 +24,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
 
   errorMessage: string;
 
-  location: {latitude: string, longitude: string} = {latitude: "0", longitude: "0"};
+  location = {latitude: "0", longitude: "0"};
   chosenLocation: {latitude: string, longitude: string};
   locationFound: boolean = false;
   locationChosen: boolean = false;
@@ -52,8 +52,8 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService,
               private searchCompletionService: SearchCompletionService, private renderer: Renderer, public alertCtrl: AlertController) {
     this.activeFilterFromMenu = navParams.get('filterParameter');
-    this.chosenLocation = navParams.get('location');
     this.category = this.activeFilterFromMenu;
+    this.chosenLocation = navParams.get('location');
   }
 
   public ngAfterViewChecked() {
@@ -68,7 +68,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
       LocationService.latitude = this.location.latitude;
       LocationService.longitude = this.location.longitude;
       LocationService.locationExact = true;
-      LocationService.locationFound = true;
+      LocationService.locationAvailable = true;
     }
     else {
       this.getLocationData();
@@ -84,7 +84,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
           text: 'Ohne Standort fortfahren',
           handler: data => {
             this.getPartners();
-            LocationService.locationFound = false;
+            LocationService.locationAvailable = false;
           }
         },
         {
@@ -107,7 +107,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
       LocationService.latitude = this.location.latitude;
       LocationService.longitude = this.location.longitude;
       LocationService.locationExact = true;
-      LocationService.locationFound = true;
+      LocationService.locationAvailable = true;
     }, (err) => {
       console.log(err);
       this.showPrompt();

@@ -16,7 +16,7 @@ import {MyProfilePageComponent} from "../pages/my-profile-page-component/my-prof
 import {PartnerPageComponent} from "../pages/partner-page-component/partner-page-component";
 import {SettingsPageComponent} from "../pages/settings-page-component/settings-page-component";
 import {MembershipDataFormComponent} from "../pages/my-profile-page-component/user-detail/membership-data-form.component";
-import {PartnerService} from '../pages/partner-page-component/partner-service';
+import {PartnerService} from '../services/partner-service';
 import {TruncateWordsPipe} from '../pages/partner-page-component/truncate'
 import {ChooseLocationManuallyComponent} from "../pages/partner-page-component/choose-location-manually/choose-location-manually-component";
 import {SearchCompletionService} from "../pages/partner-page-component/search-completion/search-completion-service";

@@ -31,7 +31,9 @@
         </ion-col>
       </ion-row>
     </div>
+
 <div class="moneyDetailsAccount">
+
   <ion-row class="money-detail-row balance-row">
     <ion-col class="icon-col">
       <ion-icon name = "star"></ion-icon>
@@ -45,6 +47,7 @@
       <p>{{balance| currency:'EUR':true:'1.2-2'}}</p>
     </ion-col>
   </ion-row>
+
   <ion-row class="money-detail-row">
     <ion-col class="icon-col">
       <ion-icon name = "star"></ion-icon>
@@ -58,14 +61,50 @@
       <p>{{bonusThisYear | currency:'EUR':true:'1.2-2'}}</p>
     </ion-col>
   </ion-row>
-  <ion-row class="title-row">
+
+  </div>
+
+  <div class="initialSpinner" *ngIf="waitingForResults">
+    <ion-spinner class="initialSpinner"></ion-spinner>
+  </div>
+
+  <ion-row class="title-row" *ngIf="favoritePartners">
     <ion-col class="title">
-      <p>Favoriten</p>
+      <p class="title-paragraph">Favoriten</p>
     </ion-col>
     <ion-col class="more">
       <ion-icon name = "more"></ion-icon>
     </ion-col>
   </ion-row>
-</div>
+
+  <ion-row class="title-row" *ngIf="lastVisitedPartners">
+    <ion-col class="title">
+      <p class="title-paragraph">Zuletzt besuchte Partner</p>
+    </ion-col>
+    <ion-col class="more">
+      <ion-icon name = "more"></ion-icon>
+    </ion-col>
+  </ion-row>
+
+  <ion-row class="title-row" *ngIf="offlinePartners">
+    <ion-col class="title">
+      <p class="title-paragraph">Vor Ort Partner</p>
+    </ion-col>
+    <ion-col class="more">
+      <ion-icon name = "more" (click) = "showOfflinePartners()"></ion-icon>
+    </ion-col>
+  </ion-row>
+  <partner-table [partners]="offlinePartners"></partner-table>
+
+  <ion-row class="title-row" *ngIf="onlinePartners">
+    <ion-col class="title">
+      <p class="title-paragraph">Online Partner</p>
+    </ion-col>
+    <ion-col class="more">
+      <ion-icon name = "more" (click) = "showOnlinePartners()"></ion-icon>
+    </ion-col>
+  </ion-row>
+  <partner-table [partners]="onlinePartners"></partner-table>
+
 </ion-content>
 
