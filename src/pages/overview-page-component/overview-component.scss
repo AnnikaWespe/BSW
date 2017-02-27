@@ -1,5 +1,5 @@
 page-overview {
-
+  background-color: map_get($colors, light);
   ion-col{
     margin: 0;
     padding: 0;
@@ -11,6 +11,7 @@ page-overview {
 
   div.bars{
     margin: 6vh 5vw 0 5vw;
+    background-color: white;
   }
   div.bar{
     height: 14vh;

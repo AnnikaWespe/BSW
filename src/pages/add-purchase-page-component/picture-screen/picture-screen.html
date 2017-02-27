@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-navbar primary>
+    <ion-buttons left>
+      <button menuToggle>
+        <ion-icon name="menu" color="grey" class="menu-button-header"></ion-icon>
+      </button>
+    </ion-buttons>
+
+    <ion-title>
+      {{title}}
+    </ion-title>
+    <ion-buttons end>
+      <button>
+        <ion-icon name="search" color="grey" class="search-button-header"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header><ion-content>
+  <div class="square">
+    <img [src]="base64Image">
+    <!--<img src="https://images4.alphacoders.com/249/thumb-1920-249578.jpg">-->
+  </div>
+  <div class="buttons">
+    <button ion-button color="secondary-grey" class="newPicture" (click) = "scanReceipt()">
+      Neues Bild aufnehmen
+    </button>
+    <button ion-button color="primary" (click)="sendEmail()">
+      Weiter!
+    </button>
+  </div>
+</ion-content>
