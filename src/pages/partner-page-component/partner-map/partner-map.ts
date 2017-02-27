@@ -18,10 +18,5 @@ export class PartnerMapComponent {
   location: {};
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    console.log('Hello PartnerMap Component');
-    this.text = 'Hello World';
-    this.partners = navParams.get('partners');
-    this.location = navParams.get('location');
-    console.log(this.partners, this.location);
   }
 }

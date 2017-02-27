@@ -103,6 +103,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
       this.location.latitude = position.coords.latitude.toFixed(4);
       this.location.longitude = position.coords.longitude.toFixed(4)
       this.locationFound = true;
+      console.log(this.location);
       this.getPartners();
       LocationService.latitude = this.location.latitude;
       LocationService.longitude = this.location.longitude;
@@ -220,6 +221,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   toggleMapAndList(){
     console.log("toggleMapAndList");
     this.showMap = !this.showMap;
+    this.showDropdown = [false, false];
   }
 
 
