@@ -11,6 +11,8 @@ export class AddPurchasePageComponent {
 
 	title: string = "Einkauf nachtragen";
 	successMessage: string = "";
+	startScreenActive = true;
+	startScreenFirstTime = true;
 	public base64Image: string;
 
 
@@ -24,6 +26,7 @@ export class AddPurchasePageComponent {
     }).then((imageData) => {
       // imageData is a base64 encoded string
       this.base64Image = "data:image/jpeg;base64," + imageData;
+      this.startScreenActive = false;
     }, (err) => {
       console.log(err);
     });
@@ -33,7 +36,7 @@ export class AddPurchasePageComponent {
       message: 'Bitte tragen Sie meinen Einkauf nach.',
       subject: 'Einkauf nachtragen',
       files: [this.base64Image],
-      chooserTitle: 'Wählen Sie bitte Ihr Emailprogramm'
+      chooserTitle: 'Bitte wählen Sie Ihr Emailprogramm'
     }
 
 
@@ -43,6 +46,8 @@ export class AddPurchasePageComponent {
       (msg)=>{
         console.log("Sharing failed with message: " + msg);
       });
+    this.startScreenFirstTime = false;
   }
 
 }
+

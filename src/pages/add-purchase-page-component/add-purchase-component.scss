@@ -1,5 +1,24 @@
 add-purchase-page {
-  ion-content{
-    background-color: green;
+  button.scanReceipt{
+    margin: 40vh 10vw 0 10vw;
+    width: 80vw;
+    text-transform: none;
+  }
+  div.explanation{
+    margin: 10vh 7vw 10vh 7vw;
+    height: 30vh;
+    line-height: 150%;
+  }
+  ion-content.pictureScreen{
+    ion-card{
+      margin-top: 5vh;
+    }
+    div.buttons{
+      button.disable-hover.button.button-md.button-default.button-default-md{
+        text-transform: none;
+        margin: 14vh 4vw 0 4vw;
+      }
+      text-align: center;
+    }
   }
 }
