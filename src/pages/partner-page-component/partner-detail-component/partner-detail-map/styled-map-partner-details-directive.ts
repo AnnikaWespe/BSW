@@ -1,34 +1,29 @@
 import {OnInit, Directive, Output, EventEmitter} from '@angular/core';
-import { GoogleMapsAPIWrapper } from 'angular2-google-maps/core';
+import {GoogleMapsAPIWrapper} from 'angular2-google-maps/core';
 import {LocationService} from '../../../../services/locationService';
 declare let google: any;
 
-class Request {
-  public origin = LocationService.latitude + ', ' + LocationService.longitude;
-  public destination = '48, 11';
-
-  constructor(public travelMode) {}
-}
 
 @Directive({
   selector: 'styled-map-partner-details',
 })
-export class StyledMapPartnerDetailsDirective implements OnInit{
+export class StyledMapPartnerDetailsDirective implements OnInit {
 
+  @Output() travelTimeCarUpdated: EventEmitter<string> = new EventEmitter();
   @Output() travelTimePublicUpdated: EventEmitter<string> = new EventEmitter();
+  @Output() travelTimePedestrianUpdated: EventEmitter<string> = new EventEmitter();
 
-  travelTimePublic: string = 'initialString';
-  travelTimeCar: string;
-  travelTimePedestrian: string;
 
-  constructor(private googleMapsWrapper: GoogleMapsAPIWrapper) {}
+  constructor(private googleMapsWrapper: GoogleMapsAPIWrapper) {
+  }
 
-  ngOnInit(){
+  ngOnInit() {
     this.googleMapsWrapper.getNativeMap()
-    .then((map) => {
-      this.setMapOptions(map);
-      this.initializeDirectionService();
-    });
+      .then((map) => {
+        this.setMapOptions(map);
+        this.extendBounds(map);
+        this.initializeDirectionService();
+      });
   }
 
   private setMapOptions(map: any) {
@@ -41,10 +36,14 @@ export class StyledMapPartnerDetailsDirective implements OnInit{
     //     ]
     //   }
     // ];
+
+  }
+
+  private extendBounds(map) {
     let bounds = new google.maps.LatLngBounds();
 
-    bounds.extend({lat: 48, lng: 11});
-    if(LocationService.locationAvailable){
+    bounds.extend({lat: 48.1300, lng: 11.5700});
+    if (LocationService.locationAvailable) {
       bounds.extend({lat: Number(LocationService.latitude), lng: Number(LocationService.longitude)});
     }
     map.setOptions({
@@ -55,38 +54,48 @@ export class StyledMapPartnerDetailsDirective implements OnInit{
   }
 
   private initializeDirectionService() {
+
     let directionsService = new google.maps.DirectionsService();
+    let origin = new google.maps.LatLng(LocationService.latitude, LocationService.longitude);
+    let destination = new google.maps.LatLng(48.1300, 11.5700);
 
-    let requestCar = new Request(google.maps.DirectionsTravelMode.DRIVING);
-    let requestPedestrian = new Request(google.maps.DirectionsTravelMode.WALKING);
-    let requestPublic = new Request(google.maps.DirectionsTravelMode.TRANSIT);
 
-    let shortenStringTravelTime = function(string) {
+    let requestPublic = {origin: origin, destination: destination, travelMode: google.maps.TravelMode.TRANSIT};
+    let requestCar = {origin: origin, destination: destination, travelMode: google.maps.TravelMode.DRIVING};
+    let requestPedestrian = {origin: origin, destination: destination, travelMode: google.maps.TravelMode.WALKING};
+
+    let shortenStringTravelTime = function (string) {
       string = string.replace("Stunden", "Std")
         .replace("Stunde", "Std")
         .replace("Minuten", "Min")
         .replace("Minute", "Min")
         .replace(",", "");
-      return(string);
+      return (string);
     }
 
     directionsService.route(requestPublic, (response, status) => {
       if (status == 'OK') {
-        let point = response.routes[ 0 ].legs[ 0 ];
+        let point = response.routes[0].legs[0];
         let travelTimePublic = shortenStringTravelTime(point.duration.text);
-        console.log("die Reisezeit beträgt: " + this.travelTimePublic);
-
         this.travelTimePublicUpdated.emit(travelTimePublic);
+        console.log("travelTimePublic: " + travelTimePublic);
+      }
+      else(console.log(response));
+    });
+    directionsService.route(requestCar, (response, status) => {
+      if (status == 'OK') {
+        let point = response.routes[0].legs[0];
+        let travelTimeCar = shortenStringTravelTime(point.duration.text);
+        this.travelTimeCarUpdated.emit(travelTimeCar);
+        console.log("travelTimeCar: " + travelTimeCar);
       }
     });
-    directionsService.route(requestCar, function(response, status) {
+    directionsService.route(requestPedestrian, (response, status) => {
       if (status == 'OK') {
-        let point = response.routes[ 0 ].legs[ 0 ];
-      }
-    });
-    directionsService.route(requestPedestrian, function(response, status) {
-      if (status == 'OK') {
-        let point = response.routes[ 0 ].legs[ 0 ];
+        let point = response.routes[0].legs[0];
+        let travelTimePedestrian = shortenStringTravelTime(point.duration.text);
+        this.travelTimePedestrianUpdated.emit(travelTimePedestrian);
+        console.log("travelTimePedestrian: " + travelTimePedestrian);
       }
     });
   }

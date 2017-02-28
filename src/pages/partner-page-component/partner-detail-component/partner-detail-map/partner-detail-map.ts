@@ -10,11 +10,14 @@ declare let device: any;
   templateUrl: 'partner-detail-map.html'
 })
 export class PartnerDetailMap {
+
   travelTimePublic: string;
+  travelTimeCar: string;
+  travelTimePedestrian: string;
 
   currentLatitude: number;
   currentLongitude: number;
-  locationFound: boolean;
+  locationAvailable: boolean;
   locationExact: boolean;
   starInactive = {
     name: "star-outline",
@@ -29,7 +32,7 @@ export class PartnerDetailMap {
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.currentLatitude = parseFloat(LocationService.latitude);
     this.currentLongitude = parseFloat(LocationService.longitude);
-    this.locationFound = LocationService.locationAvailable;
+    this.locationAvailable = LocationService.locationAvailable;
     this.locationExact = LocationService.locationExact;
     console.log("PartnerDetailMap: ", LocationService.latitude + " " + LocationService.longitude)
   }
@@ -53,7 +56,12 @@ export class PartnerDetailMap {
   }
 
   handleTravelTimePublicUpdated(travelTimePublic) {
-    console.debug('handle event from sub directive: ', travelTimePublic);
     this.travelTimePublic = travelTimePublic;
+  }
+  handleTravelTimeCarUpdated(travelTimeCar) {
+    this.travelTimeCar = travelTimeCar;
+  }
+  handleTravelTimePedestrianUpdated(travelTimePedestrian) {
+    this.travelTimePedestrian = travelTimePedestrian;
   }
 }

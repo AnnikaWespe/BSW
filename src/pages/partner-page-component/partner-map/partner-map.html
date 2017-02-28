@@ -1,8 +1,11 @@
-<!--
-  Generated template for the PartnerMap component.
-
-  See https://angular.io/docs/ts/latest/api/core/index/ComponentMetadata-class.html
-  for more info on Angular 2 Components.
--->
-
-{{text}}
+<sebm-google-map
+  [latitude]="stringToNumber(currentLatitude)"
+  [longitude]="stringToNumber(currentLongitude)"
+  [zoomControl] = "false">
+  <sebm-google-map-circle [latitude]="stringToNumber(currentLatitude)" [longitude]="stringToNumber(currentLongitude)"
+                          [fillColor]="'red'"
+                          [circleDraggable]="true"
+                          [editable]="true">
+  </sebm-google-map-circle>
+  <styled-map-partners [partners]="partners"></styled-map-partners>
+</sebm-google-map>

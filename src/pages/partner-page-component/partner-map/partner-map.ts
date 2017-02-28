@@ -1,22 +1,29 @@
-import { Component } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {NavParams, NavController} from "ionic-angular";
+import {LocationService} from "../../../services/locationService";
 
-/*
-  Generated class for the PartnerMap component.
-
-  See https://angular.io/docs/ts/latest/api/core/index/ComponentMetadata-class.html
-  for more info on Angular 2 Components.
-*/
 @Component({
   selector: 'partner-map',
   templateUrl: 'partner-map.html'
 })
-export class PartnerMapComponent {
+export class PartnerMapComponent implements OnInit{
+
+  @Input() partners: any[];
 
   text: string;
-  partners: any[];
-  location: {};
+  currentLatitude = LocationService.latitude;
+  currentLongitude = LocationService.longitude;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+  }
+
+  ngOnInit(){
+    console.log(this.partners);
+    console.log(this.currentLatitude);
+    console.log(this.currentLongitude);
+  }
+
+  stringToNumber(string){
+    return Number(string);
   }
 }

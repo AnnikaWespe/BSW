@@ -16,22 +16,21 @@
     [latitude]="49"
     [longitude]="11"
     [zoomControl] = "false">
-    <sebm-google-map-marker [latitude] = "48" [longitude] = "11"></sebm-google-map-marker>
+    <sebm-google-map-marker [latitude] = "48.1300" [longitude] = "11.5700"></sebm-google-map-marker>
     <sebm-google-map-circle [latitude]="currentLatitude" [longitude]="currentLongitude"
-                            [radius]="3"
                             [fillColor]="'red'"
                             [circleDraggable]="true"
                             [editable]="true"
                             *ngIf="locationAvailable">
     </sebm-google-map-circle>
 
-    <styled-map-partner-details (travelTimePublicUpdated)="handleTravelTimePublicUpdated($event)"></styled-map-partner-details>
+    <styled-map-partner-details (travelTimePublicUpdated)="handleTravelTimePublicUpdated($event)"
+                                (travelTimeCarUpdated)="handleTravelTimeCarUpdated($event)"
+                                (travelTimePedestrianUpdated) ="handleTravelTimePedestrianUpdated($event)"
+    ></styled-map-partner-details>
   </sebm-google-map>
 
   <div class="goToRoute">
-      <div class="route">
-          <p (click)="openExternalMapApp()" class="btn-pill">Route</p>
-      </div>
     <div class="icons">
       <div class="public-transport transport">
         <ion-icon name = "bus" color = "primary"></ion-icon>
@@ -39,12 +38,15 @@
       </div>
       <div class="car transport">
         <ion-icon name = "car" color = "primary"></ion-icon>
-        <p>1 Std 10 Min</p>
+        <p>{{travelTimeCar}}</p>
       </div>
       <div class="pedestrian transport">
         <ion-icon name = "walk" color = "primary"></ion-icon>
-        <p><1 Min</p>
+        <p>{{travelTimePedestrian}}</p>
       </div>
+    </div>
+    <div class="route">
+      <p (click)="openExternalMapApp()" class="btn-pill">Route</p>
     </div>
   </div>
 
@@ -53,8 +55,6 @@
     <p>Augenoptik, Brillen, Kontaktlinsen, Ferngläser</p>
     <p>Karlsplatz 12, 12345 Eschenbach</p>
   </div>
-
-  <div>{{travelTimePublic}}</div>
 
 </ion-content>
 

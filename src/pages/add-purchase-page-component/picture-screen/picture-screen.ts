@@ -5,12 +5,6 @@ import {Camera} from "ionic-native";
 
 declare let window: any;
 
-/*
-  Generated class for the PictureScreen component.
-
-  See https://angular.io/docs/ts/latest/api/core/index/ComponentMetadata-class.html
-  for more info on Angular 2 Components.
-*/
 @Component({
   selector: 'picture-screen',
   templateUrl: 'picture-screen.html'
@@ -30,7 +24,6 @@ export class PictureScreenComponent {
       targetWidth: 1000,
       targetHeight: 1000
     }).then((imageData) => {
-      // imageData is a base64 encoded string
       this.base64Image = "data:image/jpeg;base64," + imageData;
     }, (err) => {
       console.log(err);
@@ -47,7 +40,7 @@ export class PictureScreenComponent {
 
 
     window.plugins.socialsharing.shareWithOptions(options, () => {
-        this.navCtrl.push(AddPurchasePageComponent, {"navParamsAvailable": true, "startScreenFirstTime" : false})
+        this.navCtrl.setRoot(AddPurchasePageComponent, {"navParamsAvailable": true, "startScreenFirstTime" : false})
       },
       (msg)=>{
         console.log("Sharing failed with message: " + msg);

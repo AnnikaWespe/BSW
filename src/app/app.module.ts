@@ -28,6 +28,7 @@ import {PartnerMapComponent} from "../pages/partner-page-component/partner-map/p
 import {PartnerTableComponent} from "../components/partner-table/partner-table";
 import {StyledMapPartnerDetailsDirective} from "../pages/partner-page-component/partner-detail-component/partner-detail-map/styled-map-partner-details-directive";
 import {PictureScreenComponent} from "../pages/add-purchase-page-component/picture-screen/picture-screen";
+import {StyledMapPartnersDirective} from "../pages/partner-page-component/partner-map/styled-map-partners-directive";
 
 
 @NgModule({
@@ -50,9 +51,10 @@ import {PictureScreenComponent} from "../pages/add-purchase-page-component/pictu
     PartnerDetailComponent,
     PartnerDetailMap,
     StyledMapPartnerDetailsDirective,
+    StyledMapPartnersDirective,
     PartnerMapComponent,
     PartnerTableComponent,
-    PictureScreenComponent
+    PictureScreenComponent,
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -79,7 +81,7 @@ import {PictureScreenComponent} from "../pages/add-purchase-page-component/pictu
     PartnerDetailMap,
     PartnerMapComponent,
     PartnerTableComponent,
-    PictureScreenComponent
+    PictureScreenComponent,
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService, SearchCompletionService, GoogleMapsAPIWrapper],
 
