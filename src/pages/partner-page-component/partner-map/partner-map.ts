@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input } from '@angular/core';
 import {NavParams, NavController} from "ionic-angular";
 import {LocationService} from "../../../services/locationService";
 
@@ -6,7 +6,7 @@ import {LocationService} from "../../../services/locationService";
   selector: 'partner-map',
   templateUrl: 'partner-map.html'
 })
-export class PartnerMapComponent implements OnInit{
+export class PartnerMapComponent{
 
   @Input() partners: any[];
 
@@ -15,12 +15,6 @@ export class PartnerMapComponent implements OnInit{
   currentLongitude = LocationService.longitude;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
-
-  ngOnInit(){
-    console.log(this.partners);
-    console.log(this.currentLatitude);
-    console.log(this.currentLongitude);
   }
 
   stringToNumber(string){

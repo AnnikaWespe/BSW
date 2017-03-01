@@ -15,113 +15,73 @@
     </ion-title>
   </ion-navbar>
 </ion-header>
+
 <ion-content>
-  <div class="list-wrapper">
-    <ion-list no-lines>
-      <button ion-button full outline class="title-button" (click)="toggleContent(0)">
-        <ion-icon name="person" class="menu-title-icon" color="grey"></ion-icon>
-        <div class="menu-title">Mitgliedsdaten</div>
-      </button>
-      <div ion-item id="member" [@show]="showContentOnPosition[0]">
-        <form>
+
+  <div class="ion-card-wrapper">
+    <ion-card>
+      <ion-card-content>
+        <div class="name">Pippi Langstrumpf</div>
+          <div class="cardInfo">
+            <p>Kartennummer</p>
+            <p>12345678 9</p>
+          </div>
+
+        <div class="cardInfo password">
           <ion-row>
-            <ion-col width-50><label for="membership_number">Ihre Mitgliedsnummer</label></ion-col>
-            <ion-col width-50><input type="text" class="form-control" id="membership_number" name="membership_number" required
-                            [(ngModel)]="userDetail.membership_data.membership_number"></ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col width-50><label for="salutation">Anrede</label></ion-col>
-            <ion-col width-50>
-              <select class="form-control" id="salutation" required name="salutation"[(ngModel)]="userDetail.membership_data.salutation">
-                <option [value]="sal">Bitte auswählen</option>
-                <option *ngFor="let sal of optionsSalutation" [value]="sal">{{sal}}
-              </option>
-            </select>
+            <ion-col>
+              <div>
+                <p>Passwort</p>
+                <p>*********</p>
+              </div>
+            </ion-col>
+            <ion-col class="changePassword">
+              <div class="changePassword">
+                <a><br>Passwort ändern</a>
+              </div>
             </ion-col>
           </ion-row>
-          <ion-row>
-            <ion-col width-50><label for="title">Titel</label></ion-col>
-            <ion-col width-50><input type="text" class="form-control" id="title" name="title" placeholder="Keine Angabe"
-                            [(ngModel)]="userDetail.membership_data.title"></ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col width-50><label for="name">Vorname</label></ion-col>
-            <ion-col width-50><input type="text" class="form-control" id="name" name="name" required
-                            [(ngModel)]="userDetail.membership_data.name"></ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col width-50><label for="surname">Nachname</label></ion-col>
-            <ion-col width-50><input type="text" class="form-control" id="surname" name="surname" required
-                            [(ngModel)]="userDetail.membership_data.surname"></ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col width-50><label for="birthday">Geburtstag</label></ion-col>
-            <ion-col width-50><input type="text" class="form-control" id="birthday" name="birthday" required
-                            [(ngModel)]="userDetail.membership_data.birthday"></ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col width-50><label for="telephone_home">Telefon (Festnetz)</label></ion-col>
-            <ion-col width-50><input type="text" class="form-control" id="telephone_home" name="telephone_home" placeholder="Keine Angabe"
-                            [(ngModel)]="userDetail.membership_data.telephone_home"></ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col width-50><label for="telephone_mobile">Telefon (Mobil)</label></ion-col>
-            <ion-col width-50><input type="text" class="form-control" id="telephone_mobile" name="telephone_mobile"
-                            placeholder="Keine Angabe" [(ngModel)]="userDetail.membership_data.telephone_mobile">
-            </ion-col>
-          </ion-row>
-          <button type="submit" class="btn btn-default">Änderungen übernehmen</button>
-        </form>
-      </div>
-      <button ion-button full outline class="title-button" (click)="toggleContent(1)">
-        <ion-icon name="mail" class="menu-title-icon" color="grey"></ion-icon>
-        <div class="menu-title">Adressdaten</div>
-      </button>
-      <div ion-item id="adress" [@show]="showContentOnPosition[1]">
-        <form>
-          <ion-row>
-            <ion-col width-50><label for="street">Straße</label></ion-col>
-            <ion-col width-50><input type="text" class="form-control" id="street" name="street" required
-                                     [(ngModel)]="userDetail.adress_data.street"></ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col width-50><label for="number">Hausnummer</label></ion-col>
-            <ion-col width-50><input type="text" class="form-control" id="number" name="number" placeholder="Keine Angabe"
-                                     [(ngModel)]="userDetail.adress_data.number"></ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col width-50><label for="postal_code">PLZ</label></ion-col>
-            <ion-col width-50><input type="text" class="form-control" id="postal_code" name="postal_code" required
-                                     [(ngModel)]="userDetail.adress_data.postal_code"></ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col width-50><label for="city">Ort</label></ion-col>
-            <ion-col width-50><input type="text" class="form-control" id="city" name="city" required
-                                     [(ngModel)]="userDetail.adress_data.city"></ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col width-50><label for="district">Ortsteil</label></ion-col>
-            <ion-col width-50><input type="text" class="form-control" id="district" name="district" placeholder="keine Angabe"
-                                     [(ngModel)]="userDetail.adress_data.district"></ion-col>
-          </ion-row>
-          <button type="submit" class="btn btn-default">Änderungen übernehmen</button>
-        </form>
-      </div>
-      <button ion-button full outline class="title-button" (click)="toggleContent(2)">
-        <ion-icon name="card" class="menu-title-icon" color="grey"></ion-icon>
-        <div class="menu-title">Bankdaten</div>
-      </button>
-      <div ion-item id="bank" [@show]="showContentOnPosition[2]">
-        BankContent
-      </div>
-      <button ion-button full outline class="title-button" (click)="toggleContent(3)">
-        <ion-icon name="star" class="menu-title-icon" color="grey"></ion-icon>
-        <div class="menu-title">Passwort</div>
-      </button>
-      <div ion-item id="password" [@show]="showContentOnPosition[3]">
-        PasswordContent
-      </div>
-    </ion-list>
-    {{diagnostic}}
+        </div>
+      </ion-card-content>
+    </ion-card>
   </div>
+
+<div class="profile-header-wrapper">
+
+  <ion-row class="profile-header">
+    <ion-col class="icon-col">
+      <ion-icon name = "person"></ion-icon>
+    </ion-col>
+    <ion-col class="text-col">
+      <div class="text-div">
+        <p class="description">Persönliche Daten</p>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <ion-row class="profile-header">
+    <ion-col class="icon-col">
+      <ion-icon name = "card"></ion-icon>
+    </ion-col>
+    <ion-col class="text-col">
+      <div class="text-div">
+        <p class="description">Bankdaten</p>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <ion-row class="profile-header">
+    <ion-col class="icon-col">
+      <div>%</div>
+    </ion-col>
+    <ion-col class="text-col">
+      <div class="text-div">
+        <p class="description">Vorteilsübersicht</p>
+      </div>
+    </ion-col>
+  </ion-row>
+
+</div>
+
+
 </ion-content>

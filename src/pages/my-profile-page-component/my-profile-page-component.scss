@@ -1,70 +1,61 @@
 my-profile-page-component {
-    div.list-wrapper{
-      background-color: map-get($colors, light);
-      height: 100%;
+  div.ion-card-wrapper{
+    background-color: white;
+    padding: 3vh 3vw 3vh 3vw;
+    ion-col{
+      margin: 0;
+      padding: 0;
+      text-align: left;
     }
-    .item-md{
-      background-color: inherit;
+    ion-col.changePassword{
+      text-align: right;
     }
-    div.scroll-content{
-      overflow-y: hidden;
-    }
-    div.menu-title{
-      width: 100%;
-      padding: 1vh 0 1vh 1vw;
-      margin-left: 2vw;
-    }
-    .menu-title-icon, .menu-title{
-      display: inline-block;
-      color: grey;
-      text-transform: none;
-      font-size: larger;
-    }
-    ion-icon{
-      width: 4vw;
-    }
-    .item-block{
-      line-height: 2vh;
-    }
-    .list-wrapper{
-      padding-top: 3vh;
-    }
-  button.title-button{
-    border: 1px solid grey;
-    text-align: left;
-    border-top: none;
   }
-    div.profile-menu-title{
-      font-size: 3vh;
-    }
-    div.item.item-block.item-md{
-      background-color: white;
-    }
-    .button-md{
+  div.name{
+    font-weight: bolder;
+    color: map_get($colors, primary);
+    padding: 2vh 0 2vh 0;
+  }
+  div.cardInfo{
+    p{
       margin: 0;
     }
-    .button-outline-md{
-      box-shadow: inherit;
+    &.password{
+      margin-top: 1vh;
     }
-  form input, form select{
-    background-color: map-get($colors, light);
-    font-size: smaller;
   }
-  form label{
-    font-size: smaller;
+
+  div.profile-header-wrapper{
+    background-color: map_get($colors, light);
+    padding-top: 1vh;
+    ion-col{
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      p{
+        margin: 0 2vw 1vh 0 ;
+      }
+    }
   }
-  div.item-inner{
-    padding-right: 0;
+  div.text-div{
+    text-align: left;
   }
-  div.item-md{
-    padding-right: 0;
-    padding-left: 2vw;
+  ion-row.profile-header{
+    height: 8vh;
+    line-height: 8vh;
+    font-size: large;
   }
-  button[type="submit"]{
-    background-color: map-get($colors, primary);
-    color: white;
+  ion-col.icon-col{
+    max-width: 20vw;
   }
-  .item-block{
-    min-height: 0;
+  ion-col.text-col{
+    max-width: 80vw;
+    border-bottom: 1px solid grey;
+  }
+
+  div.scroll-content{
+    background-color: map_get($colors, light);
   }
 }
+
+

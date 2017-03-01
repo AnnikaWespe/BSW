@@ -71,7 +71,7 @@
   </div>
 </ion-content>
 
-<ion-content *ngIf="showMap">
+<ion-content *ngIf="showMap" [style.margin-top]="getMargin()">
   <partner-map [partners]="localPartners"></partner-map>
 </ion-content>
 

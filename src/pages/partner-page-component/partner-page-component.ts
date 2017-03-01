@@ -35,7 +35,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
 
   partners: any[] = [];
   displayedPartners: any[] = [];
-  localPartners: any[];
+  localPartners = [];
   resetPartnersArray: boolean = true;
 
   category: string;
@@ -138,7 +138,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     else {
       this.displayedPartners = this.displayedPartners.concat(returnedObject.originalSearchResults.bucketToSearchResult[this.category].contentEntities);
     }
-    this.localPartners = this.displayedPartners.concat(returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities);
+    this.localPartners = this.localPartners.concat(returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities);
     console.log("length of displayed partners array:" + this.displayedPartners.length);
     this.waitingForResults = false;
   }

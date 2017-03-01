@@ -8,7 +8,7 @@
   <div class="input-fields-wrapper">
 
     <div class="card-number-wrapper">
-      <ion-input type="text" placeholder="Mitgliedsnummer / Email" [(ngModel)]="scannedNumber"></ion-input>
+      <ion-input type="text" placeholder="Mitgliedsnummer / Email" [(ngModel)]="inputNumberOrEmail"></ion-input>
       <ion-icon color="primary" name="camera" class="camera" (click)="loadCameraPage()"></ion-icon>
     </div>
 
@@ -27,9 +27,9 @@
 
 
   <ion-footer>
-      <button ion-button block color="primary" (click)="pushOverviewPage()">Login</button>
+      <button ion-button block color="primary" (click)="checkForValidInput()">Login</button>
       <div class="center-text">
-        <p class="no-login">Ohne Login fortfahren</p>
+        <p class="no-login" (click)="pushOverviewPage()">Ohne Login fortfahren</p>
       </div>
   </ion-footer>
 

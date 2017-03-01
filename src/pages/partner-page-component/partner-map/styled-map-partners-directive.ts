@@ -1,7 +1,7 @@
-import {OnInit, Directive, Output, EventEmitter, Input} from '@angular/core';
+import {OnInit, Directive, Input} from '@angular/core';
 import { GoogleMapsAPIWrapper } from 'angular2-google-maps/core';
-import {LocationService} from '../../../services/locationService';
 declare let google: any;
+declare let MarkerClusterer: any;
 
 
 
@@ -24,54 +24,43 @@ export class StyledMapPartnersDirective implements OnInit{
   }
 
   private setMapOptions(map: any) {
-    // let stylesArray : any = [
-    //   {
-    //     featureType: "poi",
-    //     elementType: "labels",
-    //     stylers: [
-    //       { visibility: "off" }
-    //     ]
-    //   }
-    // ];
-    let bounds = new google.maps.LatLngBounds();
-
-    bounds.extend({lat: 48.1300, lng: 11.5700});
-    if(LocationService.locationAvailable){
-      bounds.extend({lat: Number(LocationService.latitude), lng: Number(LocationService.longitude)});
-    }
-    map.setOptions({
-      streetViewControl: false
-      // styles: stylesArray
-    });
-    map.fitBounds(bounds);
+    map.setOptions({ clickableIcons: false });
   }
 
-  private placeMarkers(map){
 
+  private placeMarkers(map){
+    let marker;
+    let markers = [];
+    let bounds = new google.maps.LatLngBounds();
+    let markerClusterer;
+
+    for (let partner of this.partners){
+      let latitude = partner.location.latitude;
+      let longitude = partner.location.longitude;
+      let logo = partner.logoUrlForGMap;
+      if (logo == "https://www.bsw.de/upload/bsw/partner-logo.png"){logo = ""}
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(latitude, longitude),
+        map: map,
+        icon: logo
+      });
+      if (marker.icon === ""){
+        marker.label = partner.nameOrigin;
+      }
+      markers.push(marker);
+
+      google.maps.event.addListener(marker, 'click', (function(marker) {
+        return function(){
+        }
+      })(marker));
+      bounds.extend({lat: latitude, lng: longitude});
+    }
+    map.fitBounds(bounds);
+
+    markerClusterer = new MarkerClusterer(map, markers,
+      {imagePath: '../assets/icon/m'});
   }
 }
 
-// var map = new google.maps.Map(document.getElementById('map'), {
-//   zoom: 10,
-//   center: new google.maps.LatLng(-33.92, 151.25),
-//   mapTypeId: google.maps.MapTypeId.ROADMAP
-// });
-//
-// var infowindow = new google.maps.InfoWindow();
-//
-// var marker, i;
-//
-// for (i = 0; i < locations.length; i++) {
-//   marker = new google.maps.Marker({
-//     position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-//     map: map
-//   });
-//
-//   google.maps.event.addListener(marker, 'click', (function(marker, i) {
-//     return function() {
-//       infowindow.setContent(locations[i][0]);
-//       infowindow.open(map, marker);
-//     }
-//   })(marker, i));
-// }
+
 
