@@ -39,7 +39,7 @@ export class MyApp {
       { title: 'Mein Profil', component: MyProfilePageComponent, icon: "person", parameters: {}},
       { title: 'Einstellungen', component: SettingsPageComponent, icon:"settings", parameters: {}},
     ];
-    this.pageExit = {title: "Abmelden", component: LogoutPageComponent, icon: "exit", parameters: {}}
+    this.pageExit = {title: "Abmelden", component: LoginPageComponent, icon: "exit", parameters: {}}
   }
 
   initializeApp() {

@@ -8,4 +8,6 @@ import { NavController, NavParams } from 'ionic-angular';
 export class SettingsPageComponent {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {}
+
+  title = "Einstellungen";
 }
