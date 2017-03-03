@@ -28,11 +28,16 @@ export class OverviewPageComponent implements OnInit{
   offlinePartners: any[];
   favoritePartners: any[];
   lastVisitedPartners: any[];
+  searchInterfaceOpen = false;
 
 
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService) {}
+
+  public ngAfterViewChecked() {
+    this.setFocus();
+  }
 
   ngOnInit(){
     if(LocationService.locationAvailable){
@@ -82,6 +87,10 @@ export class OverviewPageComponent implements OnInit{
     this.navCtrl.push(PartnerPageComponent, {filterParameter: "ONLINEPARTNER"});
   }
 
+  loadPartnerPage(searchTerm){
+    this.navCtrl.push(PartnerPageComponent, {filterParameter: "allpartners", searchTerm: searchTerm})
+  }
+
   //pure DOM method(s)
 
   heightBlueBarRedBar(){
@@ -99,5 +108,12 @@ export class OverviewPageComponent implements OnInit{
       this.heightBalanceBarBonusBarBuffer[2] =  this.maxHeightBarInVh - heightOtherDiv + "vh";
     }
     return this.heightBalanceBarBonusBarBuffer;
+  }
+
+  private setFocus() {
+    let searchInputField = document.getElementById('mySearchInputField');
+    if (searchInputField) {
+      searchInputField.focus();
+    }
   }
 }

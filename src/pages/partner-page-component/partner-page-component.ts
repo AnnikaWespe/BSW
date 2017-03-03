@@ -3,8 +3,6 @@ import {NavController, NavParams} from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
 import {PartnerService} from "../../services/partner-service";
 import {ChooseLocationManuallyComponent} from "./choose-location-manually/choose-location-manually-component";
-import {SearchTermCompletion} from './search-completion/SearchTermCompletion';
-import {SearchCompletionService} from "./search-completion/search-completion-service";
 import {AlertController} from 'ionic-angular';
 import {PartnerDetailComponent} from "./partner-detail-component/partner-detail-component";
 import {LocationService} from "../../services/locationService";
@@ -40,19 +38,16 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
 
   category: string;
   bucket: number = 0;
+  searchTerm = "";
 
   searchInterfaceOpen: boolean = false;
-  searchSuggestionsOpen: boolean = false;
-  iconLeft: string = "menu";
-  iconRight: string = "search";
-  searchTermCompletion: SearchTermCompletion[];
-  noMatchesFound = [new SearchTermCompletion("Leider keine Übereinstimmung")];
-  searchTerm: string = "";
+
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService,
-              private searchCompletionService: SearchCompletionService, private renderer: Renderer, public alertCtrl: AlertController) {
+              private renderer: Renderer, public alertCtrl: AlertController) {
     this.activeFilterFromMenu = navParams.get('filterParameter');
+    this.searchTerm = navParams.get('searchTerm');
     this.category = this.activeFilterFromMenu;
     this.chosenLocation = navParams.get('location');
   }
@@ -116,12 +111,17 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     })
   }
 
+  getPartnersWithSearchTerm(searchTerm){
+    this.searchTerm = searchTerm;
+    this.getPartners();
+  }
+
   getPartners() {
+    console.log(this.location, this.bucket, this.searchTerm);
     if (this.resetPartnersArray == true) {
       this.displayedPartners = [];
       this.waitingForResults = true;
     }
-    this.searchSuggestionsOpen = false;
     this.partnerService.getPartners(this.location, this.bucket, this.searchTerm)
       .subscribe(
         body => {
@@ -153,64 +153,12 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  inputToSuggestions(event: any) {
-    if (event.keyCode !== 13) {
-      this.getSearchSuggestions(event.target.value)
-    }
-    ;
-    if (event.keyCode === 8 && this.searchTerm === "") {
-      this.searchSuggestionsOpen = false;
-      this.resetPartnersArray = true;
-      this.getPartners();
-    }
-    if (event.keyCode == 13 && this.searchTerm.length > 1) {
-      this.resetPartnersArray = true;
-      this.getPartners();
-    }
-  }
-
-  getSearchSuggestions(searchTermSnippet) {
-    this.searchCompletionService.getSuggestions(searchTermSnippet, this.location.latitude, this.location.longitude)
-      .subscribe(
-        data => {
-          this.searchTermCompletion = data.results;
-          if (data.results) {
-            this.searchSuggestionsOpen = true
-          }
-          else {
-            this.searchTermCompletion = this.noMatchesFound
-          }
-        },
-        error => this.errorMessage = <any>error)
-  }
-
-  completeSearchTerm(text) {
-    this.searchTerm = text;
-    this.searchSuggestionsOpen = false;
-    this.resetPartnersArray = true;
-    this.getPartners();
-  }
-
   chooseLocationManually() {
     event.stopPropagation();
     this.navCtrl.push(ChooseLocationManuallyComponent, {location: this.location});
     this.showDropdown = [false, false];
   }
 
-  functionRightIcon() {
-    if (!this.searchInterfaceOpen) {
-      this.searchInterfaceOpen = true;
-      this.iconLeft = "arrow-back";
-      this.iconRight = "close-circle";
-      this.showDropdown = [false, false];
-    }
-    else {
-      this.searchTerm = "";
-      this.searchSuggestionsOpen = false;
-      this.resetPartnersArray = true;
-      this.getPartners();
-    }
-  }
 
   showPartner(partner = 0) {
     //TODO: nächste Zeile löschen
@@ -248,17 +196,10 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     this.showDropdown[position] = !isVisible;
   }
 
-  getMargin() {
-    return this.searchSuggestionsOpen ? "54px" : "108px";
-  }
-
-  closeSearchInterface() {
+  closeSearchInterface($event) {
     this.searchInterfaceOpen = false;
-    this.searchSuggestionsOpen = false;
-    this.showDropdown = [false, false];
-    this.iconLeft = "menu";
-    this.iconRight = "search";
     this.searchTerm = "";
+    this.showDropdown = [false, false];
     this.resetPartnersArray = true;
     this.getPartners();
   }

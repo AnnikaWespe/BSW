@@ -8,8 +8,6 @@ import { MyApp } from './app.component';
 import {LoginPageComponent} from '../pages/login-page-component/login-component';
 import {OverviewPageComponent} from '../pages/overview-page-component/overview-component';
 import  { AddPurchasePageComponent} from '../pages/add-purchase-page-component/add-purchase-component';
-import {SavingsOverviewComponent} from '../pages/overview-page-component/savings-overview-component/savings-overview-component';
-import {PartnersOverviewComponent} from '../pages/overview-page-component/partners-overview-component/partners-overview-component';
 import {ConfirmScanPageComponent} from '../pages/login-page-component/confirm-scan-page-component/confirm-scan-page-component';
 import {LogoutPageComponent} from "../pages/logout-page-component/logout-page-component";
 import {MyProfilePageComponent} from "../pages/my-profile-page-component/my-profile-page-component";
@@ -19,7 +17,7 @@ import {MembershipDataFormComponent} from "../pages/my-profile-page-component/us
 import {PartnerService} from '../services/partner-service';
 import {TruncateWordsPipe} from '../pages/partner-page-component/truncate'
 import {ChooseLocationManuallyComponent} from "../pages/partner-page-component/choose-location-manually/choose-location-manually-component";
-import {SearchCompletionService} from "../pages/partner-page-component/search-completion/search-completion-service";
+import {SearchCompletionService} from "../components/searchHeader/search-completion/search-completion-service.ts";
 import {GoogleMapsAPIWrapper} from "angular2-google-maps/core";
 import {StyledMapChooseManually} from "../pages/partner-page-component/choose-location-manually/styledMapChooseManually";
 import {PartnerDetailComponent} from "../pages/partner-page-component/partner-detail-component/partner-detail-component";
@@ -29,6 +27,7 @@ import {PartnerTableComponent} from "../components/partner-table/partner-table";
 import {StyledMapPartnerDetailsDirective} from "../pages/partner-page-component/partner-detail-component/partner-detail-map/styled-map-partner-details-directive";
 import {PictureScreenComponent} from "../pages/add-purchase-page-component/picture-screen/picture-screen";
 import {StyledMapPartnersDirective} from "../pages/partner-page-component/partner-map/styled-map-partners-directive";
+import {TypeaheadComponent} from "../components/searchHeader/typeahead/typeahead";
 
 
 @NgModule({
@@ -37,8 +36,6 @@ import {StyledMapPartnersDirective} from "../pages/partner-page-component/partne
     OverviewPageComponent,
     AddPurchasePageComponent,
     LoginPageComponent,
-    SavingsOverviewComponent,
-    PartnersOverviewComponent,
     ConfirmScanPageComponent,
     LogoutPageComponent,
     MyProfilePageComponent,
@@ -55,6 +52,7 @@ import {StyledMapPartnersDirective} from "../pages/partner-page-component/partne
     PartnerMapComponent,
     PartnerTableComponent,
     PictureScreenComponent,
+    TypeaheadComponent,
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -82,6 +80,7 @@ import {StyledMapPartnersDirective} from "../pages/partner-page-component/partne
     PartnerMapComponent,
     PartnerTableComponent,
     PictureScreenComponent,
+    TypeaheadComponent,
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService, SearchCompletionService, GoogleMapsAPIWrapper],
 

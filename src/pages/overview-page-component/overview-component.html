@@ -1,20 +1,25 @@
 <ion-header>
-  <ion-navbar primary>
-    <ion-buttons left>
-      <button menuToggle>
-        <ion-icon name="menu" color="grey" class="menu-button-header"></ion-icon>
-      </button>
-    </ion-buttons>
 
-    <ion-title>
-      {{title}}
-    </ion-title>
-    <ion-buttons end>
-      <button>
-        <ion-icon name="search" color="grey" class="search-button-header"></ion-icon>
-      </button>
-    </ion-buttons>
-  </ion-navbar>
+  <typeahead *ngIf="searchInterfaceOpen" (getPartnersWithSearchTermEmitter)="loadPartnerPage($event)" (closeSearchInterfaceEmitter)="searchInterfaceOpen = false"></typeahead>
+
+  <div *ngIf="!searchInterfaceOpen">
+    <ion-navbar primary>
+      <ion-buttons left>
+        <button menuToggle>
+          <ion-icon name="menu" color="grey" class="menu-button-header"></ion-icon>
+        </button>
+      </ion-buttons>
+      <ion-title>
+        {{title}}
+      </ion-title>
+      <ion-buttons end>
+        <button>
+          <ion-icon name="search" color="grey" class="search-button-header" (click) = "searchInterfaceOpen = true"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-navbar>
+  </div>
+
 </ion-header>
 <ion-content>
     <div class="bars">

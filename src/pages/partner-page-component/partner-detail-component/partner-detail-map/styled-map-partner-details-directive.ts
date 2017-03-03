@@ -59,7 +59,6 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
     let origin = new google.maps.LatLng(LocationService.latitude, LocationService.longitude);
     let destination = new google.maps.LatLng(48.1300, 11.5700);
 
-
     let requestPublic = {origin: origin, destination: destination, travelMode: google.maps.TravelMode.TRANSIT};
     let requestCar = {origin: origin, destination: destination, travelMode: google.maps.TravelMode.DRIVING};
     let requestPedestrian = {origin: origin, destination: destination, travelMode: google.maps.TravelMode.WALKING};
