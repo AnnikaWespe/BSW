@@ -38,7 +38,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
 
   category: string;
   bucket: number = 0;
-  searchTerm = "";
+  searchTerm: string;
 
   searchInterfaceOpen: boolean = false;
 
@@ -47,7 +47,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService,
               private renderer: Renderer, public alertCtrl: AlertController) {
     this.activeFilterFromMenu = navParams.get('filterParameter');
-    this.searchTerm = navParams.get('searchTerm');
+    this.searchTerm = navParams.get('searchTerm') || "";
     this.category = this.activeFilterFromMenu;
     this.chosenLocation = navParams.get('location');
   }

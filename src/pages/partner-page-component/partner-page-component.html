@@ -66,7 +66,34 @@
       <!--<div class="filterBy" (click)="showPartner(partner)">Z - A</div>-->
     <!--</div>-->
 
-
+    <div class="filter-dropdown" *ngIf="showDropdown[0]">
+      <ion-row class="currentLocation">
+        <ion-col>
+          <div>Aktueller Standort</div>
+        </ion-col>
+        <ion-col>
+          <ion-icon name = "map" (click)="chooseLocationManually()"></ion-icon>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <div>Alle auswählen</div>
+        </ion-col>
+        <ion-col>
+          <div>Auswahl aufheben</div>
+        </ion-col>
+      </ion-row>
+      <ion-row class="selection" [class.selected] = "beautySelected">Beauty</ion-row>
+      <ion-row class="selection" [class.selected] = "entertainmentSelected">Entertainment</ion-row>
+      <ion-row class="selection" [class.selected] = "healthSelected">Gesundheit</ion-row>
+      <ion-row class="selection" [class.selected] = "livingSelected">Wohnen</ion-row>
+      <ion-row class="selection" [class.selected] = "fashionSelected">Mode</ion-row>
+      <ion-row class="selection" [class.selected] = "multimediaSelected">Multimedia</ion-row>
+      <ion-row class="selection" [class.selected] = "leisureSelected">Sport & Freizeit</ion-row>
+      <div>
+        <button ion-button block color="primary">Auswahl anzeigen</button>
+      </div>
+    </div>
 
     <div class="initialSpinner" *ngIf="waitingForResults">
       <ion-spinner class="initialSpinner" (click)="hideDropdown()"></ion-spinner>

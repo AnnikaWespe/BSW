@@ -55,7 +55,7 @@ export class TypeaheadComponent {
     this.searchTermCompletion = [];
     this.searchTerm = searchTerm;
   }
-  
+
 
 
 }
