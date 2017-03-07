@@ -40,12 +40,12 @@
 
     <ion-row *ngIf="!searchSuggestionsOpen" class="filter-button-row">
       <ion-col class="filter-button left-button" (click)="toggleVisibilityDropdowns(0)">
-        <div class="filter-button-text">KATEGORIE
+        <div class="filter-button-text" [class.notActive] = "showDropdown[1]">FILTER
           <ion-icon name="arrow-dropdown"></ion-icon>
         </div>
       </ion-col>
       <ion-col class="filter-button" (click)="toggleVisibilityDropdowns(1)">
-        <div class="filter-button-text">SORTIEREN
+        <div class="filter-button-text" [class.notActive] = "showDropdown[0]">SORTIEREN
           <ion-icon name="arrow-dropdown"></ion-icon>
         </div>
       </ion-col>
@@ -66,34 +66,33 @@
       <!--<div class="filterBy" (click)="showPartner(partner)">Z - A</div>-->
     <!--</div>-->
 
-    <div class="filter-dropdown" *ngIf="showDropdown[0]">
+    <div *ngIf="showDropdown[0]" class="filter-menu">
       <ion-row class="currentLocation">
         <ion-col>
           <div>Aktueller Standort</div>
         </ion-col>
-        <ion-col>
+        <ion-col class="map-icon">
           <ion-icon name = "map" (click)="chooseLocationManually()"></ion-icon>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col>
-          <div>Alle auswählen</div>
+          <div (click)="selectAll()">Alle auswählen</div>
         </ion-col>
         <ion-col>
-          <div>Auswahl aufheben</div>
+          <div (click)="selectNone()">Auswahl aufheben</div>
         </ion-col>
       </ion-row>
-      <ion-row class="selection" [class.selected] = "beautySelected">Beauty</ion-row>
-      <ion-row class="selection" [class.selected] = "entertainmentSelected">Entertainment</ion-row>
-      <ion-row class="selection" [class.selected] = "healthSelected">Gesundheit</ion-row>
-      <ion-row class="selection" [class.selected] = "livingSelected">Wohnen</ion-row>
-      <ion-row class="selection" [class.selected] = "fashionSelected">Mode</ion-row>
-      <ion-row class="selection" [class.selected] = "multimediaSelected">Multimedia</ion-row>
-      <ion-row class="selection" [class.selected] = "leisureSelected">Sport & Freizeit</ion-row>
-      <div>
-        <button ion-button block color="primary">Auswahl anzeigen</button>
-      </div>
+      <div center class="selection" [class.selected] = "selected.beauty" (click)="selected.beauty = !selected.beauty">Beauty</div>
+      <div class="selection" [class.selected] = "selected.entertainment" (click)="selected.entertainment = !selected.entertainment">Entertainment</div>
+      <div class="selection" [class.selected] = "selected.health" (click)="selected.health = !selected.health">Gesundheit</div>
+      <div class="selection" [class.selected] = "selected.living" (click)="selected.living = !selected.living">Wohnen</div>
+      <div class="selection" [class.selected] = "selected.fashion" (click)="selected.fashion = !selected.fashion">Mode</div>
+      <div class="selection" [class.selected] = "selected.multimedia" (click)="selected.multimedia = !selected.multimedia">Multimedia</div>
+      <div class="selection" [class.selected] = "selected.leisure" (click)="selected.leisure = !selected.leisure">Sport & Freizeit</div>
+        <button ion-button color="primary" (click)="filterByCategory()">Auswahl anzeigen</button>
     </div>
+
 
     <div class="initialSpinner" *ngIf="waitingForResults">
       <ion-spinner class="initialSpinner" (click)="hideDropdown()"></ion-spinner>

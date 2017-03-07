@@ -38,9 +38,40 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
 
   category: string;
   bucket: number = 0;
-  searchTerm: string;
+  searchTerm = "";
 
   searchInterfaceOpen: boolean = false;
+
+  selected = {
+    "entertainment": false,
+    "beauty": false,
+    "leisure": false,
+    "health": false,
+    "living": false,
+    "fashion": false,
+    "multimedia": false
+  };
+  allSelected = {
+    "entertainment": true,
+    "beauty": true,
+    "leisure": true,
+    "health": true,
+    "living": true,
+    "fashion": true,
+    "multimedia": true
+  };
+  noneSelected = {
+    "entertainment": false,
+    "beauty": false,
+    "leisure": false,
+    "health": false,
+    "living": false,
+    "fashion": false,
+    "multimedia": false
+  }
+
+  categories = [ "entertainment", "beauty", "leisure", "health", "living", "fashion", "multimedia"];
+  searchCategories = "";
 
 
 
@@ -122,7 +153,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
       this.displayedPartners = [];
       this.waitingForResults = true;
     }
-    this.partnerService.getPartners(this.location, this.bucket, this.searchTerm)
+    this.partnerService.getPartners(this.location, this.bucket, this.searchTerm + this.searchCategories)
       .subscribe(
         body => {
           let returnedObject = body.json();
@@ -174,6 +205,16 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     this.showDropdown = [false, false];
   }
 
+  filterByCategory(){
+    this.searchCategories = "";
+    for (let category of this.categories){
+      if(this.selected[category] = true){
+        this.searchCategories += category;
+      }
+    }
+    this.getPartners();
+  }
+
 
 
 //pure DOM methods
@@ -205,11 +246,29 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   }
 
   doInfinite(infiniteScroll) {
-    console.log("loadnextpartners");
     this.bucket += 1;
     this.resetPartnersArray = false;
     this.getPartners();
     infiniteScroll.complete();
+  }
+
+  selectNone(){
+    this.selected.entertainment= false,
+      this.selected.beauty= false,
+      this.selected.leisure= false,
+      this.selected.health= false,
+      this.selected.living= false,
+      this.selected.fashion= false,
+      this.selected.multimedia= false
+  }
+  selectAll(){
+    this.selected.entertainment= true,
+      this.selected.beauty= true,
+      this.selected.leisure= true,
+      this.selected.health= true,
+      this.selected.living= true,
+      this.selected.fashion= true,
+      this.selected.multimedia= true
   }
 }
 

@@ -11,7 +11,7 @@ partner-page-component {
     margin-right: 1.5px;
   }
   ion-row.filter-button-row {
-    border-bottom: 1px solid map-get($colors, secondary);
+    border-bottom: 2px solid white;
     position: relative;
     text-align: center;
     background-color: white;
@@ -21,33 +21,67 @@ partner-page-component {
     vertical-align: middle;
     font-size: xx-small;
     font-weight: bolder;
-    line-height: 6.5vh
+    line-height: 6.5vh;
+    &.notActive{
+      color: map_get($colors, font-grey);
+    }
   }
   ion-icon {
     margin-left: 1vw;
   }
-
-  ion-content {
-    position: relative;
-  }
-  div.filter-dropdown {
+  div.filter-menu{
+    color: map_get($colors, font-color-for-filter-dropdown);
+    text-align: center;
     font-size: larger;
     position: absolute;
     left: 0;
     width: 100%;
     background-color: map_get($colors, secondary-grey);
     z-index: 100;
-    padding: 1vh 0 1vh 0;
     border-bottom: 1px solid grey;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     div.selection {
+      display: list-item;
+      width: 100%;
       text-align: center;
       font-weight: bolder;
+      height: 7vh;
+      line-height: 7vh;
+      border-bottom: 1px solid map_get($colors, secondary);
       &.selected {
-
+        color: white;
+        background-color: map_get($colors, secondary);
+        border-bottom: 1px solid map_get($colors, secondary-grey);
       }
     }
+    ion-row{
+      height: 8vh;
+      line-height: 8vh;
+      border-bottom: 1px solid map_get($colors, secondary);
+    }
+    ion-col{
+      padding: 0 5vw 0 5vw;
+      &.map-icon{
+        text-align: right;
+      }
+    }
+    div.wrapper-div{
+      height: 4vh;
+      text-align: center;
+    }
+    button{
+      font-size: larger;
+      width: 80vw;
+      height: 7vh;
+      text-transform: none;
+      border-radius: 2px;
+      margin: 5.5vh 0 5.5vh 0;
+    }
   }
+  ion-content {
+    position: relative;
+  }
+
   div.chooseLocationManually {
     color: map_get($colors, secondary);
     vertical-align: middle;
