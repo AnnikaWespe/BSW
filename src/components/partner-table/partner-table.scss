@@ -1,3 +1,97 @@
+//partner-table {
+//  div.partner-div{
+//    background-color: map_get($colors,light);
+//    overflow: hidden;
+//  }
+//  ion-row.partner-row{
+//    border-bottom: 0.5px solid lightgray;
+//    height: 12.5vh;
+//    background-color: map_get($colors,light);
+//    overflow: hidden;
+//  }
+//  ion-row.text-row{
+//    padding-right: 0;
+//  }
+//  div.partner-text-div{
+//    width: 60vw;
+//    text-align: left;
+//    p.partner-description{
+//      font-size: smaller;
+//    }
+//  }
+//  p.partner-title{
+//    font-weight: bold;
+//    line-height: 12.5vh;
+//    margin: 0;
+//  }
+//  p.partner-description{
+//    margin: 0;
+//    color: #808080;
+//  }
+//  div.white-square{
+//    height: 8vh;
+//    width: 8vh;
+//    background-color: white;
+//    display: -ms-flexbox;
+//    display: -webkit-flex;
+//    display: flex;
+//
+//    -ms-flex-align: center;
+//    -webkit-align-items: center;
+//    -webkit-box-align: center;
+//
+//    align-items: center;
+//
+//    margin-left: auto;
+//    margin-right: auto;
+//
+//  }
+//  ion-col.text-col{
+//    padding: 0 0 0 5px;
+//  }
+//  ion-col.image-col{
+//    height: 12vh;
+//    width: 12vh;
+//    display: -ms-flexbox;
+//    display: -webkit-flex;
+//    display: flex;
+//
+//    -ms-flex-align: center;
+//    -webkit-align-items: center;
+//    -webkit-box-align: center;
+//
+//    align-items: center;
+//  }
+//  ion-col.bonus-col{
+//    display: -ms-flexbox;
+//    display: -webkit-flex;
+//    display: flex;
+//
+//    -ms-flex-align: center;
+//    -webkit-align-items: center;
+//    -webkit-box-align: center;
+//
+//    align-items: center;
+//    text-align: center;
+//
+//    margin-left: auto;
+//    margin-right: auto;
+//
+//    width: 10vw;
+//    color: map_get($colors, primary);
+//    font-size: larger;
+//    padding-left: 0;
+//    p{
+//      text-align: center;
+//      width: 10vw;
+//    }
+//  }
+//  ion-content{
+//    position: relative;
+//  }
+//}
+
+
 partner-table {
   div.partner-div{
     background-color: map_get($colors,light);
@@ -13,7 +107,6 @@ partner-table {
     padding-right: 0;
   }
   div.partner-text-div{
-    width: 60vw;
     text-align: left;
     p.partner-description{
       font-size: smaller;
@@ -46,12 +139,12 @@ partner-table {
     margin-right: auto;
 
   }
-  ion-col.text-col{
+  div.text{
     padding: 0 0 0 5px;
   }
-  ion-col.image-col{
+  div.image{
     height: 12vh;
-    width: 12vh;
+    min-width: 12vh;
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
@@ -62,7 +155,7 @@ partner-table {
 
     align-items: center;
   }
-  ion-col.bonus-col{
+  div.bonus{
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
@@ -71,19 +164,14 @@ partner-table {
     -webkit-align-items: center;
     -webkit-box-align: center;
 
-    align-items: center;
-    text-align: center;
+    align-items: right;
+    text-align: right;
 
-    margin-left: auto;
-    margin-right: auto;
-
-    width: 10vw;
     color: map_get($colors, primary);
     font-size: larger;
     padding-left: 0;
     p{
       text-align: center;
-      width: 10vw;
     }
   }
   ion-content{
