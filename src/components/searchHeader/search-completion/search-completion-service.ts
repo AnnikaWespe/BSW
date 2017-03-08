@@ -21,7 +21,7 @@ export class SearchCompletionService {
     let helperString = res.text().replace("www.bsw.de", "");
     let body = JSON.parse(helperString.substring(1, helperString.length-1));
     console.log(body);
-    return body || { };
+    return body.results || [];
   }
   private handleError (error: Response | any) {
     // TODO: In a real world app, we might use a remote logging infrastructure

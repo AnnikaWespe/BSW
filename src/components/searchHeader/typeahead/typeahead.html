@@ -5,9 +5,10 @@
       </button>
     </ion-buttons>
     <input id="mySearchInputField"
+           #mySearchInputField
            placeholder="Geben Sie einen Suchbegriff ein"
            [(ngModel)]="searchTerm"
-           (keyup)="inputToSuggestions($event)">
+           (keyup)= "search(mySearchInputField.value)">
     <ion-buttons end>
       <button (click)="deleteSearchTerm()">
         <ion-icon name="close-circle" color="grey" class="search-button-header"></ion-icon>
@@ -15,10 +16,9 @@
     </ion-buttons>
   </ion-navbar>
   <div class = "suggestions-wrapper">
-    <div *ngFor="let item of searchTermCompletion" class="suggestion" (click)="completeSearchTerm(item.displayText)" class = "suggestion">
+    <div class = "suggestion" (click)="completeSearchTerm(item.displayText)" *ngFor="let item of searchTermCompletion2 | async">
       {{item.displayText}}
     </div>
   </div>
-
 
 
