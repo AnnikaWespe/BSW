@@ -11,8 +11,6 @@ import 'rxjs/add/operator/map';
 
 import {SearchCompletionService} from "../search-completion/search-completion-service";
 import {SearchTermCompletion} from '../search-completion/SearchTermCompletion';
-import {LocationService} from "../../../services/locationService.ts";
-
 
 
 
@@ -30,17 +28,17 @@ export class TypeaheadComponent implements OnInit {
   private searchTerms = new Subject<string>();
   searchTermCompletion2: Observable<SearchTermCompletion[]>;
 
-  searchTermCompletion: SearchTermCompletion[];
-  errorMessage: string;
-
 
   constructor(private searchCompletionService: SearchCompletionService) {
     this.searchTerms.subscribe(term => console.log(term))
   }
 
-  search(term: string): void {
-    console.log(term);
-    this.searchTerms.next(term);
+  search(term: string, $event): void {
+    if ($event.keyCode == 13 && this.searchTerm.length > 1) {
+      this.getPartnersWithSearchTermEmitter.emit(this.searchTerm);
+      this.searchTermCompletion2 = Observable.of<SearchTermCompletion[]>([]);
+    }
+    else{this.searchTerms.next(term)};
   }
 
   ngOnInit(): void {
@@ -63,40 +61,17 @@ export class TypeaheadComponent implements OnInit {
     this.searchTerm = "";
   }
 
-  inputToSuggestions(event: any) {
-    // if (event.keyCode !== 13) {
-    //   this.getSearchSuggestions(event.target.value)
-    // }
-    // else if (event.keyCode == 13 && this.searchTerm.length > 1) {
-    //   this.getPartnersWithSearchTermEmitter.emit(this.searchTerm);
-    //   this.searchTermCompletion = [];
-    // }
-    console.log(event);
-  }
-
-
-
-  getSearchSuggestions(searchTermSnippet) {
-    this.searchCompletionService.getSuggestions(this.searchTerm, LocationService.latitude, LocationService.longitude)
-      .subscribe(
-        data => {
-          this.searchTermCompletion = data.results;
-          console.log(this.searchTermCompletion);
-          if (data.results) {
-          }
-        },
-        error => this.errorMessage = <any>error)
-  }
-  deleteSearchTerm(){
-    this.searchTerm = "";
-  }
-
   completeSearchTerm(searchTerm){
     this.getPartnersWithSearchTermEmitter.emit(searchTerm);
-    this.searchTermCompletion = [];
+    this.searchTermCompletion2 = Observable.of<SearchTermCompletion[]>([]);
     this.searchTerm = searchTerm;
   }
 
+    deleteSearchTerm(){
+      this.searchTerm = "";
+      this.searchTermCompletion2 = Observable.of<SearchTermCompletion[]>([]);
+      this.getPartnersWithSearchTermEmitter.emit("");
+    }
 
 
 }

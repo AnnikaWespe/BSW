@@ -8,7 +8,7 @@
            #mySearchInputField
            placeholder="Geben Sie einen Suchbegriff ein"
            [(ngModel)]="searchTerm"
-           (keyup)= "search(mySearchInputField.value)">
+           (keyup)= "search(mySearchInputField.value, $event)">
     <ion-buttons end>
       <button (click)="deleteSearchTerm()">
         <ion-icon name="close-circle" color="grey" class="search-button-header"></ion-icon>

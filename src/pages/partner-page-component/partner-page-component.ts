@@ -14,7 +14,7 @@ import {LocationService} from "../../services/locationService";
   templateUrl: 'partner-page-component.html',
 })
 export class PartnerPageComponent implements OnInit, AfterViewChecked {
-  title: string = "Partner";
+  title = "Partner";
   mode = "Observable";
 
   showDropdown: boolean[] = [false, false];
@@ -30,6 +30,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   activeFilterFromMenu: string;
   iconToggleMapAndList: string = "heart";
   showMap: boolean = false;
+  disableMapAndSearch = false;
 
   partners: any[] = [];
   displayedPartners: any[] = [];
@@ -79,6 +80,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
               private renderer: Renderer, public alertCtrl: AlertController) {
     this.activeFilterFromMenu = navParams.get('filterParameter');
     this.searchTerm = navParams.get('searchTerm') || "";
+    this.title = navParams.get("title");
     this.category = this.activeFilterFromMenu;
     this.chosenLocation = navParams.get('location');
   }
@@ -245,6 +247,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     this.searchTerm = "";
     this.showDropdown = [false, false];
     this.resetPartnersArray = true;
+    this.title = "hier könnte Ihr Titel stehen"
     this.getPartners();
   }
 

@@ -79,16 +79,16 @@ export class OverviewPageComponent implements OnInit{
   }
 
   showOfflinePartners(){
-    this.navCtrl.push(PartnerPageComponent, {filterParameter: "OFFLINEPARTNER"});
+    this.navCtrl.push(PartnerPageComponent, {filterParameter: "OFFLINEPARTNER", title: "Vor Ort Partner"});
   }
 
 
   showOnlinePartners(){
-    this.navCtrl.push(PartnerPageComponent, {filterParameter: "ONLINEPARTNER"});
+    this.navCtrl.push(PartnerPageComponent, {filterParameter: "ONLINEPARTNER", title: "Online Partner"});
   }
 
   loadPartnerPage(searchTerm){
-    this.navCtrl.push(PartnerPageComponent, {filterParameter: "allpartners", searchTerm: searchTerm})
+    this.navCtrl.setRoot(PartnerPageComponent, {filterParameter: "allpartners", searchTerm: searchTerm, title: searchTerm})
   }
 
   //pure DOM method(s)

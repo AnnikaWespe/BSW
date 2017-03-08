@@ -59,9 +59,11 @@ page-overview {
   ion-col.more{
     color: map-get($colors, font-grey);
     font-size: large;
+    font-weight: bold;
     line-height: 8vh;
     max-width: 10vw;
     color: #3B3B3B;
+    padding-right: 4vw;
   }
   ion-col.title{
     color: #3B3B3B;

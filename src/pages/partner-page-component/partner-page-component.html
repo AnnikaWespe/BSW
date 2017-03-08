@@ -51,20 +51,10 @@
       </ion-col>
     </ion-row>
 
-    <!--<div class="filter-dropdown" *ngIf="showDropdown[0]">-->
-      <!--<div class="filterBy" (click)="filter('allpartners')">Alle Treffer</div>-->
-      <!--<div class="filterBy" (click)="filter('ONLINEPARTNER')">Online-Partner</div>-->
-      <!--<div class="filterBy" (click)="filter('OFFLINEPARTNER')" [class.disabled]="!locationChosen && !locationAvailable">-->
-        <!--Vor-Ort-Partner-->
-        <!--<div class="chooseLocationManually" (click)="chooseLocationManually()">ORT MANUELL WÄHLEN</div>-->
-      <!--</div>-->
-      <!--<div class="filterBy" (click)="filter('TRAVELOFFER')">Reiseangebote</div>-->
-      <!--<div class="filterBy" (click)="filter('VEHICLEOFFER')">Autoangebote</div>-->
-    <!--</div>-->
-    <!--<div class="filter-dropdown" *ngIf="showDropdown[1]">-->
-      <!--<div class="filterBy">A - Z</div>-->
-      <!--<div class="filterBy" (click)="showPartner(partner)">Z - A</div>-->
-    <!--</div>-->
+    <div class="filter-dropdown" *ngIf="showDropdown[1]">
+      <div class="filterBy">A - Z</div>
+      <div class="filterBy" (click)="showPartner(partner)">Z - A</div>
+    </div>
 
     <div *ngIf="showDropdown[0]" class="filter-menu">
       <ion-row class="currentLocation">

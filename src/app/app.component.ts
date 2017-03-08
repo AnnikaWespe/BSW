@@ -31,8 +31,8 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pagesGeneral = [
       { title: 'Übersicht', component: OverviewPageComponent, icon: "home", parameters: {} },
-      { title: 'Partner vor Ort', component: PartnerPageComponent, icon: "list", parameters: {filterParameter: "OFFLINEPARTNER"}},
-      { title: 'Partner online', component: PartnerPageComponent, icon: "sunny", parameters: {filterParameter: "ONLINEPARTNER"}},
+      { title: 'Partner vor Ort', component: PartnerPageComponent, icon: "list", parameters: {filterParameter: "OFFLINEPARTNER", title: "Vor Ort Partner"}},
+      { title: 'Partner online', component: PartnerPageComponent, icon: "sunny", parameters: {filterParameter: "ONLINEPARTNER", title: "Online Partner"}},
       { title: 'Einkauf nachtragen', component: AddPurchasePageComponent, icon: "cash", parameters: {}}]
     ;
     this.pagesPersonal = [
