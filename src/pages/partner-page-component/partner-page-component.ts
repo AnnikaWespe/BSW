@@ -43,34 +43,34 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   searchInterfaceOpen: boolean = false;
 
   selected = {
-    "entertainment": false,
-    "beauty": false,
-    "leisure": false,
-    "health": false,
-    "living": false,
-    "fashion": false,
-    "multimedia": false
+    "Entertainment": false,
+    "Beauty": false,
+    "Sport & Freizeit": false,
+    "Gesundheit": false,
+    "Wohnen": false,
+    "Mode": false,
+    "Multimedia": false
   };
   allSelected = {
     "entertainment": true,
-    "beauty": true,
-    "leisure": true,
-    "health": true,
-    "living": true,
-    "fashion": true,
-    "multimedia": true
+    "Beauty": true,
+    "Sport & Freizeit": true,
+    "Gesundheit": true,
+    "Wohnen": true,
+    "Mode": true,
+    "Multimedia": true
   };
   noneSelected = {
     "entertainment": false,
-    "beauty": false,
-    "leisure": false,
-    "health": false,
-    "living": false,
-    "fashion": false,
-    "multimedia": false
+    "Beauty": false,
+    "Sport & Freizeit": false,
+    "Gesundheit": false,
+    "Wohnen": false,
+    "Mode": false,
+    "Multimedia": false
   }
 
-  categories = [ "entertainment", "beauty", "leisure", "health", "living", "fashion", "multimedia"];
+  categories = [ "Entertainment", "Beauty", "Sport & Freizeit", "Gesundheit", "Wohnen", "Mode", "Multimedia"];
   searchCategories = "";
 
 
@@ -143,7 +143,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   }
 
   getPartnersWithSearchTerm(searchTerm){
-    this.searchTerm = searchTerm;
+    this.searchTerm = searchTerm + " ";
     this.getPartners();
   }
 
@@ -208,11 +208,14 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   filterByCategory(){
     this.searchCategories = "";
     for (let category of this.categories){
-      if(this.selected[category] = true){
+      if(this.selected[category] === true){
         this.searchCategories += category;
+        this.searchCategories += " ";
       }
     }
     this.getPartners();
+    this.showDropdown = [false, false];
+    this.waitingForResults = true;
   }
 
 
@@ -253,22 +256,22 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   }
 
   selectNone(){
-    this.selected.entertainment= false,
-      this.selected.beauty= false,
-      this.selected.leisure= false,
-      this.selected.health= false,
-      this.selected.living= false,
-      this.selected.fashion= false,
-      this.selected.multimedia= false
+    this.selected.Entertainment= false,
+      this.selected.Beauty= false,
+      this.selected["Sport & Freizeit"]= false,
+      this.selected.Gesundheit= false,
+      this.selected.Wohnen= false,
+      this.selected.Mode= false,
+      this.selected.Multimedia= false
   }
   selectAll(){
-    this.selected.entertainment= true,
-      this.selected.beauty= true,
-      this.selected.leisure= true,
-      this.selected.health= true,
-      this.selected.living= true,
-      this.selected.fashion= true,
-      this.selected.multimedia= true
+    this.selected.Entertainment= true,
+      this.selected.Beauty= true,
+      this.selected["Sport & Freizeit"]= true,
+      this.selected.Gesundheit= true,
+      this.selected.Wohnen= true,
+      this.selected.Mode= true,
+      this.selected.Multimedia= true
   }
 }
 

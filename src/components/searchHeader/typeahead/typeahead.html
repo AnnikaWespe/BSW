@@ -15,7 +15,7 @@
     </ion-buttons>
   </ion-navbar>
   <div class = "suggestions-wrapper">
-    <div *ngFor="let item of searchTermCompletion | async" class="suggestion" (click)="completeSearchTerm(item.displayText)" class = "suggestion">
+    <div *ngFor="let item of searchTermCompletion" class="suggestion" (click)="completeSearchTerm(item.displayText)" class = "suggestion">
       {{item.displayText}}
     </div>
   </div>

@@ -83,13 +83,13 @@
           <div (click)="selectNone()">Auswahl aufheben</div>
         </ion-col>
       </ion-row>
-      <div center class="selection" [class.selected] = "selected.beauty" (click)="selected.beauty = !selected.beauty">Beauty</div>
-      <div class="selection" [class.selected] = "selected.entertainment" (click)="selected.entertainment = !selected.entertainment">Entertainment</div>
-      <div class="selection" [class.selected] = "selected.health" (click)="selected.health = !selected.health">Gesundheit</div>
-      <div class="selection" [class.selected] = "selected.living" (click)="selected.living = !selected.living">Wohnen</div>
-      <div class="selection" [class.selected] = "selected.fashion" (click)="selected.fashion = !selected.fashion">Mode</div>
-      <div class="selection" [class.selected] = "selected.multimedia" (click)="selected.multimedia = !selected.multimedia">Multimedia</div>
-      <div class="selection" [class.selected] = "selected.leisure" (click)="selected.leisure = !selected.leisure">Sport & Freizeit</div>
+      <div center class="selection" [class.selected] = "selected.Beauty" (click)="selected.Beauty = !selected.Beauty">Beauty</div>
+      <div class="selection" [class.selected] = "selected.Entertainment" (click)="selected.Entertainment = !selected.Entertainment">Entertainment</div>
+      <div class="selection" [class.selected] = "selected.Gesundheit" (click)="selected.Gesundheit = !selected.Gesundheit">Gesundheit</div>
+      <div class="selection" [class.selected] = "selected.Wohnen" (click)="selected.Wohnen = !selected.Wohnen">Wohnen</div>
+      <div class="selection" [class.selected] = "selected.Mode" (click)="selected.Mode = !selected.Mode">Mode</div>
+      <div class="selection" [class.selected] = "selected.Multimedia" (click)="selected.Multimedia = !selected.Multimedia">Multimedia</div>
+      <div class="selection" [class.selected] = "selected['Sport & Freizeit']" (click)="selected['Sport & Freizeit'] = !selected['Sport & Freizeit']">Sport & Freizeit</div>
         <button ion-button color="primary" (click)="filterByCategory()">Auswahl anzeigen</button>
     </div>
 

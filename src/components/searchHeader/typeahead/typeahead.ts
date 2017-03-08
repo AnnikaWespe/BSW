@@ -1,7 +1,17 @@
 import {Component, EventEmitter, Output} from '@angular/core';
+import {Observable} from 'rxjs/Observable'
+
+import 'rxjs/add/observable/of';
+
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+
 import {SearchCompletionService} from "../search-completion/search-completion-service";
 import {SearchTermCompletion} from '../search-completion/SearchTermCompletion';
 import {LocationService} from "../../../services/locationService.ts";
+
+
 
 
 @Component({
@@ -21,6 +31,8 @@ export class TypeaheadComponent {
   constructor(private searchCompletionService: SearchCompletionService) {
   }
 
+
+
   closeSearchInterface($event) {
     this.closeSearchInterfaceEmitter.emit(true);
     this.searchTerm = "";
@@ -32,8 +44,11 @@ export class TypeaheadComponent {
     }
     else if (event.keyCode == 13 && this.searchTerm.length > 1) {
       this.getPartnersWithSearchTermEmitter.emit(this.searchTerm);
+      this.searchTermCompletion = [];
     }
   }
+  search(term: string){}
+
 
   getSearchSuggestions(searchTermSnippet) {
     this.searchCompletionService.getSuggestions(this.searchTerm, LocationService.latitude, LocationService.longitude)
