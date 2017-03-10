@@ -11,5 +11,9 @@ export class PartnerTableComponent {
   constructor() {
 
   }
+  widthBonusDiv(){
+    return "12vw";
+  }
+
 
 }

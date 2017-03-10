@@ -20,13 +20,13 @@
         <img src="{{partner?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
       </div>
     </div>
-    <div class="text">
-      <div class="partner-text-div partner">
-        <p class="partner-title">{{partner?.nameOrigin}}</p>
+      <div class="partner-title">
+        {{ partner?.nameOrigin}}
       </div>
-    </div>
-    <div class="bonus">
-      <p>{{partner?.bonusA}}</p>
+    <div class="partner-bonus">
+     {{partner?.pfBonus}}
     </div>
   </ion-row>
 
+
+  <!--| truncate : 25  | dynamicTruncate : partner.nameOrigin || 0-->

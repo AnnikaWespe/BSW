@@ -15,7 +15,7 @@ import {PartnerPageComponent} from "../pages/partner-page-component/partner-page
 import {SettingsPageComponent} from "../pages/settings-page-component/settings-page-component";
 import {MembershipDataFormComponent} from "../pages/my-profile-page-component/user-detail/membership-data-form.component";
 import {PartnerService} from '../services/partner-service';
-import {TruncateWordsPipe} from '../pages/partner-page-component/truncate'
+import {TruncatePipe, DynamicTruncatePipe} from '../pages/partner-page-component/truncate'
 import {ChooseLocationManuallyComponent} from "../pages/partner-page-component/choose-location-manually/choose-location-manually-component";
 import {SearchCompletionService} from "../components/searchHeader/search-completion/search-completion-service.ts";
 import {GoogleMapsAPIWrapper} from "angular2-google-maps/core";
@@ -43,7 +43,8 @@ import {TypeaheadComponent} from "../components/searchHeader/typeahead/typeahead
     SettingsPageComponent,
     MembershipDataFormComponent,
     ChooseLocationManuallyComponent,
-    TruncateWordsPipe,
+    DynamicTruncatePipe,
+    TruncatePipe,
     StyledMapChooseManually,
     PartnerDetailComponent,
     PartnerDetailMap,
