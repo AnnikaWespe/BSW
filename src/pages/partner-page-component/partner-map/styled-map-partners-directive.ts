@@ -1,5 +1,6 @@
 import {OnInit, Directive, Input} from '@angular/core';
 import {GoogleMapsAPIWrapper} from 'angular2-google-maps/core';
+import {generate} from "../../Observable";
 declare let google: any;
 declare let MarkerClusterer: any;
 
@@ -29,7 +30,9 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.
 </filter>
 </defs>
 <path id="Marker" class="cls-1" d="M4711.01,3827.65h96.31a14.779,14.779,0,0,1,14.82,14.75v73.77a14.788,14.788,0,0,1-14.82,14.76h-37.09l-11.07,35.04-11.84-35.04h-36.31a14.788,14.788,0,0,1-14.82-14.76V3842.4A14.779,14.779,0,0,1,4711.01,3827.65Z" transform="translate(-4693 -3827.66)"/>
-    <image x="0" y="0" width="5" height="5" xlink:href=`
+    <image x="10" y="10" width="100" height="100" xlink:href=`
+
+
 
 
 @Directive({
@@ -54,6 +57,11 @@ export class StyledMapPartnersDirective implements OnInit {
     map.setOptions({clickableIcons: false});
   }
 
+  bonusElement(bonusString): string{
+    let generatedString = '<text x="0" y="35" font-family="Verdana" font-size="35">${bonusString}</text>'
+    return generatedString;
+  }
+
 
   private placeMarkers(map) {
     let markers = [];
@@ -68,9 +76,8 @@ export class StyledMapPartnersDirective implements OnInit {
           let marker = new google.maps.Marker({
             position: new google.maps.LatLng(latitude, longitude),
             map: map,
-            icon: 'data:image/svg+xml;utf8,' + svg + imageAsBase64 + '/></svg>'
+            icon: 'data:image/svg+xml;utf8,' + svg + "'" + imageAsBase64 + "'" + this.bonusElement(partner.pfBonus) + '/></svg>'
           });
-          console.log(marker.icon);
           markers.push(marker);
           google.maps.event.addListener(marker, 'click', (function (marker) {
             return function () {
