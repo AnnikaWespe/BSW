@@ -1,4 +1,4 @@
-import {OnInit, Directive, Input} from '@angular/core';
+import {OnInit, Directive, Input, OnChanges} from '@angular/core';
 import {GoogleMapsAPIWrapper} from 'angular2-google-maps/core';
 import {generate} from "../../Observable";
 declare let google: any;
@@ -30,7 +30,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.
 </filter>
 </defs>
 <path id="Marker" class="cls-1" d="M4711.01,3827.65h96.31a14.779,14.779,0,0,1,14.82,14.75v73.77a14.788,14.788,0,0,1-14.82,14.76h-37.09l-11.07,35.04-11.84-35.04h-36.31a14.788,14.788,0,0,1-14.82-14.76V3842.4A14.779,14.779,0,0,1,4711.01,3827.65Z" transform="translate(-4693 -3827.66)"/>
-    <image x="10" y="10" width="100" height="100" xlink:href=`
+    <image x="10" y="-18" width="110" height="110" xlink:href=`
 
 
 
@@ -38,14 +38,14 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.
 @Directive({
   selector: 'styled-map-partners',
 })
-export class StyledMapPartnersDirective implements OnInit {
+export class StyledMapPartnersDirective implements OnChanges {
 
   @Input() partners: any[];
 
   constructor(private googleMapsWrapper: GoogleMapsAPIWrapper) {
   }
 
-  ngOnInit() {
+  ngOnChanges(){
     this.googleMapsWrapper.getNativeMap()
       .then((map) => {
         this.setMapOptions(map);
@@ -58,9 +58,27 @@ export class StyledMapPartnersDirective implements OnInit {
   }
 
   bonusElement(bonusString): string{
-    let generatedString = '<text x="0" y="35" font-family="Verdana" font-size="35">${bonusString}</text>'
+    let x;
+    let fontSize;
+    let stringLength = bonusString.length;
+    let generatedString;
+    if(stringLength < 4){
+      fontSize = 18;
+      x = "52"
+    }
+    else if (stringLength < 11){
+      fontSize = 18;
+      x = "24"
+    }
+    else{
+      fontSize = 14.5;
+      x = "5"
+    };
+    generatedString = '<text x="' + x + '" y="85" font-family="Helvetica Neue" font-size="' + fontSize + '" fill="#E61B5A">' + bonusString + '</text>'
     return generatedString;
   }
+
+  partnerElement(partnerString){}
 
 
   private placeMarkers(map) {
@@ -70,14 +88,21 @@ export class StyledMapPartnersDirective implements OnInit {
     let promises = [];
     this.partners.forEach((partner) => {
       promises.push(new Promise((resolve, reject) => {
-        this.getImageAsBase64(partner.logoUrlForGMap, (imageAsBase64) => {
+        this.getImageAsBase64(partner.logoUrlForGMap, (imageAsBase64, validImage) => {
           let latitude = partner.location.latitude;
           let longitude = partner.location.longitude;
           let marker = new google.maps.Marker({
             position: new google.maps.LatLng(latitude, longitude),
-            map: map,
-            icon: 'data:image/svg+xml;utf8,' + svg + "'" + imageAsBase64 + "'" + this.bonusElement(partner.pfBonus) + '/></svg>'
+            map: map;
+            icon
           });
+          if(validImage){
+            marker.icon = 'data:image/svg+xml;utf8,' + svg + "'" + imageAsBase64 + "'" + "/>" + this.bonusElement(partner.pfBonus) + "'" + '</svg>';
+            console.log(marker);
+          }
+          else{
+            // marker.icon = 'data:image/svg+xml;utf8,' + svg + "'" + imageAsBase64 + "'" + "/>" + this.bonusElement(partner.pfBonus) + "'" + '</svg>'
+          };
           markers.push(marker);
           google.maps.event.addListener(marker, 'click', (function (marker) {
             return function () {
@@ -98,19 +123,23 @@ export class StyledMapPartnersDirective implements OnInit {
   }
 
   private getImageAsBase64(imageUrl, callback) {
-    let xhr = new XMLHttpRequest();
-    xhr.onload = () => {
-      let reader = new FileReader();
-      reader.onloadend = () => {
-        callback(reader.result);
-      }
-      reader.readAsDataURL(xhr.response);
-    };
-    xhr.open('GET', imageUrl);
-    xhr.responseType = 'blob';
-    xhr.send();
+    if(imageUrl === "https://www.bsw.de/upload/bsw/partner-logo.png"){
+      callback("", false)
+    }
+    else {
+      let xhr = new XMLHttpRequest();
+      xhr.onload = () => {
+        let reader = new FileReader();
+        reader.onloadend = () => {
+          callback(reader.result, true);
+        }
+        reader.readAsDataURL(xhr.response);
+      };
+      xhr.open('GET', imageUrl);
+      xhr.responseType = 'blob';
+      xhr.send();
+    }
   }
-
 }
 
 

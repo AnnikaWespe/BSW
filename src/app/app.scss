@@ -1,6 +1,12 @@
 ion-content{
   background-color: map-get($colors, light);
 }
+*{
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !important;
+}
+
+
+
 
 ion-header{
 	button {

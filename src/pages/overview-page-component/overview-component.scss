@@ -28,13 +28,24 @@ page-overview {
   }
   div.text-div{
     text-align: left;
+    font-size: 90%;
   }
   ion-row.money-detail-row{
-    height: 8vh;
-    line-height: 8vh;
+    height: 14vw;
+    line-height: 14vw;
   }
   ion-col.icon-col{
-    max-width: 20vw;
+    max-width: 15vw;
+  }
+  div.piggyBank{
+    background: url('../assets/icon/piggyBank.png')no-repeat;
+    height: 11vw;
+    width: 11vw;
+    overflow: hidden;
+    background-size: contain;
+    left:50%;
+    margin: 0 auto;
+    margin-top: 1.5vw
   }
   ion-col.text-col{
     max-width: 60vw;

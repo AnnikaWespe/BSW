@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output, OnInit} from '@angular/core';
+import {Component, EventEmitter, Output, OnInit, Input} from '@angular/core';
 import {Observable} from 'rxjs/Observable'
 import { Subject } from 'rxjs/Subject';
 
@@ -21,6 +21,7 @@ import {SearchTermCompletion} from '../search-completion/SearchTermCompletion';
 export class TypeaheadComponent implements OnInit {
 
   text: string;
+  @Input() mapIcon: boolean;
   @Output() closeSearchInterfaceEmitter: EventEmitter<boolean> = new EventEmitter();
   @Output() getPartnersWithSearchTermEmitter: EventEmitter<string> = new EventEmitter();
   searchTerm: string;

@@ -13,6 +13,9 @@
       <button (click)="deleteSearchTerm()">
         <ion-icon name="close-circle" color="grey" class="search-button-header"></ion-icon>
       </button>
+      <button (click)="toggleMapAndList()" *ngIf='mapIcon'>
+        <ion-icon name="map"></ion-icon>
+      </button>
     </ion-buttons>
   </ion-navbar>
   <div class = "suggestions-wrapper">
@@ -20,5 +23,4 @@
       {{item.displayText}}
     </div>
   </div>
-
 

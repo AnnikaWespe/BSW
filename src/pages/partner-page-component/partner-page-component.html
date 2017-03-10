@@ -1,7 +1,9 @@
 <ion-header>
   <typeahead *ngIf="searchInterfaceOpen"
              (closeSearchInterfaceEmitter)="closeSearchInterface($event)"
-             (getPartnersWithSearchTermEmitter)="getPartnersWithSearchTerm($event)"></typeahead>
+             (getPartnersWithSearchTermEmitter)="getPartnersWithSearchTerm($event)"
+             [mapIcon] = 'activeFilterFromMenu == "OFFLINEPARTNER"'>
+  </typeahead>
 
   <div class="standard-header" *ngIf="!searchInterfaceOpen">
     <ion-navbar primary>
@@ -19,11 +21,11 @@
              [(ngModel)]="searchTerm"
              *ngIf="searchInterfaceOpen">
       <ion-buttons end>
-        <button (click)="toggleMapAndList()">
-          <ion-icon name="map" *ngIf='activeFilterFromMenu == "OFFLINEPARTNER"'></ion-icon>
-        </button>
         <button (click)="searchInterfaceOpen = true">
           <ion-icon name="search" color="grey" class="search-button-header"></ion-icon>
+        </button>
+        <button (click)="toggleMapAndList()" *ngIf='activeFilterFromMenu == "OFFLINEPARTNER"'>
+          <ion-icon name="map"></ion-icon>
         </button>
       </ion-buttons>
     </ion-navbar>

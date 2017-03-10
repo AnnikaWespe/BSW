@@ -247,12 +247,12 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     this.searchTerm = "";
     this.showDropdown = [false, false];
     this.resetPartnersArray = true;
-    this.title = "hier könnte Ihr Titel stehen"
+    this.title = "Partner"
     this.getPartners();
   }
 
   doInfinite(infiniteScroll) {
-    this.bucket += 1;
+    this.bucket += 25;
     this.resetPartnersArray = false;
     this.getPartners();
     infiniteScroll.complete();
