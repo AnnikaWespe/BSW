@@ -76,6 +76,15 @@ ion-menu{
   ion-icon{
     width: 4vw;
   }
+  div.customizedIcon{
+    height: 4vw;
+    width: 4vw;
+    overflow: hidden;
+    background-size: contain;
+    left:50%;
+    margin: 0 auto;
+    margin-top: 1.5vw
+  }
   .item-block{
     line-height: 2vh;
   }
