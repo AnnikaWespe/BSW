@@ -36,15 +36,15 @@ ion-navbar.toolbar.toolbar-md{
 ion-menu{
   div.logo{
     background: url('../assets/icon/bsw-logo.png')no-repeat;
-    height: 16vh;
-    width: 32vh;
+    height: 20vh;
+    width: 40vh;
     overflow: hidden;
     background-size: contain;
     left:50%;
     margin: 0 auto;
   }
   div.logo-wrapper{
-    padding: 6vh 0;
+    padding: 10vh 0 3vh 0;
     background-color: white;
   }
   div.list-wrapper{
@@ -73,27 +73,39 @@ ion-menu{
     display: inline-block;
     color: grey;
   }
-  ion-icon{
-    width: 4vw;
-  }
-  div.customizedIcon{
-    height: 4vw;
-    width: 4vw;
-    overflow: hidden;
-    background-size: contain;
-    left:50%;
-    margin: 0 auto;
-    margin-top: 1.5vw
-  }
-  .item-block{
-    line-height: 2vh;
-  }
   .list-wrapper{
     padding-top: 3vh;
+    div.icon{
+      &.offline{
+        background: url('../assets/icon/icon_vorortpartner.png')no-repeat;
+        background-size: contain;
+      }
+      &.online{
+        background: url('../assets/icon/icon_onlinepartner.png')no-repeat;
+        background-size: contain;
+      }
+      height: 11vw;
+      width: 11vw;
+      overflow: hidden;
+      left:50%;
+      margin: 0 auto;
+    }
+    ion-col{
+      padding: 0;
+      margin: 0;
+      height: 11vw;
+      line-height: 11vw;
+
+      &.page-title{
+        border-bottom: 1px solid grey;
+      }
+      &.icon-col{
+        max-width: 11vw;
+
+      }
+    }
   }
-  ion-list.pages-personal{
-    margin-top: 4vh;
-  }
+
 }
 
 

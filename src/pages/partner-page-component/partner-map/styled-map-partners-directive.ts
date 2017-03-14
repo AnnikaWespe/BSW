@@ -83,34 +83,42 @@ export class StyledMapPartnersDirective implements OnChanges, OnInit {
   clusterPartnersWithDuplicatePositions(){
     this.partners.map((partner, indexOrigin) =>
     {
+
+
+
       let originLat = partner.location.latitude;
       let originLon = partner.location.longitude;
 
-      let duplicatesOfThisPartner = [];
+      let duplicatesOfThisPartner = [indexOrigin];
       this.partners.forEach((partnerToCheck, index) => {
-        if (partnerToCheck.location.longitude === originLon && partnerToCheck.location.latitude){
-          if(index !== indexOrigin){
+        if (partnerToCheck.location.longitude === originLon && partnerToCheck.location.latitude && index !== indexOrigin){
             duplicatesOfThisPartner.push(index);
             this.indexesOfClusteredItemsSet.add(indexOrigin);
             this.indexesOfClusteredItemsSet.add(index);
-          }
         };
       });
-      this.clustersArray.push(duplicatesOfThisPartner);
+      if(duplicatesOfThisPartner.length > 1){
+        this.clustersArray.push(duplicatesOfThisPartner);
+      }
+
+
     });
     this.indexesOfClusteredItemsArray = Array.from(this.indexesOfClusteredItemsSet);
     this.indexesOfClusteredItemsArray = this.indexesOfClusteredItemsArray.sort(function(a, b){ return b - a; });
+    console.log(this.indexesOfClusteredItemsArray);
+    console.log(this.clustersArray);
     for (let index of this.indexesOfClusteredItemsArray){
       this.partnersInClusters[index] = this.partners[index];
       this.partners.splice(index, 1);
     };
-    console.log(this.clustersArray);
+    console.log(this.partnersInClusters);
+    for(let array of this.clustersArray){
+
+    }
     for (let array of this.clustersArray){
       let clusterPartnerArray = [];
-      console.log(array);
       for (let item of array){
         clusterPartnerArray.push(this.partnersInClusters[item]);
-        console.log(item);
       }
     }
   }

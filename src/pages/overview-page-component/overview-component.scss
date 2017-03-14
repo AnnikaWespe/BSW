@@ -37,25 +37,21 @@ page-overview {
   ion-col.icon-col{
     max-width: 15vw;
   }
-  div.piggyBank{
-    background: url('../assets/icon/piggyBank.png')no-repeat;
+  div.icon{
+    &.piggyBank{
+      background: url('../assets/icon/piggyBank.png')no-repeat;
+      background-size: contain;
+    }
+    &.coins{
+      background: url('../assets/icon/icon_muenzen.png')no-repeat;
+      background-size: contain;
+    }
     height: 11vw;
     width: 11vw;
     overflow: hidden;
-    background-size: contain;
     left:50%;
     margin: 0 auto;
-    margin-top: 1.5vw
-  }
-  div.coins{
-    background: url('../assets/icon/icon_muenzen.png')no-repeat;
-    height: 11vw;
-    width: 11vw;
-    overflow: hidden;
-    background-size: contain;
-    left:50%;
-    margin: 0 auto;
-    margin-top: 1.5vw
+    margin-top: 1.5vw;
   }
   ion-col.text-col{
     max-width: 60vw;
