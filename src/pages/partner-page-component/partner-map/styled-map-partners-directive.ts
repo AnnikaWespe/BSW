@@ -44,66 +44,63 @@ const svgCluster = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://
 </svg>
 `
 
-interface Set<T> {
-  add(value: T): Set<T>;
-  clear(): void;
-  delete(value: T): boolean;
-  entries(): IterableIterator<[T, T]>;
-  forEach(callbackfn: (value: T, index: T, set: Set<T>) => void, thisArg?: any): void;
-  has(value: T): boolean;
-  keys(): IterableIterator<T>;
-  size: number;
-  values(): IterableIterator<T>;
-  [Symbol.iterator]():IterableIterator<T>;
-  [Symbol.toStringTag]: string;
-}
-
-interface SetConstructor {
-  new <T>(): Set<T>;
-  new <T>(iterable: Iterable<T>): Set<T>;
-  prototype: Set<any>;
-}
-declare var Set: SetConstructor;
-
 
 
 
 @Directive({
   selector: 'styled-map-partners',
 })
-export class StyledMapPartnersDirective implements OnChanges, OnInit {
+export class StyledMapPartnersDirective implements OnChanges, OnInit{
 
   @Input() partners: any[];
+
   clustersArray = [];
-  indexesOfClusteredItemsSet = new Set();
-  indexesOfClusteredItemsArray;
+  indexesOfClusteredItemsArray =[];
   partnersInClusters = {};
+
+  ngOnInit(){
+    console.log(this.partners);
+  }
 
 
   clusterPartnersWithDuplicatePositions(){
+    this.resetParameters();
+    this.searchForDoubles();
+    this.modifyPartnersArray();
+  }
+
+  resetParameters(){
+    this.clustersArray = [];
+    this.indexesOfClusteredItemsArray =[];
+    this.partnersInClusters = {};
+  }
+
+  searchForDoubles(){
     this.partners.map((partner, indexOrigin) =>
     {
-
-
-
-      let originLat = partner.location.latitude;
-      let originLon = partner.location.longitude;
-
-      let duplicatesOfThisPartner = [indexOrigin];
-      this.partners.forEach((partnerToCheck, index) => {
-        if (partnerToCheck.location.longitude === originLon && partnerToCheck.location.latitude && index !== indexOrigin){
+      if (this.indexesOfClusteredItemsArray.indexOf(indexOrigin) === -1){
+        let originLat = partner.location.latitude;
+        let originLon = partner.location.longitude;
+        let duplicatesOfThisPartner = [indexOrigin];
+        this.partners.forEach((partnerToCheck, index) => {
+          if (this.indexesOfClusteredItemsArray.indexOf(index) === -1 && index !== indexOrigin && partnerToCheck.location.longitude === originLon && partnerToCheck.location.latitude === originLat){
             duplicatesOfThisPartner.push(index);
-            this.indexesOfClusteredItemsSet.add(indexOrigin);
-            this.indexesOfClusteredItemsSet.add(index);
-        };
-      });
-      if(duplicatesOfThisPartner.length > 1){
-        this.clustersArray.push(duplicatesOfThisPartner);
+            this.indexesOfClusteredItemsArray.push(index);
+            if (this.indexesOfClusteredItemsArray.indexOf(indexOrigin) === -1){
+              this.indexesOfClusteredItemsArray.push(indexOrigin);
+            }
+          };
+
+        });
+        if(duplicatesOfThisPartner.length > 1){
+          this.clustersArray.push(duplicatesOfThisPartner);
+          console.log(duplicatesOfThisPartner);
+        }
       }
-
-
     });
-    this.indexesOfClusteredItemsArray = Array.from(this.indexesOfClusteredItemsSet);
+  }
+
+  modifyPartnersArray(){
     this.indexesOfClusteredItemsArray = this.indexesOfClusteredItemsArray.sort(function(a, b){ return b - a; });
     console.log(this.indexesOfClusteredItemsArray);
     console.log(this.clustersArray);
@@ -112,21 +109,20 @@ export class StyledMapPartnersDirective implements OnChanges, OnInit {
       this.partners.splice(index, 1);
     };
     console.log(this.partnersInClusters);
-    for(let array of this.clustersArray){
-
-    }
     for (let array of this.clustersArray){
       let clusterPartnerArray = [];
       for (let item of array){
         clusterPartnerArray.push(this.partnersInClusters[item]);
       }
-    }
+    };
   }
 
   constructor(private googleMapsWrapper: GoogleMapsAPIWrapper) {
   }
 
   ngOnChanges(){
+    console.log(this.partners);
+    this.clusterPartnersWithDuplicatePositions();
     this.googleMapsWrapper.getNativeMap()
       .then((map) => {
         this.setMapOptions(map);
@@ -134,9 +130,6 @@ export class StyledMapPartnersDirective implements OnChanges, OnInit {
       });
   }
 
-  ngOnInit(){
-    this.clusterPartnersWithDuplicatePositions();
-  }
 
   private setMapOptions(map: any) {
     map.setOptions({clickableIcons: false});

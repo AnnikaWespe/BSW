@@ -22,14 +22,29 @@ partner-page-component {
     font-size: xx-small;
     font-weight: bolder;
     line-height: 6.5vh;
-    &.notActive{
+    &.notActive {
       color: map_get($colors, font-grey);
     }
   }
   ion-icon {
     margin-left: 1vw;
   }
-  div.filter-menu{
+
+    div.mapIcon {
+      background: url('../assets/icon/icon_map.png') no-repeat;
+      background-size: contain;
+      height: 8vw;
+      width: 8vw;
+      overflow: hidden;
+    }
+  button{
+    margin: 0;
+    padding: 0;
+  }
+
+
+
+  div.filter-menu {
     color: map_get($colors, font-color-for-filter-dropdown);
     text-align: center;
     font-size: larger;
@@ -54,22 +69,22 @@ partner-page-component {
         border-bottom: 1px solid map_get($colors, secondary-grey);
       }
     }
-    ion-row{
+    ion-row {
       height: 8vh;
       line-height: 8vh;
       border-bottom: 1px solid map_get($colors, secondary);
     }
-    ion-col{
+    ion-col {
       padding: 0 5vw 0 5vw;
-      &.map-icon{
+      &.map-icon {
         text-align: right;
       }
     }
-    div.wrapper-div{
+    div.wrapper-div {
       height: 4vh;
       text-align: center;
     }
-    button{
+    button {
       font-size: larger;
       width: 80vw;
       height: 7vh;
