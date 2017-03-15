@@ -13,10 +13,12 @@
       <button (click)="deleteSearchTerm()">
         <ion-icon name="close-circle" color="grey" class="search-button-header"></ion-icon>
       </button>
-      <button (click)="toggleMapAndList()" *ngIf='mapIcon'>
-        <ion-icon name="map"></ion-icon>
-      </button>
     </ion-buttons>
+      <ion-buttons end *ngIf='mapIcon'>
+        <button (click)="toggleMapAndList()" class="mapIcon">
+          <div class="mapIcon"></div>
+        </button>
+      </ion-buttons>
   </ion-navbar>
   <div class = "suggestions-wrapper">
     <div class = "suggestion" (click)="completeSearchTerm(item.displayText)" *ngFor="let item of searchTermCompletion2 | async">

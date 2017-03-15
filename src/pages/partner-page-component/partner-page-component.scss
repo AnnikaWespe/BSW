@@ -12,9 +12,10 @@ partner-page-component {
   }
   ion-row.filter-button-row {
     border-bottom: 2px solid white;
-    position: relative;
+    position: fixed;
     text-align: center;
     background-color: white;
+    z-index: 120;
   }
   div.filter-button-text {
     color: map_get($colors, secondary);
