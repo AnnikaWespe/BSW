@@ -40,11 +40,7 @@ export class StyledMapPartnersDirective implements OnChanges{
   @Output() showList = new EventEmitter();
   @Input() partners: any[];
 
-
-
-
-
-
+  map: any;
 
   constructor(private googleMapsWrapper: GoogleMapsAPIWrapper) {
   }
@@ -53,6 +49,7 @@ export class StyledMapPartnersDirective implements OnChanges{
     console.log(this.partners);
     this.googleMapsWrapper.getNativeMap()
       .then((map) => {
+        this.map = map;
         this.setMapOptions(map);
         this.placeMarkers(map);
       });
@@ -131,6 +128,7 @@ export class StyledMapPartnersDirective implements OnChanges{
             {imagePath: '../assets/icon/m'});
           google.maps.event.addListener(markerClusterer, 'clusterclick', (cluster) => {
             this.showList.emit(cluster.getMarkers());
+            google.maps.event.trigger(map, 'resize');
           });
         }
       )
@@ -171,6 +169,10 @@ export class StyledMapPartnersDirective implements OnChanges{
       xhr.responseType = 'blob';
       xhr.send();
     }
+  }
+
+  private resizeMap(){
+    google.maps.event.trigger(this.map, 'resize');
   }
 
 }

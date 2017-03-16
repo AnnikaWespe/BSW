@@ -2,6 +2,7 @@
   <typeahead *ngIf="searchInterfaceOpen"
              (closeSearchInterfaceEmitter)="closeSearchInterface($event)"
              (getPartnersWithSearchTermEmitter)="getPartnersWithSearchTerm($event)"
+             (toggleMapAndListEmitter)="toggleMapAndList()"
              [mapIcon] = 'activeFilterFromMenu == "OFFLINEPARTNER"'>
   </typeahead>
 

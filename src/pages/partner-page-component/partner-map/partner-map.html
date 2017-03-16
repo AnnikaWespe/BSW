@@ -1,20 +1,20 @@
-<!--<div style="height: 8vh"></div>-->
-<sebm-google-map
-  [latitude]="stringToNumber(currentLatitude)"
-  [longitude]="stringToNumber(currentLongitude)"
-  [zoomControl] = "false">
-  <sebm-google-map-circle [latitude]="stringToNumber(currentLatitude)" [longitude]="stringToNumber(currentLongitude)"
-                          [fillColor]="'red'"
-                          [circleDraggable]="true"
-                          [editable]="true">
-  </sebm-google-map-circle>
-  <styled-map-partners [partners]="partners" (showList) = "showList($event)"></styled-map-partners>
-</sebm-google-map>
-<div style="height: 50%"></div>
-<div class="partnerList" *ngIf="partnerListOpen">
-  <div class="hidePartnerList" (click)="partnerListOpen = false">
+<div class="sebmGoogleMap" [style.height] = "getMapHeight()">
+  <sebm-google-map
+    [latitude]="stringToNumber(currentLatitude)"
+    [longitude]="stringToNumber(currentLongitude)"
+    [zoomControl] = "false">
+    <sebm-google-map-circle [latitude]="stringToNumber(currentLatitude)" [longitude]="stringToNumber(currentLongitude)"
+                            [fillColor]="'red'"
+                            [circleDraggable]="true"
+                            [editable]="true">
+    </sebm-google-map-circle>
+    <styled-map-partners [partners]="partners" (showList) = "showList($event)"></styled-map-partners>
+  </sebm-google-map>
+  <div class="hidePartnerList" (click)="closePartnerList()"  *ngIf="partnerListOpen">
     <ion-icon name = "arrow-dropdown" color = "grey"></ion-icon>
   </div>
+</div>
+<div class="partnerList" *ngIf="partnerListOpen">
   <partner-table [partners]="partnersInList"></partner-table>
 </div>
 

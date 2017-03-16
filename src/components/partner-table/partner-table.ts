@@ -1,19 +1,12 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnChanges} from '@angular/core';
 
 @Component({
   selector: 'partner-table',
   templateUrl: 'partner-table.html'
 })
-export class PartnerTableComponent {
+export class PartnerTableComponent{
 
   @Input() partners: any[];
 
-  constructor() {
-
-  }
-  widthBonusDiv(){
-    return "12vw";
-  }
-
-
+  constructor() {}
 }

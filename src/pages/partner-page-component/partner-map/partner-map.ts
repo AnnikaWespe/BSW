@@ -1,6 +1,7 @@
-import {Component, Input } from '@angular/core';
+import {Component, Input, ViewChild} from '@angular/core';
 import {NavParams, NavController} from "ionic-angular";
 import {LocationService} from "../../../services/locationService";
+import {StyledMapPartnersDirective} from "./styled-map-partners-directive";
 
 @Component({
   selector: 'partner-map',
@@ -10,6 +11,7 @@ export class PartnerMapComponent{
 
   @Input() partners: any[];
 
+  @ViewChild(StyledMapPartnersDirective) map;
 
   text: string;
   currentLatitude = LocationService.latitude;
@@ -24,11 +26,22 @@ export class PartnerMapComponent{
     return Number(string);
   }
 
-  showList(markers){
+  showList(markers = []){
+    console.log("markers", markers);
     this.partnersInList = [];
     this.partnerListOpen = true;
     markers.forEach((marker)=>{
       this.partnersInList.push(marker.partner);
     });
+  }
+
+  getMapHeight(){
+    if(this.partnerListOpen) return "53%"
+    else return "100%";
+  }
+
+  closePartnerList(){
+    this.partnerListOpen = false;
+    this.map.resizeMap();
   }
 }

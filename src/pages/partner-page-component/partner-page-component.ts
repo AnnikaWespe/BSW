@@ -202,7 +202,6 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   }
 
   toggleMapAndList(){
-    console.log("toggleMapAndList");
     this.showMap = !this.showMap;
     this.showDropdown = [false, false];
     console.log("localPartners", this.localPartners)

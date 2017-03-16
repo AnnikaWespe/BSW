@@ -1,13 +1,24 @@
 partner-map {
-  .sebm-google-map-container {
-    height: 50%;
+  .sebmGoogleMap{
+    //height: 53%;
     width: 100%;
     z-index: 1;
-    //position: fixed;
+    position: fixed;
+    border-bottom: 1px solid grey;
+  }
+  .sebm-google-map-container {
+    height: 100%;
+    width: 100%;
   }
   .hidePartnerList{
     text-align: center;
-    border-top: 1px solid grey;
-    padding: 1vh 0;
+    padding: 0.5vh 0;
+    //margin-top: 54.5vh;
+    width: 100%;
+    background-color: map_get($colors, light);
   }
+  .partnerList{
+    margin-top: 56.5vh;
+  }
+
 }

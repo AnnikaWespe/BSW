@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Output, OnInit, Input} from '@angular/core';
 import {Observable} from 'rxjs/Observable'
-import { Subject } from 'rxjs/Subject';
+import {Subject} from 'rxjs/Subject';
 
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/catch';
@@ -13,7 +13,6 @@ import {SearchCompletionService} from "../search-completion/search-completion-se
 import {SearchTermCompletion} from '../search-completion/SearchTermCompletion';
 
 
-
 @Component({
   selector: 'typeahead',
   templateUrl: 'typeahead.html'
@@ -24,6 +23,7 @@ export class TypeaheadComponent implements OnInit {
   @Input() mapIcon: boolean;
   @Output() closeSearchInterfaceEmitter: EventEmitter<boolean> = new EventEmitter();
   @Output() getPartnersWithSearchTermEmitter: EventEmitter<string> = new EventEmitter();
+  @Output() toggleMapAndListEmitter: EventEmitter<any> = new EventEmitter();
   searchTerm: string;
 
   private searchTerms = new Subject<string>();
@@ -39,7 +39,10 @@ export class TypeaheadComponent implements OnInit {
       this.getPartnersWithSearchTermEmitter.emit(this.searchTerm);
       this.searchTermCompletion2 = Observable.of<SearchTermCompletion[]>([]);
     }
-    else{this.searchTerms.next(term)};
+    else {
+      this.searchTerms.next(term)
+    }
+    ;
   }
 
   ngOnInit(): void {
@@ -50,11 +53,10 @@ export class TypeaheadComponent implements OnInit {
         ? this.searchCompletionService.getSuggestions(term)
         : Observable.of<SearchTermCompletion[]>([]))
       .catch(error => {
-            console.log(error);
-            return Observable.of<SearchTermCompletion[]>([]);
-          });
+        console.log(error);
+        return Observable.of<SearchTermCompletion[]>([]);
+      });
   };
-
 
 
   closeSearchInterface($event) {
@@ -62,18 +64,21 @@ export class TypeaheadComponent implements OnInit {
     this.searchTerm = "";
   }
 
-  completeSearchTerm(searchTerm){
+  completeSearchTerm(searchTerm) {
     this.getPartnersWithSearchTermEmitter.emit(searchTerm);
     this.searchTermCompletion2 = Observable.of<SearchTermCompletion[]>([]);
     this.searchTerm = searchTerm;
   }
 
-    deleteSearchTerm(){
-      this.searchTerm = "";
-      this.searchTermCompletion2 = Observable.of<SearchTermCompletion[]>([]);
-      this.getPartnersWithSearchTermEmitter.emit("");
-    }
+  deleteSearchTerm() {
+    this.searchTerm = "";
+    this.searchTermCompletion2 = Observable.of<SearchTermCompletion[]>([]);
+    this.getPartnersWithSearchTermEmitter.emit("");
+  }
 
+  toggleMapAndList(){
+    this.toggleMapAndListEmitter.emit(true);
+  }
 
 }
 
