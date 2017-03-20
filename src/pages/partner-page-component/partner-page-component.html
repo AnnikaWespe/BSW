@@ -3,7 +3,7 @@
              (closeSearchInterfaceEmitter)="closeSearchInterface($event)"
              (getPartnersWithSearchTermEmitter)="getPartnersWithSearchTerm($event)"
              (toggleMapAndListEmitter)="toggleMapAndList()"
-             [mapIcon] = 'activeFilterFromMenu == "OFFLINEPARTNER"'>
+             [mapIcon]='activeFilterFromMenu == "OFFLINEPARTNER"'>
   </typeahead>
 
   <div class="standard-header" *ngIf="!searchInterfaceOpen">
@@ -38,56 +38,73 @@
 </ion-header>
 
 
-
 <ion-content>
 
   <div class="wrapper-div">
 
-    <ion-row *ngIf="!searchSuggestionsOpen" class="filter-button-row">
-      <ion-col class="filter-button left-button" (click)="toggleVisibilityDropdowns(0)">
-        <div class="filter-button-text" [class.notActive] = "showDropdown[1]">FILTER
-          <ion-icon name="arrow-dropdown"></ion-icon>
-        </div>
-      </ion-col>
-      <ion-col class="filter-button" (click)="toggleVisibilityDropdowns(1)">
-        <div class="filter-button-text" [class.notActive] = "showDropdown[0]">SORTIEREN
-          <ion-icon name="arrow-dropdown"></ion-icon>
-        </div>
-      </ion-col>
-    </ion-row>
-
-    <div class="filter-dropdown" *ngIf="showDropdown[1]">
-      <div class="filterBy">A - Z</div>
-      <div class="filterBy" (click)="showPartner(partner)">Z - A</div>
-    </div>
-
-    <div *ngIf="showDropdown[0]" class="filter-menu">
-      <ion-row class="currentLocation">
-        <ion-col>
-          <div>Aktueller Standort</div>
+    <div class="filter-wrapper">
+      <ion-row *ngIf="!showMap" class="filter-button-row">
+        <ion-col class="filter-button left-button" (click)="toggleVisibilityDropdowns(0)">
+          <div class="filter-button-text" [class.notActive]="showDropdown[1]">FILTER
+            <ion-icon name="arrow-dropdown"></ion-icon>
+          </div>
         </ion-col>
-        <ion-col class="map-icon">
-          <ion-icon name = "map" (click)="chooseLocationManually()"></ion-icon>
+        <ion-col class="filter-button" (click)="toggleVisibilityDropdowns(1)">
+          <div class="filter-button-text" [class.notActive]="showDropdown[0]">SORTIEREN
+            <ion-icon name="arrow-dropdown"></ion-icon>
+          </div>
         </ion-col>
       </ion-row>
-      <ion-row>
-        <ion-col>
-          <div (click)="selectAll()">Alle auswählen</div>
-        </ion-col>
-        <ion-col>
-          <div (click)="selectNone()">Auswahl aufheben</div>
+
+      <ion-row *ngIf="showMap">
+        <ion-col class="filter-button left-button" (click)="toggleVisibilityDropdowns(0)">
+          <div class="filter-button-text" [class.notActive]="showDropdown[1]">FILTER
+            <ion-icon name="arrow-dropdown"></ion-icon>
+          </div>
         </ion-col>
       </ion-row>
-      <div center class="selection" [class.selected] = "selected.Beauty" (click)="selected.Beauty = !selected.Beauty">Beauty</div>
-      <div class="selection" [class.selected] = "selected.Entertainment" (click)="selected.Entertainment = !selected.Entertainment">Entertainment</div>
-      <div class="selection" [class.selected] = "selected.Gesundheit" (click)="selected.Gesundheit = !selected.Gesundheit">Gesundheit</div>
-      <div class="selection" [class.selected] = "selected.Wohnen" (click)="selected.Wohnen = !selected.Wohnen">Wohnen</div>
-      <div class="selection" [class.selected] = "selected.Mode" (click)="selected.Mode = !selected.Mode">Mode</div>
-      <div class="selection" [class.selected] = "selected.Multimedia" (click)="selected.Multimedia = !selected.Multimedia">Multimedia</div>
-      <div class="selection" [class.selected] = "selected['Sport & Freizeit']" (click)="selected['Sport & Freizeit'] = !selected['Sport & Freizeit']">Sport & Freizeit</div>
-        <button ion-button color="primary" (click)="filterByCategory()">Auswahl anzeigen</button>
-    </div>
 
+
+      <div class="filter-dropdown" *ngIf="showDropdown[1]">
+        <div class="filterBy">A - Z</div>
+        <div class="filterBy" (click)="showPartner(partner)">Z - A</div>
+      </div>
+
+      <div class="filter-menu" *ngIf="showDropdown[0]">
+        <ion-row class="currentLocation">
+          <ion-col>
+            <div>Aktueller Standort</div>
+          </ion-col>
+          <ion-col class="map-icon">
+            <ion-icon name="map" (click)="chooseLocationManually()"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <ion-row class="toggle offline-partner-toggle">
+          <ion-col class="toggle-text">Vor-Ort Partner</ion-col>
+          <ion-col class="map-icon">
+            <ion-icon name="map" (click)="showLocalPartners = !showLocalPartners"
+                      [class.checked]="showLocalPartners"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <ion-row class="toggle online-partner-toggle">
+          <ion-col class="toggle-text">Online Partner</ion-col>
+          <ion-col class="map-icon">
+            <ion-icon name="map" (click)="showOnlinePartners = !showOnlinePartners"
+                      [class.checked]="showOnlinePartners"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <ion-row class="toggle has-campaign-partner-toggle">
+          <ion-col class="toggle-text">Nur Partner mit Aktionen</ion-col>
+          <ion-col class="map-icon">
+            <ion-icon name="map" (click)="showOnlyPartnersWithCampaign = !showOnlyPartnersWithCampaign"
+                      [class.checked]="showOnlyPartnersWithCampaign"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <div class="showSelectionWrapper">
+          <button class="showSelection" ion-button color="primary" (click)="changeDisplay()">Auswahl anzeigen</button>
+        </div>
+      </div>
+    </div>
 
     <div class="initialSpinner" *ngIf="waitingForResults">
       <ion-spinner class="initialSpinner" (click)="hideDropdown()"></ion-spinner>
@@ -95,7 +112,7 @@
 
     <div style="height: 8vh"></div>
 
-    <div class="partner-table-wrapper" (click)="clickhideDropdown()" *ngIf="!showMap">
+    <div class="partner-table-wrapper" (click)="hideDropdown()" *ngIf="!showMap">
       <partner-table [partners]="displayedPartners"></partner-table>
     </div>
 

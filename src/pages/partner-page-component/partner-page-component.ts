@@ -1,4 +1,4 @@
-import {Component, OnInit, Renderer, AfterViewChecked} from '@angular/core';
+import {Component, OnInit, AfterViewChecked} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
 import {PartnerService} from "../../services/partner-service";
@@ -6,7 +6,6 @@ import {ChooseLocationManuallyComponent} from "./choose-location-manually/choose
 import {AlertController} from 'ionic-angular';
 import {PartnerDetailComponent} from "./partner-detail-component/partner-detail-component";
 import {LocationService} from "../../services/locationService";
-
 
 
 @Component({
@@ -27,15 +26,18 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   locationFound: boolean = false;
   locationChosen: boolean = false;
 
-  activeFilterFromMenu: string;
-  iconToggleMapAndList: string = "heart";
+  activeFilterFromMenu: string = "OFFLINEPARTNER";
   showMap: boolean = false;
-  disableMapAndSearch = false;
 
   partners: any[] = [];
   displayedPartners: any[] = [];
   localPartners = [];
   resetPartnersArray: boolean = true;
+
+  showLocalPartners: false;
+  showOnlinePartners: false;
+  showOnlyPartnersWithCampaign: false;
+  rangeSize = 25;
 
   category: string;
   bucket: number = 0;
@@ -43,45 +45,14 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
 
   searchInterfaceOpen: boolean = false;
 
-  selected = {
-    "Entertainment": false,
-    "Beauty": false,
-    "Sport & Freizeit": false,
-    "Gesundheit": false,
-    "Wohnen": false,
-    "Mode": false,
-    "Multimedia": false
-  };
-  allSelected = {
-    "entertainment": true,
-    "Beauty": true,
-    "Sport & Freizeit": true,
-    "Gesundheit": true,
-    "Wohnen": true,
-    "Mode": true,
-    "Multimedia": true
-  };
-  noneSelected = {
-    "entertainment": false,
-    "Beauty": false,
-    "Sport & Freizeit": false,
-    "Gesundheit": false,
-    "Wohnen": false,
-    "Mode": false,
-    "Multimedia": false
-  }
-
-  categories = [ "Entertainment", "Beauty", "Sport & Freizeit", "Gesundheit", "Wohnen", "Mode", "Multimedia"];
-  searchCategories = "";
-
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService,
-              private renderer: Renderer, public alertCtrl: AlertController) {
-    this.activeFilterFromMenu = navParams.get('filterParameter');
+              public alertCtrl: AlertController) {
+    this.activeFilterFromMenu = navParams.get('activeFilterFromMenu');
+    this[this.activeFilterFromMenu] = true;
     this.searchTerm = navParams.get('searchTerm') || "";
     this.title = navParams.get("title");
-    this.category = this.activeFilterFromMenu;
     this.chosenLocation = navParams.get('location');
   }
 
@@ -144,7 +115,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     })
   }
 
-  getPartnersWithSearchTerm(searchTerm){
+  getPartnersWithSearchTerm(searchTerm) {
     this.searchTerm = searchTerm + " ";
     this.getPartners();
   }
@@ -155,7 +126,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
       this.displayedPartners = [];
       this.waitingForResults = true;
     }
-    this.partnerService.getPartners(this.location, this.bucket, this.searchTerm + this.searchCategories)
+    this.partnerService.getPartners(this.location, this.bucket, this.searchTerm)
       .subscribe(
         body => {
           let returnedObject = body.json();
@@ -176,15 +147,15 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     this.waitingForResults = false;
   }
 
-  filter(partnerType) {
-    if (partnerType !== 'OFFLINEPARTNER' || this.locationFound || this.chosenLocation) {
-      this.category = partnerType;
-      this.resetPartnersArray = true;
-      this.getPartners();
-      this.showDropdown = [false, false];
-      this.waitingForResults = true;
-    }
-  }
+  // filter(partnerType) {
+  //   if (partnerType !== 'OFFLINEPARTNER' || this.locationFound || this.chosenLocation) {
+  //     this.category = partnerType;
+  //     this.resetPartnersArray = true;
+  //     this.getPartners();
+  //     this.showDropdown = [false, false];
+  //     this.waitingForResults = true;
+  //   }
+  // }
 
   chooseLocationManually() {
     event.stopPropagation();
@@ -194,32 +165,58 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
 
 
   showPartner(partner = 0) {
-    //TODO: nächste Zeile löschen
-    this.navCtrl.push(PartnerDetailComponent);
-    if (this.showDropdown[0] === false && this.showDropdown[1] === false) {
-      this.navCtrl.push(PartnerDetailComponent)
+    this.navCtrl.push(PartnerDetailComponent)
+  }
+
+  changeDisplay() {
+    if (!this.showLocalPartners && !this.showOnlinePartners) {
+      this.askForValidCategories();
+    }
+    else {
+      if (this.showLocalPartners && !this.showOnlinePartners) {
+      this.getLocalPartners();
+      }
+      else if(!this.showLocalPartners && this.showOnlinePartners){
+        this.getOnlinePartners()
+      }
+      else if(!this.showLocalPartners && !this.showOnlinePartners){
+        this.getAllPartners()
+      }
     }
   }
 
-  toggleMapAndList(){
+  getAllPartners(){
+    this.rangeSize = 50;
+    this.title = "Alle Partner";
+  }
+
+  getLocalPartners(){
+    this.title = "Vor Ort Partner";
+
+  }
+
+  getOnlinePartners(){
+    this.title = "Online Partner";
+  }
+
+  askForValidCategories() {
+    let prompt = this.alertCtrl.create({
+      message: 'Bitte wählen Sie entweder "Vor-Ort-Partner" oder "Online Partner" aus',
+      buttons: [
+        {
+          text: 'OK',
+          handler: data => {}
+        }
+      ]
+    });
+    prompt.present();
+  }
+
+  toggleMapAndList() {
     this.showMap = !this.showMap;
     this.showDropdown = [false, false];
     console.log("localPartners", this.localPartners)
   }
-
-  filterByCategory(){
-    this.searchCategories = "";
-    for (let category of this.categories){
-      if(this.selected[category] === true){
-        this.searchCategories += category;
-        this.searchCategories += " ";
-      }
-    }
-    this.getPartners();
-    this.showDropdown = [false, false];
-    this.waitingForResults = true;
-  }
-
 
 
 //pure DOM methods
@@ -258,24 +255,6 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     infiniteScroll.complete();
   }
 
-  selectNone(){
-    this.selected.Entertainment= false,
-      this.selected.Beauty= false,
-      this.selected["Sport & Freizeit"]= false,
-      this.selected.Gesundheit= false,
-      this.selected.Wohnen= false,
-      this.selected.Mode= false,
-      this.selected.Multimedia= false
-  }
-  selectAll(){
-    this.selected.Entertainment= true,
-      this.selected.Beauty= true,
-      this.selected["Sport & Freizeit"]= true,
-      this.selected.Gesundheit= true,
-      this.selected.Wohnen= true,
-      this.selected.Mode= true,
-      this.selected.Multimedia= true
-  }
 }
 
 

@@ -30,8 +30,8 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Übersicht', component: OverviewPageComponent, icon: "home", parameters: {} },
-      { title: 'Vor Ort Partner', component: PartnerPageComponent, icon: "list", parameters: {filterParameter: "OFFLINEPARTNER", title: "Vor Ort Partner", icon: "icon_onlinepartner.png"}},
-      { title: 'Online Partner', component: PartnerPageComponent, icon: "sunny", parameters: {filterParameter: "ONLINEPARTNER", title: "Online Partner", icon: "icon_vorortpartner.png"}},
+      { title: 'Vor Ort Partner', component: PartnerPageComponent, icon: "list", parameters: {activeFilterFromMenu: "showLocalPartners", title: "Vor Ort Partner", icon: "icon_onlinepartner.png"}},
+      { title: 'Online Partner', component: PartnerPageComponent, icon: "sunny", parameters: {activeFilterFromMenu: "showOnlinePartners", title: "Online Partner", icon: "icon_vorortpartner.png"}},
       { title: 'Einkauf nachtragen', component: AddPurchasePageComponent, icon: "cash", parameters: {}},
       { title: 'Mein Profil', component: MyProfilePageComponent, icon: "person", parameters: {}},
       { title: 'Einstellungen', component: SettingsPageComponent, icon:"settings", parameters: {}},

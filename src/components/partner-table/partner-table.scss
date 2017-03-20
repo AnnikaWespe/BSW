@@ -98,14 +98,27 @@ partner-table {
   }
   ion-row.partner-row {
     border-bottom: 0.5px solid lightgray;
-    height: 12.5vh;
+    height: 25vw;
     background-color: map_get($colors, light);
     max-width: 100vw;
     overflow: hidden;
   }
+  div.image {
+       height: 25vw;
+       min-width: 25vw;
+       display: -ms-flexbox;
+       display: -webkit-flex;
+       display: flex;
+
+       -ms-flex-align: center;
+       -webkit-align-items: center;
+       -webkit-box-align: center;
+
+       align-items: center;
+     }
   div.white-square {
-    height: 8vh;
-    width: 8vh;
+    height: 15vw;
+    width: 15vw;
     background-color: white;
     display: -ms-flexbox;
     display: -webkit-flex;
@@ -121,39 +134,64 @@ partner-table {
     margin-right: auto;
 
   }
-  div.image {
-    height: 12vh;
-    min-width: 12vh;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
 
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    -webkit-box-align: center;
-
-    align-items: center;
-  }
   ion-content {
     position: relative;
   }
-  .partner-title {
+  .title-adress-wrapper {
     display: inline;
-    font-weight: bold;
     overflow: hidden;
-    display: block;
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: 50vw;
+    position: absolute;
+    top: 50%;
+
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    z-index: 0;
+
   }
+
   .partner-bonus {
     display: inline;
     color: map_get($colors, primary);
-    font-size: larger;
+    font-size: large;
     float: right;
     overflow: hidden;
-    display: block;
     text-overflow: ellipsis;
     white-space: nowrap;
+    max-width: 40vw;
+    position: absolute;
+    right: 3vw;
+    top: 50%;
+
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    z-index: 0;
+  }
+  .partner-adress{
+    font-size: smaller;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .partner-title{
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: larger;
+  }
+  .campaign-bonus{
+    color: map_get($colors, primary);
+    font-size: medium;
+  }
+  .bonus-title-adress-wrapper{
+    display: inline;
+    min-width:75vw;
+    white-space: nowrap;
+    height: 25vw;
+    position: relative;
   }
 }

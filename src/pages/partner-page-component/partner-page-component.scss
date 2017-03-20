@@ -2,35 +2,16 @@ partner-page-component {
   div.scroll-content {
     margin-top: 0;
     background-color: map_get($colors, light);
+    margin-top: 0px !important;
   }
-  ion-col.filter-button {
-    height: 8vh;
-    background-color: map_get($colors, secondary-grey);
-  }
-  .left-button {
-    margin-right: 1.5px;
-  }
-  ion-row.filter-button-row {
-    border-bottom: 2px solid white;
-    position: fixed;
-    text-align: center;
-    background-color: white;
-    z-index: 120;
-  }
-  div.filter-button-text {
-    color: map_get($colors, secondary);
-    vertical-align: middle;
-    font-size: xx-small;
-    font-weight: bolder;
-    line-height: 6.5vh;
-    &.notActive {
-      color: map_get($colors, font-grey);
-    }
-  }
+
+div.standard-header{
   ion-icon {
     margin-left: 1vw;
   }
-
+  button.mapIcon {
+    margin: 0 !important;
+    padding: 0 !important;
     div.mapIcon {
       background: url('../assets/icon/icon_map.png') no-repeat;
       background-size: contain;
@@ -38,78 +19,97 @@ partner-page-component {
       width: 8vw;
       overflow: hidden;
     }
+  }
   button{
-    margin: 0;
-    padding: 0;
+    padding: 0 0 0 2vw !important;
   }
+}
 
 
 
-  div.filter-menu {
-    color: map_get($colors, font-color-for-filter-dropdown);
-    text-align: center;
-    font-size: larger;
-    position: absolute;
-    left: 0;
-    width: 100%;
-    background-color: map_get($colors, secondary-grey);
-    z-index: 100;
-    border-bottom: 1px solid grey;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    div.selection {
-      display: list-item;
-      width: 100%;
-      text-align: center;
-      font-weight: bolder;
-      height: 7vh;
-      line-height: 7vh;
-      border-bottom: 1px solid map_get($colors, secondary);
-      &.selected {
-        color: white;
-        background-color: map_get($colors, secondary);
-        border-bottom: 1px solid map_get($colors, secondary-grey);
-      }
-    }
-    ion-row {
-      height: 8vh;
-      line-height: 8vh;
-      border-bottom: 1px solid map_get($colors, secondary);
-    }
-    ion-col {
-      padding: 0 5vw 0 5vw;
-      &.map-icon {
-        text-align: right;
-      }
-    }
-    div.wrapper-div {
-      height: 4vh;
-      text-align: center;
-    }
-    button {
-      font-size: larger;
-      width: 80vw;
-      height: 7vh;
-      text-transform: none;
-      border-radius: 2px;
-      margin: 5.5vh 0 5.5vh 0;
-    }
-  }
   ion-content {
     position: relative;
   }
 
-  div.chooseLocationManually {
-    color: map_get($colors, secondary);
-    vertical-align: middle;
-    font-size: xx-small;
-    font-weight: bolder;
-    line-height: 6.5vh;
-    background-color: map_get($colors, secondary-grey);
-    float: right;
-    margin-right: 5vw;
-    padding: 0 2vw 0 2vw;
-    border: 1px solid map-get($colors, secondary);
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+  div.filter-wrapper {
+    .left-button {
+      margin-right: 1.5px;
+    }
+    ion-col.filter-button {
+      height: 8vh;
+      background-color: map_get($colors, secondary-grey);
+    }
+    position: fixed;
+    width: 100%;
+    z-index: 150;
+    div.filter-menu {
+      color: map_get($colors, font-color-for-filter-dropdown);
+      text-align: center;
+      font-size: larger;
+      left: 0;
+      width: 100%;
+      height: 84vh;
+      background-color: map_get($colors, secondary-grey);
+      z-index: 100;
+      border-bottom: 1px solid grey;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      ion-row.currentLocation {
+        height: 8vh;
+        line-height: 8vh;
+        border-bottom: 1px solid grey;
+        margin-bottom: 3vw;
+      }
+      ion-col {
+        padding: 0 5vw 0 5vw;
+        &.map-icon {
+          text-align: right;
+          .checked{
+            background-color: green;
+          }
+        }
+      }
+      div.wrapper-div {
+        height: 4vh;
+        text-align: center;
+      }
+      div.showSelectionWrapper{
+        position: absolute;
+        bottom: 2vh;
+        width: 100%;
+      }
+      button.showSelection {
+        font-size: larger;
+        width: 80vw;
+        height: 7vh;
+        text-transform: none;
+        border-radius: 2px;
+        margin: 5.5vh 0 5.5vh 0;
+        padding: 0;
+      }
+      ion-row.toggle {
+        font-weight: bolder;
+      }
+      ion-col.toggle-text {
+        min-width: 80%;
+        text-align: left;
+        padding: 3vw 5vw;
+      }
+    }
+    ion-row.filter-button-row {
+      border-bottom: 2px solid white;
+      text-align: center;
+      background-color: white;
+    }
+    div.filter-button-text {
+      color: map_get($colors, secondary);
+      vertical-align: middle;
+      font-size: xx-small;
+      font-weight: bolder;
+      line-height: 6.5vh;
+      &.notActive {
+        color: map_get($colors, font-grey);
+      }
+    }
   }
 
   div.initialSpinner {
@@ -137,10 +137,6 @@ partner-page-component {
   div.wrapper-div {
     height: 100%;
     margin-top: 54px;
-  }
-
-  div.scroll-content {
-    margin-top: 0px !important;
   }
 
 }
