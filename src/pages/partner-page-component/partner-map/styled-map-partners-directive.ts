@@ -109,17 +109,19 @@ export class StyledMapPartnersDirective implements OnChanges{
     let markerClusterer;
     let promises = [];
     this.partners.forEach((partner, index) => {
+      if(partner){
         promises.push(new Promise((resolve, reject) => {
-          this.getImageAsBase64(partner.logoUrlForGMap, (imageAsBase64, validImage) => {
-            let marker = this.getMarker(partner, imageAsBase64, validImage, map, bounds);
-            markers.push(marker);
-            google.maps.event.addListener(marker, 'click', (function (marker) {
-              return function () {
-              }
-            })(marker));
-            resolve();
-          });
-        }))
+        this.getImageAsBase64(partner.logoUrlForGMap, (imageAsBase64, validImage) => {
+          let marker = this.getMarker(partner, imageAsBase64, validImage, map, bounds);
+          markers.push(marker);
+          google.maps.event.addListener(marker, 'click', (function (marker) {
+            return function () {
+            }
+          })(marker));
+          resolve();
+        });
+      }))}
+
     });
     Promise.all(promises)
       .then(() => {

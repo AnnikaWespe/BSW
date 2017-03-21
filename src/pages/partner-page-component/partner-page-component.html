@@ -44,9 +44,9 @@
 
     <div class="filter-wrapper">
       <ion-row *ngIf="!showMap" class="filter-button-row">
-        <ion-col class="filter-button left-button" (click)="toggleVisibilityDropdowns(0)">
+        <ion-col class="filter-button left-button" [class.singleButton] = "showMap" (click)="toggleVisibilityDropdowns(0)" >
           <div class="filter-button-text" [class.notActive]="showDropdown[1]">FILTER
-            <ion-icon name="arrow-dropdown"></ion-icon>
+            <ion-icon name="arrow-dropdown" [class.singleButton] = "showMap"></ion-icon>
           </div>
         </ion-col>
         <ion-col class="filter-button" (click)="toggleVisibilityDropdowns(1)">
@@ -116,11 +116,15 @@
       <partner-table [partners]="displayedPartners"></partner-table>
     </div>
 
-    <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="!showMap">
-      <ion-infinite-scroll-content>
-        <ion-spinner class="initialSpinner"></ion-spinner>
-      </ion-infinite-scroll-content>
-    </ion-infinite-scroll>
+    <div *ngIf="!showMap">
+      <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="moreDataCanBeLoaded">
+        <ion-infinite-scroll-content>
+          <ion-spinner class="initialSpinner"></ion-spinner>
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </div>
+
+
 
     <partner-map [partners]="localPartners" *ngIf="showMap"></partner-map>
 

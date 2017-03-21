@@ -1,26 +1,29 @@
 
+<div *ngFor="let partner of partners">
+  <ion-row class="partner-row" *ngIf="partner" (click)="showPartner(partner)">
+    <div class="image">
+      <div class="white-square">
+        <img src="{{partner?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
+      </div>
+    </div>
+    <div class="bonus-title-adress-wrapper">
+      <div class="title-adress-wrapper" [style.max-width.vw] = "getMaxWidth(partner)[0]">
+        <div class="partner-title" [style.max-width.vw] = "getMaxWidth(partner)[0]">
+          {{ partner?.nameOrigin}}
+        </div>
+        <div class="partner-adress" *ngIf="partner.city" [style.max-width.vw] = "getMaxWidth(partner)[0]">
+          {{partner?.street}} {{partner?.houseNumber}}, {{partner?.city}}
+        </div>
+        <div class="campaign-bonus" *ngIf="partner.hasCampaign" [style.max-width.vw] = "getMaxWidth(partner)[0]">
+          {{partner?.campaignbonus}}
+        </div>
+      </div>
+      <div class="partner-bonus" [style.max-width.vw] = "getMaxWidth(partner)[1]">
+        {{partner?.pfBonus}}
+      </div>
+    </div>
+  </ion-row>
+</div>
 
-<ion-row class="partner-row" *ngFor="let partner of partners" (click)="showPartner(partner)">
-  <div class="image">
-    <div class="white-square">
-      <img src="{{partner?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
-    </div>
-  </div>
-  <div class="bonus-title-adress-wrapper">
-    <div class="title-adress-wrapper" [style.max-width.vw] = "getMaxWidth(partner)[0]">
-      <div class="partner-title" [style.max-width.vw] = "getMaxWidth(partner)[0]">
-        {{ partner?.nameOrigin}}
-      </div>
-      <div class="partner-adress" *ngIf="partner.city" [style.max-width.vw] = "getMaxWidth(partner)[0]">
-        {{partner.street}} {{partner.houseNumber}}, {{partner.city}}
-      </div>
-      <div class="campaign-bonus" *ngIf="partner.hasCampaign">
-        + 2% Aktionsvorteil
-      </div>
-    </div>
-    <div class="partner-bonus" [style.max-width.vw] = "getMaxWidth(partner)[1]">
-      {{partner?.pfBonus}}
-    </div>
-  </div>
-</ion-row>
+
 

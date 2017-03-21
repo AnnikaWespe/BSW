@@ -34,7 +34,11 @@ div.standard-header{
   div.filter-wrapper {
     .left-button {
       margin-right: 1.5px;
+      &.singleButton{
+        background-color: green;
+      }
     }
+
     ion-col.filter-button {
       height: 8vh;
       background-color: map_get($colors, secondary-grey);

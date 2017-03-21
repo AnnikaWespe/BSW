@@ -29,7 +29,6 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   activeFilterFromMenu: string = "OFFLINEPARTNER";
   showMap: boolean = false;
 
-  //partners = [];
   displayedPartners = [];
 
   localPartners = [];
@@ -37,12 +36,12 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   allPartners = [];
   partnersWithCampaign = [];
   resetPartnersArray: boolean = true;
+  moreDataCanBeLoaded = true;
 
   showLocalPartners = false;
   showOnlinePartners = false;
   showOnlyPartnersWithCampaign = false;
 
-  category: string;
   bucket: number = 0;
   searchTerm = "";
 
@@ -53,9 +52,16 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
               public alertCtrl: AlertController) {
     let activeFilter = navParams.get('activeFilter');
     this.displayedPartners = this[activeFilter];
-    if (activeFilter == "onlinePartners") {this.showOnlinePartners = true};
-    if (activeFilter == "localPartners") {this.showLocalPartners = true};
-    if (activeFilter == "allPartners") {this.showOnlinePartners = true; this.showLocalPartners = true};
+    if (activeFilter == "onlinePartners") {
+      this.showOnlinePartners = true
+    }
+    if (activeFilter == "localPartners") {
+      this.showLocalPartners = true
+    }
+    if (activeFilter == "allPartners") {
+      this.showOnlinePartners = true;
+      this.showLocalPartners = true
+    }
     this.searchTerm = navParams.get('searchTerm') || "";
     this.title = navParams.get("title");
     this.chosenLocation = navParams.get('location');
@@ -138,7 +144,11 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
       .subscribe(
         body => {
           let returnedObject = body.json();
+          console.log(returnedObject);
           this.getDifferentCategories(returnedObject);
+          if(!returnedObject.contentEntities){
+            this.moreDataCanBeLoaded = false;
+          }
         },
         error => this.errorMessage = <any>error);
   }
@@ -165,8 +175,9 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   getDisplay() {
     if (!this.showLocalPartners && !this.showOnlinePartners) {
       this.askForValidCategories();
+      return;
     }
-    ;
+    this.showDropdown = [false, false];
     if (this.showLocalPartners && !this.showOnlinePartners) {
       this.title = "Vor Ort Partner";
       this.filterCampaignPartners(this.localPartners);
@@ -183,18 +194,27 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
 
   filterCampaignPartners(displayedPartners) {
     if (this.showOnlyPartnersWithCampaign) {
+      let partnersWithCampaign = [];
       for (let partner of displayedPartners) {
-        if (partner.hasCampaign) {
-          this.partnersWithCampaign.push(partner);
+        if (partner && partner.hasCampaign) {
+          partnersWithCampaign.push(partner);
+        }
+        else if(partner == null){
+          this.moreDataCanBeLoaded = false;
+          this.displayedPartners = partnersWithCampaign;
+          return;
         }
       }
-      ;
-      this.displayedPartners = this.partnersWithCampaign;
+      if (partnersWithCampaign.length < 7) {
+        this.resetPartnersArray = false;
+        this.bucket += 50;
+        this.getPartners();
+      }
+      this.displayedPartners = partnersWithCampaign;
     }
     else {
       this.displayedPartners = displayedPartners
     }
-    ;
   }
 
   askForValidCategories() {
@@ -213,6 +233,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
 
   toggleMapAndList() {
     this.showMap = !this.showMap;
+    console.log("showMap", this.showMap);
     this.showDropdown = [false, false];
     console.log("localPartners", this.localPartners)
   }
@@ -248,7 +269,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   }
 
   doInfinite(infiniteScroll) {
-    this.bucket += 25;
+    this.bucket += 50;
     this.resetPartnersArray = false;
     this.getPartners();
     infiniteScroll.complete();
