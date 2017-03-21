@@ -5,7 +5,7 @@ import {PartnerService} from "../../services/partner-service";
 import {ChooseLocationManuallyComponent} from "./choose-location-manually/choose-location-manually-component";
 import {AlertController} from 'ionic-angular';
 import {PartnerDetailComponent} from "./partner-detail-component/partner-detail-component";
-import {LocationService} from "../../services/locationService";
+import {LocationService} from "../../services/location-service";
 
 
 @Component({
@@ -29,15 +29,18 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   activeFilterFromMenu: string = "OFFLINEPARTNER";
   showMap: boolean = false;
 
-  partners: any[] = [];
-  displayedPartners: any[] = [];
+  //partners = [];
+  displayedPartners = [];
+
   localPartners = [];
+  onlinePartners = [];
+  allPartners = [];
+  partnersWithCampaign = [];
   resetPartnersArray: boolean = true;
 
-  showLocalPartners: false;
-  showOnlinePartners: false;
-  showOnlyPartnersWithCampaign: false;
-  rangeSize = 25;
+  showLocalPartners = false;
+  showOnlinePartners = false;
+  showOnlyPartnersWithCampaign = false;
 
   category: string;
   bucket: number = 0;
@@ -46,11 +49,13 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   searchInterfaceOpen: boolean = false;
 
 
-
   constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService,
               public alertCtrl: AlertController) {
-    this.activeFilterFromMenu = navParams.get('activeFilterFromMenu');
-    this[this.activeFilterFromMenu] = true;
+    let activeFilter = navParams.get('activeFilter');
+    this.displayedPartners = this[activeFilter];
+    if (activeFilter == "onlinePartners") {this.showOnlinePartners = true};
+    if (activeFilter == "localPartners") {this.showLocalPartners = true};
+    if (activeFilter == "allPartners") {this.showOnlinePartners = true; this.showLocalPartners = true};
     this.searchTerm = navParams.get('searchTerm') || "";
     this.title = navParams.get("title");
     this.chosenLocation = navParams.get('location');
@@ -123,39 +128,28 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   getPartners() {
     console.log(this.location, this.bucket, this.searchTerm);
     if (this.resetPartnersArray == true) {
-      this.displayedPartners = [];
+      this.allPartners = [];
+      this.onlinePartners = [];
+      this.localPartners = [];
+      this.partnersWithCampaign = [];
       this.waitingForResults = true;
     }
     this.partnerService.getPartners(this.location, this.bucket, this.searchTerm)
       .subscribe(
         body => {
           let returnedObject = body.json();
-          this.getRightCategoryPartners(returnedObject);
+          this.getDifferentCategories(returnedObject);
         },
         error => this.errorMessage = <any>error);
   }
 
-  getRightCategoryPartners(returnedObject) {
-    if (this.category == "allpartners") {
-      this.displayedPartners = this.displayedPartners.concat(returnedObject.contentEntities);
-    }
-    else {
-      this.displayedPartners = this.displayedPartners.concat(returnedObject.originalSearchResults.bucketToSearchResult[this.category].contentEntities);
-    }
+  getDifferentCategories(returnedObject) {
+    this.allPartners = this.allPartners.concat(returnedObject.contentEntities);
     this.localPartners = this.localPartners.concat(returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities);
-    console.log("length of displayed partners array:" + this.displayedPartners.length);
+    this.onlinePartners = this.onlinePartners.concat(returnedObject.originalSearchResults.bucketToSearchResult["ONLINEPARTNER"].contentEntities);
+    this.getDisplay();
     this.waitingForResults = false;
   }
-
-  // filter(partnerType) {
-  //   if (partnerType !== 'OFFLINEPARTNER' || this.locationFound || this.chosenLocation) {
-  //     this.category = partnerType;
-  //     this.resetPartnersArray = true;
-  //     this.getPartners();
-  //     this.showDropdown = [false, false];
-  //     this.waitingForResults = true;
-  //   }
-  // }
 
   chooseLocationManually() {
     event.stopPropagation();
@@ -168,44 +162,49 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     this.navCtrl.push(PartnerDetailComponent)
   }
 
-  changeDisplay() {
+  getDisplay() {
     if (!this.showLocalPartners && !this.showOnlinePartners) {
       this.askForValidCategories();
     }
-    else {
-      if (this.showLocalPartners && !this.showOnlinePartners) {
-      this.getLocalPartners();
-      }
-      else if(!this.showLocalPartners && this.showOnlinePartners){
-        this.getOnlinePartners()
-      }
-      else if(!this.showLocalPartners && !this.showOnlinePartners){
-        this.getAllPartners()
-      }
+    ;
+    if (this.showLocalPartners && !this.showOnlinePartners) {
+      this.title = "Vor Ort Partner";
+      this.filterCampaignPartners(this.localPartners);
+    }
+    else if (!this.showLocalPartners && this.showOnlinePartners) {
+      this.title = "Online Partner";
+      this.filterCampaignPartners(this.onlinePartners);
+    }
+    else if (this.showLocalPartners && this.showOnlinePartners) {
+      this.title = "Alle Partner";
+      this.filterCampaignPartners(this.allPartners)
     }
   }
 
-  getAllPartners(){
-    this.rangeSize = 50;
-    this.title = "Alle Partner";
-  }
-
-  getLocalPartners(){
-    this.title = "Vor Ort Partner";
-
-  }
-
-  getOnlinePartners(){
-    this.title = "Online Partner";
+  filterCampaignPartners(displayedPartners) {
+    if (this.showOnlyPartnersWithCampaign) {
+      for (let partner of displayedPartners) {
+        if (partner.hasCampaign) {
+          this.partnersWithCampaign.push(partner);
+        }
+      }
+      ;
+      this.displayedPartners = this.partnersWithCampaign;
+    }
+    else {
+      this.displayedPartners = displayedPartners
+    }
+    ;
   }
 
   askForValidCategories() {
     let prompt = this.alertCtrl.create({
-      message: 'Bitte wählen Sie entweder "Vor-Ort-Partner" oder "Online Partner" aus',
+      title: 'Bitte wählen Sie entweder "Vor-Ort-Partner" oder "Online Partner" aus',
       buttons: [
         {
           text: 'OK',
-          handler: data => {}
+          handler: data => {
+          }
         }
       ]
     });

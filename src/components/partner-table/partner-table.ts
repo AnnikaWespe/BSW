@@ -22,14 +22,15 @@ export class PartnerTableComponent{
         maxWidth = ["29", "44"]
       }
     }
-    else if(bonusLength > 9){
+    else if(bonusLength > 8){
       if (titleLength > 25){
-        maxWidth = ["43", "30"]
+        maxWidth = ["40", "30"]
       }
       else{
         maxWidth = ["40", "33"]
       }
     }
+
     else {
         maxWidth = ["55", "18"]
     };

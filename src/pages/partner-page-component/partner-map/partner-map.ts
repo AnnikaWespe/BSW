@@ -1,6 +1,6 @@
 import {Component, Input, ViewChild} from '@angular/core';
 import {NavParams, NavController} from "ionic-angular";
-import {LocationService} from "../../../services/locationService";
+import {LocationService} from "../../../services/location-service";
 import {StyledMapPartnersDirective} from "./styled-map-partners-directive";
 
 @Component({

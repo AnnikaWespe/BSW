@@ -3,7 +3,7 @@ import { NavController, NavParams } from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
 
 
-import {LocationService} from "../../services/locationService";
+import {LocationService} from "../../services/location-service";
 import {PartnerService} from "../../services/partner-service";
 import {PartnerPageComponent} from "../partner-page-component/partner-page-component";
 
@@ -79,16 +79,16 @@ export class OverviewPageComponent implements OnInit{
   }
 
   showOfflinePartners(){
-    this.navCtrl.push(PartnerPageComponent, {filterParameter: "OFFLINEPARTNER", title: "Vor Ort Partner"});
+    this.navCtrl.push(PartnerPageComponent, {activeFilter: "localPartners", title: "Vor Ort Partner"});
   }
 
 
   showOnlinePartners(){
-    this.navCtrl.push(PartnerPageComponent, {filterParameter: "ONLINEPARTNER", title: "Online Partner"});
+    this.navCtrl.push(PartnerPageComponent, {activeFilter: "onlinePartners", title: "Online Partner"});
   }
 
   loadPartnerPage(searchTerm){
-    this.navCtrl.setRoot(PartnerPageComponent, {filterParameter: "allpartners", searchTerm: searchTerm, title: searchTerm})
+    this.navCtrl.setRoot(PartnerPageComponent, {activeFilter: "allPartners", searchTerm: searchTerm, title: searchTerm})
   }
 
   //pure DOM method(s)

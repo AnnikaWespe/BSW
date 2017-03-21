@@ -1,6 +1,6 @@
 import {OnInit, Directive, Output, EventEmitter} from '@angular/core';
 import {GoogleMapsAPIWrapper} from 'angular2-google-maps/core';
-import {LocationService} from '../../../../services/locationService';
+import {LocationService} from '../../../../services/location-service';
 declare let google: any;
 
 

@@ -10,7 +10,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
 
 import {SearchCompletionService} from "../search-completion/search-completion-service";
-import {SearchTermCompletion} from '../search-completion/SearchTermCompletion';
+import {SearchTermCompletion} from '../search-completion/search-term-completion';
 
 
 @Component({
@@ -27,7 +27,7 @@ export class TypeaheadComponent implements OnInit {
   searchTerm: string;
 
   private searchTerms = new Subject<string>();
-  searchTermCompletion2: Observable<SearchTermCompletion[]>;
+  searchTermCompletion: Observable<SearchTermCompletion[]>;
 
 
   constructor(private searchCompletionService: SearchCompletionService) {
@@ -37,7 +37,7 @@ export class TypeaheadComponent implements OnInit {
   search(term: string, $event): void {
     if ($event.keyCode == 13 && this.searchTerm.length > 1) {
       this.getPartnersWithSearchTermEmitter.emit(this.searchTerm);
-      this.searchTermCompletion2 = Observable.of<SearchTermCompletion[]>([]);
+      this.searchTermCompletion = Observable.of<SearchTermCompletion[]>([]);
     }
     else {
       this.searchTerms.next(term)
@@ -46,7 +46,7 @@ export class TypeaheadComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.searchTermCompletion2 = this.searchTerms
+    this.searchTermCompletion = this.searchTerms
       .debounceTime(300)
       .distinctUntilChanged()
       .switchMap(term => term
@@ -66,13 +66,13 @@ export class TypeaheadComponent implements OnInit {
 
   completeSearchTerm(searchTerm) {
     this.getPartnersWithSearchTermEmitter.emit(searchTerm);
-    this.searchTermCompletion2 = Observable.of<SearchTermCompletion[]>([]);
+    this.searchTermCompletion = Observable.of<SearchTermCompletion[]>([]);
     this.searchTerm = searchTerm;
   }
 
   deleteSearchTerm() {
     this.searchTerm = "";
-    this.searchTermCompletion2 = Observable.of<SearchTermCompletion[]>([]);
+    this.searchTermCompletion = Observable.of<SearchTermCompletion[]>([]);
     this.getPartnersWithSearchTermEmitter.emit("");
   }
 

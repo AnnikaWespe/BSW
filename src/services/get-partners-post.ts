@@ -18,10 +18,10 @@ export class GetPartnersPost {
       "VEHICLEOFFER": 0,
       "TRAVELOFFER": 0
     },
-    rangeSize: 25
+    rangeSize: 50
   };
   filter = {
-    buckets: ["OFFLINEPARTNER", "ONLINEPARTNER", "TRAVELOFFER", "VEHICLEOFFER"]
+    buckets: ["OFFLINEPARTNER", "ONLINEPARTNER"]
   };
   showmap = true;
   template = "unified";
@@ -32,7 +32,5 @@ export class GetPartnersPost {
     this.query.location.longitude = location.longitude;
     this.ranges.bucketToFrom.OFFLINEPARTNER = bucket;
     this.ranges.bucketToFrom.ONLINEPARTNER = bucket;
-    this.ranges.bucketToFrom.VEHICLEOFFER = bucket;
-    this.ranges.bucketToFrom.TRAVELOFFER = bucket;
   };
 }

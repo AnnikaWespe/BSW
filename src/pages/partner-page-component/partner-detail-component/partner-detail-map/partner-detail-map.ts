@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import {LocationService} from "../../../../services/locationService";
+import {LocationService} from "../../../../services/location-service";
 
 declare let device: any;
 
