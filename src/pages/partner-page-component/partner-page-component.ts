@@ -26,7 +26,6 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   locationFound: boolean = false;
   locationChosen: boolean = false;
 
-  activeFilterFromMenu: string = "OFFLINEPARTNER";
   showMap: boolean = false;
 
   displayedPartners = [];
@@ -46,7 +45,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   searchTerm = "";
 
   searchInterfaceOpen: boolean = false;
-
+  // https://maps.googleapis.com/maps/api/geocode/json?latlng=48,11&key=AIzaSyBAHcgksDNzLfzvKC0ZjnoQZeivSQbE1Iw
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService,
               public alertCtrl: AlertController) {

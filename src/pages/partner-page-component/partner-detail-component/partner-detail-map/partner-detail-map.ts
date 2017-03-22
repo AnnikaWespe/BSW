@@ -51,7 +51,7 @@ export class PartnerDetailMap {
       window.open("geo:48,11?q=48,11(Hier wollen Sie hin)", '_system', 'location=yes');
     }
     else {
-      window.open("http://maps.apple.com/?ll=48,11");
+      window.open("http://maps.apple.com/?q=48,11");
     }
   }
 
