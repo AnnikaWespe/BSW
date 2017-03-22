@@ -3,6 +3,7 @@ import {NavController, NavParams} from 'ionic-angular';
 
 import {UserDetailProvider} from './user-detail/user-detail-provider';
 import {UserDetail} from "./user-detail/UserDetail";
+import {UserDetailWebviewComponent} from "./user-detail-webview/user-detail-webview";
 
 @Component({
   selector: 'my-profile-page-component',
@@ -11,11 +12,15 @@ import {UserDetail} from "./user-detail/UserDetail";
 })
 export class MyProfilePageComponent {
   title: string = "Mein Profil";
+  profileOverview = true;
 
   userDetail: UserDetail;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public profileDataProvider: UserDetailProvider) {
     this.userDetail = profileDataProvider.getUserDetail();
+  }
+  getWebView(url, title){
+  this.navCtrl.push(UserDetailWebviewComponent, {url: url, title: title})
   }
 
 }

@@ -127,7 +127,9 @@ export class StyledMapPartnersDirective implements OnChanges{
       .then(() => {
           map.fitBounds(bounds);
           markerClusterer = new MarkerClusterer(map, markers,
-            {imagePath: '../assets/icon/m'});
+            // {imagePath: '../assets/icon/m'});
+            // background: url('../assets/icon/bsw-logo.png')no-repeat;
+        {imagePath: '../www/assets/icon/m'});
           google.maps.event.addListener(markerClusterer, 'clusterclick', (cluster) => {
             this.showList.emit(cluster.getMarkers());
             google.maps.event.trigger(map, 'resize');

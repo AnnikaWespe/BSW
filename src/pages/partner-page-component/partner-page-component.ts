@@ -144,7 +144,6 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
       .subscribe(
         body => {
           let returnedObject = body.json();
-          console.log(returnedObject);
           this.getDifferentCategories(returnedObject);
           if(!returnedObject.contentEntities){
             this.moreDataCanBeLoaded = false;
@@ -164,7 +163,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   chooseLocationManually() {
     event.stopPropagation();
     this.navCtrl.push(ChooseLocationManuallyComponent, {location: this.location});
-    this.showDropdown = [false, false];
+    this.showDropdown = [false, false, false];
   }
 
 
@@ -177,7 +176,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
       this.askForValidCategories();
       return;
     }
-    this.showDropdown = [false, false];
+    this.showDropdown = [false, false, false];
     if (this.showLocalPartners && !this.showOnlinePartners) {
       this.title = "Vor Ort Partner";
       this.filterCampaignPartners(this.localPartners);
@@ -233,9 +232,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
 
   toggleMapAndList() {
     this.showMap = !this.showMap;
-    console.log("showMap", this.showMap);
-    this.showDropdown = [false, false];
-    console.log("localPartners", this.localPartners)
+    this.showDropdown = [false, false, false];
   }
 
 
@@ -249,20 +246,22 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   }
 
   hideDropdown() {
-    this.showDropdown = [false, false];
+    this.showDropdown = [false, false, false];
   }
 
 
   toggleVisibilityDropdowns(position) {
     let isVisible = this.showDropdown[position];
+    let anythingVisible = this.showDropdown[2];
     this.showDropdown = [false, false];
     this.showDropdown[position] = !isVisible;
+    this.showDropdown[2] = !anythingVisible;
   }
 
   closeSearchInterface($event) {
     this.searchInterfaceOpen = false;
     this.searchTerm = "";
-    this.showDropdown = [false, false];
+    this.showDropdown = [false, false, false];
     this.resetPartnersArray = true;
     this.title = "Partner"
     this.getPartners();

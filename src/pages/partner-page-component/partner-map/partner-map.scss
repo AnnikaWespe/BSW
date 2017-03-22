@@ -12,9 +12,11 @@ partner-map {
   }
   .hidePartnerList{
     text-align: center;
-    padding: 0.5vh 0;
+    padding-top: 0.5vh;
+    height: 2vh;
     //margin-top: 54.5vh;
     width: 100%;
+    font-size: 150%;
     background-color: map_get($colors, light);
   }
   .partnerList{

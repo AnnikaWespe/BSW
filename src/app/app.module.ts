@@ -28,6 +28,8 @@ import {StyledMapPartnerDetailsDirective} from "../pages/partner-page-component/
 import {PictureScreenComponent} from "../pages/add-purchase-page-component/picture-screen/picture-screen";
 import {StyledMapPartnersDirective} from "../pages/partner-page-component/partner-map/styled-map-partners-directive";
 import {TypeaheadComponent} from "../components/searchHeader/typeahead/typeahead";
+import {UserDetailWebviewComponent} from "../pages/my-profile-page-component/user-detail-webview/user-detail-webview";
+import {SafePipe} from "../pipes/safe-pipe";
 
 
 @NgModule({
@@ -54,6 +56,8 @@ import {TypeaheadComponent} from "../components/searchHeader/typeahead/typeahead
     PartnerTableComponent,
     PictureScreenComponent,
     TypeaheadComponent,
+    UserDetailWebviewComponent,
+    SafePipe
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -82,6 +86,7 @@ import {TypeaheadComponent} from "../components/searchHeader/typeahead/typeahead
     PartnerTableComponent,
     PictureScreenComponent,
     TypeaheadComponent,
+    UserDetailWebviewComponent
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService, SearchCompletionService, GoogleMapsAPIWrapper],
 

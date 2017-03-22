@@ -176,6 +176,7 @@ partner-table {
     font-size: smaller;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: map-get($colors, font-grey-dark);
   }
   .partner-title{
     font-weight: 500;

@@ -35,7 +35,10 @@ div.standard-header{
     .left-button {
       margin-right: 1.5px;
       &.singleButton{
-        background-color: green;
+        text-align: center;
+        ion-icon{
+          margin-left: 2vw;
+        }
       }
     }
 
@@ -100,9 +103,12 @@ div.standard-header{
       }
     }
     ion-row.filter-button-row {
-      border-bottom: 2px solid white;
+      border-bottom: 1px solid map_get($colors, secondary);
       text-align: center;
       background-color: white;
+      &.dropdownOpen{
+        border-bottom: 2px solid white;
+      }
     }
     div.filter-button-text {
       color: map_get($colors, secondary);
