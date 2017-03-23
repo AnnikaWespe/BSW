@@ -1,5 +1,6 @@
 {
   "name": "ionic-hello-world",
+  "description": "app: An Ionic project",
   "author": "Ionic Framework",
   "homepage": "http://ionicframework.com/",
   "private": true,
@@ -34,26 +35,30 @@
     "typescript": "2.0.9"
   },
   "cordovaPlugins": [
+    "ionic-plugin-keyboard",
     "cordova-plugin-whitelist",
     "cordova-plugin-console",
     "cordova-plugin-statusbar",
     "cordova-plugin-device",
     "cordova-plugin-splashscreen",
-    "ionic-plugin-keyboard",
+    "cordova-plugin-crosswalk-webview",
     "cordova-plugin-camera",
+    "cordova-plugin-compat",
     "cordova-plugin-geolocation",
     "cordova-plugin-x-socialsharing",
     "cordova-plugin-keyboard",
-    "cordova-plugin-compat",
     "phonegap-plugin-barcodescanner"
   ],
   "cordovaPlatforms": [
-    "ios",
+    {
+      "platform": "android",
+      "version": "",
+      "locator": "android"
+    },
     {
       "platform": "ios",
       "version": "",
       "locator": "ios"
     }
-  ],
-  "description": "app: An Ionic project"
+  ]
 }
