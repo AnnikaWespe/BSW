@@ -1,10 +1,10 @@
 <ion-header>
+  <ion-navbar primary>
 
-  <typeahead *ngIf="searchInterfaceOpen" (getPartnersWithSearchTermEmitter)="loadPartnerPage($event)"
-             (closeSearchInterfaceEmitter)="searchInterfaceOpen = false"></typeahead>
+    <typeahead *ngIf="searchInterfaceOpen" (getPartnersWithSearchTermEmitter)="loadPartnerPage($event)"
+     (closeSearchInterfaceEmitter)="searchInterfaceOpen = false"></typeahead>
 
-  <div *ngIf="!searchInterfaceOpen">
-    <ion-navbar primary>
+    <div *ngIf="!searchInterfaceOpen">
       <ion-buttons left>
         <button menuToggle>
           <ion-icon name="menu" color="grey" class="menu-button-header"></ion-icon>
@@ -19,9 +19,8 @@
                     (click)="searchInterfaceOpen = true"></ion-icon>
         </button>
       </ion-buttons>
-    </ion-navbar>
-  </div>
-
+    </div>
+  </ion-navbar>
 </ion-header>
 <ion-content>
   <div class="bars">
