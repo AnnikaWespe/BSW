@@ -1,6 +1,6 @@
 
 <div *ngFor="let partner of partners">
-  <ion-row class="partner-row" *ngIf="partner" (click)="showPartner(partner)">
+  <ion-row tappable class="partner-row" *ngIf="partner" (click)="showPartner(partner)">
     <div class="image">
       <div class="white-square">
         <img src="{{partner?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">

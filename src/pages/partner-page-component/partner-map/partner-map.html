@@ -10,7 +10,7 @@
     </sebm-google-map-circle>
     <styled-map-partners [partners]="partners" (showList) = "showList($event)"></styled-map-partners>
   </sebm-google-map>
-  <div class="hidePartnerList" (click)="closePartnerList()"  *ngIf="partnerListOpen">
+  <div tappable class="hidePartnerList" (click)="closePartnerList()"  *ngIf="partnerListOpen">
     <ion-icon name = "arrow-dropdown" color = "grey"></ion-icon>
   </div>
 </div>

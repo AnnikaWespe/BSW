@@ -3,7 +3,7 @@ import { NavController, NavParams } from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
 
 
-import {LocationService} from "../../services/location-service";
+import {LocationData} from "../../services/location-data";
 import {PartnerService} from "../../services/partner-service";
 import {PartnerPageComponent} from "../partner-page-component/partner-page-component";
 
@@ -40,9 +40,9 @@ export class OverviewPageComponent implements OnInit{
   }
 
   ngOnInit(){
-    if(LocationService.locationAvailable){
-      this.location.latitude = LocationService.latitude;
-      this.location.longitude = LocationService.longitude;
+    if(LocationData.locationAvailable){
+      this.location.latitude = LocationData.latitude;
+      this.location.longitude = LocationData.longitude;
       this.getPartners();
     }
     else {
@@ -55,10 +55,10 @@ export class OverviewPageComponent implements OnInit{
       this.location.longitude = position.coords.longitude.toFixed(4)
       this.locationFound = true;
       this.getPartners();
-      LocationService.latitude = this.location.latitude;
-      LocationService.longitude = this.location.longitude;
-      LocationService.locationExact = true;
-      LocationService.locationAvailable = true;
+      LocationData.latitude = this.location.latitude;
+      LocationData.longitude = this.location.longitude;
+      LocationData.locationExact = true;
+      LocationData.locationAvailable = true;
     })
   }
 

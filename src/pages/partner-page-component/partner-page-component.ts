@@ -5,8 +5,7 @@ import {PartnerService} from "../../services/partner-service";
 import {ChooseLocationManuallyComponent} from "./choose-location-manually/choose-location-manually-component";
 import {AlertController} from 'ionic-angular';
 import {PartnerDetailComponent} from "./partner-detail-component/partner-detail-component";
-import {LocationService} from "../../services/location-service";
-
+import {LocationData} from "../../services/location-data";
 
 @Component({
   selector: 'partner-page-component',
@@ -76,10 +75,10 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
       this.location = this.chosenLocation;
       this.locationChosen = true;
       this.getPartners();
-      LocationService.latitude = this.location.latitude;
-      LocationService.longitude = this.location.longitude;
-      LocationService.locationExact = true;
-      LocationService.locationAvailable = true;
+      LocationData.latitude = this.location.latitude;
+      LocationData.longitude = this.location.longitude;
+      LocationData.locationExact = true;
+      LocationData.locationAvailable = true;
     }
     else {
       this.getLocationData();
@@ -95,7 +94,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
           text: 'Ohne Standort fortfahren',
           handler: data => {
             this.getPartners();
-            LocationService.locationAvailable = false;
+            LocationData.locationAvailable = false;
           }
         },
         {
@@ -116,10 +115,10 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
       this.locationFound = true;
       console.log(this.location);
       this.getPartners();
-      LocationService.latitude = this.location.latitude;
-      LocationService.longitude = this.location.longitude;
-      LocationService.locationExact = true;
-      LocationService.locationAvailable = true;
+      LocationData.latitude = this.location.latitude;
+      LocationData.longitude = this.location.longitude;
+      LocationData.locationExact = true;
+      LocationData.locationAvailable = true;
     }, (err) => {
       console.log(err);
       this.showPrompt();

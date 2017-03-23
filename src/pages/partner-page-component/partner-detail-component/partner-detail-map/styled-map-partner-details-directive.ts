@@ -1,6 +1,6 @@
 import {OnInit, Directive, Output, EventEmitter} from '@angular/core';
 import {GoogleMapsAPIWrapper} from 'angular2-google-maps/core';
-import {LocationService} from '../../../../services/location-service';
+import {LocationData} from '../../../../services/location-data';
 declare let google: any;
 
 
@@ -43,8 +43,8 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
     let bounds = new google.maps.LatLngBounds();
 
     bounds.extend({lat: 48.1300, lng: 11.5700});
-    if (LocationService.locationAvailable) {
-      bounds.extend({lat: Number(LocationService.latitude), lng: Number(LocationService.longitude)});
+    if (LocationData.locationAvailable) {
+      bounds.extend({lat: Number(LocationData.latitude), lng: Number(LocationData.longitude)});
     }
     map.setOptions({
       streetViewControl: false
@@ -56,7 +56,7 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
   private initializeDirectionService() {
 
     let directionsService = new google.maps.DirectionsService();
-    let origin = new google.maps.LatLng(LocationService.latitude, LocationService.longitude);
+    let origin = new google.maps.LatLng(LocationData.latitude, LocationData.longitude);
     let destination = new google.maps.LatLng(48.1300, 11.5700);
 
     let requestPublic = {origin: origin, destination: destination, travelMode: google.maps.TravelMode.TRANSIT};

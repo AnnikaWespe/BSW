@@ -26,8 +26,8 @@
           <ion-icon name="search" color="grey" class="search-button-header"></ion-icon>
         </button>
       </ion-buttons>
-      <ion-buttons end *ngIf='showLocalPartners' (click)="toggleMapAndList()">
-        <button class="mapIcon">
+      <ion-buttons end *ngIf='showLocalPartners'>
+        <button (click)="toggleMapAndList()" class="mapIcon">
           <div class="mapIcon"></div>
         </button>
       </ion-buttons>
@@ -44,12 +44,12 @@
 
     <div class="filter-wrapper">
       <ion-row *ngIf="!showMap" class="filter-button-row" [class.dropdownOpen] = "showDropdown[2]">
-        <ion-col class="filter-button left-button" (click)="toggleVisibilityDropdowns(0)" >
+        <ion-col tappable class="filter-button left-button" (click)="toggleVisibilityDropdowns(0)" >
           <div class="filter-button-text" [class.notActive]="showDropdown[1]">FILTER
             <ion-icon name="arrow-dropdown" [class.singleButton] = "showMap"></ion-icon>
           </div>
         </ion-col>
-        <ion-col class="filter-button" (click)="toggleVisibilityDropdowns(1)">
+        <ion-col tappable class="filter-button" (click)="toggleVisibilityDropdowns(1)">
           <div class="filter-button-text" [class.notActive]="showDropdown[0]">SORTIEREN
             <ion-icon name="arrow-dropdown"></ion-icon>
           </div>
@@ -57,7 +57,7 @@
       </ion-row>
 
       <ion-row class="filter-button-row" *ngIf="showMap" [class.dropdownOpen] = "showDropdown[2]">
-        <ion-col class="filter-button left-button singleButton" (click)="toggleVisibilityDropdowns(0)">
+        <ion-col tappable class="filter-button left-button singleButton" (click)="toggleVisibilityDropdowns(0)">
           <div class="filter-button-text" [class.notActive]="showDropdown[1]">FILTER<ion-icon name="arrow-dropdown"></ion-icon>
           </div>
         </ion-col>
@@ -66,7 +66,7 @@
 
       <div class="filter-dropdown" *ngIf="showDropdown[1]">
         <div class="filterBy">A - Z</div>
-        <div class="filterBy" (click)="showPartner(partner)">Z - A</div>
+        <div tappable class="filterBy" (click)="showPartner(partner)">Z - A</div>
       </div>
 
       <div class="filter-menu" *ngIf="showDropdown[0]">
@@ -74,29 +74,26 @@
           <ion-col>
             <div>Aktueller Standort</div>
           </ion-col>
-          <ion-col class="map-icon">
-            <ion-icon name="map" (click)="chooseLocationManually()"></ion-icon>
+          <ion-col tappable class="map-icon" (click)="chooseLocationManually()">
+            <ion-icon name="map"></ion-icon>
           </ion-col>
         </ion-row>
         <ion-row class="toggle offline-partner-toggle">
           <ion-col class="toggle-text">Vor-Ort Partner</ion-col>
-          <ion-col class="map-icon">
-            <ion-icon name="map" (click)="showLocalPartners = !showLocalPartners"
-                      [class.checked]="showLocalPartners"></ion-icon>
+          <ion-col tappable class="map-icon" (click)="showLocalPartners = !showLocalPartners">
+            <ion-icon name="map" [class.checked]="showLocalPartners"></ion-icon>
           </ion-col>
         </ion-row>
         <ion-row class="toggle online-partner-toggle">
           <ion-col class="toggle-text">Online Partner</ion-col>
-          <ion-col class="map-icon">
-            <ion-icon name="map" (click)="showOnlinePartners = !showOnlinePartners"
-                      [class.checked]="showOnlinePartners"></ion-icon>
+          <ion-col tappable class="map-icon" (click)="showOnlinePartners = !showOnlinePartners">
+            <ion-icon name="map" [class.checked]="showOnlinePartners"></ion-icon>
           </ion-col>
         </ion-row>
         <ion-row class="toggle has-campaign-partner-toggle">
           <ion-col class="toggle-text">Nur Partner mit Aktionen</ion-col>
-          <ion-col class="map-icon">
-            <ion-icon name="map" (click)="showOnlyPartnersWithCampaign = !showOnlyPartnersWithCampaign"
-                      [class.checked]="showOnlyPartnersWithCampaign"></ion-icon>
+          <ion-col tappable class="map-icon" (click)="showOnlyPartnersWithCampaign = !showOnlyPartnersWithCampaign">
+            <ion-icon name="map"[class.checked]="showOnlyPartnersWithCampaign"></ion-icon>
           </ion-col>
         </ion-row>
         <div class="showSelectionWrapper">
@@ -106,12 +103,12 @@
     </div>
 
     <div class="initialSpinner" *ngIf="waitingForResults">
-      <ion-spinner class="initialSpinner" (click)="hideDropdown()"></ion-spinner>
+      <ion-spinner tappable class="initialSpinner" (click)="hideDropdown()"></ion-spinner>
     </div>
 
     <div style="height: 8vh"></div>
 
-    <div class="partner-table-wrapper" (click)="hideDropdown()" *ngIf="!showMap">
+    <div tappable class="partner-table-wrapper" (click)="hideDropdown()" *ngIf="!showMap">
       <partner-table [partners]="displayedPartners"></partner-table>
     </div>
 

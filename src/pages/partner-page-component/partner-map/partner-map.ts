@@ -1,6 +1,6 @@
 import {Component, Input, ViewChild} from '@angular/core';
 import {NavParams, NavController} from "ionic-angular";
-import {LocationService} from "../../../services/location-service";
+import {LocationData} from "../../../services/location-data";
 import {StyledMapPartnersDirective} from "./styled-map-partners-directive";
 
 @Component({
@@ -14,8 +14,8 @@ export class PartnerMapComponent{
   @ViewChild(StyledMapPartnersDirective) map;
 
   text: string;
-  currentLatitude = LocationService.latitude;
-  currentLongitude = LocationService.longitude;
+  currentLatitude = LocationData.latitude;
+  currentLongitude = LocationData.longitude;
   partnersInList = [];
   partnerListOpen = false;
 

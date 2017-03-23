@@ -1,27 +1,27 @@
-<ion-header>
+<ion-header *ngIf="searchInterfaceOpen">
+  <typeahead (getPartnersWithSearchTermEmitter)="loadPartnerPage($event)"
+               (closeSearchInterfaceEmitter)="searchInterfaceOpen = false"></typeahead>
+</ion-header>
+
+<ion-header *ngIf="!searchInterfaceOpen">
   <ion-navbar primary>
-
-    <typeahead *ngIf="searchInterfaceOpen" (getPartnersWithSearchTermEmitter)="loadPartnerPage($event)"
-     (closeSearchInterfaceEmitter)="searchInterfaceOpen = false"></typeahead>
-
-    <div *ngIf="!searchInterfaceOpen">
-      <ion-buttons left>
-        <button menuToggle>
-          <ion-icon name="menu" color="grey" class="menu-button-header"></ion-icon>
-        </button>
-      </ion-buttons>
-      <ion-title>
-        {{title}}
-      </ion-title>
-      <ion-buttons end>
-        <button>
-          <ion-icon name="search" color="grey" class="search-button-header"
-                    (click)="searchInterfaceOpen = true"></ion-icon>
-        </button>
-      </ion-buttons>
-    </div>
+    <ion-buttons left>
+      <button menuToggle>
+        <ion-icon name="menu" color="grey" class="menu-button-header"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>
+      {{title}}
+    </ion-title>
+    <ion-buttons end>
+      <button (click)="searchInterfaceOpen = true">
+        <ion-icon name="search" color="grey" class="search-button-header"
+                  ></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
+
 <ion-content>
   <div class="bars">
     <ion-row>
@@ -96,7 +96,7 @@
     <ion-col class="title">
       <p class="title-paragraph">Vor Ort Partner</p>
     </ion-col>
-    <ion-col class="more" (click)="showOfflinePartners()">
+    <ion-col tappable class="more" (click)="showOfflinePartners()">
       ...
     </ion-col>
   </ion-row>
@@ -106,7 +106,7 @@
     <ion-col class="title">
       <p class="title-paragraph">Online Partner</p>
     </ion-col>
-    <ion-col class="more" (click)="showOnlinePartners()">
+    <ion-col tappable class="more" (click)="showOnlinePartners()">
       ...
     </ion-col>
   </ion-row>

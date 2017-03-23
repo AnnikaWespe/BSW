@@ -48,7 +48,7 @@
 
 <div class="profile-header-wrapper">
 
-  <ion-row class="profile-header" (click) = "getWebView('https://www.w3schools.com', 'Persönliche Daten')">
+  <ion-row tappable ble class="profile-header" (click) = "getWebView('https://www.w3schools.com', 'Persönliche Daten')">
     <ion-col class="icon-col">
       <ion-icon name = "person"></ion-icon>
     </ion-col>
@@ -59,7 +59,7 @@
     </ion-col>
   </ion-row>
 
-  <ion-row class="profile-header" (click) = "getWebView('https://www.w3schools.com', 'Bankdaten')">
+  <ion-row tappable class="profile-header" (click) = "getWebView('https://www.w3schools.com', 'Bankdaten')">
     <ion-col class="icon-col">
       <ion-icon name = "card"></ion-icon>
     </ion-col>
@@ -70,7 +70,7 @@
     </ion-col>
   </ion-row>
 
-  <ion-row class="profile-header" (click) = "getWebView('https://www.w3schools.com', 'Vorteilsübersicht')">
+  <ion-row tappable class="profile-header" (click) = "getWebView('https://www.w3schools.com', 'Vorteilsübersicht')">
     <ion-col class="icon-col">
       <div>%</div>
     </ion-col>

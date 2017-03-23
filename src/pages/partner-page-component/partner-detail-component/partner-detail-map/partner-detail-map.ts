@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import {LocationService} from "../../../../services/location-service";
+import {LocationData} from "../../../../services/location-data";
 
 declare let device: any;
 
@@ -30,11 +30,11 @@ export class PartnerDetailMap {
   star = this.starInactive;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.currentLatitude = parseFloat(LocationService.latitude);
-    this.currentLongitude = parseFloat(LocationService.longitude);
-    this.locationAvailable = LocationService.locationAvailable;
-    this.locationExact = LocationService.locationExact;
-    console.log("PartnerDetailMap: ", LocationService.latitude + " " + LocationService.longitude)
+    this.currentLatitude = parseFloat(LocationData.latitude);
+    this.currentLongitude = parseFloat(LocationData.longitude);
+    this.locationAvailable = LocationData.locationAvailable;
+    this.locationExact = LocationData.locationExact;
+    console.log("PartnerDetailMap: ", LocationData.latitude + " " + LocationData.longitude)
   }
 
   toggleFavorites(){

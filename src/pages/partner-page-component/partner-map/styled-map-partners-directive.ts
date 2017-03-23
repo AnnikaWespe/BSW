@@ -1,8 +1,12 @@
-import {OnInit, Directive, Input, OnChanges, Output, EventEmitter} from '@angular/core';
+import {Directive, Input, OnChanges, Output, EventEmitter} from '@angular/core';
 import {GoogleMapsAPIWrapper} from 'angular2-google-maps/core';
 import {generate} from "../../Observable";
+import { Platform } from 'ionic-angular';
+import {DeviceService} from "../../../services/device-data";
+
 declare let google: any;
 declare let MarkerClusterer: any;
+
 
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="138" height="149.34" viewBox="0 0 138 149.34">
@@ -41,8 +45,15 @@ export class StyledMapPartnersDirective implements OnChanges{
   @Input() partners: any[];
 
   map: any;
+  pathToGmapsClusterIcons: string;
 
-  constructor(private googleMapsWrapper: GoogleMapsAPIWrapper) {
+  constructor(private googleMapsWrapper: GoogleMapsAPIWrapper, public plt: Platform) {
+    if(DeviceService.isInBrowser){
+      this.pathToGmapsClusterIcons = '../assets/icon/m';
+    }
+    else if(DeviceService.isAndroid){
+      this.pathToGmapsClusterIcons = '../www/assets/icon/m';
+    }
   }
 
   ngOnChanges(){
@@ -127,7 +138,7 @@ export class StyledMapPartnersDirective implements OnChanges{
       .then(() => {
           map.fitBounds(bounds);
           markerClusterer = new MarkerClusterer(map, markers,
-        {imagePath: '../www/assets/icon/m'});
+        {imagePath: this.pathToGmapsClusterIcons});
           google.maps.event.addListener(markerClusterer, 'clusterclick', (cluster) => {
             this.showList.emit(cluster.getMarkers());
             google.maps.event.trigger(map, 'resize');

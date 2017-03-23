@@ -10,8 +10,8 @@
            (keyup) = "inputToSuggestions($event)"
            [(ngModel)]="searchTerm">
     <ion-buttons end>
-      <button>
-        <ion-icon name="checkmark" color="grey" class="search-button-header" (click) = "saveLocation()" *ngIf="checkButtonVisible"></ion-icon>
+      <button (click) = "saveLocation()">
+        <ion-icon name="checkmark" color="grey" class="search-button-header"  *ngIf="checkButtonVisible"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
