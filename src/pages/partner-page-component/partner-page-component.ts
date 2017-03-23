@@ -26,7 +26,8 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   locationFound: boolean = false;
   locationChosen: boolean = false;
 
-  showMap: boolean = false;
+  showMap = false;
+  showMapIcon = false;
 
   displayedPartners = [];
 
@@ -52,14 +53,14 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     let activeFilter = navParams.get('activeFilter');
     this.displayedPartners = this[activeFilter];
     if (activeFilter == "onlinePartners") {
-      this.showOnlinePartners = true
+      this.showOnlinePartners = true;
     }
     if (activeFilter == "localPartners") {
-      this.showLocalPartners = true
+      this.showLocalPartners = true;
     }
     if (activeFilter == "allPartners") {
       this.showOnlinePartners = true;
-      this.showLocalPartners = true
+      this.showLocalPartners = true;
     }
     this.searchTerm = navParams.get('searchTerm') || "";
     this.title = navParams.get("title");

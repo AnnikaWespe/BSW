@@ -26,7 +26,7 @@
           <ion-icon name="search" color="grey" class="search-button-header"></ion-icon>
         </button>
       </ion-buttons>
-      <ion-buttons end *ngIf='activeFilterFromMenu == "OFFLINEPARTNER"' (click)="toggleMapAndList()">
+      <ion-buttons end *ngIf='showLocalPartners' (click)="toggleMapAndList()">
         <button class="mapIcon">
           <div class="mapIcon"></div>
         </button>
