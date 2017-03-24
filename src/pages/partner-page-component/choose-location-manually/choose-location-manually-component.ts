@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {NavController, NavParams} from "ionic-angular";
 import {PartnerPageComponent} from "../partner-page-component";
 import {GoogleMapsAPIWrapper} from "angular2-google-maps/core";
+import {LocationData} from "../../../services/location-data";
 
 @Component({
   selector: 'choose-location-manually',
@@ -11,6 +12,7 @@ export class ChooseLocationManuallyComponent {
 
   latitude: string;
   longitude: string;
+  cityName: string;
   latitudeCenter: number = 51.1656;
   longitudeCenter: number = 10.4515;
   location: {latitude: string, longitude: string};
@@ -21,12 +23,15 @@ export class ChooseLocationManuallyComponent {
   locationExact: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private _wrapper: GoogleMapsAPIWrapper) {
-    this.location = navParams.get('location');
-    if(this.location) {
-      this.longitude = this.location.longitude;
-      this.latitude = this.location.latitude;
-      this.markerVisible = true;
-    }
+    // this.location = navParams.get('location');
+    // if(this.location) {
+    //   this.longitude = this.location.longitude;
+    //   this.latitude = this.location.latitude;
+    //   this.markerVisible = true;
+    // }
+    this.latitude = LocationData.latitude;
+    this.longitude = LocationData.longitude;
+    this.cityName = LocationData.cityName;
   }
 
   mapClicked($event: any){
@@ -37,11 +42,12 @@ export class ChooseLocationManuallyComponent {
     console.log(this.longitude + " " + this.latitude);
     this.locationExact = true;
   }
+
   inputToSuggestions(){
     this.locationExact = false;
   }
   saveLocation(){
-    this.navCtrl.setRoot(PartnerPageComponent, {location: {latitude: this.latitude, longitude: this.longitude, locationExact: this.locationExact}});
+    this.navCtrl.setRoot(PartnerPageComponent);
   }
 
   parseFloat(string){

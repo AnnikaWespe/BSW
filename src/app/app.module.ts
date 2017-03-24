@@ -30,6 +30,7 @@ import {StyledMapPartnersDirective} from "../pages/partner-page-component/partne
 import {TypeaheadComponent} from "../components/searchHeader/typeahead/typeahead";
 import {UserDetailWebviewComponent} from "../pages/my-profile-page-component/user-detail-webview/user-detail-webview";
 import {SafePipe} from "../pipes/safe-pipe";
+import {LocationService} from "../services/location-service";
 
 
 @NgModule({
@@ -88,7 +89,7 @@ import {SafePipe} from "../pipes/safe-pipe";
     TypeaheadComponent,
     UserDetailWebviewComponent
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService, SearchCompletionService, GoogleMapsAPIWrapper],
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService, LocationService, SearchCompletionService, GoogleMapsAPIWrapper],
 
 })
 export class AppModule {}

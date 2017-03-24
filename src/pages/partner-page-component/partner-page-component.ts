@@ -15,15 +15,13 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   title = "Partner";
   mode = "Observable";
 
+  location : {};
+  cityName : string;
+
   showDropdown: boolean[] = [false, false];
   waitingForResults: boolean = true;
 
   errorMessage: string;
-
-  location = {latitude: "0", longitude: "0"};
-  chosenLocation: {latitude: string, longitude: string};
-  locationFound: boolean = false;
-  locationChosen: boolean = false;
 
   showMap = false;
   showMapIcon = false;
@@ -45,11 +43,25 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
   searchTerm = "";
 
   searchInterfaceOpen: boolean = false;
-  // https://maps.googleapis.com/maps/api/geocode/json?latlng=48,11&key=AIzaSyBAHcgksDNzLfzvKC0ZjnoQZeivSQbE1Iw
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService,
               public alertCtrl: AlertController) {
-    let activeFilter = navParams.get('activeFilter');
+    this.setFilterParameters();
+    this.setLocationData();
+    this.searchTerm = navParams.get('searchTerm') || "";
+    this.title = navParams.get("title");
+  }
+
+  public ngAfterViewChecked() {
+    this.setFocus();
+  }
+
+  ngOnInit() {
+
+  };
+
+  setFilterParameters(){
+    let activeFilter = this.navParams.get('activeFilter');
     this.displayedPartners = this[activeFilter];
     if (activeFilter == "onlinePartners") {
       this.showOnlinePartners = true;
@@ -61,29 +73,21 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
       this.showOnlinePartners = true;
       this.showLocalPartners = true;
     }
-    this.searchTerm = navParams.get('searchTerm') || "";
-    this.title = navParams.get("title");
-    this.chosenLocation = navParams.get('location');
   }
 
-  public ngAfterViewChecked() {
-    this.setFocus();
-  }
-
-  ngOnInit() {
-    if (this.chosenLocation) {
-      this.location = this.chosenLocation;
-      this.locationChosen = true;
-      this.getPartners();
-      LocationData.latitude = this.location.latitude;
-      LocationData.longitude = this.location.longitude;
-      LocationData.locationExact = true;
-      LocationData.locationAvailable = true;
+  setLocationData(){
+    if(LocationData.locationAvailable){
+      this.location = {
+        latitude: LocationData.latitude,
+        longitude: LocationData.longitude
+      };
+      this.cityName = LocationData.cityName;
     }
     else {
-      this.getLocationData();
+      this.showPrompt();
     }
-  };
+
+  }
 
   showPrompt() {
     let prompt = this.alertCtrl.create({
@@ -94,7 +98,6 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
           text: 'Ohne Standort fortfahren',
           handler: data => {
             this.getPartners();
-            LocationData.locationAvailable = false;
           }
         },
         {
@@ -106,23 +109,6 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
       ]
     });
     prompt.present();
-  }
-
-  getLocationData() {
-    Geolocation.getCurrentPosition().then((position) => {
-      this.location.latitude = position.coords.latitude.toFixed(4);
-      this.location.longitude = position.coords.longitude.toFixed(4)
-      this.locationFound = true;
-      console.log(this.location);
-      this.getPartners();
-      LocationData.latitude = this.location.latitude;
-      LocationData.longitude = this.location.longitude;
-      LocationData.locationExact = true;
-      LocationData.locationAvailable = true;
-    }, (err) => {
-      console.log(err);
-      this.showPrompt();
-    })
   }
 
   getPartnersWithSearchTerm(searchTerm) {

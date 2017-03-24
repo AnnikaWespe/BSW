@@ -17,7 +17,7 @@ export class LocationService {
   constructor(private http: Http) {}
 
 
-  getLocation(){
+  getLocation() {
     Geolocation.getCurrentPosition().then((position) => {
       this.latitude = position.coords.latitude.toFixed(4);
       this.longitude = position.coords.longitude.toFixed(4);
@@ -25,45 +25,30 @@ export class LocationService {
       LocationData.longitude = this.longitude;
       LocationData.locationExact = true;
       LocationData.locationAvailable = true;
-      this.getLocationName(this.latitude, this.longitude);
+      return this.getLocationName(this.latitude, this.longitude);
     }, (err) => {
-      LocationData.latitude = "13.4132";
-      LocationData.longitude = "52.5219";
-      LocationData.locationExact = false;
-      LocationData.locationAvailable = false;
-      return {
-        latitude: 13.4132,
-        longitude: 52.5219,
-        cityName: "Berlin"
-      };
+      console.log(err);
     })
   }
 
   getLocationName(lat, lon): Observable <any> {
-    return this.http.get(this.getLocationNameUrl + lat + lon + '&sensor=true')
+    let url = this.getLocationNameUrl + lat + "," + lon + '&sensor=true';
+    return this.http.get(url)
       .map(this.extractData)
-      .catch(this.handleError)
+      .catch(this.handleError);
   }
 
 
   private extractData(res: Response) {
-    console.log(res.json());
-    let cityName = res.json().results[0].address_components[1].shortName;
-    console.log("cityName:" + cityName);
-    return {
-      latitude: this.latitude,
-      longitude: this.longitude,
-      cityName: cityName
-      } || {
-        latitude: 13.4132,
-        longitude: 52.5219,
-        cityName: "Berlin"
-      };
+    let cityName = res.json().results[0].address_components[0].short_name;
+    LocationData.cityName = cityName;
+    return {};
   }
 
   private handleError(error: Response | any) {
     //TODO: In a real world app, we might use a remote logging infrastructure
     let errMsg: string;
+    console.log("error");
     if (error instanceof Response) {
       const body = error.json() || '';
       const err = body.error || JSON.stringify(body);

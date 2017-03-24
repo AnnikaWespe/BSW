@@ -10,7 +10,7 @@ import {MyProfilePageComponent} from "../pages/my-profile-page-component/my-prof
 import {PartnerPageComponent} from "../pages/partner-page-component/partner-page-component";
 import {SettingsPageComponent} from "../pages/settings-page-component/settings-page-component";
 import {DeviceService} from "../services/device-data";
-import {LocationData} from "../services/location-data";
+import {LocationService} from "../services/location-service";
 
 
 @Component({
@@ -23,15 +23,13 @@ export class MyApp implements OnInit{
   pages: Array<{title: string, component: any, icon: string, parameters: {}}>;
 
 
-  constructor(public platform: Platform) {
+  constructor(public platform: Platform, private locationService: LocationService) {
     this.initializeApp();
     this.setMenu();
   }
 
   ngOnInit(){
     this.getDevice();
-    this.getLocation();
-
   }
 
   initializeApp() {
@@ -74,14 +72,6 @@ export class MyApp implements OnInit{
       { title: 'Einstellungen', component: SettingsPageComponent, icon:"settings", parameters: {}},
       {title: "Abmelden", component: LoginPageComponent, icon: "exit", parameters: {}}]
   }
-
-  getLocation(){
-
-    }
-
-    getLocationName(lat, lon){
-
-    }
 
 }
 
