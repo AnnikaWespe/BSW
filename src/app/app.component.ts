@@ -13,8 +13,6 @@ import {DeviceService} from "../services/device-data";
 import {LocationData} from "../services/location-data";
 
 
-
-
 @Component({
   templateUrl: 'app.html'
 })
@@ -22,7 +20,6 @@ export class MyApp implements OnInit{
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = LoginPageComponent;
-
   pages: Array<{title: string, component: any, icon: string, parameters: {}}>;
 
 
