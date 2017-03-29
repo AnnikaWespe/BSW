@@ -9,9 +9,9 @@ declare let google: any;
 })
 export class StyledMapPartnerDetailsDirective implements OnInit {
 
-  @Output() travelTimeCarUpdated: EventEmitter<string> = new EventEmitter();
-  @Output() travelTimePublicUpdated: EventEmitter<string> = new EventEmitter();
-  @Output() travelTimePedestrianUpdated: EventEmitter<string> = new EventEmitter();
+  @Output() travelTimeCarUpdated = new EventEmitter();
+  @Output() travelTimePublicUpdated = new EventEmitter();
+  @Output() travelTimePedestrianUpdated = new EventEmitter();
 
 
   constructor(private googleMapsWrapper: GoogleMapsAPIWrapper) {

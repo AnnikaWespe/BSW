@@ -6,6 +6,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import {LocationData} from "./location-data";
+import {BehaviorSubject, Subject} from "rxjs";
 
 
 
@@ -16,33 +17,41 @@ export class LocationService {
   private longitude;
   constructor(private http: Http) {}
 
+  private locationSource = new Subject<any>();
+  locationFound = this.locationSource.asObservable();
 
-  getLocation() {
+
+  getLocation(){
     Geolocation.getCurrentPosition().then((position) => {
-      this.latitude = position.coords.latitude.toFixed(4);
-      this.longitude = position.coords.longitude.toFixed(4);
-      LocationData.latitude = this.latitude;
-      LocationData.longitude = this.longitude;
+      let latitude = position.coords.latitude.toFixed(4);
+      let longitude = position.coords.longitude.toFixed(4);
+      LocationData.latitude = latitude;
+      LocationData.longitude = longitude;
       LocationData.locationExact = true;
       LocationData.locationAvailable = true;
-      return this.getLocationName(this.latitude, this.longitude);
+      this.giveBackLocation({lat: latitude, lon: longitude, locationFound: true});
     }, (err) => {
-      console.log(err);
+      this.giveBackLocation({lat: "0", lon: "0", locationFound: false});
     })
   }
 
   getLocationName(lat, lon): Observable <any> {
     let url = this.getLocationNameUrl + lat + "," + lon + '&sensor=true';
+    console.log(url);
     return this.http.get(url)
       .map(this.extractData)
       .catch(this.handleError);
   }
 
+  private giveBackLocation(object){
+    this.locationSource.next(object)
+  }
+
 
   private extractData(res: Response) {
-    let cityName = res.json().results[0].address_components[0].short_name;
+    let cityName = res.json().results[0].address_components[2].short_name;
     LocationData.cityName = cityName;
-    return {};
+    return cityName;
   }
 
   private handleError(error: Response | any) {

@@ -3,6 +3,7 @@ import {NavController, NavParams} from "ionic-angular";
 import {PartnerPageComponent} from "../partner-page-component";
 import {GoogleMapsAPIWrapper} from "angular2-google-maps/core";
 import {LocationData} from "../../../services/location-data";
+import {LocationService} from "../../../services/location-service";
 
 @Component({
   selector: 'choose-location-manually',
@@ -16,19 +17,13 @@ export class ChooseLocationManuallyComponent {
   latitudeCenter: number = 51.1656;
   longitudeCenter: number = 10.4515;
   location: {latitude: string, longitude: string};
-  markerVisible = false;
+  markerVisible = true;
   checkButtonVisible = false;
   zoom: number = 6;
   title: string = 'Standort auswählen';
   locationExact: boolean;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private _wrapper: GoogleMapsAPIWrapper) {
-    // this.location = navParams.get('location');
-    // if(this.location) {
-    //   this.longitude = this.location.longitude;
-    //   this.latitude = this.location.latitude;
-    //   this.markerVisible = true;
-    // }
+  constructor(public navCtrl: NavController, public navParams: NavParams, private _wrapper: GoogleMapsAPIWrapper, private locationService: LocationService) {
     this.latitude = LocationData.latitude;
     this.longitude = LocationData.longitude;
     this.cityName = LocationData.cityName;
@@ -41,6 +36,13 @@ export class ChooseLocationManuallyComponent {
     this.latitude = $event.coords.lat.toFixed(4);
     console.log(this.longitude + " " + this.latitude);
     this.locationExact = true;
+    this.setLocationData();
+  }
+
+  setLocationData(){
+    LocationData.latitude = this.latitude;
+    LocationData.longitude = this.longitude;
+    LocationData.locationManuallyChosen = true;
   }
 
   inputToSuggestions(){

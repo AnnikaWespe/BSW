@@ -1,4 +1,4 @@
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, Input, ViewChild, Output, EventEmitter} from '@angular/core';
 import {NavParams, NavController} from "ionic-angular";
 import {LocationData} from "../../../services/location-data";
 import {StyledMapPartnersDirective} from "./styled-map-partners-directive";
@@ -10,8 +10,11 @@ import {StyledMapPartnersDirective} from "./styled-map-partners-directive";
 export class PartnerMapComponent{
 
   @Input() partners: any[];
+  @Output() scrollToTopEmitter = new EventEmitter();
+
 
   @ViewChild(StyledMapPartnersDirective) map;
+
 
   text: string;
   currentLatitude = LocationData.latitude;
@@ -33,6 +36,10 @@ export class PartnerMapComponent{
     markers.forEach((marker)=>{
       this.partnersInList.push(marker.partner);
     });
+  }
+
+  scrollToTop(event){
+    this.scrollToTopEmitter.emit();
   }
 
   getMapHeight(){

@@ -22,7 +22,7 @@ export class OverviewPageComponent implements OnInit {
   heightBalanceBarBonusBarBuffer = ["0vh", "0vh", "0vh", "0vh"];
   maxHeightBarInVh = 14;
   location = {latitude: "0", longitude: "0"};
-  locationFound = false;
+  locationAvailable = false;
   errorMessage: string;
   waitingForResults = true;
   onlinePartners: any[];
@@ -32,17 +32,30 @@ export class OverviewPageComponent implements OnInit {
   searchInterfaceOpen = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService, private locationService: LocationService) {
+    locationService.locationFound.subscribe(
+      (object) => {
+        if(object.locationFound == true){
+          console.log("location is", object);
+          this.location.latitude = object.lat;
+          this.location.longitude = object.lon;
+          this.getPartners();
+          this.locationAvailable = true;
+        }
+        else{
+          console.log("no location found");
+          this.getPartners();
+        }
+      }
+    )
   }
+
 
   public ngAfterViewChecked() {
     this.setFocus();
   }
 
   ngOnInit() {
-    this.locationService.getLocation().subscribe();
-    this.location.latitude = LocationData.latitude;
-    this.location.longitude = LocationData.longitude;
-    this.getPartners();
+    this.locationService.getLocation();
   }
 
   getPartners() {
@@ -57,8 +70,10 @@ export class OverviewPageComponent implements OnInit {
   }
 
   getOnlineAndOfflinePartners(returnedObject) {
-    this.offlinePartners = returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities.slice(0, 5);
+    console.log(returnedObject);
     this.onlinePartners = returnedObject.originalSearchResults.bucketToSearchResult["ONLINEPARTNER"].contentEntities.slice(0, 5);
+    let offlinePartnerArray = returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities;
+    if( offlinePartnerArray){this.offlinePartners = offlinePartnerArray.slice(0, 5)}
   }
 
   showOfflinePartners() {

@@ -4,4 +4,5 @@ export class LocationData {
   public static locationExact: boolean = false;
   public static locationAvailable: boolean = false;
   public static cityName: string = "Berlin";
+  public static locationManuallyChosen: boolean = false;
 }

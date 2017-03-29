@@ -1,7 +1,7 @@
-import {Directive, Input, OnChanges, Output, EventEmitter} from '@angular/core';
+import {Directive, Input, OnChanges, Output, EventEmitter, ViewChild} from '@angular/core';
 import {GoogleMapsAPIWrapper} from 'angular2-google-maps/core';
 import {generate} from "../../Observable";
-import { Platform } from 'ionic-angular';
+import {Platform, Content} from 'ionic-angular';
 import {DeviceService} from "../../../services/device-data";
 
 declare let google: any;
@@ -42,7 +42,9 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.
 export class StyledMapPartnersDirective implements OnChanges{
 
   @Output() showList = new EventEmitter();
+  @Output() scrollToTop = new EventEmitter();
   @Input() partners: any[];
+
 
   map: any;
   pathToGmapsClusterIcons: string;
@@ -140,6 +142,7 @@ export class StyledMapPartnersDirective implements OnChanges{
           markerClusterer = new MarkerClusterer(map, markers,
         {imagePath: this.pathToGmapsClusterIcons});
           google.maps.event.addListener(markerClusterer, 'clusterclick', (cluster) => {
+            this.scrollToTop.emit();
             this.showList.emit(cluster.getMarkers());
             google.maps.event.trigger(map, 'resize');
           });

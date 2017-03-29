@@ -71,8 +71,8 @@
 
       <div class="filter-menu" *ngIf="showDropdown[0]">
         <ion-row class="currentLocation">
-          <ion-col>
-            <div>Aktueller Standort</div>
+          <ion-col class = "currentPosition">
+            {{cityName}}
           </ion-col>
           <ion-col tappable class="map-icon" (click)="chooseLocationManually()">
             <ion-icon name="map"></ion-icon>
@@ -86,7 +86,7 @@
         </ion-row>
         <ion-row class="toggle online-partner-toggle">
           <ion-col class="toggle-text">Online Partner</ion-col>
-          <ion-col tappable class="map-icon" (click)="showOnlinePartners = !showOnlinePartners">
+          <ion-col tappable class="map-icon" (click) ="showOnlinePartners = !showOnlinePartners">
             <ion-icon name="map" [class.checked]="showOnlinePartners"></ion-icon>
           </ion-col>
         </ion-row>
@@ -122,7 +122,7 @@
 
 
 
-    <partner-map [partners]="localPartners" *ngIf="showMap"></partner-map>
+    <partner-map [partners]="localPartners" *ngIf="showMap" (scrollToTopEmitter)="scrollToTop()"></partner-map>
 
   </div>
 </ion-content>

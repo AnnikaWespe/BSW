@@ -11,6 +11,7 @@ import {PartnerPageComponent} from "../pages/partner-page-component/partner-page
 import {SettingsPageComponent} from "../pages/settings-page-component/settings-page-component";
 import {DeviceService} from "../services/device-data";
 import {LocationService} from "../services/location-service";
+import {FilterData} from "../services/filter-data";
 
 
 @Component({
@@ -20,7 +21,7 @@ export class MyApp implements OnInit{
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = LoginPageComponent;
-  pages: Array<{title: string, component: any, icon: string, parameters: {}}>;
+  pages: Array<{title: string, component: any, icon: string, parameters: {}, filterData : {}}>;
 
 
   constructor(public platform: Platform, private locationService: LocationService) {
@@ -40,6 +41,13 @@ export class MyApp implements OnInit{
   }
 
   openPage(page) {
+    if(page.filterData){
+      FilterData.showOnlinePartners = false;
+      FilterData.showLocalPartners = false;
+      FilterData.showOnlyPartnersWithCampaign = false;
+      FilterData[page.filterData.activeFilter] = true;
+      FilterData.title = page.filterData.title;
+    }
     this.nav.setRoot(page.component, page.parameters);
   }
 
@@ -54,7 +62,7 @@ export class MyApp implements OnInit{
     }
     else if (this.platform.is('android')){
       DeviceService.isAndroid = true;
-      console.log("ios");
+      console.log("android");
     }
     else if (this.platform.is('windows')){
       DeviceService.isIos = true;
@@ -64,13 +72,13 @@ export class MyApp implements OnInit{
 
   setMenu(){
     this.pages = [
-      { title: 'Übersicht', component: OverviewPageComponent, icon: "home", parameters: {} },
-      { title: 'Vor Ort Partner', component: PartnerPageComponent, icon: "list", parameters: {activeFilter: "localPartners", title: "Vor Ort Partner", icon: "icon_onlinepartner.png"}},
-      { title: 'Online Partner', component: PartnerPageComponent, icon: "sunny", parameters: {activeFilter: "onlinePartners", title: "Online Partner", icon: "icon_vorortpartner.png"}},
-      { title: 'Einkauf nachtragen', component: AddPurchasePageComponent, icon: "cash", parameters: {}},
-      { title: 'Mein Profil', component: MyProfilePageComponent, icon: "person", parameters: {}},
-      { title: 'Einstellungen', component: SettingsPageComponent, icon:"settings", parameters: {}},
-      {title: "Abmelden", component: LoginPageComponent, icon: "exit", parameters: {}}]
+      { title: 'Übersicht', component: OverviewPageComponent, icon: "home", parameters: {}, filterData: {} },
+      { title: 'Vor Ort Partner', component: PartnerPageComponent, icon: "list", parameters: { icon: "icon_onlinepartner.png"}, filterData: {activeFilter: "showLocalPartners", title: "Vor Ort Partner"} },
+      { title: 'Online Partner', component: PartnerPageComponent, icon: "sunny", parameters: {icon: "icon_vorortpartner.png"}, filterData: {activeFilter: "showOnlinePartners", title: "Online Partner"} },
+      { title: 'Einkauf nachtragen', component: AddPurchasePageComponent, icon: "cash", parameters: {}, filterData: {}  },
+      { title: 'Mein Profil', component: MyProfilePageComponent, icon: "person", parameters: {}, filterData: {}  },
+      { title: 'Einstellungen', component: SettingsPageComponent, icon:"settings", parameters: {}, filterData: {} },
+      {title: "Abmelden", component: LoginPageComponent, icon: "exit", parameters: {}, filterData: {}  }]
   }
 
 }

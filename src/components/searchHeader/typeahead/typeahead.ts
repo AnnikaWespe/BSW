@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output, OnInit, Input} from '@angular/core';
+import {Component, EventEmitter, Output, OnInit, Input, OnDestroy} from '@angular/core';
 import {Observable} from 'rxjs/Observable'
 import {Subject} from 'rxjs/Subject';
 
@@ -17,21 +17,22 @@ import {SearchTermCompletion} from '../search-completion/search-term-completion'
   selector: 'typeahead',
   templateUrl: 'typeahead.html'
 })
-export class TypeaheadComponent implements OnInit {
+export class TypeaheadComponent implements OnInit, OnDestroy {
 
   text: string;
   @Input() mapIcon: boolean;
-  @Output() closeSearchInterfaceEmitter: EventEmitter<boolean> = new EventEmitter();
-  @Output() getPartnersWithSearchTermEmitter: EventEmitter<string> = new EventEmitter();
-  @Output() toggleMapAndListEmitter: EventEmitter<any> = new EventEmitter();
+  @Output() closeSearchInterfaceEmitter = new EventEmitter();
+  @Output() getPartnersWithSearchTermEmitter = new EventEmitter();
+  @Output() toggleMapAndListEmitter = new EventEmitter();
   searchTerm: string;
+  subscription: any;
 
   private searchTerms = new Subject<string>();
   searchTermCompletion: Observable<SearchTermCompletion[]>;
 
 
   constructor(private searchCompletionService: SearchCompletionService) {
-    this.searchTerms.subscribe(term => console.log(term))
+    this.subscription = this.searchTerms.subscribe(term => console.log(term))
   }
 
   search(term: string, $event): void {
@@ -57,6 +58,10 @@ export class TypeaheadComponent implements OnInit {
         return Observable.of<SearchTermCompletion[]>([]);
       });
   };
+
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
+  }
 
 
   closeSearchInterface($event) {

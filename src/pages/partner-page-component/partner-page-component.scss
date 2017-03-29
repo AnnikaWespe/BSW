@@ -68,8 +68,12 @@ div.standard-header{
       }
       ion-col {
         padding: 0 5vw 0 5vw;
+        &.currentPosition{
+          text-align: left;
+        }
         &.map-icon {
           text-align: right;
+          max-width:4vw;
           .checked{
             background-color: green;
           }

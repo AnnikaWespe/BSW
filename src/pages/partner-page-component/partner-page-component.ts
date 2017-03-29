@@ -1,21 +1,26 @@
-import {Component, OnInit, AfterViewChecked} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {Component, OnInit, AfterViewChecked, ViewChild} from '@angular/core';
+import {NavController, NavParams, Content} from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
 import {PartnerService} from "../../services/partner-service";
 import {ChooseLocationManuallyComponent} from "./choose-location-manually/choose-location-manually-component";
 import {AlertController} from 'ionic-angular';
 import {PartnerDetailComponent} from "./partner-detail-component/partner-detail-component";
 import {LocationData} from "../../services/location-data";
+import {LocationService} from "../../services/location-service";
+import {FilterData} from "../../services/filter-data";
 
 @Component({
   selector: 'partner-page-component',
   templateUrl: 'partner-page-component.html',
 })
-export class PartnerPageComponent implements OnInit, AfterViewChecked {
+export class PartnerPageComponent implements AfterViewChecked {
+  @ViewChild(Content) content: Content;
+
   title = "Partner";
   mode = "Observable";
 
-  location : {};
+  location = {latitude: "0", longitude: "0"};
+  locationAvailable = false;
   cityName : string;
 
   showDropdown: boolean[] = [false, false];
@@ -44,50 +49,80 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
 
   searchInterfaceOpen: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService,
-              public alertCtrl: AlertController) {
-    this.setFilterParameters();
-    this.setLocationData();
-    this.searchTerm = navParams.get('searchTerm') || "";
-    this.title = navParams.get("title");
-  }
-
   public ngAfterViewChecked() {
     this.setFocus();
   }
 
-  ngOnInit() {
-
-  };
-
-  setFilterParameters(){
-    let activeFilter = this.navParams.get('activeFilter');
-    this.displayedPartners = this[activeFilter];
-    if (activeFilter == "onlinePartners") {
-      this.showOnlinePartners = true;
+  constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService,
+              public alertCtrl: AlertController, public locationService: LocationService) {
+    this.setFilterParameters();
+    this.searchTerm = navParams.get("searchTerm") || "";
+    if (this.showLocalPartners) {
+      this.checkLocation()
     }
-    if (activeFilter == "localPartners") {
-      this.showLocalPartners = true;
-    }
-    if (activeFilter == "allPartners") {
-      this.showOnlinePartners = true;
-      this.showLocalPartners = true;
+    else{
+      this.cityName = LocationData.cityName;
+      this.getPartners();
     }
   }
 
-  setLocationData(){
-    if(LocationData.locationAvailable){
-      this.location = {
-        latitude: LocationData.latitude,
-        longitude: LocationData.longitude
-      };
-      this.cityName = LocationData.cityName;
+  setFilterParameters() {
+    this.title = FilterData.title;
+    this.showOnlinePartners = FilterData.showOnlinePartners;
+    console.log("onlinePartner: ", this.showOnlinePartners);
+    this.showLocalPartners = FilterData.showLocalPartners;
+    this.showOnlyPartnersWithCampaign = FilterData.showOnlyPartnersWithCampaign;
+    if (this.showOnlinePartners && this.showLocalPartners) {
+      this.displayedPartners = this.allPartners;
     }
     else {
-      this.showPrompt();
+      this.displayedPartners = (this.showOnlinePartners) ? this.onlinePartners : this.localPartners
     }
-
   }
+
+
+
+  checkLocation() {
+    if (LocationData.locationManuallyChosen) {
+      console.log(LocationData);
+      this.getLocationName(LocationData.latitude, LocationData.longitude);
+      this.location.latitude = LocationData.latitude;
+      this.location.longitude = LocationData.longitude;
+      this.getPartners();
+    }
+    else {
+      this.locationService.getLocation();
+      this.subscribeToLocationService();
+    }
+  }
+
+  subscribeToLocationService() {
+    this.locationService.locationFound.subscribe(
+      (object) => {
+        if (object.locationFound == true) {
+          console.log("location is", object);
+          this.location.latitude = LocationData.latitude;
+          this.location.longitude = LocationData.longitude;
+          this.getPartners();
+          this.locationAvailable = true;
+          this.getLocationName(object.lat, object.lon)
+        }
+        else {
+          if (this.showOnlinePartners == true) {
+            this.showPrompt();
+          }
+        }
+      }
+    )
+  }
+
+  getLocationName(lat, lon) {
+    this.locationService.getLocationName(lat, lon)
+      .subscribe(
+        cityName => this.cityName = cityName
+      );
+  }
+
 
   showPrompt() {
     let prompt = this.alertCtrl.create({
@@ -130,7 +165,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
         body => {
           let returnedObject = body.json();
           this.getDifferentCategories(returnedObject);
-          if(!returnedObject.contentEntities){
+          if (!returnedObject.contentEntities) {
             this.moreDataCanBeLoaded = false;
           }
         },
@@ -139,21 +174,11 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
 
   getDifferentCategories(returnedObject) {
     this.allPartners = this.allPartners.concat(returnedObject.contentEntities);
+    console.log(this.allPartners);
     this.localPartners = this.localPartners.concat(returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities);
     this.onlinePartners = this.onlinePartners.concat(returnedObject.originalSearchResults.bucketToSearchResult["ONLINEPARTNER"].contentEntities);
     this.getDisplay();
     this.waitingForResults = false;
-  }
-
-  chooseLocationManually() {
-    event.stopPropagation();
-    this.navCtrl.push(ChooseLocationManuallyComponent, {location: this.location});
-    this.showDropdown = [false, false, false];
-  }
-
-
-  showPartner(partner = 0) {
-    this.navCtrl.push(PartnerDetailComponent)
   }
 
   getDisplay() {
@@ -171,19 +196,34 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
       this.filterCampaignPartners(this.onlinePartners);
     }
     else if (this.showLocalPartners && this.showOnlinePartners) {
+      console.log(this.allPartners);
       this.title = "Alle Partner";
       this.filterCampaignPartners(this.allPartners)
     }
   }
 
+  chooseLocationManually() {
+    event.stopPropagation();
+    this.navCtrl.push(ChooseLocationManuallyComponent, {location: this.location});
+    this.showDropdown = [false, false, false];
+  }
+
+
+  showPartner(partner = 0) {
+    this.navCtrl.push(PartnerDetailComponent)
+  }
+
+
+
   filterCampaignPartners(displayedPartners) {
     if (this.showOnlyPartnersWithCampaign) {
       let partnersWithCampaign = [];
+      this.title = "Partner mit Aktionen";
       for (let partner of displayedPartners) {
         if (partner && partner.hasCampaign) {
           partnersWithCampaign.push(partner);
         }
-        else if(partner == null){
+        else if (partner == null) {
           this.moreDataCanBeLoaded = false;
           this.displayedPartners = partnersWithCampaign;
           return;
@@ -248,7 +288,7 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     this.searchTerm = "";
     this.showDropdown = [false, false, false];
     this.resetPartnersArray = true;
-    this.title = "Partner"
+    this.title = "Partner";
     this.getPartners();
   }
 
@@ -259,6 +299,9 @@ export class PartnerPageComponent implements OnInit, AfterViewChecked {
     infiniteScroll.complete();
   }
 
+  scrollToTop(){
+    this.content.scrollToTop();
+  }
 }
 
 
