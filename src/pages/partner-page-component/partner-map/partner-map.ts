@@ -7,10 +7,10 @@ import {StyledMapPartnersDirective} from "./styled-map-partners-directive";
   selector: 'partner-map',
   templateUrl: 'partner-map.html'
 })
-export class PartnerMapComponent{
+export class PartnerMapComponent {
 
   @Input() partners: any[];
-  @Output() scrollToTopEmitter = new EventEmitter();
+  @Output() scrollToTop = new EventEmitter();
 
 
   @ViewChild(StyledMapPartnersDirective) map;
@@ -25,30 +25,34 @@ export class PartnerMapComponent{
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
-  stringToNumber(string){
+  stringToNumber(string) {
     return Number(string);
   }
 
-  showList(markers = []){
+  showList(markers = []) {
     console.log("markers", markers);
     this.partnersInList = [];
     this.partnerListOpen = true;
-    markers.forEach((marker)=>{
+    markers.forEach((marker) => {
       this.partnersInList.push(marker.partner);
     });
   }
 
-  scrollToTop(event){
-    this.scrollToTopEmitter.emit();
-  }
-
-  getMapHeight(){
-    if(this.partnerListOpen) return "53%"
+  getMapHeight() {
+    if (this.partnerListOpen) return "53%"
     else return "100%";
   }
 
-  closePartnerList(){
+  closePartnerList() {
     this.partnerListOpen = false;
     this.map.resizeMap();
+  }
+
+  removeList(event) {
+    this.partnerListOpen = false;
+  }
+
+  addList(event) {
+    this.partnerListOpen = false;
   }
 }

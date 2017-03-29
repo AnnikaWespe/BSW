@@ -122,7 +122,7 @@
 
 
 
-    <partner-map [partners]="localPartners" *ngIf="showMap" (scrollToTopEmitter)="scrollToTop()"></partner-map>
+    <partner-map [partners]="localPartners" *ngIf="showMap" (scrollToTop)="myScrollToTop($event)"></partner-map>
 
   </div>
 </ion-content>

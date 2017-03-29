@@ -49,7 +49,7 @@ export class LocationService {
 
 
   private extractData(res: Response) {
-    let cityName = res.json().results[0].address_components[2].short_name;
+    let cityName = res.json().results[0].address_components[2].long_name;
     LocationData.cityName = cityName;
     return cityName;
   }

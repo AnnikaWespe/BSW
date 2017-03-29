@@ -15,7 +15,6 @@ import {FilterData} from "../../services/filter-data";
 })
 export class PartnerPageComponent implements AfterViewChecked {
   @ViewChild(Content) content: Content;
-
   title = "Partner";
   mode = "Observable";
 
@@ -288,7 +287,7 @@ export class PartnerPageComponent implements AfterViewChecked {
     this.searchTerm = "";
     this.showDropdown = [false, false, false];
     this.resetPartnersArray = true;
-    this.title = "Partner";
+    this.title = FilterData.title;
     this.getPartners();
   }
 
@@ -299,8 +298,7 @@ export class PartnerPageComponent implements AfterViewChecked {
     infiniteScroll.complete();
   }
 
-  scrollToTop(){
-    this.content.scrollToTop();
+  myScrollToTop(){
   }
 }
 

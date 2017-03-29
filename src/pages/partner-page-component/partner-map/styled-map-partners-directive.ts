@@ -42,7 +42,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.
 export class StyledMapPartnersDirective implements OnChanges{
 
   @Output() showList = new EventEmitter();
-  @Output() scrollToTop = new EventEmitter();
+  @Output() removeList = new EventEmitter();
+  @Output() addList = new EventEmitter();
   @Input() partners: any[];
 
 
@@ -59,7 +60,6 @@ export class StyledMapPartnersDirective implements OnChanges{
   }
 
   ngOnChanges(){
-    console.log(this.partners);
     this.googleMapsWrapper.getNativeMap()
       .then((map) => {
         this.map = map;
@@ -142,8 +142,13 @@ export class StyledMapPartnersDirective implements OnChanges{
           markerClusterer = new MarkerClusterer(map, markers,
         {imagePath: this.pathToGmapsClusterIcons});
           google.maps.event.addListener(markerClusterer, 'clusterclick', (cluster) => {
-            this.scrollToTop.emit();
+            // window.scrollTo(0,0);
+            // document.body.scrollTop = 0; // For Chrome, Safari and Opera
+            // document.documentElement.scrollTop = 0; // For IE and Firefox
+            this.removeList.emit();
             this.showList.emit(cluster.getMarkers());
+            google.maps.event.trigger(map, 'resize');
+            this.addList.emit();
             google.maps.event.trigger(map, 'resize');
           });
         }
