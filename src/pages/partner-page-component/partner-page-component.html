@@ -97,7 +97,7 @@
           </ion-col>
         </ion-row>
         <div class="showSelectionWrapper">
-          <button class="showSelection" ion-button color="primary" (click)="getDisplay()">Auswahl anzeigen</button>
+          <button class="showSelection" ion-button color="primary" (click)="filterButtonPushed()">Auswahl anzeigen</button>
         </div>
       </div>
     </div>
@@ -122,7 +122,7 @@
 
 
 
-    <partner-map [partners]="localPartners" *ngIf="showMap" (scrollToTop)="myScrollToTop($event)"></partner-map>
+    <partner-map [partners]="displayedPartners" *ngIf="showMap" (scrollToTop)="myScrollToTop($event)"></partner-map>
 
   </div>
 </ion-content>

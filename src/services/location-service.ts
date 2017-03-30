@@ -5,6 +5,7 @@ import {Geolocation} from 'ionic-native';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/fromPromise';
 import {LocationData} from "./location-data";
 import {BehaviorSubject, Subject} from "rxjs";
 
@@ -17,22 +18,21 @@ export class LocationService {
   private longitude;
   constructor(private http: Http) {}
 
-  private locationSource = new Subject<any>();
-  locationFound = this.locationSource.asObservable();
 
-
-  getLocation(){
-    Geolocation.getCurrentPosition().then((position) => {
-      let latitude = position.coords.latitude.toFixed(4);
-      let longitude = position.coords.longitude.toFixed(4);
-      LocationData.latitude = latitude;
-      LocationData.longitude = longitude;
-      LocationData.locationExact = true;
-      LocationData.locationAvailable = true;
-      this.giveBackLocation({lat: latitude, lon: longitude, locationFound: true});
-    }, (err) => {
-      this.giveBackLocation({lat: "0", lon: "0", locationFound: false});
-    })
+  getLocation(): Observable<any>{
+    return Observable.fromPromise(
+      Geolocation.getCurrentPosition().then((position) => {
+        let latitude = position.coords.latitude.toFixed(4);
+        let longitude = position.coords.longitude.toFixed(4);
+        LocationData.latitude = latitude;
+        LocationData.longitude = longitude;
+        LocationData.locationExact = true;
+        LocationData.locationAvailable = true;
+        return{lat: latitude, lon: longitude, locationFound: true};
+      }, (err) => {
+        return{lat: "0", lon: "0", locationFound: false};
+      })
+    )
   }
 
   getLocationName(lat, lon): Observable <any> {
@@ -43,9 +43,6 @@ export class LocationService {
       .catch(this.handleError);
   }
 
-  private giveBackLocation(object){
-    this.locationSource.next(object)
-  }
 
 
   private extractData(res: Response) {

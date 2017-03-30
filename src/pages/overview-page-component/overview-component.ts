@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
 
@@ -14,7 +14,7 @@ import {LocationService} from "../../services/location-service";
   selector: 'page-overview',
   templateUrl: 'overview-component.html',
 })
-export class OverviewPageComponent implements OnInit {
+export class OverviewPageComponent implements OnInit, OnDestroy {
 
   title: string = "Übersicht";
   balance: number = 10;
@@ -31,11 +31,13 @@ export class OverviewPageComponent implements OnInit {
   lastVisitedPartners: any[];
   searchInterfaceOpen = false;
 
+  getPartnersSubscription: any;
+  getLocationSubscription: any;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService, private locationService: LocationService) {
-    locationService.locationFound.subscribe(
+    this.getLocationSubscription = locationService.getLocation().subscribe(
       (object) => {
         if(object.locationFound == true){
-          console.log("location is", object);
           this.location.latitude = object.lat;
           this.location.longitude = object.lon;
           this.getPartners();
@@ -58,8 +60,17 @@ export class OverviewPageComponent implements OnInit {
     this.locationService.getLocation();
   }
 
+  ngOnDestroy(){
+    if(this.getPartnersSubscription){
+      this.getPartnersSubscription.unsubscribe();
+    };
+    if(this.getLocationSubscription){
+      this.getLocationSubscription.unsubscribe();
+    }
+  }
+
   getPartners() {
-    this.partnerService.getPartners(this.location, 0, "")
+    this.getPartnersSubscription = this.partnerService.getPartners(this.location, 0, "")
       .subscribe(
         body => {
           let returnedObject = body.json();
@@ -70,7 +81,6 @@ export class OverviewPageComponent implements OnInit {
   }
 
   getOnlineAndOfflinePartners(returnedObject) {
-    console.log(returnedObject);
     this.onlinePartners = returnedObject.originalSearchResults.bucketToSearchResult["ONLINEPARTNER"].contentEntities.slice(0, 5);
     let offlinePartnerArray = returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities;
     if( offlinePartnerArray){this.offlinePartners = offlinePartnerArray.slice(0, 5)}

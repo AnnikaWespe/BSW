@@ -21,6 +21,7 @@ export class PartnerMapComponent {
   currentLongitude = LocationData.longitude;
   partnersInList = [];
   partnerListOpen = false;
+  scrollTop = 0;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
@@ -30,7 +31,6 @@ export class PartnerMapComponent {
   }
 
   showList(markers = []) {
-    console.log("markers", markers);
     this.partnersInList = [];
     this.partnerListOpen = true;
     markers.forEach((marker) => {
@@ -48,11 +48,4 @@ export class PartnerMapComponent {
     this.map.resizeMap();
   }
 
-  removeList(event) {
-    this.partnerListOpen = false;
-  }
-
-  addList(event) {
-    this.partnerListOpen = false;
-  }
 }

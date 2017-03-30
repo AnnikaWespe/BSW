@@ -1,6 +1,5 @@
 partner-map {
   .sebmGoogleMap{
-    //height: 53%;
     width: 100%;
     z-index: 1;
     position: fixed;
@@ -14,7 +13,6 @@ partner-map {
     text-align: center;
     padding-top: 0.5vh;
     height: 2vh;
-    //margin-top: 54.5vh;
     width: 100%;
     font-size: 150%;
     background-color: map_get($colors, light);

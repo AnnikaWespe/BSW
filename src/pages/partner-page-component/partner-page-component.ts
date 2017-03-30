@@ -1,4 +1,4 @@
-import {Component, OnInit, AfterViewChecked, ViewChild} from '@angular/core';
+import {Component, OnInit, AfterViewChecked, ViewChild, OnDestroy} from '@angular/core';
 import {NavController, NavParams, Content} from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
 import {PartnerService} from "../../services/partner-service";
@@ -13,10 +13,13 @@ import {FilterData} from "../../services/filter-data";
   selector: 'partner-page-component',
   templateUrl: 'partner-page-component.html',
 })
-export class PartnerPageComponent implements AfterViewChecked {
+export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   @ViewChild(Content) content: Content;
   title = "Partner";
   mode = "Observable";
+getPartnersSubscription: any;
+  locationNameSubscription: any;
+  locationSubscription: any;
 
   location = {latitude: "0", longitude: "0"};
   locationAvailable = false;
@@ -52,6 +55,18 @@ export class PartnerPageComponent implements AfterViewChecked {
     this.setFocus();
   }
 
+  ngOnDestroy(){
+    if(this.locationSubscription){
+      this.locationSubscription.unsubscribe();
+    };
+    if(this.locationNameSubscription){
+      this.locationNameSubscription.unsubscribe();
+    };
+    if(this.getPartnersSubscription){
+      this.getPartnersSubscription.unsubscribe();
+    }
+  }
+
   constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService,
               public alertCtrl: AlertController, public locationService: LocationService) {
     this.setFilterParameters();
@@ -68,7 +83,6 @@ export class PartnerPageComponent implements AfterViewChecked {
   setFilterParameters() {
     this.title = FilterData.title;
     this.showOnlinePartners = FilterData.showOnlinePartners;
-    console.log("onlinePartner: ", this.showOnlinePartners);
     this.showLocalPartners = FilterData.showLocalPartners;
     this.showOnlyPartnersWithCampaign = FilterData.showOnlyPartnersWithCampaign;
     if (this.showOnlinePartners && this.showLocalPartners) {
@@ -83,7 +97,6 @@ export class PartnerPageComponent implements AfterViewChecked {
 
   checkLocation() {
     if (LocationData.locationManuallyChosen) {
-      console.log(LocationData);
       this.getLocationName(LocationData.latitude, LocationData.longitude);
       this.location.latitude = LocationData.latitude;
       this.location.longitude = LocationData.longitude;
@@ -96,10 +109,9 @@ export class PartnerPageComponent implements AfterViewChecked {
   }
 
   subscribeToLocationService() {
-    this.locationService.locationFound.subscribe(
+    this.locationSubscription = this.locationService.getLocation().subscribe(
       (object) => {
         if (object.locationFound == true) {
-          console.log("location is", object);
           this.location.latitude = LocationData.latitude;
           this.location.longitude = LocationData.longitude;
           this.getPartners();
@@ -107,7 +119,7 @@ export class PartnerPageComponent implements AfterViewChecked {
           this.getLocationName(object.lat, object.lon)
         }
         else {
-          if (this.showOnlinePartners == true) {
+          if (this.showLocalPartners == true) {
             this.showPrompt();
           }
         }
@@ -116,7 +128,7 @@ export class PartnerPageComponent implements AfterViewChecked {
   }
 
   getLocationName(lat, lon) {
-    this.locationService.getLocationName(lat, lon)
+    this.locationNameSubscription = this.locationService.getLocationName(lat, lon)
       .subscribe(
         cityName => this.cityName = cityName
       );
@@ -131,6 +143,9 @@ export class PartnerPageComponent implements AfterViewChecked {
         {
           text: 'Ohne Standort fortfahren',
           handler: data => {
+            this.location.latitude = LocationData.latitude;
+            this.location.longitude = LocationData.longitude;
+            this.cityName = LocationData.cityName;
             this.getPartners();
           }
         },
@@ -157,9 +172,10 @@ export class PartnerPageComponent implements AfterViewChecked {
       this.onlinePartners = [];
       this.localPartners = [];
       this.partnersWithCampaign = [];
+      this.bucket = 0;
       this.waitingForResults = true;
     }
-    this.partnerService.getPartners(this.location, this.bucket, this.searchTerm)
+    this.getPartnersSubscription = this.partnerService.getPartners(this.location, this.bucket, this.searchTerm)
       .subscribe(
         body => {
           let returnedObject = body.json();
@@ -173,11 +189,17 @@ export class PartnerPageComponent implements AfterViewChecked {
 
   getDifferentCategories(returnedObject) {
     this.allPartners = this.allPartners.concat(returnedObject.contentEntities);
-    console.log(this.allPartners);
     this.localPartners = this.localPartners.concat(returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities);
     this.onlinePartners = this.onlinePartners.concat(returnedObject.originalSearchResults.bucketToSearchResult["ONLINEPARTNER"].contentEntities);
     this.getDisplay();
     this.waitingForResults = false;
+  }
+
+  filterButtonPushed(){
+    if(this.showLocalPartners){
+      this.checkLocation();
+    }
+    else {this.getDisplay()}
   }
 
   getDisplay() {
@@ -186,6 +208,7 @@ export class PartnerPageComponent implements AfterViewChecked {
       return;
     }
     this.showDropdown = [false, false, false];
+
     if (this.showLocalPartners && !this.showOnlinePartners) {
       this.title = "Vor Ort Partner";
       this.filterCampaignPartners(this.localPartners);
@@ -195,7 +218,6 @@ export class PartnerPageComponent implements AfterViewChecked {
       this.filterCampaignPartners(this.onlinePartners);
     }
     else if (this.showLocalPartners && this.showOnlinePartners) {
-      console.log(this.allPartners);
       this.title = "Alle Partner";
       this.filterCampaignPartners(this.allPartners)
     }
@@ -298,8 +320,8 @@ export class PartnerPageComponent implements AfterViewChecked {
     infiniteScroll.complete();
   }
 
-  myScrollToTop(){
-  }
+  // myScrollToTop(){
+  // }
 }
 
 

@@ -8,7 +8,6 @@ declare let google: any;
 declare let MarkerClusterer: any;
 
 
-
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="138" height="149.34" viewBox="0 0 138 149.34">
 <metadata><?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
 <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.6-c138 79.159824, 2016/09/14-01:09:01        ">
@@ -39,9 +38,9 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.
 @Directive({
   selector: 'styled-map-partners',
 })
-export class StyledMapPartnersDirective implements OnChanges{
+export class StyledMapPartnersDirective implements OnChanges {
 
-  @Output() showList = new EventEmitter();
+  @Output() fillList = new EventEmitter();
   @Output() removeList = new EventEmitter();
   @Output() addList = new EventEmitter();
   @Input() partners: any[];
@@ -51,15 +50,15 @@ export class StyledMapPartnersDirective implements OnChanges{
   pathToGmapsClusterIcons: string;
 
   constructor(private googleMapsWrapper: GoogleMapsAPIWrapper, public plt: Platform) {
-    if(DeviceService.isInBrowser){
+    if (DeviceService.isInBrowser) {
       this.pathToGmapsClusterIcons = '../assets/icon/m';
     }
-    else if(DeviceService.isAndroid){
+    else if (DeviceService.isAndroid) {
       this.pathToGmapsClusterIcons = '../www/assets/icon/m';
     }
   }
 
-  ngOnChanges(){
+  ngOnChanges() {
     this.googleMapsWrapper.getNativeMap()
       .then((map) => {
         this.map = map;
@@ -73,44 +72,46 @@ export class StyledMapPartnersDirective implements OnChanges{
     map.setOptions({clickableIcons: false});
   }
 
-  bonusElement(bonusString): string{
+  bonusElement(bonusString): string {
     let x;
     let fontSize;
     let stringLength = bonusString.length;
     let generatedString;
-    if(stringLength < 4){
+    if (stringLength < 4) {
       fontSize = 18;
       x = "52"
     }
-    else if (stringLength < 12){
+    else if (stringLength < 12) {
       fontSize = 18;
       x = "24"
     }
-    else{
+    else {
       fontSize = 14.5;
       x = "5"
-    };
+    }
+    ;
     generatedString = '<text x="' + x + '" y="90" font-family="Helvetica Neue" font-size="' + fontSize + '" fill="#E61B5A">' + bonusString + '</text>';
     return generatedString;
   }
 
-  partnerElement(partnerString){
+  partnerElement(partnerString) {
     let x;
     let fontSize;
     let stringLength = partnerString.length;
     let generatedString;
-    if(stringLength < 11){
+    if (stringLength < 11) {
       fontSize = 22;
     }
-    else if (stringLength < 16){
+    else if (stringLength < 16) {
       fontSize = 14;
     }
-    else if (stringLength < 22){
+    else if (stringLength < 22) {
       fontSize = 12
     }
-    else{
+    else {
       fontSize = 10;
-    };
+    }
+    ;
     generatedString = '<text x="3" y="40" font-family="Helvetica Neue" font-size="' + fontSize + '">' + partnerString + '</text>';
     return generatedString;
   }
@@ -122,47 +123,46 @@ export class StyledMapPartnersDirective implements OnChanges{
     let markerClusterer;
     let promises = [];
     this.partners.forEach((partner, index) => {
-      if(partner){
+      if (partner) {
         promises.push(new Promise((resolve, reject) => {
-        this.getImageAsBase64(partner.logoUrlForGMap, (imageAsBase64, validImage) => {
-          let marker = this.getMarker(partner, imageAsBase64, validImage, map, bounds);
-          markers.push(marker);
-          google.maps.event.addListener(marker, 'click', (function (marker) {
-            return function () {
-            }
-          })(marker));
-          resolve();
-        });
-      }))}
+          this.getImageAsBase64(partner.logoUrlForGMap, (imageAsBase64, validImage) => {
+            let marker = this.getMarker(partner, imageAsBase64, validImage, map, bounds);
+            markers.push(marker);
+            google.maps.event.addListener(marker, 'click', (function (marker) {
+              return function () {
+              }
+            })(marker));
+            resolve();
+          });
+        }))
+      }
 
     });
     Promise.all(promises)
       .then(() => {
           map.fitBounds(bounds);
           markerClusterer = new MarkerClusterer(map, markers,
-        {imagePath: this.pathToGmapsClusterIcons});
+            {imagePath: this.pathToGmapsClusterIcons});
           google.maps.event.addListener(markerClusterer, 'clusterclick', (cluster) => {
-            // window.scrollTo(0,0);
-            // document.body.scrollTop = 0; // For Chrome, Safari and Opera
-            // document.documentElement.scrollTop = 0; // For IE and Firefox
-            this.removeList.emit();
-            this.showList.emit(cluster.getMarkers());
-            google.maps.event.trigger(map, 'resize');
-            this.addList.emit();
+            this.fillList.emit(cluster.getMarkers());
             google.maps.event.trigger(map, 'resize');
           });
         }
       )
   }
 
-  private getMarker(partner, imageAsBase64, validImage, map, bounds){
+  private getMarker(partner, imageAsBase64, validImage, map, bounds) {
     let latitude = partner.location.latitude;
     let longitude = partner.location.longitude;
     let imageIcon;
     let textIcon;
-    if (validImage){imageIcon = 'data:image/svg+xml;utf8,' + svg + '<image x="10" y="-18" width="110" height="110" xlink:href="' + imageAsBase64 + '"/>' + this.bonusElement(partner.pfBonus)  + '</svg>';}
-    else {textIcon = 'data:image/svg+xml;utf8,' + svg  + this.bonusElement(partner.pfBonus) + this.partnerElement(partner.nameOrigin) + '</svg>';}
-    let icon = (validImage)? imageIcon : textIcon;
+    if (validImage) {
+      imageIcon = 'data:image/svg+xml;utf8,' + svg + '<image x="10" y="-18" width="110" height="110" xlink:href="' + imageAsBase64 + '"/>' + this.bonusElement(partner.pfBonus) + '</svg>';
+    }
+    else {
+      textIcon = 'data:image/svg+xml;utf8,' + svg + this.bonusElement(partner.pfBonus) + this.partnerElement(partner.nameOrigin) + '</svg>';
+    }
+    let icon = (validImage) ? imageIcon : textIcon;
     let marker = new google.maps.Marker({
       position: new google.maps.LatLng(latitude, longitude),
       map: map,
@@ -174,7 +174,7 @@ export class StyledMapPartnersDirective implements OnChanges{
   }
 
   private getImageAsBase64(imageUrl, callback) {
-    if(imageUrl === "https://www.bsw.de/upload/bsw/partner-logo.png"){
+    if (imageUrl === "https://www.bsw.de/upload/bsw/partner-logo.png") {
       callback("", false)
     }
     else {
@@ -192,7 +192,7 @@ export class StyledMapPartnersDirective implements OnChanges{
     }
   }
 
-  private resizeMap(){
+  private resizeMap() {
     google.maps.event.trigger(this.map, 'resize');
   }
 
