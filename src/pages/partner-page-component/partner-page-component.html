@@ -78,21 +78,21 @@
             <ion-icon name="map"></ion-icon>
           </ion-col>
         </ion-row>
-        <ion-row class="toggle offline-partner-toggle">
+        <ion-row tappable class="toggle offline-partner-toggle" (click)="showLocalPartners = !showLocalPartners">
           <ion-col class="toggle-text">Vor-Ort Partner</ion-col>
-          <ion-col tappable class="map-icon" (click)="showLocalPartners = !showLocalPartners">
+          <ion-col class="map-icon">
             <ion-icon name="map" [class.checked]="showLocalPartners"></ion-icon>
           </ion-col>
         </ion-row>
-        <ion-row class="toggle online-partner-toggle">
+        <ion-row tappable class="toggle online-partner-toggle" (click) ="showOnlinePartners = !showOnlinePartners">
           <ion-col class="toggle-text">Online Partner</ion-col>
-          <ion-col tappable class="map-icon" (click) ="showOnlinePartners = !showOnlinePartners">
+          <ion-col class="map-icon">
             <ion-icon name="map" [class.checked]="showOnlinePartners"></ion-icon>
           </ion-col>
         </ion-row>
-        <ion-row class="toggle has-campaign-partner-toggle">
+        <ion-row tappable class="toggle has-campaign-partner-toggle" (click)="showOnlyPartnersWithCampaign = !showOnlyPartnersWithCampaign">
           <ion-col class="toggle-text">Nur Partner mit Aktionen</ion-col>
-          <ion-col tappable class="map-icon" (click)="showOnlyPartnersWithCampaign = !showOnlyPartnersWithCampaign">
+          <ion-col class="map-icon">
             <ion-icon name="map"[class.checked]="showOnlyPartnersWithCampaign"></ion-icon>
           </ion-col>
         </ion-row>
@@ -102,7 +102,7 @@
       </div>
     </div>
 
-    <div class="initialSpinner" *ngIf="waitingForResults">
+    <div class="initialSpinner" *ngIf="mapWaitingForResults">
       <ion-spinner tappable class="initialSpinner" (click)="hideDropdown()"></ion-spinner>
     </div>
 

@@ -1,3 +1,4 @@
+
 <div class="sebmGoogleMap" [style.height] = "getMapHeight()">
   <sebm-google-map
     [latitude]="stringToNumber(currentLatitude)"
@@ -8,8 +9,17 @@
                             [circleDraggable]="true"
                             [editable]="true">
     </sebm-google-map-circle>
-    <styled-map-partners [partners]="partners" (fillList) = "showList($event)" (removeList)="removeList(event)" (addList)="addList(event)"></styled-map-partners>
+    <styled-map-partners
+      [partners]="partners"
+      (fillList) = "showList($event)"
+      (removeList)="removeList(event)"
+      (addList)="addList(event)"
+      (addSpinner)="addSpinner()"
+      (removeSpinner)="removeSpinner()"></styled-map-partners>
   </sebm-google-map>
+  <div class="initialSpinner" *ngIf="waitingForResults">
+    <ion-spinner class="initialSpinner"></ion-spinner>
+  </div>
   <div tappable class="hidePartnerList" (click)="closePartnerList()"  *ngIf="partnerListOpen">
     <ion-icon name = "arrow-dropdown" color = "grey"></ion-icon>
   </div>

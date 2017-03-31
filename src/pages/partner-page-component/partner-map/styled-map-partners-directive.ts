@@ -43,12 +43,16 @@ export class StyledMapPartnersDirective implements OnChanges {
   @Output() fillList = new EventEmitter();
   @Output() removeList = new EventEmitter();
   @Output() addList = new EventEmitter();
+  @Output() addSpinner = new EventEmitter();
+  @Output() removeSpinner = new EventEmitter();
   @Input() partners: any[];
 
 
   map: any;
   pathToGmapsClusterIcons: string;
   markers = [];
+  markerClusterer;
+  mapWaitingForResults = true;
 
   constructor(private googleMapsWrapper: GoogleMapsAPIWrapper, public plt: Platform) {
     if (DeviceService.isInBrowser) {
@@ -62,11 +66,15 @@ export class StyledMapPartnersDirective implements OnChanges {
   ngOnChanges() {
     this.googleMapsWrapper.getNativeMap()
       .then((map) => {
+        this.addSpinner.emit();
         this.map = map;
         for (let i = 0; i < this.markers.length; i++) {
           this.markers[i].setMap(null);
-        };
+        }
         this.markers = [];
+        if (this.markerClusterer) {
+          this.markerClusterer.clearMarkers();
+        }
         this.setMapOptions(map);
         this.placeMarkers(map);
       });
@@ -123,16 +131,14 @@ export class StyledMapPartnersDirective implements OnChanges {
 
 
   private placeMarkers(map) {
-    let markers = [];
     let bounds = new google.maps.LatLngBounds();
-    let markerClusterer;
     let promises = [];
     this.partners.forEach((partner, index) => {
       if (partner && partner.location) {
         promises.push(new Promise((resolve, reject) => {
           this.getImageAsBase64(partner.logoUrlForGMap, (imageAsBase64, validImage) => {
             let marker = this.getMarker(partner, imageAsBase64, validImage, map, bounds);
-            markers.push(marker);
+            // markers.push(marker);
             this.markers.push(marker);
             google.maps.event.addListener(marker, 'click', (function (marker) {
               return function () {
@@ -147,12 +153,14 @@ export class StyledMapPartnersDirective implements OnChanges {
     Promise.all(promises)
       .then(() => {
           map.fitBounds(bounds);
-          markerClusterer = new MarkerClusterer(map, markers,
+          this.markerClusterer = new MarkerClusterer(map, this.markers,
             {imagePath: this.pathToGmapsClusterIcons});
-          google.maps.event.addListener(markerClusterer, 'clusterclick', (cluster) => {
+          google.maps.event.addListener(this.markerClusterer, 'clusterclick', (cluster) => {
             this.fillList.emit(cluster.getMarkers());
             google.maps.event.trigger(map, 'resize');
           });
+          this.removeSpinner.emit();
+          this.mapWaitingForResults = false;
         }
       )
   }

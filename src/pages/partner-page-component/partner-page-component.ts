@@ -329,8 +329,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     infiniteScroll.complete();
   }
 
-  // myScrollToTop(){
-  // }
 }
 
 

@@ -20,5 +20,21 @@ partner-map {
   .partnerList{
     margin-top: 56.5vh;
   }
-
+  div.initialSpinner {
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    z-index: 2000;
+    background-color: lightgray;
+    opacity: 0.5;
+    ion-spinner{
+      margin-top: 30vh;
+    }
+  }
 }

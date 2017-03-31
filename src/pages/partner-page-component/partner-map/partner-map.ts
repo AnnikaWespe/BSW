@@ -22,6 +22,7 @@ export class PartnerMapComponent implements AfterViewChecked{
   currentLongitude = LocationData.longitude;
   partnersInList = [];
   partnerListOpen = false;
+  waitingForResults = true;
   scrollTop = 0;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
@@ -29,7 +30,6 @@ export class PartnerMapComponent implements AfterViewChecked{
 
   ngAfterViewChecked(){
     let element = this.partnerList.nativeElement;
-    console.log(this.partnerList.nativeElement);
     try {
       this.partnerList.nativeElement.scrollTop = 0;
     } catch(err) { }
@@ -52,9 +52,19 @@ export class PartnerMapComponent implements AfterViewChecked{
     else return "100%";
   }
 
+  addSpinner(){
+    this.waitingForResults = true;
+  }
+
+  removeSpinner(){
+    this.waitingForResults = false;
+  }
+
   closePartnerList() {
     this.partnerListOpen = false;
     this.map.resizeMap();
   }
+
+
 
 }
