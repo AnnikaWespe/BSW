@@ -7,6 +7,7 @@ import {LocationData} from "../../services/location-data";
 import {PartnerService} from "../../services/partner-service";
 import {PartnerPageComponent} from "../partner-page-component/partner-page-component";
 import {LocationService} from "../../services/location-service";
+import {FilterData} from "../../services/filter-data";
 
 
 @Component({
@@ -87,16 +88,28 @@ export class OverviewPageComponent implements OnInit, OnDestroy {
   }
 
   showOfflinePartners() {
-    this.navCtrl.push(PartnerPageComponent, {activeFilter: "localPartners", title: "Vor Ort Partner"});
+  FilterData.showLocalPartners = true;
+  FilterData.showOnlinePartners = false;
+  FilterData.showOnlyPartnersWithCampaign = false;
+  FilterData.title = "Vor Ort Partner";
+    this.navCtrl.push(PartnerPageComponent, {});
   }
 
 
   showOnlinePartners() {
-    this.navCtrl.push(PartnerPageComponent, {activeFilter: "onlinePartners", title: "Online Partner"});
+    FilterData.showLocalPartners = false;
+    FilterData.showOnlinePartners = true;
+    FilterData.showOnlyPartnersWithCampaign = false;
+    FilterData.title = "Online Partner";
+    this.navCtrl.push(PartnerPageComponent, {});
   }
 
   loadPartnerPage(searchTerm) {
-    this.navCtrl.setRoot(PartnerPageComponent, {activeFilter: "allPartners", searchTerm: searchTerm, title: searchTerm})
+    FilterData.showLocalPartners = true;
+    FilterData.showOnlinePartners = true;
+    FilterData.showOnlyPartnersWithCampaign = false;
+    FilterData.title = searchTerm;
+    this.navCtrl.setRoot(PartnerPageComponent, {searchTerm: searchTerm})
   }
 
   //pure DOM method(s)

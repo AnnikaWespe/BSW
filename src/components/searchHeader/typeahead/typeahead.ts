@@ -26,6 +26,7 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
   @Output() toggleMapAndListEmitter = new EventEmitter();
   searchTerm: string;
   subscription: any;
+  searchExecuted = false;
 
   private searchTerms = new Subject<string>();
   searchTermCompletion: Observable<SearchTermCompletion[]>;
@@ -37,6 +38,7 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
 
   search(term: string, $event): void {
     if ($event.keyCode == 13 && this.searchTerm.length > 1) {
+      this.searchExecuted = true;
       this.getPartnersWithSearchTermEmitter.emit(this.searchTerm);
       this.searchTermCompletion = Observable.of<SearchTermCompletion[]>([]);
     }
@@ -59,17 +61,18 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
       });
   };
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
 
   closeSearchInterface($event) {
-    this.closeSearchInterfaceEmitter.emit(true);
+    this.closeSearchInterfaceEmitter.emit(this.searchExecuted);
     this.searchTerm = "";
   }
 
   completeSearchTerm(searchTerm) {
+    this.searchExecuted = true;
     this.getPartnersWithSearchTermEmitter.emit(searchTerm);
     this.searchTermCompletion = Observable.of<SearchTermCompletion[]>([]);
     this.searchTerm = searchTerm;
@@ -78,10 +81,10 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
   deleteSearchTerm() {
     this.searchTerm = "";
     this.searchTermCompletion = Observable.of<SearchTermCompletion[]>([]);
-    this.getPartnersWithSearchTermEmitter.emit("");
   }
 
-  toggleMapAndList(){
+
+  toggleMapAndList() {
     this.toggleMapAndListEmitter.emit(true);
   }
 

@@ -31,6 +31,7 @@ import {TypeaheadComponent} from "../components/searchHeader/typeahead/typeahead
 import {UserDetailWebviewComponent} from "../pages/my-profile-page-component/user-detail-webview/user-detail-webview";
 import {SafePipe} from "../pipes/safe-pipe";
 import {LocationService} from "../services/location-service";
+import {ActionsPageComponent} from "../pages/actions-page-component/actions-page-component";
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import {LocationService} from "../services/location-service";
     PictureScreenComponent,
     TypeaheadComponent,
     UserDetailWebviewComponent,
-    SafePipe
+    SafePipe,
+    ActionsPageComponent,
   ],
   imports: [
     IonicModule.forRoot(MyApp),

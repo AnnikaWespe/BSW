@@ -17,13 +17,13 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   @ViewChild(Content) content: Content;
   title = "Partner";
   mode = "Observable";
-getPartnersSubscription: any;
+  getPartnersSubscription: any;
   locationNameSubscription: any;
   locationSubscription: any;
 
   location = {latitude: "0", longitude: "0"};
   locationAvailable = false;
-  cityName : string;
+  cityName: string;
 
   showDropdown: boolean[] = [false, false];
   waitingForResults: boolean = true;
@@ -55,14 +55,16 @@ getPartnersSubscription: any;
     this.setFocus();
   }
 
-  ngOnDestroy(){
-    if(this.locationSubscription){
+  ngOnDestroy() {
+    if (this.locationSubscription) {
       this.locationSubscription.unsubscribe();
-    };
-    if(this.locationNameSubscription){
+    }
+    ;
+    if (this.locationNameSubscription) {
       this.locationNameSubscription.unsubscribe();
-    };
-    if(this.getPartnersSubscription){
+    }
+    ;
+    if (this.getPartnersSubscription) {
       this.getPartnersSubscription.unsubscribe();
     }
   }
@@ -74,7 +76,7 @@ getPartnersSubscription: any;
     if (this.showLocalPartners) {
       this.checkLocation()
     }
-    else{
+    else {
       this.cityName = LocationData.cityName;
       this.getPartners();
     }
@@ -92,7 +94,6 @@ getPartnersSubscription: any;
       this.displayedPartners = (this.showOnlinePartners) ? this.onlinePartners : this.localPartners
     }
   }
-
 
 
   checkLocation() {
@@ -195,11 +196,17 @@ getPartnersSubscription: any;
     this.waitingForResults = false;
   }
 
-  filterButtonPushed(){
-    if(this.showLocalPartners){
+  filterButtonPushed() {
+    if (this.showLocalPartners) {
+      this.showDropdown = [false, false, false];
+      this.waitingForResults = true;
       this.checkLocation();
     }
-    else {this.getDisplay()}
+    else {
+      this.showDropdown = [false, false, false];
+      this.waitingForResults = true;
+      this.getDisplay();
+    }
   }
 
   getDisplay() {
@@ -208,17 +215,16 @@ getPartnersSubscription: any;
       return;
     }
     this.showDropdown = [false, false, false];
-
     if (this.showLocalPartners && !this.showOnlinePartners) {
-      this.title = "Vor Ort Partner";
+      this.title = this.searchTerm || "Vor Ort Partner";
       this.filterCampaignPartners(this.localPartners);
     }
     else if (!this.showLocalPartners && this.showOnlinePartners) {
-      this.title = "Online Partner";
+      this.title = this.searchTerm || "Online Partner";
       this.filterCampaignPartners(this.onlinePartners);
     }
     else if (this.showLocalPartners && this.showOnlinePartners) {
-      this.title = "Alle Partner";
+      this.title = this.searchTerm || "Alle Partner";
       this.filterCampaignPartners(this.allPartners)
     }
   }
@@ -235,11 +241,11 @@ getPartnersSubscription: any;
   }
 
 
-
   filterCampaignPartners(displayedPartners) {
+    this.waitingForResults = false;
     if (this.showOnlyPartnersWithCampaign) {
       let partnersWithCampaign = [];
-      this.title = "Partner mit Aktionen";
+      this.title = this.searchTerm || "Partner mit Aktionen";
       for (let partner of displayedPartners) {
         if (partner && partner.hasCampaign) {
           partnersWithCampaign.push(partner);
@@ -274,6 +280,7 @@ getPartnersSubscription: any;
       ]
     });
     prompt.present();
+    this.showDropdown = [true, false, true];
   }
 
   toggleMapAndList() {
@@ -304,13 +311,15 @@ getPartnersSubscription: any;
     this.showDropdown[2] = !anythingVisible;
   }
 
-  closeSearchInterface($event) {
+  closeSearchInterface(searchExecuted) {
     this.searchInterfaceOpen = false;
     this.searchTerm = "";
     this.showDropdown = [false, false, false];
     this.resetPartnersArray = true;
     this.title = FilterData.title;
-    this.getPartners();
+    if (searchExecuted) {
+      this.getPartners();
+    }
   }
 
   doInfinite(infiniteScroll) {

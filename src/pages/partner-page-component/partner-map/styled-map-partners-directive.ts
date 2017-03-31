@@ -48,6 +48,7 @@ export class StyledMapPartnersDirective implements OnChanges {
 
   map: any;
   pathToGmapsClusterIcons: string;
+  markers = [];
 
   constructor(private googleMapsWrapper: GoogleMapsAPIWrapper, public plt: Platform) {
     if (DeviceService.isInBrowser) {
@@ -62,6 +63,10 @@ export class StyledMapPartnersDirective implements OnChanges {
     this.googleMapsWrapper.getNativeMap()
       .then((map) => {
         this.map = map;
+        for (let i = 0; i < this.markers.length; i++) {
+          this.markers[i].setMap(null);
+        };
+        this.markers = [];
         this.setMapOptions(map);
         this.placeMarkers(map);
       });
@@ -123,11 +128,12 @@ export class StyledMapPartnersDirective implements OnChanges {
     let markerClusterer;
     let promises = [];
     this.partners.forEach((partner, index) => {
-      if (partner) {
+      if (partner && partner.location) {
         promises.push(new Promise((resolve, reject) => {
           this.getImageAsBase64(partner.logoUrlForGMap, (imageAsBase64, validImage) => {
             let marker = this.getMarker(partner, imageAsBase64, validImage, map, bounds);
             markers.push(marker);
+            this.markers.push(marker);
             google.maps.event.addListener(marker, 'click', (function (marker) {
               return function () {
               }
