@@ -32,6 +32,7 @@ import {UserDetailWebviewComponent} from "../pages/my-profile-page-component/use
 import {SafePipe} from "../pipes/safe-pipe";
 import {LocationService} from "../services/location-service";
 import {ActionsPageComponent} from "../pages/actions-page-component/actions-page-component";
+import {LoginWebviewComponent} from "../pages/login-page-component/login-webview/login-webview";
 
 
 @NgModule({
@@ -61,6 +62,7 @@ import {ActionsPageComponent} from "../pages/actions-page-component/actions-page
     UserDetailWebviewComponent,
     SafePipe,
     ActionsPageComponent,
+    LoginWebviewComponent
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -89,7 +91,8 @@ import {ActionsPageComponent} from "../pages/actions-page-component/actions-page
     PartnerTableComponent,
     PictureScreenComponent,
     TypeaheadComponent,
-    UserDetailWebviewComponent
+    UserDetailWebviewComponent,
+    LoginWebviewComponent
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService, LocationService, SearchCompletionService, GoogleMapsAPIWrapper],
 
