@@ -1,107 +1,144 @@
-ion-content{
+ion-content {
   background-color: map-get($colors, light);
 }
-*{
+
+* {
   font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !important;
 }
 
-
-
-
-ion-header{
-	button {
-		background: transparent;
-	}
-	ion-title{
-		text-align: center;
+ion-header {
+  button {
+    background: transparent;
+  }
+  ion-title {
+    text-align: center;
     color: map-get($colors, secondary);
-	}
-  .menu-button-header, .search-button-header, .add-favourite-button-header{
+  }
+  .menu-button-header, .search-button-header, .add-favourite-button-header {
     font-size: 4vh;
     margin: 0 3vw;
   }
 
 }
-ion-header .toolbar-title-md{
+
+ion-header .toolbar-title-md {
   color: map-get($colors, secondary);
 }
 
-.back-button .disable-hover .bar-button .bar-button-md .back-button-md .bar-button-default .bar-button-default-md .show-back-button{
+.back-button .disable-hover .bar-button .bar-button-md .back-button-md .bar-button-default .bar-button-default-md .show-back-button {
   color: map-get($colors, secondary);
 }
-ion-navbar.toolbar.toolbar-md{
+
+ion-navbar.toolbar.toolbar-md {
   background-color: map-get($colors, light);
 }
 
-ion-menu{
-  div.logo{
-    background: url('../assets/icon/bsw-logo.png')no-repeat;
+ion-menu {
+  div.logo {
+    background: url('../assets/icon/bsw-logo.png') no-repeat;
     height: 20vh;
     width: 40vh;
     overflow: hidden;
     background-size: contain;
-    left:50%;
+    left: 50%;
     margin: 0 auto;
   }
-  div.logo-wrapper{
+  div.logo-wrapper {
     padding: 10vh 0 3vh 0;
     background-color: white;
   }
-  div.list-wrapper{
+  div.list-wrapper {
     background-color: map-get($colors, light);
     height: 100%;
   }
-  .item-md{
+  .item-md {
     background-color: inherit;
   }
-  div.scroll-content{
+  div.scroll-content {
     overflow-y: hidden;
   }
-  .logoutButton{
+  .logoutButton {
     min-height: 12vh;
   }
-  .footer-md::before{
+  .footer-md::before {
     content: none;
   }
-  div.menu-title{
+  div.menu-title {
     border-bottom: 1px solid grey;
     width: 100%;
     padding: 1vh 0 1vh 1vw;
     margin-left: 2vw;
   }
-  .menu-title-icon, .menu-title{
+  .menu-title-icon, .menu-title {
     display: inline-block;
     color: grey;
   }
-  .list-wrapper{
+  .list-wrapper {
     padding-top: 3vh;
-    div.icon{
-      &.offline{
-        background: url('../assets/icon/icon_vorortpartner.png')no-repeat;
+    div.icon {
+      margin: 2vw;
+      &.offline {
+        background: url('../assets/icon/vorortpartner.svg') no-repeat;
+        background-size: contain;
+        fill: red;
+      }
+      &.online {
+        background: url('../assets/icon/onlinepartner.svg') no-repeat;
         background-size: contain;
       }
-      &.online{
+      &.add-purchase {
+        background: url('../assets/icon/bonusnacherfassen.svg') no-repeat;
+        background-size: contain;
+      }
+      &.overview {
+        background: url('../assets/icon/uebersicht.svg') no-repeat;
+        background-size: contain;
+      }
+      &.my-profile {
+        background: url('../assets/icon/profil.svg') no-repeat;
+        background-size: contain;
+      }
+      &.settings{
+        background: url('../assets/icon/einstellungen.svg')no-repeat;
+        background-size: contain;
+      }
+      &.contact{
+        background: url('../assets/icon/kontakt.svg')no-repeat;
+        background-size: contain;
+      }
+      &.sign-out{
         background: url('../assets/icon/icon_onlinepartner.png')no-repeat;
         background-size: contain;
       }
       height: 11vw;
       width: 11vw;
       overflow: hidden;
-      left:50%;
+      left: 50%;
       margin: 0 auto;
     }
-    ion-col{
+    ion-col {
       padding: 0;
       margin: 0;
       height: 11vw;
       line-height: 11vw;
 
-      &.page-title{
-        border-bottom: 1px solid grey;
+      &.page-title {
+        border-bottom: 1px solid map_get($colors, font-color-for-filter-dropdown);
+        font-size: larger;
+        color: map_get($colors, font-color-for-filter-dropdown);
       }
-      &.icon-col{
-        max-width: 11vw;
+      &.icon-col {
+        max-width: 15vw;
 
+      }
+    }
+    ion-row.page{
+      margin-bottom: 1vh;
+      &.get-large-distance{
+        margin-bottom: 5vh;
+      }
+      &.get-small-distance{
+        margin-bottom: 4vh;
       }
     }
   }

@@ -28,7 +28,7 @@
       </ion-buttons>
       <ion-buttons end *ngIf='showLocalPartners'>
         <button (click)="toggleMapAndList()" class="mapIcon">
-          <div class="mapIcon"></div>
+          <div class = "toggleListAndMapIcon" [class.mapIcon] = "!showMap"></div>
         </button>
       </ion-buttons>
     </ion-navbar>
@@ -75,7 +75,7 @@
             {{cityName}}
           </ion-col>
           <ion-col tappable class="map-icon" (click)="chooseLocationManually()">
-            <ion-icon name="map"></ion-icon>
+            <div class="locationManuallyOrAutomatically"></div>
           </ion-col>
         </ion-row>
         <ion-row tappable class="toggle offline-partner-toggle" (click)="showLocalPartners = !showLocalPartners">

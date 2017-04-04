@@ -109,7 +109,7 @@ export class OverviewPageComponent implements OnInit, OnDestroy {
     FilterData.showOnlinePartners = true;
     FilterData.showOnlyPartnersWithCampaign = false;
     FilterData.title = searchTerm;
-    this.navCtrl.setRoot(PartnerPageComponent, {searchTerm: searchTerm})
+    this.navCtrl.setRoot(PartnerPageComponent, {type: "searchPageComponent", searchTerm: searchTerm})
   }
 
   //pure DOM method(s)

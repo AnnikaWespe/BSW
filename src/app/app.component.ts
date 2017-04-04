@@ -21,7 +21,7 @@ export class MyApp implements OnInit{
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = LoginPageComponent;
-  pages: Array<{title: string, component: any, icon: string, parameters: {}, filterData : {}}>;
+  pages: Array<{title: string, component: any, parameters: {}}>;
 
 
   constructor(public platform: Platform, private locationService: LocationService) {
@@ -72,13 +72,13 @@ export class MyApp implements OnInit{
 
   setMenu(){
     this.pages = [
-      { title: 'Übersicht', component: OverviewPageComponent, icon: "home", parameters: {}, filterData: {} },
-      { title: 'Vor Ort Partner', component: PartnerPageComponent, icon: "list", parameters: { icon: "icon_onlinepartner.png"}, filterData: {activeFilter: "showLocalPartners", title: "Vor Ort Partner"} },
-      { title: 'Online Partner', component: PartnerPageComponent, icon: "sunny", parameters: {icon: "icon_vorortpartner.png"}, filterData: {activeFilter: "showOnlinePartners", title: "Online Partner"} },
-      { title: 'Einkauf nachtragen', component: AddPurchasePageComponent, icon: "cash", parameters: {}, filterData: {}  },
-      { title: 'Mein Profil', component: MyProfilePageComponent, icon: "person", parameters: {}, filterData: {}  },
-      { title: 'Einstellungen', component: SettingsPageComponent, icon:"settings", parameters: {}, filterData: {} },
-      {title: "Abmelden", component: LoginPageComponent, icon: "exit", parameters: {}, filterData: {}  }]
+      { title: 'Übersicht', component: OverviewPageComponent, parameters: {}},
+      { title: 'Vor Ort Partner', component: PartnerPageComponent, parameters: {type: "onlinePartnerPageComponent"}},
+      { title: 'Online Partner', component: PartnerPageComponent, parameters: {type: "offlinePartnerPageComponent"}},
+      { title: 'Einkauf nachtragen', component: AddPurchasePageComponent, parameters: {}},
+      { title: 'Mein Profil', component: MyProfilePageComponent, parameters: {}},
+      { title: 'Einstellungen', component: SettingsPageComponent, parameters: {}},
+      {title: "Abmelden", component: LoginPageComponent, parameters: {}}]
   }
 
 }

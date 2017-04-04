@@ -9,7 +9,7 @@
 
       <ion-row menuClose tappable class="page" (click)="openPage(this.pages[0])">
         <ion-col class="icon-col">
-          <ion-icon name = "home"></ion-icon>
+          <div class="icon overview"></div>
         </ion-col>
         <ion-col class="page-title">
             Übersicht
@@ -34,18 +34,18 @@
         </ion-col>
       </ion-row>
 
-      <ion-row menuClose tappable class="page" (click)="openPage(this.pages[3])">
+      <ion-row menuClose tappable class="page get-large-distance" (click)="openPage(this.pages[3])">
         <ion-col class="icon-col">
-          <ion-icon name = "cash"></ion-icon>
+          <div class="icon add-purchase"></div>
         </ion-col>
         <ion-col class="page-title">
-          Einkauf nachtragen
+          Einkauf nacherfassen
         </ion-col>
       </ion-row>
 
       <ion-row menuClose tappable class="page first-margin" (click)="openPage(this.pages[4])">
         <ion-col class="icon-col">
-          <ion-icon name = "person"></ion-icon>
+          <div class="icon my-profile"></div>
         </ion-col>
         <ion-col class="page-title">
           Mein Profil
@@ -54,16 +54,16 @@
 
       <ion-row menuClose tappable class="page" (click)="openPage(this.pages[5])">
         <ion-col class="icon-col">
-          <ion-icon name = "settings"></ion-icon>
+          <div class="icon settings"></div>
         </ion-col>
         <ion-col class="page-title">
           Einstellungen
         </ion-col>
       </ion-row>
 
-      <ion-row menuClose tappable class="page" (click)="openPage(this.pages[6])">
+      <ion-row menuClose tappable class="page get-small-distance" (click)="openPage(this.pages[6])">
         <ion-col class="icon-col">
-          <ion-icon name = "mail"></ion-icon>
+          <div class="icon contact"></div>
         </ion-col>
         <ion-col class="page-title">
           Kontakt
@@ -72,7 +72,7 @@
 
       <ion-row menuClose tappable class="page sign-out" (click)="openPage(this.pages[7])">
         <ion-col class="icon-col">
-          <ion-icon name = "exit"></ion-icon>
+          <div class="icon sign-out"></div>
         </ion-col>
         <ion-col class="page-title">
           Abmelden

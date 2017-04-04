@@ -46,6 +46,11 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   showOnlinePartners = false;
   showOnlyPartnersWithCampaign = false;
 
+  onlinePartnerPageComponent = false;
+  offlinePartnerPageComponent = false;
+  searchPageComponent = false;
+
+
   bucket: number = 0;
   searchTerm = "";
 
@@ -59,11 +64,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     if (this.locationSubscription) {
       this.locationSubscription.unsubscribe();
     }
-    ;
-    if (this.locationNameSubscription) {
-      this.locationNameSubscription.unsubscribe();
-    }
-    ;
     if (this.getPartnersSubscription) {
       this.getPartnersSubscription.unsubscribe();
     }
@@ -77,16 +77,13 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.checkLocation()
     }
     else {
-      this.cityName = LocationData.cityName;
       this.getPartners();
     }
+
   }
 
   setFilterParameters() {
-    this.title = FilterData.title;
-    this.showOnlinePartners = FilterData.showOnlinePartners;
-    this.showLocalPartners = FilterData.showLocalPartners;
-    this.showOnlyPartnersWithCampaign = FilterData.showOnlyPartnersWithCampaign;
+
     if (this.showOnlinePartners && this.showLocalPartners) {
       this.displayedPartners = this.allPartners;
     }

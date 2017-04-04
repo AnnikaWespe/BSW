@@ -5,27 +5,29 @@ partner-page-component {
     margin-top: 0px !important;
   }
 
-div.standard-header{
-  ion-icon {
-    margin-left: 1vw;
-  }
-  button.mapIcon {
-    margin: 0 !important;
-    padding: 0 !important;
-    div.mapIcon {
-      background: url('../assets/icon/icon_map.png') no-repeat;
-      background-size: contain;
-      height: 8vw;
-      width: 8vw;
-      overflow: hidden;
+  div.standard-header {
+    ion-icon {
+      margin-left: 1vw;
+    }
+    button.mapIcon {
+      margin: 0 !important;
+      padding: 0 !important;
+      div.toggleListAndMapIcon {
+        background: url('../assets/icon/listenansicht.svg') no-repeat;
+        background-size: contain;
+        height: 8vw;
+        width: 8vw;
+        overflow: hidden;
+        &.mapIcon {
+          background: url('../assets/icon/map.svg') no-repeat;
+          background-size: contain;
+        }
+      }
+    }
+    button {
+      padding: 0 0 0 2vw !important;
     }
   }
-  button{
-    padding: 0 0 0 2vw !important;
-  }
-}
-
-
 
   ion-content {
     position: relative;
@@ -34,10 +36,10 @@ div.standard-header{
   div.filter-wrapper {
     .left-button {
       margin-right: 1.5px;
-      &.singleButton{
+      &.singleButton {
         text-align: center;
         margin-right: 0;
-        ion-icon{
+        ion-icon {
           margin-left: 2vw;
         }
       }
@@ -69,13 +71,13 @@ div.standard-header{
       }
       ion-col {
         padding: 0 5vw 0 5vw;
-        &.currentPosition{
+        &.currentPosition {
           text-align: left;
         }
         &.map-icon {
           text-align: right;
-          max-width:4vw;
-          .checked{
+          max-width: 4vw;
+          .checked {
             background-color: green;
           }
         }
@@ -84,7 +86,7 @@ div.standard-header{
         height: 4vh;
         text-align: center;
       }
-      div.showSelectionWrapper{
+      div.showSelectionWrapper {
         position: absolute;
         bottom: 2vh;
         width: 100%;
@@ -111,7 +113,7 @@ div.standard-header{
       border-bottom: 1px solid map_get($colors, secondary);
       text-align: center;
       background-color: white;
-      &.dropdownOpen{
+      &.dropdownOpen {
         border-bottom: 2px solid white;
       }
     }
