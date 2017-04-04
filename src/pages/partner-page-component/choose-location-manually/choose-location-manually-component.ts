@@ -14,13 +14,13 @@ export class ChooseLocationManuallyComponent {
   latitude: string;
   longitude: string;
   cityName: string;
-  latitudeCenter: number = 51.1656;
-  longitudeCenter: number = 10.4515;
+  latitudeCenter = 51.1656;
+  longitudeCenter = 10.4515;
   location: {latitude: string, longitude: string};
   markerVisible = true;
   checkButtonVisible = false;
   zoom: number = 6;
-  title: string = 'Standort auswählen';
+  title = 'Standort auswählen';
   locationExact: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private _wrapper: GoogleMapsAPIWrapper, private locationService: LocationService) {
@@ -49,7 +49,8 @@ export class ChooseLocationManuallyComponent {
     this.locationExact = false;
   }
   saveLocation(){
-    this.navCtrl.setRoot(PartnerPageComponent);
+    console.log(this.navParams.data);
+    this.navCtrl.setRoot(PartnerPageComponent, this.navParams.data);
   }
 
   parseFloat(string){

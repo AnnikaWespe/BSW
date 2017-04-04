@@ -26,7 +26,7 @@
           <ion-icon name="search" color="grey" class="search-button-header"></ion-icon>
         </button>
       </ion-buttons>
-      <ion-buttons end *ngIf='showLocalPartners'>
+      <ion-buttons end *ngIf="showOfflinePartners">
         <button (click)="toggleMapAndList()" class="mapIcon">
           <div class = "toggleListAndMapIcon" [class.mapIcon] = "!showMap"></div>
         </button>
@@ -70,30 +70,34 @@
       </div>
 
       <div class="filter-menu" *ngIf="showDropdown[0]">
-        <ion-row class="currentLocation">
-          <ion-col class = "currentPosition">
-            {{cityName}}
+        <ion-row class="currentLocation" *ngIf="offlinePartnerPageComponent || searchPageComponent">
+          <ion-col class = "currentPosition" *ngIf="getLocationFromGPSEnabled">
+            Aktueller Standort
           </ion-col>
-          <ion-col tappable class="map-icon" (click)="chooseLocationManually()">
-            <div class="locationManuallyOrAutomatically"></div>
+          <ion-col class = "currentPosition" *ngIf="!getLocationFromGPSEnabled" (click)="chooseLocationManually()">
+            <p>{{cityName}}</p>
+            <p class="changeLocation">Ort ändern</p>
+          </ion-col>
+          <ion-col tappable class="map-icon" (click)="toggleLocationFromGPSEnabled()">
+            <div class="locationManuallyOrFromGPS" [class.manually] = "getLocationFromGPSEnabled"></div>
           </ion-col>
         </ion-row>
-        <ion-row tappable class="toggle offline-partner-toggle" (click)="showLocalPartners = !showLocalPartners">
+        <ion-row tappable class="toggle offline-partner-toggle" (click)="showLocalPartners = !showOfflinePartners" *ngIf="searchPageComponent">
           <ion-col class="toggle-text">Vor-Ort Partner</ion-col>
-          <ion-col class="map-icon">
-            <ion-icon name="map" [class.checked]="showLocalPartners"></ion-icon>
+          <ion-col class="toggle">
+            <ion-toggle [class.checked]="showLocalPartners" color = "light-blue" mode = "ios" [class.checked]="showOnlyPartnersWithCampaign"></ion-toggle>
           </ion-col>
         </ion-row>
-        <ion-row tappable class="toggle online-partner-toggle" (click) ="showOnlinePartners = !showOnlinePartners">
+        <ion-row tappable class="toggle online-partner-toggle" (click) ="showOnlinePartners = !showOnlinePartners" *ngIf="searchPageComponent">
           <ion-col class="toggle-text">Online Partner</ion-col>
-          <ion-col class="map-icon">
-            <ion-icon name="map" [class.checked]="showOnlinePartners"></ion-icon>
+          <ion-col class="toggle">
+            <ion-toggle color = "light-blue" [class.checked]="showOnlinePartners" mode = "ios" [class.checked]="showOnlyPartnersWithCampaign"></ion-toggle>
           </ion-col>
         </ion-row>
-        <ion-row tappable class="toggle has-campaign-partner-toggle" (click)="showOnlyPartnersWithCampaign = !showOnlyPartnersWithCampaign">
+        <ion-row tappable class="toggle has-campaign-partner-toggle" (click)="showOnlyPartnersWithCampaign = !showOnlyPartnersWithCampaign" [class.biggerMarginTop] = "onlinePartnerPageComponent">
           <ion-col class="toggle-text">Nur Partner mit Aktionen</ion-col>
-          <ion-col class="map-icon">
-            <ion-icon name="map"[class.checked]="showOnlyPartnersWithCampaign"></ion-icon>
+          <ion-col class="toggle">
+            <ion-toggle color = "light-blue" mode = "ios" [class.checked]="showOnlyPartnersWithCampaign"></ion-toggle>
           </ion-col>
         </ion-row>
         <div class="showSelectionWrapper">

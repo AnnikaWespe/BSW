@@ -92,7 +92,7 @@
     </ion-col>
   </ion-row>
 
-  <ion-row class="title-row" *ngIf="locationAvailable && offlinePartners">
+  <ion-row class="title-row" *ngIf="offlinePartners">
     <ion-col class="title">
       <p class="title-paragraph">Vor Ort Partner</p>
     </ion-col>
@@ -100,7 +100,7 @@
       ...
     </ion-col>
   </ion-row>
-  <partner-table [partners]="offlinePartners" *ngIf="locationAvailable && offlinePartners"></partner-table>
+  <partner-table [partners]="offlinePartners"></partner-table>
 
   <ion-row class="title-row" *ngIf="onlinePartners">
     <ion-col class="title">

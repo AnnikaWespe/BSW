@@ -71,14 +71,22 @@ partner-page-component {
       }
       ion-col {
         padding: 0 5vw 0 5vw;
+        &.toggle{
+          padding-top: 0.7vh;
+        }
         &.currentPosition {
           text-align: left;
         }
-        &.map-icon {
+        &.map-icon div{
+          background: url('../assets/icon/mapmarker_crossed.svg')no-repeat;
+          background-size: contain;
           text-align: right;
-          max-width: 4vw;
-          .checked {
-            background-color: green;
+          min-width: 8vh;
+          min-height: 8vh;
+          float: right;
+          .getLocationFromGPSEnabled {
+            background: url('../assets/icon/mapmarker.svg')no-repeat;
+            background-size: contain;
           }
         }
       }
@@ -102,9 +110,12 @@ partner-page-component {
       }
       ion-row.toggle {
         font-weight: bolder;
+        &.biggerMarginTop{
+          padding-top: 2vh;
+        }
       }
       ion-col.toggle-text {
-        min-width: 80%;
+        min-width: 75%;
         text-align: left;
         padding: 3vw 5vw;
       }

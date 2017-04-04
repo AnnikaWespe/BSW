@@ -1,11 +1,9 @@
-import {Component, OnInit, AfterViewChecked, ViewChild, OnDestroy} from '@angular/core';
+import {Component, AfterViewChecked, ViewChild, OnDestroy} from '@angular/core';
 import {NavController, NavParams, Content} from 'ionic-angular';
-import {Geolocation} from 'ionic-native';
 import {PartnerService} from "../../services/partner-service";
 import {ChooseLocationManuallyComponent} from "./choose-location-manually/choose-location-manually-component";
 import {AlertController} from 'ionic-angular';
 import {PartnerDetailComponent} from "./partner-detail-component/partner-detail-component";
-import {LocationData} from "../../services/location-data";
 import {LocationService} from "../../services/location-service";
 import {FilterData} from "../../services/filter-data";
 
@@ -18,12 +16,11 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   title = "Partner";
   mode = "Observable";
   getPartnersSubscription: any;
-  locationNameSubscription: any;
-  locationSubscription: any;
+  getLocationNameSubscription: any;
+  getLocationSubscription: any;
 
   location = {latitude: "0", longitude: "0"};
   locationAvailable = false;
-  cityName: string;
 
   showDropdown: boolean[] = [false, false];
   waitingForResults: boolean = true;
@@ -35,24 +32,33 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   displayedPartners = [];
 
-  localPartners = [];
+  offlinePartners = [];
   onlinePartners = [];
   allPartners = [];
   partnersWithCampaign = [];
   resetPartnersArray: boolean = true;
   moreDataCanBeLoaded = true;
+  bucket: number = 0;
+  searchTerm = "";
 
-  showLocalPartners = false;
+  showOfflinePartners = false;
   showOnlinePartners = false;
   showOnlyPartnersWithCampaign = false;
-
+  pageType: string;
   onlinePartnerPageComponent = false;
   offlinePartnerPageComponent = false;
   searchPageComponent = false;
 
+  navigationParameters = {
+    type: this.pageType,
+    showOfflinePartners: this.showOfflinePartners,
+    showOnlinePartners: this.showOnlinePartners,
+    showOnlyPartnersWithCampaign: this.showOnlyPartnersWithCampaign,
+  }
 
-  bucket: number = 0;
-  searchTerm = "";
+  getLocationFromGPSEnabled = false;
+  cityName;
+
 
   searchInterfaceOpen: boolean = false;
 
@@ -61,8 +67,8 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.locationSubscription) {
-      this.locationSubscription.unsubscribe();
+    if (this.getLocationSubscription) {
+      this.getLocationSubscription.unsubscribe();
     }
     if (this.getPartnersSubscription) {
       this.getPartnersSubscription.unsubscribe();
@@ -71,92 +77,96 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService,
               public alertCtrl: AlertController, public locationService: LocationService) {
-    this.setFilterParameters();
+    let pageType = navParams.get("type");
+    this[pageType] = true;
+    this.pageType = pageType;
     this.searchTerm = navParams.get("searchTerm") || "";
-    if (this.showLocalPartners) {
-      this.checkLocation()
-    }
-    else {
-      this.getPartners();
-    }
-
+    this.getLocationFromGPSEnabled = (localStorage.getItem("getLocationFromGPSEnabled") === "true");
+    this.cityName = localStorage.getItem("cityName") || "Berlin";
+    this.setParameters();
   }
 
-  setFilterParameters() {
-
-    if (this.showOnlinePartners && this.showLocalPartners) {
+  setParameters() {
+    this.showOnlyPartnersWithCampaign = this.navParams.get("showOnlyPartnersWithCampaign") || false;
+    if (this.offlinePartnerPageComponent) {
+      this.showOfflinePartners = true;
+      this.displayedPartners = this.offlinePartners;
+      this.title = "Vor Ort Partner";
+      this.checkIfGPSEnabled();
+    }
+    if (this.onlinePartnerPageComponent) {
+      this.showOnlinePartners = true;
+      this.displayedPartners = this.onlinePartners;
+      this.title = "Online Partner";
+      this.getPartners();
+    }
+    if (this.searchPageComponent) {
+      this.showOnlinePartners = this.navParams.get("showOnlinePartners") || true;
+      this.showOfflinePartners = this.navParams.get("showOfflinePartners") || true;
       this.displayedPartners = this.allPartners;
-    }
-    else {
-      this.displayedPartners = (this.showOnlinePartners) ? this.onlinePartners : this.localPartners
-    }
-  }
-
-
-  checkLocation() {
-    if (LocationData.locationManuallyChosen) {
-      this.getLocationName(LocationData.latitude, LocationData.longitude);
-      this.location.latitude = LocationData.latitude;
-      this.location.longitude = LocationData.longitude;
-      this.getPartners();
-    }
-    else {
-      this.locationService.getLocation();
-      this.subscribeToLocationService();
+      this.title = this.searchTerm;
+      this.checkIfGPSEnabled();
     }
   }
 
-  subscribeToLocationService() {
-    this.locationSubscription = this.locationService.getLocation().subscribe(
-      (object) => {
-        if (object.locationFound == true) {
-          this.location.latitude = LocationData.latitude;
-          this.location.longitude = LocationData.longitude;
-          this.getPartners();
-          this.locationAvailable = true;
-          this.getLocationName(object.lat, object.lon)
-        }
-        else {
-          if (this.showLocalPartners == true) {
-            this.showPrompt();
-          }
-        }
-      }
-    )
-  }
 
-  getLocationName(lat, lon) {
-    this.locationNameSubscription = this.locationService.getLocationName(lat, lon)
-      .subscribe(
-        cityName => this.cityName = cityName
-      );
-  }
-
-
-  showPrompt() {
-    let prompt = this.alertCtrl.create({
-      title: 'Kein Standort gefunden',
-      message: "Wollen Sie Ihren Standort manuell eingeben?",
-      buttons: [
-        {
-          text: 'Ohne Standort fortfahren',
-          handler: data => {
-            this.location.latitude = LocationData.latitude;
-            this.location.longitude = LocationData.longitude;
-            this.cityName = LocationData.cityName;
+  checkIfGPSEnabled() {
+    if (this.getLocationFromGPSEnabled) {
+      this.getLocationSubscription = this.locationService.getLocation().subscribe(
+        (object) => {
+          if (object.locationFound == true) {
+            this.location.latitude = object.lat;
+            this.location.longitude = object.lon;
             this.getPartners();
           }
-        },
-        {
-          text: 'Ja',
-          handler: data => {
-            this.navCtrl.push(ChooseLocationManuallyComponent);
+          else {
+            localStorage.setItem("getLocationFromGPSEnabled", "false");
+            this.getLocationFromGPSEnabled = false;
+            this.getManuallySetLocationData();
           }
         }
-      ]
-    });
-    prompt.present();
+      )
+    }
+    else {
+      this.getManuallySetLocationData()
+    }
   }
+
+  getManuallySetLocationData() {
+    if (localStorage.getItem("locationAvailable") === "true") {
+      this.location.latitude = localStorage.getItem("latitude");
+      this.location.longitude = localStorage.getItem("longitude");
+    }
+    else {
+      this.location.latitude = "52.5219";
+      this.location.longitude = "13.4132";
+    }
+    this.getPartners();
+  }
+
+  // showPrompt() {
+  //   let prompt = this.alertCtrl.create({
+  //     title: 'Kein Standort gefunden',
+  //     message: "Wollen Sie Ihren Standort manuell eingeben?",
+  //     buttons: [
+  //       {
+  //         text: 'Ohne Standort fortfahren',
+  //         handler: data => {
+  //           this.location.latitude = LocationData.latitude;
+  //           this.location.longitude = LocationData.longitude;
+  //           this.getPartners();
+  //         }
+  //       },
+  //       {
+  //         text: 'Ja',
+  //         handler: data => {
+  //           this.navCtrl.push(ChooseLocationManuallyComponent, this.navigationParameters);
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   prompt.present();
+  // }
 
   getPartnersWithSearchTerm(searchTerm) {
     this.searchTerm = searchTerm + " ";
@@ -168,7 +178,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     if (this.resetPartnersArray == true) {
       this.allPartners = [];
       this.onlinePartners = [];
-      this.localPartners = [];
+      this.offlinePartners = [];
       this.partnersWithCampaign = [];
       this.bucket = 0;
       this.waitingForResults = true;
@@ -187,17 +197,17 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   getDifferentCategories(returnedObject) {
     this.allPartners = this.allPartners.concat(returnedObject.contentEntities);
-    this.localPartners = this.localPartners.concat(returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities);
+    this.offlinePartners = this.offlinePartners.concat(returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities);
     this.onlinePartners = this.onlinePartners.concat(returnedObject.originalSearchResults.bucketToSearchResult["ONLINEPARTNER"].contentEntities);
     this.getDisplay();
     this.waitingForResults = false;
   }
 
   filterButtonPushed() {
-    if (this.showLocalPartners) {
+    if (this.showOfflinePartners) {
       this.showDropdown = [false, false, false];
       this.waitingForResults = true;
-      this.checkLocation();
+      this.checkIfGPSEnabled();
     }
     else {
       this.showDropdown = [false, false, false];
@@ -207,34 +217,35 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   }
 
   getDisplay() {
-    if (!this.showLocalPartners && !this.showOnlinePartners) {
+    if (!this.showOfflinePartners && !this.showOnlinePartners) {
       this.askForValidCategories();
       return;
     }
     this.showDropdown = [false, false, false];
-    if (this.showLocalPartners && !this.showOnlinePartners) {
+    if (this.showOfflinePartners && !this.showOnlinePartners) {
       this.title = this.searchTerm || "Vor Ort Partner";
-      this.filterCampaignPartners(this.localPartners);
+      this.filterCampaignPartners(this.offlinePartners);
     }
-    else if (!this.showLocalPartners && this.showOnlinePartners) {
+    else if (!this.showOfflinePartners && this.showOnlinePartners) {
       this.title = this.searchTerm || "Online Partner";
       this.filterCampaignPartners(this.onlinePartners);
     }
-    else if (this.showLocalPartners && this.showOnlinePartners) {
+    else if (this.showOfflinePartners && this.showOnlinePartners) {
       this.title = this.searchTerm || "Alle Partner";
       this.filterCampaignPartners(this.allPartners)
     }
   }
 
+
   chooseLocationManually() {
     event.stopPropagation();
-    this.navCtrl.push(ChooseLocationManuallyComponent, {location: this.location});
+    this.navCtrl.push(ChooseLocationManuallyComponent, this.navigationParameters);
     this.showDropdown = [false, false, false];
   }
 
 
   showPartner(partner = 0) {
-    this.navCtrl.push(PartnerDetailComponent)
+    this.navCtrl.push(PartnerDetailComponent, this.navigationParameters)
   }
 
 
@@ -283,6 +294,15 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   toggleMapAndList() {
     this.showMap = !this.showMap;
     this.showDropdown = [false, false, false];
+  }
+
+  toggleLocationFromGPSEnabled(){
+    let newValueGetLocationFromGPSEnabled = !this.getLocationFromGPSEnabled;
+    this.getLocationFromGPSEnabled = newValueGetLocationFromGPSEnabled;
+    localStorage.setItem("getLocationFromGPSEnabled", "'" + newValueGetLocationFromGPSEnabled + "'");
+    if(newValueGetLocationFromGPSEnabled){
+
+    }
   }
 
 

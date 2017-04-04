@@ -41,13 +41,6 @@ export class MyApp implements OnInit{
   }
 
   openPage(page) {
-    if(page.filterData){
-      FilterData.showOnlinePartners = false;
-      FilterData.showLocalPartners = false;
-      FilterData.showOnlyPartnersWithCampaign = false;
-      FilterData[page.filterData.activeFilter] = true;
-      FilterData.title = page.filterData.title;
-    }
     this.nav.setRoot(page.component, page.parameters);
   }
 
@@ -73,8 +66,8 @@ export class MyApp implements OnInit{
   setMenu(){
     this.pages = [
       { title: 'Übersicht', component: OverviewPageComponent, parameters: {}},
-      { title: 'Vor Ort Partner', component: PartnerPageComponent, parameters: {type: "onlinePartnerPageComponent"}},
-      { title: 'Online Partner', component: PartnerPageComponent, parameters: {type: "offlinePartnerPageComponent"}},
+      { title: 'Vor Ort Partner', component: PartnerPageComponent, parameters: {type: "offlinePartnerPageComponent"}},
+      { title: 'Online Partner', component: PartnerPageComponent, parameters: {type: "onlinePartnerPageComponent"}},
       { title: 'Einkauf nachtragen', component: AddPurchasePageComponent, parameters: {}},
       { title: 'Mein Profil', component: MyProfilePageComponent, parameters: {}},
       { title: 'Einstellungen', component: SettingsPageComponent, parameters: {}},

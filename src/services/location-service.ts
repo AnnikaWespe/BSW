@@ -18,16 +18,14 @@ export class LocationService {
   private longitude;
   constructor(private http: Http) {}
 
-
   getLocation(): Observable<any>{
     return Observable.fromPromise(
       Geolocation.getCurrentPosition().then((position) => {
         let latitude = position.coords.latitude.toFixed(4);
         let longitude = position.coords.longitude.toFixed(4);
-        LocationData.latitude = latitude;
-        LocationData.longitude = longitude;
-        LocationData.locationExact = true;
-        LocationData.locationAvailable = true;
+        localStorage.setItem("latitude", latitude);
+        localStorage.setItem("longitude", longitude);
+        localStorage.setItem("locationAvailable", "true");
         return{lat: latitude, lon: longitude, locationFound: true};
       }, (err) => {
         return{lat: "0", lon: "0", locationFound: false};
@@ -35,7 +33,7 @@ export class LocationService {
     )
   }
 
-  getLocationName(lat, lon): Observable <any> {
+getLocationName(lat, lon): Observable <any> {
     let url = this.getLocationNameUrl + lat + "," + lon + '&sensor=true';
     console.log(url);
     return this.http.get(url)

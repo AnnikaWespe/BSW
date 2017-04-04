@@ -15,7 +15,7 @@ import {FilterData} from "../../services/filter-data";
   selector: 'page-overview',
   templateUrl: 'overview-component.html',
 })
-export class OverviewPageComponent implements OnInit, OnDestroy {
+export class OverviewPageComponent implements OnDestroy {
 
   title: string = "Übersicht";
   balance: number = 10;
@@ -23,7 +23,6 @@ export class OverviewPageComponent implements OnInit, OnDestroy {
   heightBalanceBarBonusBarBuffer = ["0vh", "0vh", "0vh", "0vh"];
   maxHeightBarInVh = 14;
   location = {latitude: "0", longitude: "0"};
-  locationAvailable = false;
   errorMessage: string;
   waitingForResults = true;
   onlinePartners: any[];
@@ -36,20 +35,39 @@ export class OverviewPageComponent implements OnInit, OnDestroy {
   getLocationSubscription: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService, private locationService: LocationService) {
-    this.getLocationSubscription = locationService.getLocation().subscribe(
-      (object) => {
-        if(object.locationFound == true){
-          this.location.latitude = object.lat;
-          this.location.longitude = object.lon;
-          this.getPartners();
-          this.locationAvailable = true;
+    this.checkIfGPSEnabled();
+  }
+
+  checkIfGPSEnabled(){
+    if (localStorage.getItem("getLocationFromGPSEnabled") === "true") {
+      this.getLocationSubscription = this.locationService.getLocation().subscribe(
+        (object) => {
+          if (object.locationFound == true) {
+            this.location.latitude = object.lat;
+            this.location.longitude = object.lon;
+            this.getPartners();
+          }
+          else {
+            this.getManuallySetLocationData();
+          }
         }
-        else{
-          console.log("no location found");
-          this.getPartners();
-        }
-      }
-    )
+      )
+    }
+    else {
+      this.getManuallySetLocationData()
+    }
+  }
+
+  getManuallySetLocationData() {
+    if (localStorage.getItem("locationAvailable") === "true") {
+      this.location.latitude = localStorage.getItem("latitude");
+      this.location.longitude = localStorage.getItem("longitude");
+    }
+    else {
+      this.location.latitude = "52.5219";
+      this.location.longitude = "13.4132";
+    }
+    this.getPartners();
   }
 
 
@@ -57,15 +75,12 @@ export class OverviewPageComponent implements OnInit, OnDestroy {
     this.setFocus();
   }
 
-  ngOnInit() {
-    this.locationService.getLocation();
-  }
-
-  ngOnDestroy(){
-    if(this.getPartnersSubscription){
+  ngOnDestroy() {
+    if (this.getPartnersSubscription) {
       this.getPartnersSubscription.unsubscribe();
-    };
-    if(this.getLocationSubscription){
+    }
+    ;
+    if (this.getLocationSubscription) {
       this.getLocationSubscription.unsubscribe();
     }
   }
@@ -84,31 +99,21 @@ export class OverviewPageComponent implements OnInit, OnDestroy {
   getOnlineAndOfflinePartners(returnedObject) {
     this.onlinePartners = returnedObject.originalSearchResults.bucketToSearchResult["ONLINEPARTNER"].contentEntities.slice(0, 5);
     let offlinePartnerArray = returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities;
-    if( offlinePartnerArray){this.offlinePartners = offlinePartnerArray.slice(0, 5)}
+    if (offlinePartnerArray) {
+      this.offlinePartners = offlinePartnerArray.slice(0, 5)
+    }
   }
 
   showOfflinePartners() {
-  FilterData.showLocalPartners = true;
-  FilterData.showOnlinePartners = false;
-  FilterData.showOnlyPartnersWithCampaign = false;
-  FilterData.title = "Vor Ort Partner";
-    this.navCtrl.push(PartnerPageComponent, {});
+    this.navCtrl.push(PartnerPageComponent, {type: "offlinePartnerPageComponent"});
   }
 
 
   showOnlinePartners() {
-    FilterData.showLocalPartners = false;
-    FilterData.showOnlinePartners = true;
-    FilterData.showOnlyPartnersWithCampaign = false;
-    FilterData.title = "Online Partner";
-    this.navCtrl.push(PartnerPageComponent, {});
+    this.navCtrl.push(PartnerPageComponent, {type: "onlinePartnerPageComponent"});
   }
 
   loadPartnerPage(searchTerm) {
-    FilterData.showLocalPartners = true;
-    FilterData.showOnlinePartners = true;
-    FilterData.showOnlyPartnersWithCampaign = false;
-    FilterData.title = searchTerm;
     this.navCtrl.setRoot(PartnerPageComponent, {type: "searchPageComponent", searchTerm: searchTerm})
   }
 
