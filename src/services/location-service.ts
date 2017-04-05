@@ -45,7 +45,7 @@ getLocationName(lat, lon): Observable <any> {
 
   private extractData(res: Response) {
     let cityName = res.json().results[0].address_components[2].long_name;
-    LocationData.cityName = cityName;
+    localStorage.setItem("cityName", cityName);
     return cityName;
   }
 
@@ -53,6 +53,7 @@ getLocationName(lat, lon): Observable <any> {
     //TODO: In a real world app, we might use a remote logging infrastructure
     let errMsg: string;
     console.log("error");
+    localStorage.setItem("cityName", "Manuell gewählter Ort");
     if (error instanceof Response) {
       const body = error.json() || '';
       const err = body.error || JSON.stringify(body);

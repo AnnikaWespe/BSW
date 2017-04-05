@@ -16,7 +16,6 @@ export class ChooseLocationManuallyComponent {
   cityName: string;
   latitudeCenter = 51.1656;
   longitudeCenter = 10.4515;
-  location: {latitude: string, longitude: string};
   markerVisible = true;
   checkButtonVisible = false;
   zoom: number = 6;
@@ -24,9 +23,8 @@ export class ChooseLocationManuallyComponent {
   locationExact: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private _wrapper: GoogleMapsAPIWrapper, private locationService: LocationService) {
-    this.latitude = LocationData.latitude;
-    this.longitude = LocationData.longitude;
-    this.cityName = LocationData.cityName;
+    this.latitude = localStorage.getItem("latitude") || "52.5219";
+    this.longitude = localStorage.getItem("longitude") || "13.4132";
   }
 
   mapClicked($event: any){
@@ -40,9 +38,9 @@ export class ChooseLocationManuallyComponent {
   }
 
   setLocationData(){
-    LocationData.latitude = this.latitude;
-    LocationData.longitude = this.longitude;
-    LocationData.locationManuallyChosen = true;
+    localStorage.setItem("latitude", this.latitude);
+    localStorage.setItem("longitude", this.longitude);
+    localStorage.setItem("locationAvailable", "true");
   }
 
   inputToSuggestions(){
@@ -50,6 +48,9 @@ export class ChooseLocationManuallyComponent {
   }
   saveLocation(){
     console.log(this.navParams.data);
+    this.locationService.getLocationName(this.latitude, this.longitude).subscribe(
+      data => {}
+    );
     this.navCtrl.setRoot(PartnerPageComponent, this.navParams.data);
   }
 

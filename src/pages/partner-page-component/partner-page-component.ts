@@ -49,13 +49,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   offlinePartnerPageComponent = false;
   searchPageComponent = false;
 
-  navigationParameters = {
-    type: this.pageType,
-    showOfflinePartners: this.showOfflinePartners,
-    showOnlinePartners: this.showOnlinePartners,
-    showOnlyPartnersWithCampaign: this.showOnlyPartnersWithCampaign,
-  }
-
   getLocationFromGPSEnabled = false;
   cityName;
 
@@ -128,8 +121,13 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       )
     }
     else {
-      this.getManuallySetLocationData()
+      this.getManuallySetLocationData();
+      this.getPartners();
     }
+  }
+
+  subscribeToLocationService() {
+
   }
 
   getManuallySetLocationData() {
@@ -141,32 +139,21 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.location.latitude = "52.5219";
       this.location.longitude = "13.4132";
     }
-    this.getPartners();
   }
 
-  // showPrompt() {
-  //   let prompt = this.alertCtrl.create({
-  //     title: 'Kein Standort gefunden',
-  //     message: "Wollen Sie Ihren Standort manuell eingeben?",
-  //     buttons: [
-  //       {
-  //         text: 'Ohne Standort fortfahren',
-  //         handler: data => {
-  //           this.location.latitude = LocationData.latitude;
-  //           this.location.longitude = LocationData.longitude;
-  //           this.getPartners();
-  //         }
-  //       },
-  //       {
-  //         text: 'Ja',
-  //         handler: data => {
-  //           this.navCtrl.push(ChooseLocationManuallyComponent, this.navigationParameters);
-  //         }
-  //       }
-  //     ]
-  //   });
-  //   prompt.present();
-  // }
+  showPromptGPSDisabled() {
+    let prompt = this.alertCtrl.create({
+      title: 'Leider darf diese App nicht auf Ihren Standort zugreifen.',
+      message: "Sie können dies in den Appeinstellungen ändern, oder Ihren Standort manuell ändern.",
+      buttons: [
+        {
+          text: 'OK',
+          handler: data => {}
+        }
+      ]
+    });
+    prompt.present();
+  }
 
   getPartnersWithSearchTerm(searchTerm) {
     this.searchTerm = searchTerm + " ";
@@ -239,13 +226,23 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   chooseLocationManually() {
     event.stopPropagation();
-    this.navCtrl.push(ChooseLocationManuallyComponent, this.navigationParameters);
+    this.navCtrl.push(ChooseLocationManuallyComponent, {
+      type: this.pageType,
+      showOfflinePartners: this.showOfflinePartners,
+      showOnlinePartners: this.showOnlinePartners,
+      showOnlyPartnersWithCampaign: this.showOnlyPartnersWithCampaign,
+    });
     this.showDropdown = [false, false, false];
   }
 
 
   showPartner(partner = 0) {
-    this.navCtrl.push(PartnerDetailComponent, this.navigationParameters)
+    this.navCtrl.push(PartnerDetailComponent, {
+      type: this.pageType,
+      showOfflinePartners: this.showOfflinePartners,
+      showOnlinePartners: this.showOnlinePartners,
+      showOnlyPartnersWithCampaign: this.showOnlyPartnersWithCampaign,
+    })
   }
 
 
@@ -296,12 +293,25 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.showDropdown = [false, false, false];
   }
 
-  toggleLocationFromGPSEnabled(){
+  toggleGetLocationFromGPSEnabled() {
     let newValueGetLocationFromGPSEnabled = !this.getLocationFromGPSEnabled;
-    this.getLocationFromGPSEnabled = newValueGetLocationFromGPSEnabled;
-    localStorage.setItem("getLocationFromGPSEnabled", "'" + newValueGetLocationFromGPSEnabled + "'");
-    if(newValueGetLocationFromGPSEnabled){
-
+    if (newValueGetLocationFromGPSEnabled) {
+      this.getLocationSubscription = this.locationService.getLocation().subscribe(
+        (object) => {
+          if (object.locationFound == true) {
+            this.location.latitude = object.lat;
+            this.location.longitude = object.lon;
+            this.getLocationFromGPSEnabled = true;
+            localStorage.setItem("getLocationFromGPSEnabled", "true");
+          }
+          else{this.showPromptGPSDisabled()};
+        }
+      )
+    }
+    else {
+      localStorage.setItem("getLocationFromGPSEnabled", "false");
+      this.getLocationFromGPSEnabled = false;
+      this.getManuallySetLocationData();
     }
   }
 
