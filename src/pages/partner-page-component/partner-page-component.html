@@ -75,38 +75,42 @@
             Aktueller Standort
           </ion-col>
           <ion-col class = "currentPosition" *ngIf="!getLocationFromGPSEnabled" (click)="chooseLocationManually()">
-            <p>{{cityName}}</p>
+            <p class="cityName">{{cityName}}</p>
             <p class="changeLocation">Ort ändern</p>
           </ion-col>
           <ion-col tappable class="map-icon" (click)="toggleGetLocationFromGPSEnabled()">
-            <div class="locationManuallyOrFromGPS" [class.manually] = "getLocationFromGPSEnabled"></div>
+            <div [class.manually] = "!getLocationFromGPSEnabled"></div>
           </ion-col>
         </ion-row>
-        <ion-row tappable class="toggle offline-partner-toggle" (click)="showLocalPartners = !showOfflinePartners" *ngIf="searchPageComponent">
+
+        <ion-row tappable class="toggle offline-partner-toggle" (click)="showOfflinePartners = !showOfflinePartners" *ngIf="searchPageComponent">
           <ion-col class="toggle-text">Vor-Ort Partner</ion-col>
           <ion-col class="toggle">
-            <ion-toggle [class.checked]="showLocalPartners" color = "light-blue" mode = "ios" [class.checked]="showOnlyPartnersWithCampaign"></ion-toggle>
+            <ion-toggle [(ngModel)]="showOfflinePartners" color = "light-blue" mode = "ios" [class.checked]="showOnlyPartnersWithCampaign"></ion-toggle>
           </ion-col>
         </ion-row>
+
         <ion-row tappable class="toggle online-partner-toggle" (click) ="showOnlinePartners = !showOnlinePartners" *ngIf="searchPageComponent">
           <ion-col class="toggle-text">Online Partner</ion-col>
           <ion-col class="toggle">
-            <ion-toggle color = "light-blue" [class.checked]="showOnlinePartners" mode = "ios" [class.checked]="showOnlyPartnersWithCampaign"></ion-toggle>
+            <ion-toggle color = "light-blue" [(ngModel)]="showOnlinePartners" mode = "ios" [class.checked]="showOnlyPartnersWithCampaign"></ion-toggle>
           </ion-col>
         </ion-row>
+
         <ion-row tappable class="toggle has-campaign-partner-toggle" (click)="showOnlyPartnersWithCampaign = !showOnlyPartnersWithCampaign" [class.biggerMarginTop] = "onlinePartnerPageComponent">
           <ion-col class="toggle-text">Nur Partner mit Aktionen</ion-col>
           <ion-col class="toggle">
-            <ion-toggle color = "light-blue" mode = "ios" [class.checked]="showOnlyPartnersWithCampaign"></ion-toggle>
+            <ion-toggle color = "light-blue" mode = "ios" [(ngModel)] = "showOnlyPartnersWithCampaign"></ion-toggle>
           </ion-col>
         </ion-row>
+
         <div class="showSelectionWrapper">
           <button class="showSelection" ion-button color="primary" (click)="filterButtonPushed()">Auswahl anzeigen</button>
         </div>
       </div>
     </div>
 
-    <div class="initialSpinner" *ngIf="mapWaitingForResults">
+    <div class="initialSpinner" *ngIf="waitingForResults">
       <ion-spinner tappable class="initialSpinner" (click)="hideDropdown()"></ion-spinner>
     </div>
 

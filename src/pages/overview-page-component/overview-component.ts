@@ -114,7 +114,7 @@ export class OverviewPageComponent implements OnDestroy {
   }
 
   loadPartnerPage(searchTerm) {
-    this.navCtrl.setRoot(PartnerPageComponent, {type: "searchPageComponent", searchTerm: searchTerm})
+    this.navCtrl.push(PartnerPageComponent, {type: "searchPageComponent", searchTerm: searchTerm})
   }
 
   //pure DOM method(s)

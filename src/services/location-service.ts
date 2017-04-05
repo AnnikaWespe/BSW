@@ -10,15 +10,16 @@ import {LocationData} from "./location-data";
 import {BehaviorSubject, Subject} from "rxjs";
 
 
-
 @Injectable()
 export class LocationService {
   private getLocationNameUrl = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=';
   private latitude;
   private longitude;
-  constructor(private http: Http) {}
 
-  getLocation(): Observable<any>{
+  constructor(private http: Http) {
+  }
+
+  getLocation(): Observable<any> {
     return Observable.fromPromise(
       Geolocation.getCurrentPosition().then((position) => {
         let latitude = position.coords.latitude.toFixed(4);
@@ -26,14 +27,14 @@ export class LocationService {
         localStorage.setItem("latitude", latitude);
         localStorage.setItem("longitude", longitude);
         localStorage.setItem("locationAvailable", "true");
-        return{lat: latitude, lon: longitude, locationFound: true};
+        return {lat: latitude, lon: longitude, locationFound: true};
       }, (err) => {
-        return{lat: "0", lon: "0", locationFound: false};
+        return {lat: "0", lon: "0", locationFound: false};
       })
     )
   }
 
-getLocationName(lat, lon): Observable <any> {
+  getLocationName(lat, lon): Observable <any> {
     let url = this.getLocationNameUrl + lat + "," + lon + '&sensor=true';
     console.log(url);
     return this.http.get(url)
@@ -42,9 +43,17 @@ getLocationName(lat, lon): Observable <any> {
   }
 
 
-
-  private extractData(res: Response) {
-    let cityName = res.json().results[0].address_components[2].long_name;
+  extractData(res: Response) {
+    let cityName;
+    for (let result of res.json().results) {
+      for (let addressComponent of result.address_components) {
+        if (addressComponent.types.indexOf("administrative_area_level_3") > -1) {
+          cityName = addressComponent.long_name;
+          break;
+        }
+      }
+    }
+    console.log(cityName);
     localStorage.setItem("cityName", cityName);
     return cityName;
   }

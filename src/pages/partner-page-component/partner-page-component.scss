@@ -68,6 +68,18 @@ partner-page-component {
         line-height: 8vh;
         border-bottom: 1px solid grey;
         margin-bottom: 3vw;
+        p{
+          margin: 0;
+          &.changeLocation{
+            font-size: x-small;
+            line-height: 1.5vh;
+            color: map_get($colors, primary);
+          }
+          &.cityName{
+            line-height: 4vh;
+            margin-top: 2vh;
+          }
+        }
       }
       ion-col {
         padding: 0 5vw 0 5vw;
@@ -76,16 +88,21 @@ partner-page-component {
         }
         &.currentPosition {
           text-align: left;
+          min-width: 83vw;
+          padding-right: 0;
+        }
+        &.map-icon{
+          padding-left: 0;
         }
         &.map-icon div{
-          background: url('../assets/icon/mapmarker_crossed.svg')no-repeat;
+          background: url('../assets/icon/mapmarker.svg')no-repeat;
           background-size: contain;
           text-align: right;
           min-width: 8vh;
           min-height: 8vh;
           float: right;
-          .getLocationFromGPSEnabled {
-            background: url('../assets/icon/mapmarker.svg')no-repeat;
+          &.manually {
+            background: url('../assets/icon/mapmarker_crossed.svg')no-repeat;
             background-size: contain;
           }
         }

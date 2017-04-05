@@ -49,9 +49,13 @@ export class ChooseLocationManuallyComponent {
   saveLocation(){
     console.log(this.navParams.data);
     this.locationService.getLocationName(this.latitude, this.longitude).subscribe(
-      data => {}
+      data => {
+        this.navCtrl.setRoot(PartnerPageComponent, this.navParams.data);
+      },
+      err => {
+        this.navCtrl.setRoot(PartnerPageComponent, this.navParams.data);
+      }
     );
-    this.navCtrl.setRoot(PartnerPageComponent, this.navParams.data);
   }
 
   parseFloat(string){

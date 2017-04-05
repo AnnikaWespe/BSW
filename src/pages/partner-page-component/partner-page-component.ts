@@ -126,10 +126,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     }
   }
 
-  subscribeToLocationService() {
-
-  }
-
   getManuallySetLocationData() {
     if (localStorage.getItem("locationAvailable") === "true") {
       this.location.latitude = localStorage.getItem("latitude");
@@ -296,13 +292,16 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   toggleGetLocationFromGPSEnabled() {
     let newValueGetLocationFromGPSEnabled = !this.getLocationFromGPSEnabled;
     if (newValueGetLocationFromGPSEnabled) {
+      this.waitingForResults = true;
       this.getLocationSubscription = this.locationService.getLocation().subscribe(
         (object) => {
           if (object.locationFound == true) {
+            this.waitingForResults = false;
             this.location.latitude = object.lat;
             this.location.longitude = object.lon;
             this.getLocationFromGPSEnabled = true;
             localStorage.setItem("getLocationFromGPSEnabled", "true");
+            this.getLocationNameSubscription = this.locationService.getLocationName(this.location.latitude, this.location.longitude).subscribe((cityName)=>{this.cityName = cityName})
           }
           else{this.showPromptGPSDisabled()};
         }
