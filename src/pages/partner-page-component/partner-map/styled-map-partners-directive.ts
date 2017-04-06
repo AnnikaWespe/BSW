@@ -52,7 +52,6 @@ export class StyledMapPartnersDirective implements OnChanges {
   pathToGmapsClusterIcons: string;
   markers = [];
   markerClusterer;
-  mapWaitingForResults = true;
 
   constructor(private googleMapsWrapper: GoogleMapsAPIWrapper, public plt: Platform) {
     if (DeviceService.isInBrowser) {
@@ -160,7 +159,6 @@ export class StyledMapPartnersDirective implements OnChanges {
             google.maps.event.trigger(map, 'resize');
           });
           this.removeSpinner.emit();
-          this.mapWaitingForResults = false;
         }
       )
   }

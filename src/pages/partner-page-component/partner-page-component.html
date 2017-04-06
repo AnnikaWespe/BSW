@@ -130,7 +130,7 @@
 
 
 
-    <partner-map [partners]="displayedPartners" *ngIf="showMap" (scrollToTop)="myScrollToTop($event)"></partner-map>
+    <partner-map [partners]="displayedPartners" *ngIf="showMap" (scrollToTop)="myScrollToTop($event)" [(mapWaitingForResults)] = "mapWaitingForResults"></partner-map>
 
   </div>
 </ion-content>

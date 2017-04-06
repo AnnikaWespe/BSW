@@ -1,4 +1,4 @@
-import {Component, Input, ViewChild, Output, EventEmitter, AfterViewChecked} from '@angular/core';
+import {Component, Input, ViewChild, Output, EventEmitter, AfterViewChecked, OnChanges} from '@angular/core';
 import {NavParams, NavController} from "ionic-angular";
 import {LocationData} from "../../../services/location-data";
 import {StyledMapPartnersDirective} from "./styled-map-partners-directive";
@@ -7,25 +7,40 @@ import {StyledMapPartnersDirective} from "./styled-map-partners-directive";
   selector: 'partner-map',
   templateUrl: 'partner-map.html'
 })
-export class PartnerMapComponent implements AfterViewChecked{
-
-  @Input() partners: any[];
-  @Output() scrollToTop = new EventEmitter();
-
-
-  @ViewChild(StyledMapPartnersDirective) map;
-  @ViewChild('partnerList') partnerList;
-
+export class PartnerMapComponent implements AfterViewChecked, OnChanges{
 
   text: string;
   currentLatitude = LocationData.latitude;
   currentLongitude = LocationData.longitude;
   partnersInList = [];
   partnerListOpen = false;
-  waitingForResults = true;
   scrollTop = 0;
+  mapWaitingForResultsValue;
+
+  @Input() partners: any[];
+  @Input() get mapWaitingForResults(){
+    return this.mapWaitingForResultsValue;
+  };
+  @Output() scrollToTop = new EventEmitter();
+  @Output() mapWaitingForResultsChange = new EventEmitter();
+
+  set mapWaitingForResults(val){
+    this.mapWaitingForResultsValue = val;
+    this.mapWaitingForResultsChange.emit(this.mapWaitingForResultsValue);
+  }
+
+
+  @ViewChild(StyledMapPartnersDirective) map;
+  @ViewChild('partnerList') partnerList;
+
+
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+  }
+
+  ngOnChanges(){
+    console.log("mapWaitingForResults", this.mapWaitingForResults);
   }
 
   ngAfterViewChecked(){
@@ -53,11 +68,11 @@ export class PartnerMapComponent implements AfterViewChecked{
   }
 
   addSpinner(){
-    this.waitingForResults = true;
+    this.mapWaitingForResults = true;
   }
 
   removeSpinner(){
-    this.waitingForResults = false;
+    this.mapWaitingForResults = false;
   }
 
   closePartnerList() {

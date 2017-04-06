@@ -5,7 +5,6 @@ import {ChooseLocationManuallyComponent} from "./choose-location-manually/choose
 import {AlertController} from 'ionic-angular';
 import {PartnerDetailComponent} from "./partner-detail-component/partner-detail-component";
 import {LocationService} from "../../services/location-service";
-import {FilterData} from "../../services/filter-data";
 
 @Component({
   selector: 'partner-page-component',
@@ -24,6 +23,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   showDropdown: boolean[] = [false, false];
   waitingForResults: boolean = true;
+  mapWaitingForResults;
 
   errorMessage: string;
 
@@ -190,6 +190,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     if (this.showOfflinePartners) {
       this.showDropdown = [false, false, false];
       this.waitingForResults = true;
+      this.mapWaitingForResults = true;
       this.checkIfGPSEnabled();
     }
     else {
@@ -207,14 +208,17 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.showDropdown = [false, false, false];
     if (this.showOfflinePartners && !this.showOnlinePartners) {
       this.title = this.searchTerm || "Vor Ort Partner";
+      localStorage.setItem("title", "Vor Ort Partner");
       this.filterCampaignPartners(this.offlinePartners);
     }
     else if (!this.showOfflinePartners && this.showOnlinePartners) {
       this.title = this.searchTerm || "Online Partner";
+      localStorage.setItem("title", "Online Partner");
       this.filterCampaignPartners(this.onlinePartners);
     }
     else if (this.showOfflinePartners && this.showOnlinePartners) {
       this.title = this.searchTerm || "Alle Partner";
+      localStorage.setItem("title", "Alle Partner");
       this.filterCampaignPartners(this.allPartners)
     }
   }
@@ -286,6 +290,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   toggleMapAndList() {
     this.showMap = !this.showMap;
+    this.mapWaitingForResults = true;
     this.showDropdown = [false, false, false];
   }
 
@@ -342,7 +347,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.searchTerm = "";
     this.showDropdown = [false, false, false];
     this.resetPartnersArray = true;
-    this.title = FilterData.title;
+    this.title = localStorage.getItem("title");
     if (searchExecuted) {
       this.getPartners();
     }
