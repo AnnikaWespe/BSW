@@ -205,7 +205,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.askForValidCategories();
       return;
     }
-    this.showDropdown = [false, false, false];
     if (this.showOfflinePartners && !this.showOnlinePartners) {
       this.title = this.searchTerm || "Vor Ort Partner";
       localStorage.setItem("title", "Vor Ort Partner");
