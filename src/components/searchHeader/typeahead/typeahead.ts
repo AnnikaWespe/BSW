@@ -26,7 +26,6 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
   @Output() toggleMapAndListEmitter = new EventEmitter();
   searchTerm: string;
   subscription: any;
-  searchExecuted = false;
 
   private searchTerms = new Subject<string>();
   searchTermCompletion: Observable<SearchTermCompletion[]>;
@@ -38,7 +37,6 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
 
   search(term: string, $event): void {
     if ($event.keyCode == 13 && this.searchTerm.length > 1) {
-      this.searchExecuted = true;
       this.getPartnersWithSearchTermEmitter.emit(this.searchTerm);
       this.searchTermCompletion = Observable.of<SearchTermCompletion[]>([]);
     }
@@ -49,16 +47,19 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.searchTermCompletion = this.searchTerms
-      .debounceTime(300)
-      .distinctUntilChanged()
-      .switchMap(term => term
-        ? this.searchCompletionService.getSuggestions(term)
-        : Observable.of<SearchTermCompletion[]>([]))
-      .catch(error => {
-        console.log(error);
-        return Observable.of<SearchTermCompletion[]>([]);
-      });
+    const searchTermsObservable = () => {
+      return this.searchTerms
+        .debounceTime(300)
+        .distinctUntilChanged()
+        .switchMap(term => term
+          ? this.searchCompletionService.getSuggestions(term)
+          : Observable.of<SearchTermCompletion[]>([]))
+        .catch(error => {
+          console.log(error);
+          return searchTermsObservable();
+        });
+    }
+    this.searchTermCompletion = searchTermsObservable();
   };
 
   ngOnDestroy() {
@@ -67,15 +68,12 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
 
 
   closeSearchInterface($event) {
-    this.closeSearchInterfaceEmitter.emit(this.searchExecuted);
-    this.searchTerm = "";
+    this.closeSearchInterfaceEmitter.emit();
   }
 
   completeSearchTerm(searchTerm) {
-    this.searchExecuted = true;
     this.getPartnersWithSearchTermEmitter.emit(searchTerm);
     this.searchTermCompletion = Observable.of<SearchTermCompletion[]>([]);
-    this.searchTerm = searchTerm;
   }
 
   deleteSearchTerm() {

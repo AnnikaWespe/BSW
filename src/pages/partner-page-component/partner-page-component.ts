@@ -1,5 +1,7 @@
 import {Component, AfterViewChecked, ViewChild, OnDestroy} from '@angular/core';
 import {NavController, NavParams, Content} from 'ionic-angular';
+//import {trigger,state,style,animate,transition} from ;
+
 import {PartnerService} from "../../services/partner-service";
 import {ChooseLocationManuallyComponent} from "./choose-location-manually/choose-location-manually-component";
 import {AlertController} from 'ionic-angular';
@@ -9,6 +11,7 @@ import {LocationService} from "../../services/location-service";
 @Component({
   selector: 'partner-page-component',
   templateUrl: 'partner-page-component.html',
+  //animations: [trigger()]
 })
 export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   @ViewChild(Content) content: Content;
@@ -21,9 +24,11 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   location = {latitude: "0", longitude: "0"};
   locationAvailable = false;
 
+  showCustomBackButton = false;
   showDropdown: boolean[] = [false, false];
   waitingForResults: boolean = true;
   mapWaitingForResults;
+  waitingForGPSSignal = false;
 
   errorMessage: string;
 
@@ -51,7 +56,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   getLocationFromGPSEnabled = false;
   cityName;
-
 
   searchInterfaceOpen: boolean = false;
 
@@ -140,11 +144,12 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   showPromptGPSDisabled() {
     let prompt = this.alertCtrl.create({
       title: 'Leider darf diese App nicht auf Ihren Standort zugreifen.',
-      message: "Sie können dies in den Appeinstellungen ändern, oder Ihren Standort manuell ändern.",
+      message: "Sie können dies in den Appeinstellungen ändern, oder Ihren Standort manuell anpassen.",
       buttons: [
         {
           text: 'OK',
-          handler: data => {}
+          handler: data => {
+          }
         }
       ]
     });
@@ -152,8 +157,11 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   }
 
   getPartnersWithSearchTerm(searchTerm) {
+    this.searchInterfaceOpen = false;
+    this.showCustomBackButton = true;
     this.searchTerm = searchTerm + " ";
     this.getPartners();
+    this.title = searchTerm;
   }
 
   getPartners() {
@@ -296,18 +304,24 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   toggleGetLocationFromGPSEnabled() {
     let newValueGetLocationFromGPSEnabled = !this.getLocationFromGPSEnabled;
     if (newValueGetLocationFromGPSEnabled) {
-      this.waitingForResults = true;
+      this.waitingForGPSSignal = true;
       this.getLocationSubscription = this.locationService.getLocation().subscribe(
         (object) => {
           if (object.locationFound == true) {
-            this.waitingForResults = false;
+            this.waitingForGPSSignal = false;
             this.location.latitude = object.lat;
             this.location.longitude = object.lon;
             this.getLocationFromGPSEnabled = true;
             localStorage.setItem("getLocationFromGPSEnabled", "true");
-            this.getLocationNameSubscription = this.locationService.getLocationName(this.location.latitude, this.location.longitude).subscribe((cityName)=>{this.cityName = cityName})
+            this.getLocationNameSubscription = this.locationService.getLocationName(this.location.latitude, this.location.longitude).subscribe((cityName) => {
+              this.cityName = cityName
+            })
           }
-          else{this.showPromptGPSDisabled()};
+          else {
+            this.showPromptGPSDisabled();
+            this.waitingForGPSSignal = false;
+          }
+          ;
         }
       )
     }
@@ -317,8 +331,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.getManuallySetLocationData();
     }
   }
-
-
+  
 //pure DOM methods
 
   private setFocus() {
@@ -341,14 +354,18 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.showDropdown[2] = !anythingVisible;
   }
 
-  closeSearchInterface(searchExecuted) {
+  closeSearchInterface() {
     this.searchInterfaceOpen = false;
+    if (this.searchTerm) {
+      this.searchTerm = "";
+      this.resetPartnersArray = true;
+      this.getPartners();
+    }
     this.searchTerm = "";
     this.showDropdown = [false, false, false];
-    this.resetPartnersArray = true;
     this.title = localStorage.getItem("title");
-    if (searchExecuted) {
-      this.getPartners();
+    if(this.searchPageComponent){
+      this.showCustomBackButton = true;
     }
   }
 
@@ -357,6 +374,10 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.resetPartnersArray = false;
     this.getPartners();
     infiniteScroll.complete();
+  }
+
+  customBackButtonClicked(){
+    this.navCtrl.pop();
   }
 
 }

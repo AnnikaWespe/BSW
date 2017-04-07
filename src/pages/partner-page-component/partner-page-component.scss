@@ -94,6 +94,9 @@ partner-page-component {
         &.map-icon{
           padding-left: 0;
         }
+        ion-spinner{
+          height: 8vh;
+        }
         &.map-icon div{
           background: url('../assets/icon/mapmarker.svg')no-repeat;
           background-size: contain;

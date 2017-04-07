@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, AfterViewChecked} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {Geolocation} from 'ionic-native';
 
@@ -15,7 +15,7 @@ import {FilterData} from "../../services/filter-data";
   selector: 'page-overview',
   templateUrl: 'overview-component.html',
 })
-export class OverviewPageComponent implements OnDestroy {
+export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   title: string = "Übersicht";
   balance: number = 10;
@@ -37,6 +37,17 @@ export class OverviewPageComponent implements OnDestroy {
   constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService, private locationService: LocationService) {
     this.checkIfGPSEnabled();
   }
+
+  ngOnDestroy() {
+    if (this.getPartnersSubscription) {
+      this.getPartnersSubscription.unsubscribe();
+    }
+    ;
+    if (this.getLocationSubscription) {
+      this.getLocationSubscription.unsubscribe();
+    }
+  }
+
 
   checkIfGPSEnabled(){
     if (localStorage.getItem("getLocationFromGPSEnabled") === "true") {
@@ -73,17 +84,10 @@ export class OverviewPageComponent implements OnDestroy {
 
   public ngAfterViewChecked() {
     this.setFocus();
+
   }
 
-  ngOnDestroy() {
-    if (this.getPartnersSubscription) {
-      this.getPartnersSubscription.unsubscribe();
-    }
-    ;
-    if (this.getLocationSubscription) {
-      this.getLocationSubscription.unsubscribe();
-    }
-  }
+
 
   getPartners() {
     this.getPartnersSubscription = this.partnerService.getPartners(this.location, 0, "")
@@ -114,6 +118,7 @@ export class OverviewPageComponent implements OnDestroy {
   }
 
   loadPartnerPage(searchTerm) {
+    this.searchInterfaceOpen = false;
     this.navCtrl.push(PartnerPageComponent, {type: "searchPageComponent", searchTerm: searchTerm})
   }
 

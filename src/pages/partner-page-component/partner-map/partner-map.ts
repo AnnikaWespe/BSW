@@ -10,8 +10,8 @@ import {StyledMapPartnersDirective} from "./styled-map-partners-directive";
 export class PartnerMapComponent implements AfterViewChecked, OnChanges{
 
   text: string;
-  currentLatitude = LocationData.latitude;
-  currentLongitude = LocationData.longitude;
+  currentLatitude = localStorage.getItem("latitude");
+  currentLongitude = localStorage.getItem("longitude");
   partnersInList = [];
   partnerListOpen = false;
   scrollTop = 0;
@@ -37,6 +37,14 @@ export class PartnerMapComponent implements AfterViewChecked, OnChanges{
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    if (localStorage.getItem("locationAvailable") === "true") {
+      this.currentLatitude = localStorage.getItem("latitude");
+      this.currentLongitude = localStorage.getItem("longitude");
+    }
+    else {
+      this.currentLatitude = "52.5219";
+      this.currentLongitude = "13.4132";
+    }
   }
 
   ngOnChanges(){
