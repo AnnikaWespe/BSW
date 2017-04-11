@@ -41,6 +41,7 @@ export class ChooseLocationManuallyComponent {
     localStorage.setItem("latitude", this.latitude);
     localStorage.setItem("longitude", this.longitude);
     localStorage.setItem("locationAvailable", "true");
+    localStorage.setItem("locationExact", "true");
   }
 
   inputToSuggestions(){

@@ -71,12 +71,12 @@
       </ion-row>
 
 
-      <div class="filter-dropdown" *ngIf="showDropdown[1]">
+      <div class="filter-dropdown" [@show]="showDropdown[0].toString()">
         <div class="filterBy">A - Z</div>
         <div tappable class="filterBy" (click)="showPartner(partner)">Z - A</div>
       </div>
 
-      <div class="filter-menu" *ngIf="showDropdown[0]">
+      <div class="filter-menu" [@show]="showDropdown[1].toString()">
         <ion-row class="currentLocation" *ngIf="offlinePartnerPageComponent || searchPageComponent">
           <ion-col class="currentPosition" *ngIf="getLocationFromGPSEnabled">
             Aktueller Standort

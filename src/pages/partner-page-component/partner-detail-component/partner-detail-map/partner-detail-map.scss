@@ -30,6 +30,13 @@ page-partner-detail-map {
       text-align: center;
       border-radius: 4vw;
       border: solid 1px map_get($colors, primary);
+      &.center{
+        position: absolute;
+        top: 50%;
+        height: 8vw;
+        margin-top: -1.5vw;
+        margin-left: -8vw;
+      }
     }
   }
   div.transport{
@@ -48,6 +55,11 @@ page-partner-detail-map {
   div.goToRoute{
     height: 10vh;
     color: map_get($colors, primary);
+    &.center{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
   div.adress-div{
     border-top: 1px solid grey;

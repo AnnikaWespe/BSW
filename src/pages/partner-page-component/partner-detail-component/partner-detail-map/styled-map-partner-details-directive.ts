@@ -20,35 +20,20 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
   ngOnInit() {
     this.googleMapsWrapper.getNativeMap()
       .then((map) => {
-        this.setMapOptions(map);
         this.extendBounds(map);
         this.initializeDirectionService();
       });
-  }
-
-  private setMapOptions(map: any) {
-    // let stylesArray : any = [
-    //   {
-    //     featureType: "poi",
-    //     elementType: "labels",
-    //     stylers: [
-    //       { visibility: "off" }
-    //     ]
-    //   }
-    // ];
-
   }
 
   private extendBounds(map) {
     let bounds = new google.maps.LatLngBounds();
 
     bounds.extend({lat: 48.1300, lng: 11.5700});
-    if (LocationData.locationAvailable) {
-      bounds.extend({lat: Number(LocationData.latitude), lng: Number(LocationData.longitude)});
+    if (localStorage.getItem("locationAvailable") === "true") {
+      bounds.extend({lat: Number(localStorage.getItem("latitude")), lng: Number(localStorage.getItem("longitude"))});
     }
     map.setOptions({
       streetViewControl: false
-      // styles: stylesArray
     });
     map.fitBounds(bounds);
   }
@@ -56,7 +41,7 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
   private initializeDirectionService() {
 
     let directionsService = new google.maps.DirectionsService();
-    let origin = new google.maps.LatLng(LocationData.latitude, LocationData.longitude);
+    let origin = new google.maps.LatLng(Number(localStorage.getItem("latitude")), Number(localStorage.getItem("longitude")));
     let destination = new google.maps.LatLng(48.1300, 11.5700);
 
     let requestPublic = {origin: origin, destination: destination, travelMode: google.maps.TravelMode.TRANSIT};

@@ -31,22 +31,28 @@
   </sebm-google-map>
 
   <div class="goToRoute">
-    <div class="icons">
-      <div class="public-transport transport">
-        <ion-icon name = "bus" color = "primary"></ion-icon>
-        <p>{{travelTimePublic}}</p>
-      </div>
-      <div class="car transport">
-        <ion-icon name = "car" color = "primary"></ion-icon>
-        <p>{{travelTimeCar}}</p>
-      </div>
-      <div class="pedestrian transport">
-        <ion-icon name = "walk" color = "primary"></ion-icon>
-        <p>{{travelTimePedestrian}}</p>
-      </div>
+  <div class="icons" *ngIf="travelTimePublic || travelTimePedestrian || travelTimePedestrian">
+    <div class="public-transport transport">
+      <ion-icon name = "bus" color = "primary"></ion-icon>
+      <p>{{travelTimePublic}}</p>
     </div>
+    <div class="car transport">
+      <ion-icon name = "car" color = "primary"></ion-icon>
+      <p>{{travelTimeCar}}</p>
+    </div>
+    <div class="pedestrian transport">
+      <ion-icon name = "walk" color = "primary"></ion-icon>
+      <p>{{travelTimePedestrian}}</p>
+    </div>
+  </div>
+  <div tappable class="route" (click)="openExternalMapApp()">
+    <p  class="btn-pill">Route</p>
+  </div>
+</div>
+
+  <div class="goToRoute center" *ngIf="!travelTimePublic && !travelTimePedestrian && !travelTimePedestrian">
     <div tappable class="route" (click)="openExternalMapApp()">
-      <p  class="btn-pill">Route</p>
+      <p class="btn-pill center">Route</p>
     </div>
   </div>
 

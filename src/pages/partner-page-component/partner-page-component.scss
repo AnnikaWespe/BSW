@@ -52,6 +52,9 @@ partner-page-component {
     position: fixed;
     width: 100%;
     z-index: 150;
+    div.filter-menu{
+      overflow: hidden;
+    }
     div.filter-menu {
       color: map_get($colors, font-color-for-filter-dropdown);
       text-align: center;
@@ -63,19 +66,20 @@ partner-page-component {
       z-index: 100;
       border-bottom: 1px solid grey;
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      overflow: hidden;
       ion-row.currentLocation {
         height: 8vh;
         line-height: 8vh;
         border-bottom: 1px solid grey;
         margin-bottom: 3vw;
-        p{
+        p {
           margin: 0;
-          &.changeLocation{
+          &.changeLocation {
             font-size: x-small;
             line-height: 1.5vh;
             color: map_get($colors, primary);
           }
-          &.cityName{
+          &.cityName {
             line-height: 4vh;
             margin-top: 2vh;
           }
@@ -83,7 +87,7 @@ partner-page-component {
       }
       ion-col {
         padding: 0 5vw 0 5vw;
-        &.toggle{
+        &.toggle {
           padding-top: 0.7vh;
         }
         &.currentPosition {
@@ -91,21 +95,21 @@ partner-page-component {
           min-width: 83vw;
           padding-right: 0;
         }
-        &.map-icon{
+        &.map-icon {
           padding-left: 0;
         }
-        ion-spinner{
+        ion-spinner {
           height: 8vh;
         }
-        &.map-icon div{
-          background: url('../assets/icon/mapmarker.svg')no-repeat;
+        &.map-icon div {
+          background: url('../assets/icon/mapmarker.svg') no-repeat;
           background-size: contain;
           text-align: right;
           min-width: 8vh;
           min-height: 8vh;
           float: right;
           &.manually {
-            background: url('../assets/icon/mapmarker_crossed.svg')no-repeat;
+            background: url('../assets/icon/mapmarker_crossed.svg') no-repeat;
             background-size: contain;
           }
         }
@@ -130,7 +134,7 @@ partner-page-component {
       }
       ion-row.toggle {
         font-weight: bolder;
-        &.biggerMarginTop{
+        &.biggerMarginTop {
           padding-top: 2vh;
         }
       }

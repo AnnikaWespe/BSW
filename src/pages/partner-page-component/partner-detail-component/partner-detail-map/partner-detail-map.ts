@@ -30,11 +30,13 @@ export class PartnerDetailMap {
   star = this.starInactive;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.currentLatitude = parseFloat(LocationData.latitude);
-    this.currentLongitude = parseFloat(LocationData.longitude);
-    this.locationAvailable = LocationData.locationAvailable;
-    this.locationExact = LocationData.locationExact;
-    console.log("PartnerDetailMap: ", LocationData.latitude + " " + LocationData.longitude)
+    if (localStorage.getItem("locationAvailable") === "true"){
+      this.currentLatitude = parseFloat(localStorage.getItem("latitude"));
+      this.currentLongitude = parseFloat(localStorage.getItem("longitude"));
+      this.locationAvailable = true;
+    }
+    else {this.locationAvailable = false};
+    console.log("PartnerDetailMap: ", this.currentLatitude + " " + this.currentLongitude)
   }
 
   toggleFavorites(){
@@ -48,10 +50,10 @@ export class PartnerDetailMap {
 
   openExternalMapApp(){
     if(device.platform == "Android"){
-      window.open("geo:48,11?q=48,11(Hier wollen Sie hin)", '_system', 'location=yes');
+      window.open("geo:49,10?q=48,11(Hier wollen Sie hin)", '_system', 'location=yes');
     }
     else {
-      window.open("http://maps.apple.com/?q=48,11");
+      window.open("http://maps.apple.com/?saddr=48,11&daddr=49,10");
     }
   }
 

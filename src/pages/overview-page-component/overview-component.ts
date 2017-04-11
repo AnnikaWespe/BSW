@@ -1,11 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
-import {Geolocation} from '@ionic-native/geolocation';
+import {Component, OnInit, OnDestroy, AfterViewChecked} from '@angular/core';
+import {NavController, NavParams} from 'ionic-angular';
 
 
-import {LocationData} from "../../services/location-data";
 import {PartnerService} from "../../services/partner-service";
 import {PartnerPageComponent} from "../partner-page-component/partner-page-component";
+import {LocationService} from "../../services/location-service";
 
 
 @Component({
@@ -13,15 +12,14 @@ import {PartnerPageComponent} from "../partner-page-component/partner-page-compo
   selector: 'page-overview',
   templateUrl: 'overview-component.html',
 })
-export class OverviewPageComponent implements OnInit {
+export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   title: string = "Übersicht";
-  balance: number = 232;
-  bonusThisYear: number = 124;
-  heightBalanceBarBonusBarBuffer = ["0vh","0vh", "0vh", "0vh"];
+  balance: number = 10;
+  bonusThisYear: number = 1;
+  heightBalanceBarBonusBarBuffer = ["0vh", "0vh", "0vh", "0vh"];
   maxHeightBarInVh = 14;
   location = {latitude: "0", longitude: "0"};
-  locationFound = false;
   errorMessage: string;
   waitingForResults = true;
   onlinePartners: any[];
@@ -30,46 +28,66 @@ export class OverviewPageComponent implements OnInit {
   lastVisitedPartners: any[];
   searchInterfaceOpen = false;
 
+  getPartnersSubscription: any;
+  getLocationSubscription: any;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService, private locationService: LocationService) {
+    this.checkIfGPSEnabled();
+  }
+
+  ngOnDestroy() {
+    if (this.getPartnersSubscription) {
+      this.getPartnersSubscription.unsubscribe();
+    }
+    ;
+    if (this.getLocationSubscription) {
+      this.getLocationSubscription.unsubscribe();
+    }
+  }
 
 
+  checkIfGPSEnabled(){
+    if (localStorage.getItem("getLocationFromGPSEnabled") === "true") {
+      this.getLocationSubscription = this.locationService.getLocation().subscribe(
+        (object) => {
+          if (object.locationFound == true) {
+            this.location.latitude = object.lat;
+            this.location.longitude = object.lon;
+            this.getPartners();
+          }
+          else {
+            this.getStoredLocationData();
+          }
+        }
+      )
+    }
+    else {
+      this.getStoredLocationData()
+    }
+  }
 
-  constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    private partnerService: PartnerService,
-    private geolocation: Geolocation
-  ) {}
+  getStoredLocationData() {
+    if (localStorage.getItem("locationAvailable") === "true") {
+      this.location.latitude = localStorage.getItem("latitude");
+      this.location.longitude = localStorage.getItem("longitude");
+    }
+    else {
+      this.location.latitude = "52.5219";
+      this.location.longitude = "13.4132";
+    }
+    this.getPartners();
+  }
+
 
   public ngAfterViewChecked() {
     this.setFocus();
+
   }
 
-  ngOnInit(){
-    if(LocationData.locationAvailable){
-      this.location.latitude = LocationData.latitude;
-      this.location.longitude = LocationData.longitude;
-      this.getPartners();
-    }
-    else {
-      this.getLocationData();
-    }
-  }
-  getLocationData() {
-    this.geolocation.getCurrentPosition()
-    .then((position) => {
-      this.location.latitude = position.coords.latitude.toFixed(4);
-      this.location.longitude = position.coords.longitude.toFixed(4)
-      this.locationFound = true;
-      this.getPartners();
-      LocationData.latitude = this.location.latitude;
-      LocationData.longitude = this.location.longitude;
-      LocationData.locationExact = true;
-      LocationData.locationAvailable = true;
-    })
-  }
+
 
   getPartners() {
-    this.partnerService.getPartners(this.location, 0, "")
+    this.getPartnersSubscription = this.partnerService.getPartners(this.location, 0, "")
       .subscribe(
         body => {
           let returnedObject = body.json();
@@ -79,39 +97,43 @@ export class OverviewPageComponent implements OnInit {
         error => this.errorMessage = <any>error);
   }
 
-  getOnlineAndOfflinePartners(returnedObject){
-    this.offlinePartners = returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities.slice(0,5);
-    this.onlinePartners = returnedObject.originalSearchResults.bucketToSearchResult["ONLINEPARTNER"].contentEntities.slice(0,5);
+  getOnlineAndOfflinePartners(returnedObject) {
+    this.onlinePartners = returnedObject.originalSearchResults.bucketToSearchResult["ONLINEPARTNER"].contentEntities.slice(0, 5);
+    let offlinePartnerArray = returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities;
+    if (offlinePartnerArray) {
+      this.offlinePartners = offlinePartnerArray.slice(0, 5)
+    }
   }
 
-  showOfflinePartners(){
-    this.navCtrl.push(PartnerPageComponent, {activeFilter: "localPartners", title: "Vor Ort Partner"});
+  showOfflinePartners() {
+    this.navCtrl.push(PartnerPageComponent, {type: "offlinePartnerPageComponent"});
   }
 
 
-  showOnlinePartners(){
-    this.navCtrl.push(PartnerPageComponent, {activeFilter: "onlinePartners", title: "Online Partner"});
+  showOnlinePartners() {
+    this.navCtrl.push(PartnerPageComponent, {type: "onlinePartnerPageComponent"});
   }
 
-  loadPartnerPage(searchTerm){
-    this.navCtrl.setRoot(PartnerPageComponent, {activeFilter: "allPartners", searchTerm: searchTerm, title: searchTerm})
+  loadPartnerPage(searchTerm) {
+    this.searchInterfaceOpen = false;
+    this.navCtrl.push(PartnerPageComponent, {type: "searchPageComponent", searchTerm: searchTerm})
   }
 
   //pure DOM method(s)
 
-  heightBlueBarRedBar(){
+  heightBlueBarRedBar() {
     let heightOtherDiv;
-    if(this.balance > this.bonusThisYear){
+    if (this.balance > this.bonusThisYear) {
       this.heightBalanceBarBonusBarBuffer[0] = this.maxHeightBarInVh + "vh";
-      heightOtherDiv = Math.round((this.bonusThisYear / this.balance) * this.maxHeightBarInVh);
-      this.heightBalanceBarBonusBarBuffer[1] =  heightOtherDiv + "vh";
-      this.heightBalanceBarBonusBarBuffer[3] =  this.maxHeightBarInVh - heightOtherDiv + "vh";
+      heightOtherDiv = Math.max(Math.round((this.bonusThisYear / this.balance) * this.maxHeightBarInVh), 1);
+      this.heightBalanceBarBonusBarBuffer[1] = heightOtherDiv + "vh";
+      this.heightBalanceBarBonusBarBuffer[3] = this.maxHeightBarInVh - heightOtherDiv + "vh";
     }
     else {
       this.heightBalanceBarBonusBarBuffer[1] = this.maxHeightBarInVh + "vh";
-      heightOtherDiv = Math.round((this.bonusThisYear / this.balance) * this.maxHeightBarInVh);
+      heightOtherDiv = Math.max(Math.round((this.balance / this.bonusThisYear) * this.maxHeightBarInVh), 1);
       this.heightBalanceBarBonusBarBuffer[0] = heightOtherDiv + "vh";
-      this.heightBalanceBarBonusBarBuffer[2] =  this.maxHeightBarInVh - heightOtherDiv + "vh";
+      this.heightBalanceBarBonusBarBuffer[2] = this.maxHeightBarInVh - heightOtherDiv + "vh";
     }
     return this.heightBalanceBarBonusBarBuffer;
   }
