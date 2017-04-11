@@ -16,7 +16,9 @@
 
 
       <ion-buttons left *ngIf="showCustomBackButton" (click)="customBackButtonClicked()">
-        <button><ion-icon class="back-button-icon icon icon-md back-button-icon-md ion-md-arrow-back" color="grey"></ion-icon></button>
+        <button>
+          <ion-icon class="back-button-icon icon icon-md back-button-icon-md ion-md-arrow-back" color="grey"></ion-icon>
+        </button>
       </ion-buttons>
 
       <ion-title>
@@ -49,6 +51,7 @@
   <div class="wrapper-div">
 
     <div class="filter-wrapper">
+
       <ion-row *ngIf="!showMap" class="filter-button-row" [class.dropdownOpen]="showDropdown[2]">
         <ion-col tappable class="filter-button left-button" (click)="toggleVisibilityDropdowns(0)">
           <div class="filter-button-text" [class.notActive]="showDropdown[1]">FILTER
@@ -70,13 +73,7 @@
         </ion-col>
       </ion-row>
 
-
-      <div class="filter-dropdown" [@show]="showDropdown[0].toString()">
-        <div class="filterBy">A - Z</div>
-        <div tappable class="filterBy" (click)="showPartner(partner)">Z - A</div>
-      </div>
-
-      <div class="filter-menu" [@show]="showDropdown[1].toString()">
+      <div class="filter-menu" [@show]="showDropdownForAnimation[0]">
         <ion-row class="currentLocation" *ngIf="offlinePartnerPageComponent || searchPageComponent">
           <ion-col class="currentPosition" *ngIf="getLocationFromGPSEnabled">
             Aktueller Standort
@@ -89,7 +86,7 @@
             <div [class.manually]="!getLocationFromGPSEnabled"></div>
           </ion-col>
           <ion-col>
-              <ion-spinner *ngIf="waitingForGPSSignal" class="waitingForGPSSignalSpinner"></ion-spinner>
+            <ion-spinner *ngIf="waitingForGPSSignal" class="waitingForGPSSignalSpinner"></ion-spinner>
           </ion-col>
         </ion-row>
 
@@ -125,6 +122,13 @@
           </button>
         </div>
       </div>
+
+      <div class="filter-menu" [@show]="showDropdownForAnimation[1]">
+        <div class="filterBy">A - Z</div>
+        <div tappable class="filterBy" (click)="showPartner(partner)">Z - A</div>
+      </div>
+
+
     </div>
 
     <div class="initialSpinner" *ngIf="waitingForResults">

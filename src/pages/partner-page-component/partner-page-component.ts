@@ -1,17 +1,24 @@
 import {Component, AfterViewChecked, ViewChild, OnDestroy} from '@angular/core';
 import {NavController, NavParams, Content} from 'ionic-angular';
-//import {trigger,state,style,animate,transition} from ;
 
 import {PartnerService} from "../../services/partner-service";
 import {ChooseLocationManuallyComponent} from "./choose-location-manually/choose-location-manually-component";
 import {AlertController} from 'ionic-angular';
 import {PartnerDetailComponent} from "./partner-detail-component/partner-detail-component";
 import {LocationService} from "../../services/location-service";
+import {style, state, trigger, transition, animate} from "@angular/animations";
 
 @Component({
   selector: 'partner-page-component',
   templateUrl: 'partner-page-component.html',
-  //animations: [trigger()]
+  animations: [trigger('show', [state('false', style({
+    height: '0vh'
+  })),
+  state('true', style({
+    height: '84vh'
+  })),
+    transition('false <=> true', animate('500ms'))
+  ])]
 })
 export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   @ViewChild(Content) content: Content;
@@ -22,10 +29,12 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   getLocationSubscription: any;
 
   location = {latitude: "0", longitude: "0"};
-  locationAvailable = false;
 
   showCustomBackButton = false;
-  showDropdown: boolean[] = [false, false];
+  showDropdown = [false, false, false];
+  showDropdownForAnimation = ["false", "false"];
+
+
   waitingForResults: boolean = true;
   mapWaitingForResults;
   waitingForGPSSignal = false;
@@ -72,13 +81,12 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     }
   }
 
-  constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    private partnerService: PartnerService,
-    public alertCtrl: AlertController,
-    public locationService: LocationService
-  ) {
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              private partnerService: PartnerService,
+              public alertCtrl: AlertController,
+              public locationService: LocationService) {
+
     let pageType = navParams.get("type");
     this[pageType] = true;
     this.pageType = pageType;
@@ -201,16 +209,16 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   filterButtonPushed() {
     if (this.showOfflinePartners) {
-      this.showDropdown = [false, false, false];
       this.waitingForResults = true;
       this.mapWaitingForResults = true;
       this.checkIfGPSEnabled();
     }
     else {
-      this.showDropdown = [false, false, false];
       this.waitingForResults = true;
       this.getDisplay();
     }
+    this.showDropdown = [false, false, false];
+    this.showDropdownForAnimation = ["false", "false"];
   }
 
   getDisplay() {
@@ -245,6 +253,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       showOnlyPartnersWithCampaign: this.showOnlyPartnersWithCampaign,
     });
     this.showDropdown = [false, false, false];
+    this.showDropdownForAnimation = ["false", "false"];
   }
 
 
@@ -298,12 +307,14 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     });
     prompt.present();
     this.showDropdown = [true, false, true];
+    this.showDropdownForAnimation = ["true", "false"];
   }
 
   toggleMapAndList() {
     this.showMap = !this.showMap;
     this.mapWaitingForResults = true;
     this.showDropdown = [false, false, false];
+    this.showDropdownForAnimation = ["false", "false"];
   }
 
   toggleGetLocationFromGPSEnabled() {
@@ -326,7 +337,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
             this.showPromptGPSDisabled();
             this.waitingForGPSSignal = false;
           }
-          ;
         }
       )
     }
@@ -348,15 +358,18 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   hideDropdown() {
     this.showDropdown = [false, false, false];
+    this.showDropdownForAnimation = ["false", "false"];
   }
 
 
   toggleVisibilityDropdowns(position) {
     let isVisible = this.showDropdown[position];
     let anythingVisible = this.showDropdown[2];
-    this.showDropdown = [false, false];
+    this.showDropdown = [false, false, false];
     this.showDropdown[position] = !isVisible;
     this.showDropdown[2] = !anythingVisible;
+    this.showDropdownForAnimation = [this.showDropdown[0].toString(), this.showDropdown[1].toString()];
+    console.log(this.showDropdownForAnimation);
   }
 
   closeSearchInterface() {
@@ -368,8 +381,9 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     }
     this.searchTerm = "";
     this.showDropdown = [false, false, false];
+    this.showDropdownForAnimation = ["false", "false"];
     this.title = localStorage.getItem("title");
-    if(this.searchPageComponent){
+    if (this.searchPageComponent) {
       this.showCustomBackButton = true;
     }
   }
@@ -381,8 +395,12 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     infiniteScroll.complete();
   }
 
-  customBackButtonClicked(){
+  customBackButtonClicked() {
     this.navCtrl.pop();
+  }
+
+  toString(input) {
+    return input.toString();
   }
 
 }

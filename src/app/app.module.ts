@@ -1,5 +1,5 @@
 import { NgModule, ErrorHandler } from '@angular/core';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import {IonicApp, IonicModule, IonicErrorHandler, Animation} from 'ionic-angular';
 import {FormsModule} from '@angular/forms';
 import {HttpModule, JsonpModule} from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -41,6 +41,7 @@ import {SafePipe} from "../pipes/safe-pipe";
 import {LocationService} from "../services/location-service";
 import {ActionsPageComponent} from "../pages/actions-page-component/actions-page-component";
 import {LoginWebviewComponent} from "../pages/login-page-component/login-webview/login-webview";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 
 @NgModule({
@@ -78,6 +79,7 @@ import {LoginWebviewComponent} from "../pages/login-page-component/login-webview
     FormsModule,
     HttpModule,
     JsonpModule,
+    BrowserAnimationsModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBAHcgksDNzLfzvKC0ZjnoQZeivSQbE1Iw'
     }),

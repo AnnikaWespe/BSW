@@ -64,8 +64,6 @@ partner-page-component {
       height: 84vh;
       background-color: map_get($colors, secondary-grey);
       z-index: 100;
-      border-bottom: 1px solid grey;
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
       overflow: hidden;
       ion-row.currentLocation {
         height: 8vh;
@@ -92,7 +90,7 @@ partner-page-component {
         }
         &.currentPosition {
           text-align: left;
-          min-width: 83vw;
+          min-width: 80vw;
           padding-right: 0;
         }
         &.map-icon {
@@ -118,11 +116,6 @@ partner-page-component {
         height: 4vh;
         text-align: center;
       }
-      div.showSelectionWrapper {
-        position: absolute;
-        bottom: 2vh;
-        width: 100%;
-      }
       button.showSelection {
         font-size: larger;
         width: 80vw;
@@ -131,6 +124,7 @@ partner-page-component {
         border-radius: 2px;
         margin: 5.5vh 0 5.5vh 0;
         padding: 0;
+        margin-top: 55vh;
       }
       ion-row.toggle {
         font-weight: bolder;
