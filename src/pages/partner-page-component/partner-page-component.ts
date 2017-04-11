@@ -72,8 +72,13 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     }
   }
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService,
-              public alertCtrl: AlertController, public locationService: LocationService) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private partnerService: PartnerService,
+    public alertCtrl: AlertController,
+    public locationService: LocationService
+  ) {
     let pageType = navParams.get("type");
     this[pageType] = true;
     this.pageType = pageType;
@@ -331,7 +336,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.getManuallySetLocationData();
     }
   }
-  
+
 //pure DOM methods
 
   private setFocus() {

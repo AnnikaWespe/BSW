@@ -8,6 +8,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class SearchCompletionService {
   constructor (private http: Http) {}
+
   getSuggestions (searchTerm, latitude = "0", longitude = "0"): Observable<any> {
     let rootOfUrl = "https://www.bsw.de/autocomplete/completephrasep?prefix=";
     let requestUrl : string = rootOfUrl + searchTerm + "&hal&radius=50&latitude=" + latitude + "&longitude=" + longitude + "&callback=www.bsw.de";
@@ -16,6 +17,7 @@ export class SearchCompletionService {
       .map(this.extractData)
       .catch(this.handleError);
   }
+
   private extractData(res: Response) {
     console.log(res);
     let helperString = res.text().replace("www.bsw.de", "");

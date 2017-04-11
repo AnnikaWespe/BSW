@@ -2,6 +2,14 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import {FormsModule} from '@angular/forms';
 import {HttpModule, JsonpModule} from '@angular/http';
+import { BrowserModule } from '@angular/platform-browser';
+
+import {SplashScreen} from '@ionic-native/splash-screen';
+import {StatusBar} from '@ionic-native/status-bar';
+import {Camera} from '@ionic-native/camera';
+import {BarcodeScanner} from '@ionic-native/barcode-scanner';
+import {Geolocation} from '@ionic-native/geolocation';
+
 import { AgmCoreModule } from 'angular2-google-maps/core';
 
 import { MyApp } from './app.component';
@@ -66,6 +74,7 @@ import {LoginWebviewComponent} from "../pages/login-page-component/login-webview
   ],
   imports: [
     IonicModule.forRoot(MyApp),
+    BrowserModule,
     FormsModule,
     HttpModule,
     JsonpModule,
@@ -94,7 +103,18 @@ import {LoginWebviewComponent} from "../pages/login-page-component/login-webview
     UserDetailWebviewComponent,
     LoginWebviewComponent
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, PartnerService, LocationService, SearchCompletionService, GoogleMapsAPIWrapper],
 
+  providers: [
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    SplashScreen,
+    StatusBar,
+    Camera,
+    BarcodeScanner,
+    Geolocation,
+    LocationService,
+    PartnerService,
+    SearchCompletionService,
+    GoogleMapsAPIWrapper
+  ]
 })
 export class AppModule {}

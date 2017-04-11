@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Http, Response} from '@angular/http';
-import {Geolocation} from 'ionic-native';
+import {Geolocation} from '@ionic-native/geolocation';
 
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
@@ -16,12 +16,12 @@ export class LocationService {
   private latitude;
   private longitude;
 
-  constructor(private http: Http) {
-  }
+  constructor(private http: Http, private geolocation: Geolocation) {}
+
 
   getLocation(): Observable<any> {
     return Observable.fromPromise(
-      Geolocation.getCurrentPosition().then((position) => {
+      this.geolocation.getCurrentPosition().then((position) => {
         let latitude = position.coords.latitude.toFixed(4);
         let longitude = position.coords.longitude.toFixed(4);
         localStorage.setItem("latitude", latitude);

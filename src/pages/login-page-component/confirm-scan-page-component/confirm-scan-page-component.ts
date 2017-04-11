@@ -1,6 +1,6 @@
 import { Component} from '@angular/core';
 import {NavController, NavParams, AlertController} from 'ionic-angular';
-import {BarcodeScanner} from 'ionic-native';
+import {BarcodeScanner} from '@ionic-native/barcode-scanner';
 
 import {BarcodeData} from "./BarcodeData";
 import {LoginPageComponent} from "../login-component";
@@ -13,28 +13,35 @@ export class ConfirmScanPageComponent {
 
   //@ViewChild(Nav) nav: Nav;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {}
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public alertCtrl: AlertController,
+    private barcodeScanner: BarcodeScanner
+  ) {}
 
-  loadScanPage(){
-  BarcodeScanner.scan()
-      .then((result) => {
-        if (!result.cancelled) {
-          const barcodeData = new BarcodeData(result.text, result.format);
-          if(barcodeData.text.length === 10){
-            this.backToLoginPage(barcodeData);
-          }
-          else{
-            this.showPromptIncorrectBarcode();
-          }
+  loadScanPage() {
+    this.barcodeScanner.scan()
+    .then((result) => {
+      if (!result.cancelled) {
+        const barcodeData = new BarcodeData(result.text, result.format);
+        if (barcodeData.text.length === 10) {
+          this.backToLoginPage(barcodeData);
         }
-      })
-      .catch((err) => {
-        alert(err);
-      })
-  };
+        else{
+          this.showPromptIncorrectBarcode();
+        }
+      }
+    })
+    .catch((err) => {
+      alert(err);
+    });
+  }
+
   backToLoginPage(barcodeData) {
     this.navCtrl.push(LoginPageComponent, {barcodeData: barcodeData});
   }
+
   showPromptIncorrectBarcode() {
     let prompt = this.alertCtrl.create({
       title: 'Barcode konnte nicht gelesen werden.',

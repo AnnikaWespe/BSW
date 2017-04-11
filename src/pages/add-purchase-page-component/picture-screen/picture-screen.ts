@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {NavParams, NavController} from "ionic-angular";
 import {AddPurchasePageComponent} from "../add-purchase-component";
-import {Camera} from "ionic-native";
+import {Camera} from "@ionic-native/camera";
 
 declare let window: any;
 
@@ -14,19 +14,25 @@ export class PictureScreenComponent {
   base64Image: string;
   title = "Einkauf nachtragen";
 
-  constructor(public navCtrl: NavController, public navParams: NavParams){
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private camera: Camera
+  ) {
     this.base64Image = navParams.get('base64Image');
   }
 
   scanReceipt(){
-    Camera.getPicture({
-      destinationType: Camera.DestinationType.DATA_URL,
+    this.camera.getPicture({
+      destinationType: this.camera.DestinationType.DATA_URL,
       targetWidth: 1000,
       targetHeight: 1000
-    }).then((imageData) => {
+    })
+    .then((imageData) => {
       this.base64Image = "data:image/jpeg;base64," + imageData;
-    }, (err) => {
-      console.log(err);
+    })
+    .catch((err) => {
+      console.error(err);
     });
   }
 

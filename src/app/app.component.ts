@@ -1,7 +1,7 @@
 import {Component, ViewChild, OnInit} from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
-import { StatusBar, Splashscreen } from 'ionic-native';
-
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { StatusBar } from '@ionic-native/status-bar';
 
 import  {AddPurchasePageComponent} from '../pages/add-purchase-page-component/add-purchase-component';
 import {OverviewPageComponent} from "../pages/overview-page-component/overview-component";
@@ -10,33 +10,35 @@ import {MyProfilePageComponent} from "../pages/my-profile-page-component/my-prof
 import {PartnerPageComponent} from "../pages/partner-page-component/partner-page-component";
 import {SettingsPageComponent} from "../pages/settings-page-component/settings-page-component";
 import {DeviceService} from "../services/device-data";
-import {LocationService} from "../services/location-service";
 import {FilterData} from "../services/filter-data";
 
 
 @Component({
   templateUrl: 'app.html'
 })
-export class MyApp implements OnInit{
+export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = LoginPageComponent;
   pages: Array<{title: string, component: any, parameters: {}}>;
 
 
-  constructor(public platform: Platform, private locationService: LocationService) {
+  constructor(
+    private platform: Platform,
+    private splashScreen: SplashScreen,
+    private statusBar: StatusBar
+  ) {
     this.initializeApp();
     this.setMenu();
   }
 
-  ngOnInit(){
-    this.getDevice();
-  }
-
   initializeApp() {
-    this.platform.ready().then(() => {
-      StatusBar.styleDefault();
-      Splashscreen.hide();
+    this.platform.ready()
+    .then(() => {
+      this.statusBar.styleDefault();
+      this.splashScreen.hide();
+
+      this.getDevice();
     });
   }
 
@@ -73,7 +75,4 @@ export class MyApp implements OnInit{
       { title: 'Einstellungen', component: SettingsPageComponent, parameters: {}},
       {title: "Abmelden", component: LoginPageComponent, parameters: {}}]
   }
-
 }
-
-
