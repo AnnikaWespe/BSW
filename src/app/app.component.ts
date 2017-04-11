@@ -30,6 +30,7 @@ export class MyApp {
   ) {
     this.initializeApp();
     this.setMenu();
+    localStorage.setItem("locationExact", "false");
   }
 
   initializeApp() {
@@ -37,7 +38,6 @@ export class MyApp {
     .then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-
       this.getDevice();
     });
   }

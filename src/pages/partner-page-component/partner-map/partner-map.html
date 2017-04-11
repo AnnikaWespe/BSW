@@ -4,10 +4,12 @@
     [latitude]="stringToNumber(currentLatitude)"
     [longitude]="stringToNumber(currentLongitude)"
     [zoomControl] = "false">
-    <sebm-google-map-circle [latitude]="stringToNumber(currentLatitude)" [longitude]="stringToNumber(currentLongitude)"
+    <sebm-google-map-circle [latitude]="stringToNumber(currentLatitude)"
+                            [longitude]="stringToNumber(currentLongitude)"
                             [fillColor]="'red'"
-                            [circleDraggable]="true"
-                            [editable]="true">
+                            [circleDraggable]="false"
+                            [editable]="true"
+                            *ngIf="locationExact">
     </sebm-google-map-circle>
     <styled-map-partners
       [partners]="partners"
@@ -29,5 +31,3 @@
     <partner-table [partners]="partnersInList"></partner-table>
   </div>
 </div>
-
-

@@ -16,6 +16,7 @@ export class PartnerMapComponent implements AfterViewChecked, OnChanges{
   partnerListOpen = false;
   scrollTop = 0;
   mapWaitingForResultsValue;
+  locationExact = false;
 
   @Input() partners: any[];
   @Input() get mapWaitingForResults(){
@@ -37,9 +38,10 @@ export class PartnerMapComponent implements AfterViewChecked, OnChanges{
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    if (localStorage.getItem("locationAvailable") === "true") {
+    if (localStorage.getItem("locationExact") === "true") {
       this.currentLatitude = localStorage.getItem("latitude");
       this.currentLongitude = localStorage.getItem("longitude");
+      this.locationExact = true;
     }
     else {
       this.currentLatitude = "52.5219";

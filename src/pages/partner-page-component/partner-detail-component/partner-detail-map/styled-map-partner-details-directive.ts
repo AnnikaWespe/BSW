@@ -21,7 +21,6 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
     this.googleMapsWrapper.getNativeMap()
       .then((map) => {
         this.extendBounds(map);
-        this.initializeDirectionService();
       });
   }
 
@@ -29,8 +28,10 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
     let bounds = new google.maps.LatLngBounds();
 
     bounds.extend({lat: 48.1300, lng: 11.5700});
-    if (localStorage.getItem("locationAvailable") === "true") {
+    if (localStorage.getItem("locationExact") === "true") {
       bounds.extend({lat: Number(localStorage.getItem("latitude")), lng: Number(localStorage.getItem("longitude"))});
+      this.initializeDirectionService();
+
     }
     map.setOptions({
       streetViewControl: false

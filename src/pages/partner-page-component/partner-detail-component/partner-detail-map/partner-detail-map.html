@@ -17,11 +17,13 @@
     [longitude]="11"
     [zoomControl] = "false">
     <sebm-google-map-marker [latitude] = "48.1300" [longitude] = "11.5700"></sebm-google-map-marker>
-    <sebm-google-map-circle [latitude]="currentLatitude" [longitude]="currentLongitude"
+    <sebm-google-map-circle [latitude]="currentLatitude"
+                            [longitude]="currentLongitude"
                             [fillColor]="'red'"
-                            [circleDraggable]="true"
+                            [circleDraggable]="false"
                             [editable]="true"
-                            *ngIf="locationAvailable">
+                            [strokeColor] = "'red'"
+                            *ngIf="locationExact">
     </sebm-google-map-circle>
 
     <styled-map-partner-details (travelTimePublicUpdated)="handleTravelTimePublicUpdated($event)"
@@ -30,8 +32,8 @@
     ></styled-map-partner-details>
   </sebm-google-map>
 
-  <div class="goToRoute">
-  <div class="icons" *ngIf="travelTimePublic || travelTimePedestrian || travelTimePedestrian">
+  <div class="goToRoute" *ngIf="travelTimeAvailable">
+  <div class="icons">
     <div class="public-transport transport">
       <ion-icon name = "bus" color = "primary"></ion-icon>
       <p>{{travelTimePublic}}</p>
@@ -50,7 +52,7 @@
   </div>
 </div>
 
-  <div class="goToRoute center" *ngIf="!travelTimePublic && !travelTimePedestrian && !travelTimePedestrian">
+  <div class="goToRoute center" *ngIf="!travelTimeAvailable">
     <div tappable class="route" (click)="openExternalMapApp()">
       <p class="btn-pill center">Route</p>
     </div>

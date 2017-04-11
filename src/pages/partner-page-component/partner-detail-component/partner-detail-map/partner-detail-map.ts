@@ -14,11 +14,11 @@ export class PartnerDetailMap {
   travelTimePublic: string;
   travelTimeCar: string;
   travelTimePedestrian: string;
+  travelTimeAvailable = false;
 
   currentLatitude: number;
   currentLongitude: number;
-  locationAvailable: boolean;
-  locationExact: boolean;
+  locationExact = false;
   starInactive = {
     name: "star-outline",
     color: "grey"
@@ -30,12 +30,11 @@ export class PartnerDetailMap {
   star = this.starInactive;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    if (localStorage.getItem("locationAvailable") === "true"){
+    if (localStorage.getItem("locationExact") === "true"){
       this.currentLatitude = parseFloat(localStorage.getItem("latitude"));
       this.currentLongitude = parseFloat(localStorage.getItem("longitude"));
-      this.locationAvailable = true;
+      this.locationExact = true;
     }
-    else {this.locationAvailable = false};
     console.log("PartnerDetailMap: ", this.currentLatitude + " " + this.currentLongitude)
   }
 
@@ -58,12 +57,15 @@ export class PartnerDetailMap {
   }
 
   handleTravelTimePublicUpdated(travelTimePublic) {
+    this.travelTimeAvailable = true;
     this.travelTimePublic = travelTimePublic;
   }
   handleTravelTimeCarUpdated(travelTimeCar) {
+    this.travelTimeAvailable = true;
     this.travelTimeCar = travelTimeCar;
   }
   handleTravelTimePedestrianUpdated(travelTimePedestrian) {
+    this.travelTimeAvailable = true;
     this.travelTimePedestrian = travelTimePedestrian;
   }
 }

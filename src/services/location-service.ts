@@ -26,6 +26,7 @@ export class LocationService {
         let longitude = position.coords.longitude.toFixed(4);
         localStorage.setItem("latitude", latitude);
         localStorage.setItem("longitude", longitude);
+        localStorage.setItem("locationExact", "true");
         localStorage.setItem("locationAvailable", "true");
         return {lat: latitude, lon: longitude, locationFound: true};
       }, (err) => {
