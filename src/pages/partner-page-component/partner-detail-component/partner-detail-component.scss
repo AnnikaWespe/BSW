@@ -1,14 +1,80 @@
 page-partner-detail-component {
-  .bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default{
+  .bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default {
     color: map_get($colors, grey) !important;
   }
-  img.big-logo-img{
-  }
-  div.my-image-wrapper{
-
-  }
-  div.online-partner-div{
-    width: 100%;
+  img {
+    width: 80%;
     display: block;
+    margin: auto;
+  }
+  div.partner-details {
+    padding: 0 0 0.5vh 7vw;
+    background-color: map-get($colors, light);
+    p.grey{
+      margin: 1vh 0;
+      color: map_get($colors, font-color-for-filter-dropdown);
+    }
+    div.description{
+      margin: 3vh 0 3vh 0;
+      line-height: 3vh;
+      div.showMore{
+        color: map_get($colors, primary);
+        text-decoration: underline;
+      }
+    }
+    div.titleAndButton {
+      .btn-pill {
+        text-decoration: none;
+        color: map_get($colors, primary);
+        font-size: 5vw;
+        padding: 0 2vw 0 4vw;
+        height: auto;
+        display: inline-block;
+        text-align: center;
+        border-radius: 5vw;
+        border: solid 1px map_get($colors, primary);
+        div.btn-pill-text{
+          display: inline-block;
+          line-height: 10vw;
+        }
+        div.centerMapIcon{
+          display: inline-block;
+          height: 8vw;
+        }
+        div.mapIcon{
+          background-size: contain;
+          height: 6vw;
+          width: 6vw;
+          overflow: hidden;
+          background: url('../assets/icon/map-pink.svg') no-repeat;
+          background-size: contain;
+          position: relative;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+      }
+      h3 {
+        width: 55vw;
+        display: inline-block;
+      }
+    }
+  }
+  ion-row.title-row{
+    background-color: map-get($colors, light-grey);
+    height: 8vh;
+  }
+  ion-col.title{
+    color: map-get($colors, font-grey-dark);
+    font-size: large;
+    line-height: 8vh;
+    text-align: left;
+  }
+  p.title-paragraph{
+    margin: 0 0 0 7vw;
+  }
+  ion-col.title.col{
+    padding: 0
   }
 }
+
+

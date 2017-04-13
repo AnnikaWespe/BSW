@@ -403,6 +403,11 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     return input.toString();
   }
 
+  scrollToTop(){
+    console.debug(".........", this.content)
+    this.content.scrollToTop();
+  }
+
 }
 
 

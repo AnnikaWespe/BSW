@@ -1,4 +1,3 @@
-
 <ion-header>
   <ion-navbar primary>
     <ion-title>
@@ -14,16 +13,37 @@
 
 
 <ion-content>
-  <div class="my-image-wrapper">
-    <img src="https://bild.avs.de/avsprod/1/11/025/671/bsw-advocado-11025671.png" class="big-logo-img">
-  </div>
-  <div class="online-partner-div">
-    <div class="title-div">
-      <h3 class="title-div-title">Matt Optik</h3>
-      <p>Augenoptik, Brillen, Kontaktlinsen, Ferngläser</p>
-      <p>Karlsplatz 12, 92323 Eschenbach</p>
-      <button (click)="goToPartnerDetailMap()">Zur Karte</button>
+  <img src="https://bild.avs.de/avsprod/1/11/025/671/bsw-advocado-11025671.png"
+       onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
+  <div class="offline-partner">
+    <div class="partner-details">
+      <div class="titleAndButton">
+        <h3 class="title">Matt Optik</h3>
+        <div tappable class="btn-pill" (click)='goToPartnerDetailMap()'>
+          <div class="btn-pill-text">
+            Zur Karte
+          </div>
+          <div class="centerMapIcon">
+            <div class="mapIcon"></div>
+          </div>
+        </div>
+      </div>
+      <p class="grey">Augenoptik, Brillen, Kontaktlinsen, Ferngläser</p>
+      <p class="grey">Karlsplatz 12, 92323 Eschenbach</p>
+      <div class="description">
+        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+        dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+        clita kas...
+        <div class="showMore">mehr anzeigen</div>
+      </div>
     </div>
+    <ion-row class="title-row">
+      <ion-col class="title">
+        <p class="title-paragraph">Aktuelles Angebot</p>
+      </ion-col>
+    </ion-row>
   </div>
-  <div class="offline-partner-div"></div>
+  <div class="online-partner">
+
+  </div>
 </ion-content>

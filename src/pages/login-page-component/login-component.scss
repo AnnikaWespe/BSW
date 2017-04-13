@@ -18,10 +18,10 @@ input.text-input.text-input-md.ng-pristine.ng-valid{
     height: 14vh;
   }
   .scroll-content{
-    background-color: #F4F5F9;
+    background-color: map-get($colors, light);
   }
   ion-item.item.item-block.item-md{
-    background-color: #F4F5F9;
+    background-color: map-get($colors, light);
   }
   div.center-text{
     text-align: center;

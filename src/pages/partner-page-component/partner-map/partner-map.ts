@@ -2,6 +2,7 @@ import {Component, Input, ViewChild, Output, EventEmitter, AfterViewChecked, OnC
 import {NavParams, NavController} from "ionic-angular";
 import {LocationData} from "../../../services/location-data";
 import {StyledMapPartnersDirective} from "./styled-map-partners-directive";
+import { Content } from 'ionic-angular';
 
 @Component({
   selector: 'partner-map',
@@ -24,6 +25,8 @@ export class PartnerMapComponent implements AfterViewChecked, OnChanges{
   };
   @Output() scrollToTop = new EventEmitter();
   @Output() mapWaitingForResultsChange = new EventEmitter();
+  @Output() onListUpdated = new EventEmitter();
+
 
   set mapWaitingForResults(val){
     this.mapWaitingForResultsValue = val;
@@ -65,11 +68,10 @@ export class PartnerMapComponent implements AfterViewChecked, OnChanges{
   }
 
   showList(markers = []) {
-    this.partnersInList = [];
+    let newPartners = markers.map((marker)=>{return marker.partner});
+    this.partnersInList = newPartners;
     this.partnerListOpen = true;
-    markers.forEach((marker) => {
-      this.partnersInList.push(marker.partner);
-    });
+    this.onListUpdated.emit();
   }
 
   getMapHeight() {
