@@ -43,7 +43,6 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
     else {
       this.searchTerms.next(term)
     }
-    ;
   }
 
   ngOnInit(): void {

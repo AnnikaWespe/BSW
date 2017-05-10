@@ -125,6 +125,9 @@ partner-page-component {
         margin: 5.5vh 0 5.5vh 0;
         padding: 0;
         margin-top: 55vh;
+        &.searchPageComponent{
+          margin-top: 42vh;
+        }
       }
       ion-row.toggle {
         font-weight: bolder;

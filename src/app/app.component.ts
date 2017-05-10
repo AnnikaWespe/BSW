@@ -37,6 +37,7 @@ export class MyApp {
     this.platform.ready()
     .then(() => {
       this.statusBar.styleDefault();
+      this.statusBar.backgroundColorByHexString('#929395');
       this.splashScreen.hide();
       this.getDevice();
     });

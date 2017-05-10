@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import {NavController, NavParams} from "ionic-angular";
 
 @Component({
-  selector: 'user-detail-webview',
-  templateUrl: 'user-detail-webview.html'
+  selector: 'webview',
+  templateUrl: 'webview.html'
 })
-export class UserDetailWebviewComponent {
+export class WebviewComponent {
 
   title: string;
   url: string;

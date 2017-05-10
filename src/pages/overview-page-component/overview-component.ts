@@ -87,7 +87,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
 
   getPartners() {
-    this.getPartnersSubscription = this.partnerService.getPartners(this.location, 0, "")
+    this.getPartnersSubscription = this.partnerService.getPartners(this.location, 0, "", false)
       .subscribe(
         body => {
           let returnedObject = body.json();
@@ -106,17 +106,17 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
   showOfflinePartners() {
-    this.navCtrl.push(PartnerPageComponent, {type: "offlinePartnerPageComponent"});
+    this.navCtrl.push(PartnerPageComponent, {type: "offlinePartnerPageComponent", navigatedFromOverview: true});
   }
 
 
   showOnlinePartners() {
-    this.navCtrl.push(PartnerPageComponent, {type: "onlinePartnerPageComponent"});
+    this.navCtrl.push(PartnerPageComponent, {type: "onlinePartnerPageComponent", navigatedFromOverview: true});
   }
 
   loadPartnerPage(searchTerm) {
     this.searchInterfaceOpen = false;
-    this.navCtrl.push(PartnerPageComponent, {type: "searchPageComponent", searchTerm: searchTerm})
+    this.navCtrl.push(PartnerPageComponent, {type: "searchPageComponent", searchTerm: searchTerm, navigatedFromOverview: true})
   }
 
   //pure DOM method(s)

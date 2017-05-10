@@ -14,10 +14,10 @@ import {style, state, trigger, transition, animate} from "@angular/animations";
   animations: [trigger('show', [state('false', style({
     height: '0vh'
   })),
-  state('true', style({
-    height: '84vh'
-  })),
-    transition('false <=> true', animate('500ms'))
+    state('true', style({
+      height: '84vh'
+    })),
+    transition('false <=> true', animate('200ms'))
   ])]
 })
 export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
@@ -59,6 +59,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   showOnlinePartners = false;
   showOnlyPartnersWithCampaign = false;
   pageType: string;
+  navigatedFromOverview = false;
   onlinePartnerPageComponent = false;
   offlinePartnerPageComponent = false;
   searchPageComponent = false;
@@ -88,6 +89,9 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
               public locationService: LocationService) {
 
     let pageType = navParams.get("type");
+    if (navParams.get('navigatedFromOverview')) {
+      this.navigatedFromOverview = true;
+    }
     this[pageType] = true;
     this.pageType = pageType;
     this.searchTerm = navParams.get("searchTerm") || "";
@@ -133,6 +137,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
             localStorage.setItem("getLocationFromGPSEnabled", "false");
             this.getLocationFromGPSEnabled = false;
             this.getManuallySetLocationData();
+            this.getPartners();
           }
         }
       )
@@ -171,14 +176,16 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   getPartnersWithSearchTerm(searchTerm) {
     this.searchInterfaceOpen = false;
-    this.showCustomBackButton = true;
     this.searchTerm = searchTerm + " ";
     this.getPartners();
     this.title = searchTerm;
+    if (this.navigatedFromOverview) {
+      this.showCustomBackButton = true;
+    }
   }
 
   getPartners() {
-    console.log(this.location, this.bucket, this.searchTerm);
+    console.log(this.location, this.bucket, this.searchTerm, this.showOnlyPartnersWithCampaign);
     if (this.resetPartnersArray == true) {
       this.allPartners = [];
       this.onlinePartners = [];
@@ -187,7 +194,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.bucket = 0;
       this.waitingForResults = true;
     }
-    this.getPartnersSubscription = this.partnerService.getPartners(this.location, this.bucket, this.searchTerm)
+    this.getPartnersSubscription = this.partnerService.getPartners(this.location, this.bucket, this.searchTerm, this.showOnlyPartnersWithCampaign)
       .subscribe(
         body => {
           let returnedObject = body.json();
@@ -369,7 +376,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.showDropdown[position] = !isVisible;
     this.showDropdown[2] = !anythingVisible;
     this.showDropdownForAnimation = [this.showDropdown[0].toString(), this.showDropdown[1].toString()];
-    console.log(this.showDropdownForAnimation);
   }
 
   closeSearchInterface() {
@@ -383,7 +389,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.showDropdown = [false, false, false];
     this.showDropdownForAnimation = ["false", "false"];
     this.title = localStorage.getItem("title");
-    if (this.searchPageComponent) {
+    if (this.navigatedFromOverview) {
       this.showCustomBackButton = true;
     }
   }
@@ -403,8 +409,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     return input.toString();
   }
 
-  scrollToTop(){
-    console.debug(".........", this.content)
+  scrollToTop() {
     this.content.scrollToTop();
   }
 

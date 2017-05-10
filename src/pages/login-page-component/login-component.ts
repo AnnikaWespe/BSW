@@ -6,7 +6,7 @@ import {Nav, NavController, NavParams, AlertController} from 'ionic-angular';
 import {OverviewPageComponent} from "../overview-page-component/overview-component";
 import {ConfirmScanPageComponent} from "./confirm-scan-page-component/confirm-scan-page-component";
 import {BarcodeData} from "./confirm-scan-page-component/BarcodeData";
-import {LoginWebviewComponent} from "./login-webview/login-webview";
+import {WebviewComponent} from "../webview/webview";
 
 @Component({
   selector: 'page-login-component',
@@ -30,7 +30,7 @@ export class LoginPageComponent {
   }
 
   loadWebView(title, url){
-    this.navCtrl.push(LoginWebviewComponent, {url: url, title: title})
+    this.navCtrl.push(WebviewComponent, {url: url, title: title})
   }
 
   pushOverviewPage(){
@@ -58,7 +58,9 @@ export class LoginPageComponent {
     }
   }
 
-  login(){}
+  login(){
+
+  }
 
   showPromptNoValidEmail() {
     let prompt = this.alertCtrl.create({

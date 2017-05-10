@@ -3,7 +3,7 @@ import {NavController, NavParams} from 'ionic-angular';
 
 import {UserDetailProvider} from './user-detail/user-detail-provider';
 import {UserDetail} from "./user-detail/UserDetail";
-import {UserDetailWebviewComponent} from "./user-detail-webview/user-detail-webview";
+import {WebviewComponent} from "../webview/webview";
 
 @Component({
   selector: 'my-profile-page-component',
@@ -20,7 +20,7 @@ export class MyProfilePageComponent {
     this.userDetail = profileDataProvider.getUserDetail();
   }
   getWebView(url, title){
-  this.navCtrl.push(UserDetailWebviewComponent, {url: url, title: title})
+  this.navCtrl.push(WebviewComponent, {url: url, title: title})
   }
 
 }

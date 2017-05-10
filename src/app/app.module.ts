@@ -36,12 +36,12 @@ import {StyledMapPartnerDetailsDirective} from "../pages/partner-page-component/
 import {PictureScreenComponent} from "../pages/add-purchase-page-component/picture-screen/picture-screen";
 import {StyledMapPartnersDirective} from "../pages/partner-page-component/partner-map/styled-map-partners-directive";
 import {TypeaheadComponent} from "../components/searchHeader/typeahead/typeahead";
-import {UserDetailWebviewComponent} from "../pages/my-profile-page-component/user-detail-webview/user-detail-webview";
 import {SafePipe} from "../pipes/safe-pipe";
 import {LocationService} from "../services/location-service";
 import {ActionsPageComponent} from "../pages/actions-page-component/actions-page-component";
 import {LoginWebviewComponent} from "../pages/login-page-component/login-webview/login-webview";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {WebviewComponent} from "../pages/webview/webview";
 
 
 @NgModule({
@@ -68,10 +68,9 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     PartnerTableComponent,
     PictureScreenComponent,
     TypeaheadComponent,
-    UserDetailWebviewComponent,
+    WebviewComponent,
     SafePipe,
     ActionsPageComponent,
-    LoginWebviewComponent
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -102,8 +101,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     PartnerTableComponent,
     PictureScreenComponent,
     TypeaheadComponent,
-    UserDetailWebviewComponent,
-    LoginWebviewComponent
+    WebviewComponent,
   ],
 
   providers: [
