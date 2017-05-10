@@ -20,7 +20,7 @@
         </button>
       </ion-buttons>
   </ion-navbar>
-  <div class = "suggestions-wrapper" *ngIf="searchTerm">
+  <div class = "suggestions-wrapper" *ngIf="searchTermCompletion">
     <div tappable class = "suggestion" (click)="completeSearchTerm(item.displayText)" *ngFor="let item of searchTermCompletion | async">
       {{item.displayText}}
     </div>

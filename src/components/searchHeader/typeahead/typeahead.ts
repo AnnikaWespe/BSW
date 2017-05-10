@@ -29,6 +29,7 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
 
   private searchTerms = new Subject<string>();
   searchTermCompletion: Observable<SearchTermCompletion[]>;
+  suggestionsWrapperOpen;
 
 
   constructor(private searchCompletionService: SearchCompletionService) {
@@ -57,7 +58,7 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
           console.log(error);
           return searchTermsObservable();
         });
-    }
+    };
     this.searchTermCompletion = searchTermsObservable();
   };
 

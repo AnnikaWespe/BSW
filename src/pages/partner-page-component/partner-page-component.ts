@@ -215,13 +215,13 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   }
 
   filterButtonPushed() {
+    this.resetPartnersArray = true;
+    this.waitingForResults = true;
     if (this.showOfflinePartners) {
-      this.waitingForResults = true;
       this.mapWaitingForResults = true;
       this.checkIfGPSEnabled();
     }
     else {
-      this.waitingForResults = true;
       this.getDisplay();
     }
     this.showDropdown = [false, false, false];
@@ -236,17 +236,17 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     if (this.showOfflinePartners && !this.showOnlinePartners) {
       this.title = this.searchTerm || "Vor Ort Partner";
       localStorage.setItem("title", "Vor Ort Partner");
-      this.filterCampaignPartners(this.offlinePartners);
+      this.displayedPartners = this.offlinePartners;
     }
     else if (!this.showOfflinePartners && this.showOnlinePartners) {
       this.title = this.searchTerm || "Online Partner";
       localStorage.setItem("title", "Online Partner");
-      this.filterCampaignPartners(this.onlinePartners);
+      this.displayedPartners = this.onlinePartners;
     }
     else if (this.showOfflinePartners && this.showOnlinePartners) {
       this.title = this.searchTerm || "Alle Partner";
       localStorage.setItem("title", "Alle Partner");
-      this.filterCampaignPartners(this.allPartners)
+      this.displayedPartners = this.allPartners;
     }
   }
 
@@ -271,34 +271,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       showOnlinePartners: this.showOnlinePartners,
       showOnlyPartnersWithCampaign: this.showOnlyPartnersWithCampaign,
     })
-  }
-
-
-  filterCampaignPartners(displayedPartners) {
-    this.waitingForResults = false;
-    if (this.showOnlyPartnersWithCampaign) {
-      let partnersWithCampaign = [];
-      this.title = this.searchTerm || "Partner mit Aktionen";
-      for (let partner of displayedPartners) {
-        if (partner && partner.hasCampaign) {
-          partnersWithCampaign.push(partner);
-        }
-        else if (partner == null) {
-          this.moreDataCanBeLoaded = false;
-          this.displayedPartners = partnersWithCampaign;
-          return;
-        }
-      }
-      if (partnersWithCampaign.length < 7) {
-        this.resetPartnersArray = false;
-        this.bucket += 50;
-        this.getPartners();
-      }
-      this.displayedPartners = partnersWithCampaign;
-    }
-    else {
-      this.displayedPartners = displayedPartners
-    }
   }
 
   askForValidCategories() {

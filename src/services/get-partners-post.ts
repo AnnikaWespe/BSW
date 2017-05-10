@@ -6,7 +6,7 @@ export class GetPartnersPost {
     location: {
       latitude: null,
       longitude: null,
-      radius: 50.0,
+      radius: 400.0,
       cityName: ""
     }
   };
