@@ -143,7 +143,8 @@
     <div style="height: 8vh"></div>
 
     <div tappable class="partner-table-wrapper" (click)="hideDropdown()" *ngIf="!showMap">
-      <partner-table [partners]="displayedPartners"></partner-table>
+      <partner-table [partners]="displayedPartners"
+                     (showPartnerEventEmitter)="showPartner($event)"></partner-table>
     </div>
 
     <div *ngIf="!showMap">
@@ -155,8 +156,9 @@
     </div>
 
 
-    <partner-map [partners]="displayedPartners" *ngIf="showMap" (onListUpdated)="scrollToTop()"
-                 [(mapWaitingForResults)]="mapWaitingForResults" ></partner-map>
+    <partner-map [partners]="displayedPartners"
+                 *ngIf="showMap"
+                 (onListUpdated)="scrollToTop()"></partner-map>
 
   </div>
 </ion-content>

@@ -82,6 +82,9 @@
       ...
     </ion-col>
   </ion-row>
+  <partner-table [partners]="favoritePartners"
+                 (showPartnerEventEmitter)="showPartner($event)"
+                 *ngIf="favoritePartners"></partner-table>
 
   <ion-row class="title-row" *ngIf="lastVisitedPartners">
     <ion-col class="title">
@@ -91,6 +94,9 @@
       ...
     </ion-col>
   </ion-row>
+  <partner-table [partners]="lastVisitedPartners"
+                 (showPartnerEventEmitter)="showPartner($event)"
+                 *ngIf="lastVisitedPartners"></partner-table>
 
   <ion-row class="title-row" *ngIf="offlinePartners">
     <ion-col class="title">
@@ -100,7 +106,9 @@
       ...
     </ion-col>
   </ion-row>
-  <partner-table [partners]="offlinePartners"></partner-table>
+  <partner-table [partners]="offlinePartners"
+                 (showPartnerEventEmitter)="showPartner($event)"
+                 *ngIf="offlinePartners"></partner-table>
 
   <ion-row class="title-row" *ngIf="onlinePartners">
     <ion-col class="title">
@@ -110,7 +118,9 @@
       ...
     </ion-col>
   </ion-row>
-  <partner-table [partners]="onlinePartners"></partner-table>
+  <partner-table [partners]="onlinePartners"
+                 (showPartnerEventEmitter)="showPartner($event)"
+                 *ngIf="onlinePartners"></partner-table>
 
 </ion-content>
 

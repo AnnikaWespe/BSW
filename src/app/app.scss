@@ -6,6 +6,15 @@ ion-content {
   font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !important;
 }
 
+[tappable]:active{
+  outline-color: initial;
+  outline-style: none;
+  outline-width: initial;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+
+}
+
 ion-header {
   button {
     background: transparent;
@@ -76,11 +85,9 @@ ion-menu {
   .list-wrapper {
     padding-top: 3vh;
     div.icon {
-      margin: 2vw;
       &.offline {
         background: url('../assets/icon/vorortpartner.svg') no-repeat;
         background-size: contain;
-        fill: red;
       }
       &.online {
         background: url('../assets/icon/onlinepartner.svg') no-repeat;
@@ -112,34 +119,25 @@ ion-menu {
       }
       height: 11vw;
       width: 11vw;
-      overflow: hidden;
+      /*overflow: hidden;
       left: 50%;
-      margin: 0 auto;
+      margin: 0 auto;*/
     }
-    ion-col {
-      padding: 0;
-      margin: 0;
-      height: 11vw;
-      line-height: 11vw;
-
-      &.page-title {
-        border-bottom: 1px solid map_get($colors, font-color-for-filter-dropdown);
-        font-size: larger;
-        color: map_get($colors, font-color-for-filter-dropdown);
-      }
-      &.icon-col {
-        max-width: 15vw;
-
-      }
+    .page-title {
+      //border-bottom: 1px solid map_get($colors, font-color-for-filter-dropdown);
+      font-size: 120%;
+      color: map_get($colors, font-color-for-filter-dropdown);
     }
     ion-row.page{
-      margin-bottom: 1vh;
       &.get-large-distance{
-        margin-bottom: 5vh;
+        margin-bottom: 4vh !important;
       }
       &.get-small-distance{
-        margin-bottom: 4vh;
+        margin-bottom: 3vh !important;
       }
+    }
+    ion-item{
+      height: 6vh;
     }
   }
 

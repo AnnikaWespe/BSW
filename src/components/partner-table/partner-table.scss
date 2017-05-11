@@ -1,5 +1,16 @@
 partner-table {
-  div.partner-div {
+  div.item-inner{
+    border-bottom: none !important;
+  }
+  div.input-wrapper{
+    padding: 0 !important;
+  }
+  ion-item {
+    border: none !important;
+    padding: 0 !important;
+    background-color: map_get($colors, light) !important;
+  }
+  row.partner-div {
     background-color: map_get($colors, light);
     overflow: hidden;
   }
@@ -11,18 +22,20 @@ partner-table {
     overflow: hidden;
   }
   div.image {
-       height: 25vw;
-       min-width: 25vw;
-       display: -ms-flexbox;
-       display: -webkit-flex;
-       display: flex;
+    height: 25vw;
+    min-width: 25vw;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
 
-       -ms-flex-align: center;
-       -webkit-align-items: center;
-       -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
 
-       align-items: center;
-     }
+    align-items: center;
+
+    margin-right: 0 !important;
+  }
   div.white-square {
     height: 15vw;
     width: 15vw;
@@ -62,44 +75,31 @@ partner-table {
   }
 
   .partner-bonus {
-    display: inline;
     color: map_get($colors, primary);
     font-size: large;
-    float: right;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 40vw;
-    position: absolute;
-    right: 3vw;
-    top: 50%;
-
-    -webkit-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-    z-index: 0;
   }
-  .partner-adress{
+  .partner-adress {
     font-size: smaller;
     overflow: hidden;
     text-overflow: ellipsis;
     color: map-get($colors, font-grey-dark);
   }
-  .partner-title{
+  .partner-title {
     font-weight: 500;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: larger;
   }
-  .campaign-bonus{
+  .campaign-bonus {
     color: map_get($colors, primary);
     font-size: medium;
   }
-  .bonus-title-adress-wrapper{
+  .bonus-title-adress-wrapper {
     display: inline;
-    min-width:75vw;
+    min-width: 75vw;
     white-space: nowrap;
     height: 25vw;
     position: relative;
+    right: 2vw;
   }
 }

@@ -74,12 +74,17 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.globallyUnsubscribe();
+  }
+
+  globallyUnsubscribe(){
     if (this.getLocationSubscription) {
       this.getLocationSubscription.unsubscribe();
     }
     if (this.getPartnersSubscription) {
       this.getPartnersSubscription.unsubscribe();
     }
+
   }
 
   constructor(public navCtrl: NavController,
@@ -187,12 +192,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   getPartners() {
     console.log(this.location, this.bucket, this.searchTerm, this.showOnlyPartnersWithCampaign);
     if (this.resetPartnersArray == true) {
-      this.allPartners = [];
-      this.onlinePartners = [];
-      this.offlinePartners = [];
-      this.partnersWithCampaign = [];
-      this.bucket = 0;
-      this.waitingForResults = true;
+      this.resetPartnersArrayMethod();
     }
     this.getPartnersSubscription = this.partnerService.getPartners(this.location, this.bucket, this.searchTerm, this.showOnlyPartnersWithCampaign)
       .subscribe(
@@ -206,7 +206,17 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
         error => this.errorMessage = <any>error);
   }
 
+  resetPartnersArrayMethod(){
+    this.allPartners = [];
+    this.onlinePartners = [];
+    this.offlinePartners = [];
+    this.partnersWithCampaign = [];
+    this.bucket = 0;
+    this.waitingForResults = true;
+  }
+
   getDifferentCategories(returnedObject) {
+    console.log(returnedObject);
     this.allPartners = this.allPartners.concat(returnedObject.contentEntities);
     this.offlinePartners = this.offlinePartners.concat(returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities);
     this.onlinePartners = this.onlinePartners.concat(returnedObject.originalSearchResults.bucketToSearchResult["ONLINEPARTNER"].contentEntities);
@@ -222,7 +232,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.checkIfGPSEnabled();
     }
     else {
-      this.getDisplay();
+      this.getPartners();
     }
     this.showDropdown = [false, false, false];
     this.showDropdownForAnimation = ["false", "false"];
@@ -265,17 +275,12 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
 
   showPartner(partner = 0) {
-    this.navCtrl.push(PartnerDetailComponent, {
-      type: this.pageType,
-      showOfflinePartners: this.showOfflinePartners,
-      showOnlinePartners: this.showOnlinePartners,
-      showOnlyPartnersWithCampaign: this.showOnlyPartnersWithCampaign,
-    })
+    this.navCtrl.push(PartnerDetailComponent)
   }
 
   askForValidCategories() {
     let prompt = this.alertCtrl.create({
-      title: 'Bitte wählen Sie entweder "Vor-Ort-Partner" oder "Online Partner" aus',
+      title: 'Bitte wählen Sie entweder "Vor-Ort-Partner" oder "Online Partner" aus.',
       buttons: [
         {
           text: 'OK',
@@ -294,6 +299,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.mapWaitingForResults = true;
     this.showDropdown = [false, false, false];
     this.showDropdownForAnimation = ["false", "false"];
+    this.globallyUnsubscribe();
   }
 
   toggleGetLocationFromGPSEnabled() {
@@ -326,7 +332,12 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     }
   }
 
+
 //pure DOM methods
+
+  getFirst50(array){
+    return array.slice(0,50);
+  }
 
   private setFocus() {
     let searchInputField = document.getElementById('mySearchInputField');

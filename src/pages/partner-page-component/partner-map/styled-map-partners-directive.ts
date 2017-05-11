@@ -47,7 +47,6 @@ export class StyledMapPartnersDirective implements OnChanges {
   @Output() removeSpinner = new EventEmitter();
   @Input() partners: any[];
 
-
   map: any;
   pathToGmapsClusterIcons: string;
   markers = [];

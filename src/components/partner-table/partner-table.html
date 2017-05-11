@@ -1,29 +1,25 @@
-
-<div *ngFor="let partner of partners">
-  <ion-row tappable class="partner-row" *ngIf="partner" (click)="showPartner(partner)">
-    <div class="image">
+<ion-row class="partner-row" *ngFor="let partner of partners">
+  <ion-item tappable (click)="showPartner(partner)">
+    <div class="image" item-left>
       <div class="white-square">
         <img src="{{partner?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
       </div>
     </div>
-    <div class="bonus-title-adress-wrapper">
-      <div class="title-adress-wrapper" [style.max-width.vw] = "getMaxWidth(partner)[0]">
-        <div class="partner-title" [style.max-width.vw] = "getMaxWidth(partner)[0]">
+    <div class="bonus-title-adress-wrapper" item-content>
+      <div class="title-adress-wrapper" [style.max-width.vw]="getMaxWidth(partner)[0]">
+        <div class="partner-title" [style.max-width.vw]="getMaxWidth(partner)[0]">
           {{ partner?.nameOrigin}}
         </div>
-        <div class="partner-adress" *ngIf="partner.city" [style.max-width.vw] = "getMaxWidth(partner)[0]">
+        <div class="partner-adress" *ngIf="partner.city" [style.max-width.vw]="getMaxWidth(partner)[0]">
           {{partner?.street}} {{partner?.houseNumber}}, {{partner?.city}}
         </div>
-        <div class="campaign-bonus" *ngIf="partner.hasCampaign" [style.max-width.vw] = "getMaxWidth(partner)[0]">
+        <div class="campaign-bonus" *ngIf="partner.hasCampaign" [style.max-width.vw]="getMaxWidth(partner)[0]">
           {{partner?.campaignbonus}}
         </div>
       </div>
-      <div class="partner-bonus" [style.max-width.vw] = "getMaxWidth(partner)[1]">
-        {{partner?.pfBonus}}
-      </div>
     </div>
-  </ion-row>
-</div>
-
-
-
+    <div class="partner-bonus" [style.max-width.vw]="getMaxWidth(partner)[1]" item-right>
+      {{partner?.pfBonus}}
+    </div>
+  </ion-item>
+</ion-row>

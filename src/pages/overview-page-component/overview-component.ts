@@ -5,6 +5,7 @@ import {NavController, NavParams} from 'ionic-angular';
 import {PartnerService} from "../../services/partner-service";
 import {PartnerPageComponent} from "../partner-page-component/partner-page-component";
 import {LocationService} from "../../services/location-service";
+import {PartnerDetailComponent} from "../partner-page-component/partner-detail-component/partner-detail-component";
 
 
 @Component({
@@ -117,6 +118,10 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   loadPartnerPage(searchTerm) {
     this.searchInterfaceOpen = false;
     this.navCtrl.push(PartnerPageComponent, {type: "searchPageComponent", searchTerm: searchTerm, navigatedFromOverview: true})
+  }
+
+  showPartner(partner = 0) {
+    this.navCtrl.push(PartnerDetailComponent)
   }
 
   //pure DOM method(s)

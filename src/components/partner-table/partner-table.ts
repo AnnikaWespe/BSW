@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
 
 @Component({
   selector: 'partner-table',
@@ -7,6 +7,7 @@ import {Component, Input, OnChanges} from '@angular/core';
 export class PartnerTableComponent{
 
   @Input() partners: any[];
+  @Output() showPartnerEventEmitter = new EventEmitter();
 
   constructor() {}
 
@@ -35,5 +36,9 @@ export class PartnerTableComponent{
         maxWidth = ["55", "18"]
     };
     return maxWidth;
+  }
+
+  showPartner(partner){
+    this.showPartnerEventEmitter.emit(partner);
   }
 }
