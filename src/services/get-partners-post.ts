@@ -18,7 +18,7 @@ export class GetPartnersPost {
       "VEHICLEOFFER": 0,
       "TRAVELOFFER": 0
     },
-    rangeSize: 50
+    rangeSize: 100
   };
   filter = {
     buckets: ["OFFLINEPARTNER", "ONLINEPARTNER"],
@@ -27,10 +27,11 @@ export class GetPartnersPost {
   showmap = true;
   template = "unified";
 
-  constructor(location = {latitude: 52.5219, longitude: 13.4132}, bucket = 0, searchTerm, showOnlyPartnersWithCampaign) {
+  constructor(location = {latitude: 52.5219, longitude: 13.4132}, bucket = 0, searchTerm, showOnlyPartnersWithCampaign, radius = 400, ) {
     this.query.searchTerm = searchTerm;
     this.query.location.latitude = location.latitude;
     this.query.location.longitude = location.longitude;
+    this.query.location.radius = radius;
     this.ranges.bucketToFrom.OFFLINEPARTNER = bucket;
     this.ranges.bucketToFrom.ONLINEPARTNER = bucket;
     this.filter.PARTNER_HAS_CAMPAIGN = [showOnlyPartnersWithCampaign.toString()];

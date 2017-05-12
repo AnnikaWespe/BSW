@@ -74,7 +74,7 @@
       </ion-row>
 
       <div class="filter-menu" [@show]="showDropdownForAnimation[0]">
-        <ion-row class="currentLocation" *ngIf="offlinePartnerPageComponent || searchPageComponent">
+        <ion-row class="currentLocation" *ngIf="(offlinePartnerPageComponent || searchPageComponent) && !showMap ">
           <ion-col class="currentPosition" *ngIf="getLocationFromGPSEnabled">
             Aktueller Standort
           </ion-col>
@@ -110,7 +110,7 @@
 
         <ion-row tappable class="toggle has-campaign-partner-toggle"
                  (click)="showOnlyPartnersWithCampaign = !showOnlyPartnersWithCampaign"
-                 [class.biggerMarginTop]="onlinePartnerPageComponent">
+                 [class.biggerMarginTop]="onlinePartnerPageComponent || showMap">
           <ion-col class="toggle-text">Nur Partner mit Aktionen</ion-col>
           <ion-col class="toggle">
             <ion-toggle color="light-blue" mode="ios" [(ngModel)]="showOnlyPartnersWithCampaign"></ion-toggle>
@@ -122,7 +122,8 @@
             class="showSelection"
             ion-button color="primary"
             (click)="filterButtonPushed()"
-            [class.searchPageComponent] = "searchPageComponent">
+            [class.searchPageComponent] = "searchPageComponent"
+            [class.onlinePartnerPageComponent] = "onlinePartnerPageComponent || showMap">
             Auswahl anzeigen
           </button>
         </div>
@@ -155,8 +156,7 @@
       </ion-infinite-scroll>
     </div>
 
-
-    <partner-map [partners]="displayedPartners"
+    <partner-map [partnersLong]="displayedPartners"
                  *ngIf="showMap"
                  (onListUpdated)="scrollToTop()"></partner-map>
 

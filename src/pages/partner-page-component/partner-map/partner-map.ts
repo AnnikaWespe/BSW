@@ -1,4 +1,4 @@
-import {Component, Input, ViewChild, Output, EventEmitter, AfterViewChecked, OnChanges} from '@angular/core';
+import {Component, Input, ViewChild, Output, EventEmitter, AfterViewChecked, OnChanges, OnInit} from '@angular/core';
 import {NavParams, NavController} from "ionic-angular";
 import {LocationData} from "../../../services/location-data";
 import {StyledMapPartnersDirective} from "./styled-map-partners-directive";
@@ -8,18 +8,19 @@ import { Content } from 'ionic-angular';
   selector: 'partner-map',
   templateUrl: 'partner-map.html'
 })
-export class PartnerMapComponent implements AfterViewChecked, OnChanges{
+export class PartnerMapComponent implements AfterViewChecked, OnChanges, OnInit{
 
   text: string;
   currentLatitude = localStorage.getItem("latitude");
   currentLongitude = localStorage.getItem("longitude");
   partnersInList = [];
   partnerListOpen = false;
+  partners: any[];
   scrollTop = 0;
   mapWaitingForResultsValue;
   locationExact = false;
 
-  @Input() partners: any[];
+  @Input() partnersLong: any[];
   @Input() get mapWaitingForResults(){
     return this.mapWaitingForResultsValue;
   };
@@ -54,6 +55,10 @@ export class PartnerMapComponent implements AfterViewChecked, OnChanges{
 
   ngOnChanges(){
     console.log("mapWaitingForResults", this.mapWaitingForResults);
+  }
+
+  ngOnInit(){
+    this.partners = this.partnersLong.slice(0,50);
   }
 
   ngAfterViewChecked(){
@@ -92,6 +97,17 @@ export class PartnerMapComponent implements AfterViewChecked, OnChanges{
     this.map.resizeMap();
   }
 
+  unsubscribeFromGetPartnersRequest(){
+    this.map.unsubscribeFromGetPartnersRequest();
+  }
+
+  setParameterOnlyPartnersWithCampaign(boolean){
+    this.map.setParameterOnlyPartnersWithCampaign(boolean)
+  }
+
+  getPartnersWithSearchTerm(searchTerm){
+    this.map.getPartnersWithSearchTerm(searchTerm);
+  }
 
 
 }

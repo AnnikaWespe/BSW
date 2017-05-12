@@ -7,6 +7,7 @@ import {AlertController} from 'ionic-angular';
 import {PartnerDetailComponent} from "./partner-detail-component/partner-detail-component";
 import {LocationService} from "../../services/location-service";
 import {style, state, trigger, transition, animate} from "@angular/animations";
+import {PartnerMapComponent} from "./partner-map/partner-map";
 
 @Component({
   selector: 'partner-page-component',
@@ -22,6 +23,7 @@ import {style, state, trigger, transition, animate} from "@angular/animations";
 })
 export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   @ViewChild(Content) content: Content;
+  @ViewChild(PartnerMapComponent) partnerMapComponent: PartnerMapComponent;
   title = "Partner";
   mode = "Observable";
   getPartnersSubscription: any;
@@ -84,7 +86,9 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     if (this.getPartnersSubscription) {
       this.getPartnersSubscription.unsubscribe();
     }
-
+    if(this.partnerMapComponent){
+      this.partnerMapComponent.unsubscribeFromGetPartnersRequest();
+    }
   }
 
   constructor(public navCtrl: NavController,
@@ -182,10 +186,15 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   getPartnersWithSearchTerm(searchTerm) {
     this.searchInterfaceOpen = false;
     this.searchTerm = searchTerm + " ";
-    this.getPartners();
     this.title = searchTerm;
     if (this.navigatedFromOverview) {
       this.showCustomBackButton = true;
+    }
+    if(this.showMap){
+      this.partnerMapComponent.getPartnersWithSearchTerm(searchTerm);
+    }
+    else{
+      this.getPartners();
     }
   }
 
@@ -236,6 +245,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     }
     this.showDropdown = [false, false, false];
     this.showDropdownForAnimation = ["false", "false"];
+    this.partnerMapComponent.setParameterOnlyPartnersWithCampaign(this.showOnlyPartnersWithCampaign);
   }
 
   getDisplay() {
@@ -335,9 +345,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
 //pure DOM methods
 
-  getFirst50(array){
-    return array.slice(0,50);
-  }
 
   private setFocus() {
     let searchInputField = document.getElementById('mySearchInputField');

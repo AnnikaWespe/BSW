@@ -28,6 +28,6 @@
 </div>
 <div #partnerList [scrollTop]="scrollTop">
   <div  class="partnerList" *ngIf="partnerListOpen">
-    <partner-table [partners]="getFirst50(displayedPartners)"></partner-table>
+    <partner-table [partners]="partnersInList"></partner-table>
   </div>
 </div>

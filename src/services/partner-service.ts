@@ -15,8 +15,8 @@ export class PartnerService {
 
   constructor(private http: Http) {}
 
-  getPartners(location, bucket, searchTerm, showOnlyPartnersWithCampaign): Observable <any> {
-    let post = new GetPartnersPost(location, bucket, searchTerm, showOnlyPartnersWithCampaign);
+  getPartners(location, bucket, searchTerm, showOnlyPartnersWithCampaign, radius = 400): Observable <any> {
+    let post = new GetPartnersPost(location, bucket, searchTerm, showOnlyPartnersWithCampaign, radius);
     let headers = new Headers({'Content-Type': 'application/json'});
     let options = new RequestOptions({headers: headers});
     let getPartnersPostJson = JSON.stringify(post);
