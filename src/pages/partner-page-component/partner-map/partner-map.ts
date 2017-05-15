@@ -4,6 +4,7 @@ import {LocationData} from "../../../services/location-data";
 import {StyledMapPartnersDirective} from "./styled-map-partners-directive";
 import { Content } from 'ionic-angular';
 
+
 @Component({
   selector: 'partner-map',
   templateUrl: 'partner-map.html'

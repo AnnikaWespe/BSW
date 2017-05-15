@@ -12,7 +12,7 @@
                             *ngIf="locationExact">
     </sebm-google-map-circle>
     <styled-map-partners
-      [partners]="partners"
+      [inputPartners]="partners"
       (fillList) = "showList($event)"
       (removeList)="removeList(event)"
       (addList)="addList(event)"

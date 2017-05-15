@@ -5,6 +5,19 @@ import {NavController, Platform} from 'ionic-angular';
 import {DeviceService} from "../../../services/device-data";
 import {PartnerService} from "../../../services/partner-service";
 import {PartnerDetailComponent} from "../partner-detail-component/partner-detail-component";
+import {Observable} from 'rxjs/Observable'
+
+
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/startWith';
+
 
 declare let google: any;
 declare let MarkerClusterer: any;
@@ -47,8 +60,11 @@ export class StyledMapPartnersDirective {
   @Output() addList = new EventEmitter();
   @Output() addSpinner = new EventEmitter();
   @Output() removeSpinner = new EventEmitter();
-  @Input() partners: any[];
+  @Input() inputPartners: any[];
 
+
+  partnersWithSearchTerm$;
+  partnersWithCampaign$;
   getPartnersSubscription;
   map: any;
   pathToGmapsClusterIcons: string;
@@ -61,36 +77,80 @@ export class StyledMapPartnersDirective {
   radius;
 
   constructor(private googleMapsWrapper: GoogleMapsAPIWrapper,
-              public plt: Platform,
               private partnerService: PartnerService,
               private navCtrl: NavController) {
     if (DeviceService.isInBrowser) {
       this.pathToGmapsClusterIcons = '../assets/icon/m';
     }
-    else if (DeviceService.isAndroid) {
+    else if (DeviceService.isAndroid || DeviceService.isIos || DeviceService.isWindowsPhone) {
       this.pathToGmapsClusterIcons = '../www/assets/icon/m';
     }
+    this.partnersWithCampaign$ = Observable.startsWith()
     this.googleMapsWrapper.getNativeMap()
       .then((map) => {
         this.map = map;
         this.setMapOptions(map);
-        map.addListener('idle', () => {
-          console.log(this.map.getCenter());
+        const idle$ = Observable.create((observer) => {
+          map.addListener('idle', () => {
+            observer.next();
+          })
+        });
+        const center$ = idle$.map(() => {
           let newCenter = this.map.getCenter();
           let newLat = this.map.getCenter().lat().toFixed(4);
           let newLong = this.map.getCenter().lng().toFixed(4);
-          this.center = {latitude: newLat, longitude: newLong};
-          this.radius = this.getRadius(newCenter, this.map.getBounds().getNorthEast())
+          let center = {latitude: newLat, longitude: newLong};
+          let radius = this.getRadius(newCenter, this.map.getBounds().getNorthEast());
+          console.log(center, radius);
+          return [center, radius];
+        })
+        const partners$ = center$.switchMap((params) => {
+          this.center = params[0];
+          this.radius = params[1];
+          return this.partnerService.getPartners(this.center, this.bucket, this.searchTerm, this.showOnlyPartnersWithCampaign, this.radius)
+        }).map(body => {
+          let returnedObject = body.json();
+          let offlinePartners = returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities;
+          return offlinePartners;
+        })
+          const markers$ = partners$.switchMap((offlinePartners) => {
+          let observables = [];
           this.clearMarkers();
-          this.getPartners();
-        });
-        this.placeMarkers(map, this.partners, true);
+          offlinePartners.forEach((partner, index) => {
+            let observable = Observable.create(observer => {
+              this.getImageAsBase64(partner.logoUrlForGMap, (imageAsBase64, validImage) => {
+                let bounds = new google.maps.LatLngBounds();
+                let marker = this.getMarker(partner, imageAsBase64, validImage, map, bounds);
+                this.markers.push(marker);
+                google.maps.event.addListener(marker, 'click', (function (marker) {
+                  return function () {
+                    this.navCtrl.push(PartnerDetailComponent);
+                  }
+                })(marker));
+                observer.next(marker);
+                observer.complete();
+              });
+            });
+            observables.push(observable);
+          });
+          return Observable.forkJoin(observables)
+        }).subscribe((markers) => {
+          this.markers = markers;
+          this.markerClusterer = new MarkerClusterer(map, markers,
+            {imagePath: this.pathToGmapsClusterIcons});
+          google.maps.event.addListener(this.markerClusterer, 'clusterclick', (cluster) => {
+            this.fillList.emit(cluster.getMarkers());
+            google.maps.event.trigger(map, 'resize');
+          });
+        })
       });
   }
 
-  clearMarkers(){
-    for (let i = 0; i < this.markers.length; i++) {
-      this.markers[i].setMap(null);
+  clearMarkers() {
+    while (this.markers.length > 0) {
+      let markerObj = this.markers.pop();
+      markerObj.setMap(null);
+      markerObj = null;
     }
     this.markers = [];
     if (this.markerClusterer) {
@@ -100,48 +160,52 @@ export class StyledMapPartnersDirective {
 
   getPartners() {
     console.log(this.center, this.searchTerm, this.showOnlyPartnersWithCampaign);
+    if (this.getPartnersSubscription) {
+      this.getPartnersSubscription.unsubscribe();
+    }
     this.getPartnersSubscription = this.partnerService.getPartners(this.center, this.bucket, this.searchTerm, this.showOnlyPartnersWithCampaign, this.radius)
       .subscribe(
         body => {
           let returnedObject = body.json();
           let offlinePartners = returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities;
-          this.placeMarkers(this.map, offlinePartners, false);
+          this.placeMarkers(this.map, offlinePartners);
         })
   }
 
-  private placeMarkers(map, partners, adjustBounds) {
+
+  private placeMarkers(map, partners) {
     let bounds = new google.maps.LatLngBounds();
     let promises = [];
-    partners.forEach((partner, index) => {
-      if (partner && partner.location) {
-        promises.push(new Promise((resolve, reject) => {
-          this.getImageAsBase64(partner.logoUrlForGMap, (imageAsBase64, validImage) => {
-            let marker = this.getMarker(partner, imageAsBase64, validImage, map, bounds);
-            this.markers.push(marker);
-            google.maps.event.addListener(marker, 'click', (function (marker) {
-              return function () {
-                this.navCtrl.push(PartnerDetailComponent);
-              }
-            })(marker));
-            resolve();
-          });
-        }))
-      }
-    });
-    Promise.all(promises)
-      .then(() => {
-          if (adjustBounds) {
-            map.fitBounds(bounds);
-          }
-          this.markerClusterer = new MarkerClusterer(map, this.markers,
-            {imagePath: this.pathToGmapsClusterIcons});
-          google.maps.event.addListener(this.markerClusterer, 'clusterclick', (cluster) => {
-            this.fillList.emit(cluster.getMarkers());
-            google.maps.event.trigger(map, 'resize');
-          });
-          this.removeSpinner.emit();
+    this.clearMarkers();
+    if (partners && this.markers.length === 0) {
+      partners.forEach((partner, index) => {
+        if (partner && partner.location) {
+          promises.push(new Promise((resolve, reject) => {
+            this.getImageAsBase64(partner.logoUrlForGMap, (imageAsBase64, validImage) => {
+              let marker = this.getMarker(partner, imageAsBase64, validImage, map, bounds);
+              this.markers.push(marker);
+              google.maps.event.addListener(marker, 'click', (function (marker) {
+                return function () {
+                  this.navCtrl.push(PartnerDetailComponent);
+                }
+              })(marker));
+              resolve();
+            });
+          }))
         }
-      )
+      });
+      Promise.all(promises)
+        .then(() => {
+            this.markerClusterer = new MarkerClusterer(map, this.markers,
+              {imagePath: this.pathToGmapsClusterIcons});
+            google.maps.event.addListener(this.markerClusterer, 'clusterclick', (cluster) => {
+              this.fillList.emit(cluster.getMarkers());
+              google.maps.event.trigger(map, 'resize');
+            });
+            this.removeSpinner.emit();
+          }
+        )
+    }
   }
 
 
@@ -157,12 +221,11 @@ export class StyledMapPartnersDirective {
 
   setParameterOnlyPartnersWithCampaign(boolean) {
     this.showOnlyPartnersWithCampaign = boolean;
+    this.getPartners();
   }
-  
-  getPartnersWithSearchTerm(searchTerm){
+
+  getPartnersWithSearchTerm(searchTerm) {
     this.searchTerm = searchTerm;
-    console.log("https://www.youtube.com/watch?v=9Oxr8eb4u7c&list=RDMMdMia7HJR2l4&index=7");
-    this.clearMarkers();
     this.getPartners();
   }
 
