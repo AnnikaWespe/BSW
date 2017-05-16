@@ -1,28 +1,3 @@
-import {Directive, Input, Output, EventEmitter} from '@angular/core';
-import {GoogleMapsAPIWrapper} from 'angular2-google-maps/core';
-import {generate} from "../../Observable";
-import {NavController, Platform} from 'ionic-angular';
-import {DeviceService} from "../../../services/device-data";
-import {PartnerService} from "../../../services/partner-service";
-import {PartnerDetailComponent} from "../partner-detail-component/partner-detail-component";
-import {Observable} from 'rxjs/Observable'
-
-
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/observable/forkJoin';
-import 'rxjs/add/operator/startWith';
-
-
-declare let google: any;
-declare let MarkerClusterer: any;
-
-
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="138" height="149.34" viewBox="0 0 138 149.34">
 <metadata><?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
 <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.6-c138 79.159824, 2016/09/14-01:09:01        ">
@@ -50,6 +25,32 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.
 <path id="Marker" class="cls-1" d="M4711.01,3827.65h96.31a14.779,14.779,0,0,1,14.82,14.75v73.77a14.788,14.788,0,0,1-14.82,14.76h-37.09l-11.07,35.04-11.84-35.04h-36.31a14.788,14.788,0,0,1-14.82-14.76V3842.4A14.779,14.779,0,0,1,4711.01,3827.65Z" transform="translate(-4693 -3827.66)"/>
     `
 
+
+import {Directive, Input, Output, EventEmitter, OnChanges} from '@angular/core';
+import {GoogleMapsAPIWrapper} from 'angular2-google-maps/core';
+import {generate} from "../../Observable";
+import {NavController, Platform} from 'ionic-angular';
+import {DeviceService} from "../../../services/device-data";
+import {PartnerService} from "../../../services/partner-service";
+import {PartnerDetailComponent} from "../partner-detail-component/partner-detail-component";
+import {Observable} from 'rxjs/Observable'
+
+
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/combineLatest';
+
+
+declare let google: any;
+declare let MarkerClusterer: any;
+
 @Directive({
   selector: 'styled-map-partners',
 })
@@ -58,21 +59,17 @@ export class StyledMapPartnersDirective {
   @Output() fillList = new EventEmitter();
   @Output() removeList = new EventEmitter();
   @Output() addList = new EventEmitter();
-  @Output() addSpinner = new EventEmitter();
-  @Output() removeSpinner = new EventEmitter();
-  @Input() inputPartners: any[];
+  @Input() justPartnersWithCampaign$: EventEmitter<boolean>;
+  @Input() justPartnersWithCampaign: boolean;
+  @Input() searchTerm$: EventEmitter<string>;
+  @Input() searchTerm: string;
 
-
-  partnersWithSearchTerm$;
-  partnersWithCampaign$;
   getPartnersSubscription;
   map: any;
   pathToGmapsClusterIcons: string;
   markers = [];
   markerClusterer;
-  showOnlyPartnersWithCampaign = false;
   bucket = 0;
-  searchTerm = "";
   center;
   radius;
 
@@ -82,10 +79,10 @@ export class StyledMapPartnersDirective {
     if (DeviceService.isInBrowser) {
       this.pathToGmapsClusterIcons = '../assets/icon/m';
     }
+    //TODO: check path on IOS and WindowsPhone
     else if (DeviceService.isAndroid || DeviceService.isIos || DeviceService.isWindowsPhone) {
       this.pathToGmapsClusterIcons = '../www/assets/icon/m';
     }
-    this.partnersWithCampaign$ = Observable.startsWith()
     this.googleMapsWrapper.getNativeMap()
       .then((map) => {
         this.map = map;
@@ -94,28 +91,35 @@ export class StyledMapPartnersDirective {
           map.addListener('idle', () => {
             observer.next();
           })
-        });
+        })
         const center$ = idle$.map(() => {
           let newCenter = this.map.getCenter();
           let newLat = this.map.getCenter().lat().toFixed(4);
           let newLong = this.map.getCenter().lng().toFixed(4);
           let center = {latitude: newLat, longitude: newLong};
           let radius = this.getRadius(newCenter, this.map.getBounds().getNorthEast());
-          console.log(center, radius);
-          return [center, radius];
+          return {center: center, radius: radius};
         })
-        const partners$ = center$.switchMap((params) => {
-          this.center = params[0];
-          this.radius = params[1];
-          return this.partnerService.getPartners(this.center, this.bucket, this.searchTerm, this.showOnlyPartnersWithCampaign, this.radius)
-        }).map(body => {
-          let returnedObject = body.json();
-          let offlinePartners = returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities;
-          return offlinePartners;
-        })
-          const markers$ = partners$.switchMap((offlinePartners) => {
+        const partners$ = center$
+          .combineLatest(this.justPartnersWithCampaign$.startWith(this.justPartnersWithCampaign), this.searchTerm$.startWith(this.searchTerm))
+          .switchMap((params) => {
+            this.center = params[0].center;
+            this.radius = params[0].radius;
+            let showOnlyPartnersWithCampaign = params[1];
+            let searchTerm = params[2];
+            console.log(this.center, this.radius, showOnlyPartnersWithCampaign);
+            return this.partnerService.getPartners(this.center, this.bucket, searchTerm, showOnlyPartnersWithCampaign, this.radius)
+          }).map(body => {
+            let returnedObject = body.json();
+            let offlinePartners = returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities;
+            this.clearMarkers();
+            return offlinePartners;
+          })
+        const markers$ = partners$.switchMap((offlinePartners) => {
           let observables = [];
-          this.clearMarkers();
+          if (offlinePartners == undefined) {
+            return [];
+          }
           offlinePartners.forEach((partner, index) => {
             let observable = Observable.create(observer => {
               this.getImageAsBase64(partner.logoUrlForGMap, (imageAsBase64, validImage) => {
@@ -123,6 +127,7 @@ export class StyledMapPartnersDirective {
                 let marker = this.getMarker(partner, imageAsBase64, validImage, map, bounds);
                 this.markers.push(marker);
                 google.maps.event.addListener(marker, 'click', (function (marker) {
+                  //TODO: navigate to corresponding partner
                   return function () {
                     this.navCtrl.push(PartnerDetailComponent);
                   }
@@ -134,7 +139,8 @@ export class StyledMapPartnersDirective {
             observables.push(observable);
           });
           return Observable.forkJoin(observables)
-        }).subscribe((markers) => {
+        })
+          this.getPartnersSubscription = markers$.subscribe((markers) => {
           this.markers = markers;
           this.markerClusterer = new MarkerClusterer(map, markers,
             {imagePath: this.pathToGmapsClusterIcons});
@@ -159,11 +165,10 @@ export class StyledMapPartnersDirective {
   }
 
   getPartners() {
-    console.log(this.center, this.searchTerm, this.showOnlyPartnersWithCampaign);
     if (this.getPartnersSubscription) {
       this.getPartnersSubscription.unsubscribe();
     }
-    this.getPartnersSubscription = this.partnerService.getPartners(this.center, this.bucket, this.searchTerm, this.showOnlyPartnersWithCampaign, this.radius)
+    this.getPartnersSubscription = this.partnerService.getPartners(this.center, this.bucket, this.searchTerm, null, this.radius)
       .subscribe(
         body => {
           let returnedObject = body.json();
@@ -202,7 +207,6 @@ export class StyledMapPartnersDirective {
               this.fillList.emit(cluster.getMarkers());
               google.maps.event.trigger(map, 'resize');
             });
-            this.removeSpinner.emit();
           }
         )
     }
@@ -217,16 +221,6 @@ export class StyledMapPartnersDirective {
     if (this.getPartnersSubscription) {
       this.getPartnersSubscription.unsubscribe()
     }
-  }
-
-  setParameterOnlyPartnersWithCampaign(boolean) {
-    this.showOnlyPartnersWithCampaign = boolean;
-    this.getPartners();
-  }
-
-  getPartnersWithSearchTerm(searchTerm) {
-    this.searchTerm = searchTerm;
-    this.getPartners();
   }
 
 

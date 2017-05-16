@@ -1,9 +1,9 @@
-
-<div class="sebmGoogleMap" [style.height] = "getMapHeight()">
+<div class="sebmGoogleMap" [style.height]="getMapHeight()">
   <sebm-google-map
     [latitude]="stringToNumber(currentLatitude)"
     [longitude]="stringToNumber(currentLongitude)"
-    [zoomControl] = "false">
+    [zoomControl]="false"
+    [zoom] = "12">
     <sebm-google-map-circle [latitude]="stringToNumber(currentLatitude)"
                             [longitude]="stringToNumber(currentLongitude)"
                             [fillColor]="'red'"
@@ -12,22 +12,24 @@
                             *ngIf="locationExact">
     </sebm-google-map-circle>
     <styled-map-partners
-      [inputPartners]="partners"
-      (fillList) = "showList($event)"
+      (fillList)="showList($event)"
       (removeList)="removeList(event)"
       (addList)="addList(event)"
-      (addSpinner)="addSpinner()"
-      (removeSpinner)="removeSpinner()"></styled-map-partners>
+      [justPartnersWithCampaign$]="justPartnersWithCampaign$"
+      [justPartnersWithCampaign]="justPartnersWithCampaign"
+      [searchTerm$]="searchTerm$"
+      [searchTerm]="searchTerm"
+    ></styled-map-partners>
   </sebm-google-map>
   <div class="initialSpinner" *ngIf="waitingForResults">
     <ion-spinner class="initialSpinner"></ion-spinner>
   </div>
-  <div tappable class="hidePartnerList" (click)="closePartnerList()"  *ngIf="partnerListOpen">
-    <ion-icon name = "arrow-dropdown" color = "grey"></ion-icon>
+  <div tappable class="hidePartnerList" (click)="closePartnerList()" *ngIf="partnerListOpen">
+    <ion-icon name="arrow-dropdown" color="grey"></ion-icon>
   </div>
 </div>
 <div #partnerList [scrollTop]="scrollTop">
-  <div  class="partnerList" *ngIf="partnerListOpen">
+  <div class="partnerList" *ngIf="partnerListOpen">
     <partner-table [partners]="partnersInList"></partner-table>
   </div>
 </div>

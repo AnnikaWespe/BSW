@@ -1,4 +1,4 @@
-import {Component, AfterViewChecked, ViewChild, OnDestroy} from '@angular/core';
+import {Component, AfterViewChecked, ViewChild, OnDestroy, EventEmitter, Output} from '@angular/core';
 import {NavController, NavParams, Content} from 'ionic-angular';
 
 import {PartnerService} from "../../services/partner-service";
@@ -23,7 +23,8 @@ import {PartnerMapComponent} from "./partner-map/partner-map";
 })
 export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   @ViewChild(Content) content: Content;
-  @ViewChild(PartnerMapComponent) partnerMapComponent: PartnerMapComponent;
+  @Output() justPartnersWithCampaign$ = new EventEmitter();
+  @Output() searchTerm$ = new EventEmitter();
   title = "Partner";
   mode = "Observable";
   getPartnersSubscription: any;
@@ -79,15 +80,12 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.globallyUnsubscribe();
   }
 
-  globallyUnsubscribe(){
+  globallyUnsubscribe() {
     if (this.getLocationSubscription) {
       this.getLocationSubscription.unsubscribe();
     }
     if (this.getPartnersSubscription) {
       this.getPartnersSubscription.unsubscribe();
-    }
-    if(this.partnerMapComponent){
-      this.partnerMapComponent.unsubscribeFromGetPartnersRequest();
     }
   }
 
@@ -191,11 +189,9 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.showCustomBackButton = true;
     }
     if(this.showMap){
-      this.partnerMapComponent.getPartnersWithSearchTerm(searchTerm);
+      this.searchTerm$.emit(searchTerm);
     }
-    else{
-      this.getPartners();
-    }
+    this.getPartners();
   }
 
   getPartners() {
@@ -215,7 +211,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
         error => this.errorMessage = <any>error);
   }
 
-  resetPartnersArrayMethod(){
+  resetPartnersArrayMethod() {
     this.allPartners = [];
     this.onlinePartners = [];
     this.offlinePartners = [];
@@ -245,7 +241,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     }
     this.showDropdown = [false, false, false];
     this.showDropdownForAnimation = ["false", "false"];
-    this.partnerMapComponent.setParameterOnlyPartnersWithCampaign(this.showOnlyPartnersWithCampaign);
+    this.justPartnersWithCampaign$.emit(this.showOnlyPartnersWithCampaign);
   }
 
   getDisplay() {
@@ -370,6 +366,9 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   closeSearchInterface() {
     this.searchInterfaceOpen = false;
+    if(this.showMap){
+      this.searchTerm$.emit("");
+    }
     if (this.searchTerm) {
       this.searchTerm = "";
       this.resetPartnersArray = true;

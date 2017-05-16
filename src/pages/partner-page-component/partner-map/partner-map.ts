@@ -9,7 +9,7 @@ import { Content } from 'ionic-angular';
   selector: 'partner-map',
   templateUrl: 'partner-map.html'
 })
-export class PartnerMapComponent implements AfterViewChecked, OnChanges, OnInit{
+export class PartnerMapComponent implements AfterViewChecked{
 
   text: string;
   currentLatitude = localStorage.getItem("latitude");
@@ -18,22 +18,20 @@ export class PartnerMapComponent implements AfterViewChecked, OnChanges, OnInit{
   partnerListOpen = false;
   partners: any[];
   scrollTop = 0;
-  mapWaitingForResultsValue;
   locationExact = false;
 
   @Input() partnersLong: any[];
-  @Input() get mapWaitingForResults(){
-    return this.mapWaitingForResultsValue;
-  };
+  @Input() justPartnersWithCampaign$: EventEmitter<boolean>;
+  @Input() justPartnersWithCampaign: boolean;
+  @Input() searchTerm$: EventEmitter<string>;
+  @Input() searchTerm: string;
+
+
   @Output() scrollToTop = new EventEmitter();
   @Output() mapWaitingForResultsChange = new EventEmitter();
   @Output() onListUpdated = new EventEmitter();
 
 
-  set mapWaitingForResults(val){
-    this.mapWaitingForResultsValue = val;
-    this.mapWaitingForResultsChange.emit(this.mapWaitingForResultsValue);
-  }
 
 
   @ViewChild(StyledMapPartnersDirective) map;
@@ -52,14 +50,6 @@ export class PartnerMapComponent implements AfterViewChecked, OnChanges, OnInit{
       this.currentLatitude = "52.5219";
       this.currentLongitude = "13.4132";
     }
-  }
-
-  ngOnChanges(){
-    console.log("mapWaitingForResults", this.mapWaitingForResults);
-  }
-
-  ngOnInit(){
-    this.partners = this.partnersLong.slice(0,50);
   }
 
   ngAfterViewChecked(){
@@ -85,13 +75,6 @@ export class PartnerMapComponent implements AfterViewChecked, OnChanges, OnInit{
     else return "100%";
   }
 
-  addSpinner(){
-    this.mapWaitingForResults = true;
-  }
-
-  removeSpinner(){
-    this.mapWaitingForResults = false;
-  }
 
   closePartnerList() {
     this.partnerListOpen = false;

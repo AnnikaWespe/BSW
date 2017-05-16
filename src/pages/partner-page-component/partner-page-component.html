@@ -156,7 +156,10 @@
       </ion-infinite-scroll>
     </div>
 
-    <partner-map [partnersLong]="displayedPartners"
+    <partner-map [justPartnersWithCampaign$] = "justPartnersWithCampaign$"
+                 [justPartnersWithCampaign] = "showOnlyPartnersWithCampaign"
+                 [searchTerm$] = "searchTerm$"
+                 [searchTerm] = "searchTerm"
                  *ngIf="showMap"
                  (onListUpdated)="scrollToTop()"></partner-map>
 
