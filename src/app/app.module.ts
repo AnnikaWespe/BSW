@@ -42,6 +42,8 @@ import {ActionsPageComponent} from "../pages/actions-page-component/actions-page
 import {LoginWebviewComponent} from "../pages/login-page-component/login-webview/login-webview";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {WebviewComponent} from "../pages/webview/webview";
+import {LoginService} from "../pages/login-page-component/login-service";
+import {FavoritesService} from "../services/favorites-service";
 
 
 @NgModule({
@@ -114,6 +116,8 @@ import {WebviewComponent} from "../pages/webview/webview";
     LocationService,
     PartnerService,
     SearchCompletionService,
+    LoginService,
+    FavoritesService,
     GoogleMapsAPIWrapper
   ]
 })

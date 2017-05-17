@@ -15,7 +15,7 @@ input.text-input.text-input-md.ng-pristine.ng-valid{
     margin: 0 auto;
   }
   .distance-div{
-    height: 14vh;
+    height: 13vh;
   }
   .scroll-content{
     background-color: map-get($colors, light);
@@ -26,19 +26,21 @@ input.text-input.text-input-md.ng-pristine.ng-valid{
   div.center-text{
     text-align: center;
     p.no-login{
+      //margin-bottom: 8vh;
       color: map_get($colors, font-grey);
       text-decoration: underline;
       font-size: 85%;
     }
-    p.no-account{
-      margin-top: 1vh;
+    p.no-password{
       color: map_get($colors, font-grey);
       font-size: 85%;
+      margin-bottom: 0.5vh;
     }
     p.no-member{
       margin-bottom: 1vh;
       color: map_get($colors, font-grey);
       font-size: 85%;
+      margin-top: 1vh;
     }
   }
   .footer-md::before{

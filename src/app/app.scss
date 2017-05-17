@@ -53,12 +53,8 @@ ion-menu {
     margin: 0 auto;
   }
   div.logo-wrapper {
-    padding: 10vh 0 3vh 0;
+    padding: 5vh 0 3vh 0;
     background-color: white;
-  }
-  div.list-wrapper {
-    background-color: map-get($colors, light);
-    height: 100%;
   }
   .item-md {
     background-color: inherit;
@@ -84,6 +80,9 @@ ion-menu {
   }
   .list-wrapper {
     padding-top: 3vh;
+    overflow-y: scroll;
+    background-color: map-get($colors, light);
+    height: 100%;
     div.icon {
       &.offline {
         background: url('../assets/icon/vorortpartner.svg') no-repeat;
@@ -137,7 +136,8 @@ ion-menu {
       }
     }
     ion-item{
-      height: 6vh;
+      max-height: 2vh !important;
+      background-color: map-get($colors, light);
     }
   }
 

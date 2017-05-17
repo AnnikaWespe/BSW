@@ -1,106 +1,108 @@
-<ion-menu [content]="content" class="no-scroll">
+<ion-menu [content]="content">
 
 
-  <ion-content class="no-scroll">
+  <ion-content class="scroll-content ionic-scroll">
     <div class="logo-wrapper">
       <div class="logo"></div>
     </div>
-    <div class="list-wrapper">
 
-      <ion-row menuClose class="page" (click)="openPage(this.pages[0])">
-        <ion-item tappable>
-          <div item-left class="icon-col">
-            <div class="icon overview"></div>
-          </div>
-          <ion-label class="page-title">
-            Übersicht
-          </ion-label>
-        </ion-item>
-      </ion-row>
-
-      <ion-row menuClose class="page" (click)="openPage(this.pages[1])">
-        <ion-item tappable>
-          <div item-left class="icon-col">
-            <div class="icon offline"></div>
-          </div>
-          <ion-label class="page-title">
-            Vor Ort Partner
-          </ion-label>
-        </ion-item>
-      </ion-row>
-
-      <ion-row menuClose class="page" (click)="openPage(this.pages[2])">
-        <ion-item tappable>
-          <div item-left class="icon-col">
-            <div class="icon online"></div>
-          </div>
-          <ion-label class="page-title">
-            Online Partner
-          </ion-label>
-        </ion-item>
-      </ion-row>
-
-      <ion-row menuClose class="page" (click)="openPage(this.pages[3])">
-        <ion-item tappable>
-          <div item-left class="icon-col">
-            <div class="icon add-purchase"></div>
-          </div>
-          <ion-label class="page-title">
-            Einkauf nacherfassen
-          </ion-label>
-        </ion-item>
-      </ion-row>
+      <div class="list-wrapper">
 
 
-      <ion-row menuClose class="page get-large-distance" (click)="openPage(this.pages[4])">
-        <ion-item tappable>
-          <div item-left class="icon-col">
-            <div class="icon my-profile"></div>
-          </div>
-          <ion-label class="page-title">
-            Mein Profil
-          </ion-label>
-        </ion-item>
-      </ion-row>
+        <ion-row menuClose class="page" (click)="openPage(this.pages[0])">
+          <ion-item tappable>
+            <div item-left class="icon-col">
+              <div class="icon overview"></div>
+            </div>
+            <ion-label class="page-title">
+              Übersicht
+            </ion-label>
+          </ion-item>
+        </ion-row>
+
+        <ion-row menuClose class="page" (click)="openPage(this.pages[1])">
+          <ion-item tappable>
+            <div item-left class="icon-col">
+              <div class="icon offline"></div>
+            </div>
+            <ion-label class="page-title">
+              Vor Ort Partner
+            </ion-label>
+          </ion-item>
+        </ion-row>
+
+        <ion-row menuClose class="page" (click)="openPage(this.pages[2])">
+          <ion-item tappable>
+            <div item-left class="icon-col">
+              <div class="icon online"></div>
+            </div>
+            <ion-label class="page-title">
+              Online Partner
+            </ion-label>
+          </ion-item>
+        </ion-row>
+
+        <ion-row menuClose class="page" (click)="openPage(this.pages[3])">
+          <ion-item tappable>
+            <div item-left class="icon-col">
+              <div class="icon add-purchase"></div>
+            </div>
+            <ion-label class="page-title">
+              Einkauf nacherfassen
+            </ion-label>
+          </ion-item>
+        </ion-row>
 
 
-      <ion-row menuClose class="page" (click)="openPage(this.pages[5])">
-        <ion-item tappable>
-          <div item-left class="icon-col">
-            <div class="icon settings"></div>
-          </div>
-          <ion-label class="page-title">
-            Einstellungen
-          </ion-label>
-        </ion-item>
-      </ion-row>
+        <ion-row menuClose class="page get-large-distance" (click)="openPage(this.pages[4])">
+          <ion-item tappable>
+            <div item-left class="icon-col">
+              <div class="icon my-profile"></div>
+            </div>
+            <ion-label class="page-title">
+              Mein Profil
+            </ion-label>
+          </ion-item>
+        </ion-row>
 
 
-      <ion-row menuClose class="page get-small-distance" (click)="openPage(this.pages[6])">
-        <ion-item tappable>
-          <div item-left class="icon-col">
-            <div class="icon contact"></div>
-          </div>
-          <ion-label class="page-title">
-            Kontakt
-          </ion-label>
-        </ion-item>
-      </ion-row>
+        <ion-row menuClose class="page" (click)="openPage(this.pages[5])">
+          <ion-item tappable>
+            <div item-left class="icon-col">
+              <div class="icon settings"></div>
+            </div>
+            <ion-label class="page-title">
+              Einstellungen
+            </ion-label>
+          </ion-item>
+        </ion-row>
 
 
-      <ion-row menuClose class="page" (click)="openPage(this.pages[7])">
-        <ion-item tappable>
-          <div item-left class="icon-col">
-            <div class="icon sign-out"></div>
-          </div>
-          <ion-label class="page-title">
-            Abmelden
-          </ion-label>
-        </ion-item>
-      </ion-row>
+        <ion-row menuClose class="page get-small-distance" (click)="openPage(this.pages[6])">
+          <ion-item tappable>
+            <div item-left class="icon-col">
+              <div class="icon contact"></div>
+            </div>
+            <ion-label class="page-title">
+              Kontakt
+            </ion-label>
+          </ion-item>
+        </ion-row>
 
 
-    </div>
+        <ion-row menuClose class="page" (click)="logout()">
+          <ion-item tappable>
+            <div item-left class="icon-col">
+              <div class="icon sign-out"></div>
+            </div>
+            <ion-label class="page-title">
+              Abmelden
+            </ion-label>
+          </ion-item>
+        </ion-row>
+
+
+      </div>
   </ion-content>
 </ion-menu>
 

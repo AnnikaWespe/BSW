@@ -13,14 +13,13 @@
     </div>
 
     <div class="password-wrapper">
-      <ion-input type="password" placeholder="Passwort"></ion-input>
-      <div class="forgot-hyperlink">vergessen?</div>
+      <ion-input [(ngModel)] = "password" type="password" placeholder="Passwort"></ion-input>
     </div>
   </div>
 
   <div class = "center-text">
+    <p class = "no-password">Passwort vergessen oder keines vergeben? Neues anfordern!</p>
     <p class = "no-member" (click)="loadWebView('Mitglied werden', 'https://www.bsw.de/')">Noch kein Mitglied? Jetzt Mitglied werden!</p>
-    <p class = "no-account" (click)="loadWebView('Konto anlegen', 'https://www.bsw.de/')">Bereits Mitglied? Hier Konto anlegen!</p>
   </div>
 
 

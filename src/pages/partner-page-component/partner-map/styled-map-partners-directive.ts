@@ -83,13 +83,18 @@ export class StyledMapPartnersDirective {
     else if (DeviceService.isAndroid || DeviceService.isIos || DeviceService.isWindowsPhone) {
       this.pathToGmapsClusterIcons = '../www/assets/icon/m';
     }
+
     this.googleMapsWrapper.getNativeMap()
       .then((map) => {
         this.map = map;
         this.setMapOptions(map);
         const idle$ = Observable.create((observer) => {
+          let timer;
           map.addListener('idle', () => {
-            observer.next();
+            clearTimeout(timer);
+            timer = setTimeout(()=>{
+              observer.next();
+            }, 1500)
           })
         })
         const center$ = idle$.map(() => {

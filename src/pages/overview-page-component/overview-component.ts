@@ -6,6 +6,8 @@ import {PartnerService} from "../../services/partner-service";
 import {PartnerPageComponent} from "../partner-page-component/partner-page-component";
 import {LocationService} from "../../services/location-service";
 import {PartnerDetailComponent} from "../partner-page-component/partner-detail-component/partner-detail-component";
+import {FavoritesService} from "../../services/favorites-service";
+import {FavoritesData} from "../../services/favorites-data";
 
 
 @Component({
@@ -32,8 +34,23 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   getPartnersSubscription: any;
   getLocationSubscription: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private partnerService: PartnerService, private locationService: LocationService) {
+
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              private partnerService: PartnerService,
+              private locationService: LocationService,
+              private favoritesService: FavoritesService) {
     this.checkIfGPSEnabled();
+    this.favoritesService.getFavorites().subscribe((res) => {
+      let favorites = res.json().response.favoriten;
+      FavoritesData.favoritesArray = favorites;
+      this.favoritePartners = favorites.slice(0 , 5);
+      console.log(favorites);
+    })
+    this.favoritesService.rememberFavorite().subscribe((res) => {
+      console.log(res)
+    })
+
   }
 
   ngOnDestroy() {
@@ -47,7 +64,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
 
-  checkIfGPSEnabled(){
+  checkIfGPSEnabled() {
     if (localStorage.getItem("getLocationFromGPSEnabled") === "true") {
       this.getLocationSubscription = this.locationService.getLocation().subscribe(
         (object) => {
@@ -80,11 +97,11 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
 
-  public ngAfterViewChecked() {
+  public
+  ngAfterViewChecked() {
     this.setFocus();
 
   }
-
 
 
   getPartners() {
@@ -117,14 +134,18 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   loadPartnerPage(searchTerm) {
     this.searchInterfaceOpen = false;
-    this.navCtrl.push(PartnerPageComponent, {type: "searchPageComponent", searchTerm: searchTerm, navigatedFromOverview: true})
+    this.navCtrl.push(PartnerPageComponent, {
+      type: "searchPageComponent",
+      searchTerm: searchTerm,
+      navigatedFromOverview: true
+    })
   }
 
   showPartner(partner = 0) {
     this.navCtrl.push(PartnerDetailComponent)
   }
 
-  //pure DOM method(s)
+//pure DOM method(s)
 
   heightBlueBarRedBar() {
     let heightOtherDiv;
@@ -143,7 +164,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     return this.heightBalanceBarBonusBarBuffer;
   }
 
-  private setFocus() {
+  private
+  setFocus() {
     let searchInputField = document.getElementById('mySearchInputField');
     if (searchInputField) {
       searchInputField.focus();

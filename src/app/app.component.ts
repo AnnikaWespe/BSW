@@ -77,4 +77,10 @@ export class MyApp {
       { title: 'Einstellungen', component: SettingsPageComponent, parameters: {}},
       {title: "Abmelden", component: LoginPageComponent, parameters: {}}]
   }
+
+  logout(){
+    localStorage.deleteItem("securityToken");
+    console.log("securityToken:" + localStorage.getItem("securityToken"));
+    this.nav.setRoot(LoginPageComponent);
+  }
 }
