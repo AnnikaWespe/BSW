@@ -2,6 +2,10 @@ page-partner-detail-component {
   .bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default {
     color: map_get($colors, grey) !important;
   }
+  ion-icon.favorites-icon{
+    font-size: 2.5em;
+    margin-right: 2.5vw;
+  }
   img {
     width: 80%;
     display: block;

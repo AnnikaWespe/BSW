@@ -60,8 +60,12 @@ input.text-input.text-input-md.ng-pristine.ng-valid{
   div.card-number-wrapper{
     position: relative;
   }
-  ion-icon.camera{
-    position: absolute; top: 0.75vh; right: 0;
+  button.camera{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: transparent;
+    box-shadow: none;
   }
   div.password-wrapper{
     margin-top: 2vh;

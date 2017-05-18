@@ -42,15 +42,18 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               private favoritesService: FavoritesService) {
     this.checkIfGPSEnabled();
     this.favoritesService.getFavorites().subscribe((res) => {
-      let favorites = res.json().response.favoriten;
-      FavoritesData.favoritesArray = favorites;
-      this.favoritePartners = favorites.slice(0 , 5);
-      console.log(favorites);
+      let favoritesByPf = res.json().response.favoriten.map((obj) => {
+        return obj.pfNummer;
+      });
+      let firstFiveFavoritesByPf = favoritesByPf.slice(0, 5);
+      FavoritesData.favoritesByPfArray = favoritesByPf;
+      console.log(favoritesByPf);
+      firstFiveFavoritesByPf.forEach((pfNummer) => {
+        let subscription = this.getPartnerFromPfNumber(pfNummer).subscribe((res) => {
+          console.log(res);
+        })
+      })
     })
-    this.favoritesService.rememberFavorite().subscribe((res) => {
-      console.log(res)
-    })
-
   }
 
   ngOnDestroy() {
@@ -100,7 +103,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   public
   ngAfterViewChecked() {
     this.setFocus();
-
   }
 
 
@@ -142,7 +144,11 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
   showPartner(partner = 0) {
-    this.navCtrl.push(PartnerDetailComponent)
+    this.navCtrl.push(PartnerDetailComponent, {partner: partner})
+  }
+
+  getPartnerFromPfNumber(number) {
+    return this.partnerService.getPartners(this.location, 0, number, false)
   }
 
 //pure DOM method(s)

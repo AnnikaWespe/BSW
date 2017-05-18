@@ -47,23 +47,26 @@ export class LoginPageComponent {
     this.login();
     //TODO: outcomment for production
     /*if (isNaN(this.inputNumberOrEmail)) {
-     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-     if (re.test(this.inputNumberOrEmail)) {
-     this.login();
-     }
-     else {
-     this.showPromptNoValidEmail();
-     }
-     ;
-     }
-     else {
-     if (this.inputNumberOrEmail.length == 10) {
-     this.login();
-     }
-     else {
-     this.showPromptNoValidNumber()
-     }
-     }*/
+      if (this.emailAdressProperlyFormatted()) {
+        this.login();
+      }
+      else {
+        this.showPromptNoValidEmail();
+      }
+    }
+    else {
+      if (this.inputNumberOrEmail.length == 10) {
+        this.login();
+      }
+      else {
+        this.showPromptNoValidNumber()
+      }
+    }*/
+  }
+
+  emailAdressProperlyFormatted() {
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(this.inputNumberOrEmail);
   }
 
   login() {
@@ -72,7 +75,7 @@ export class LoginPageComponent {
     this.loginService.login(username, password).subscribe((res) => {
       this.loading.dismiss();
       let loginData = res.json();
-      if(loginData.errors[0].code === "0"){
+      if (loginData.errors[0].code === "0") {
         localStorage.setItem("securityToken", loginData.response.securityToken);
         localStorage.setItem("mitgliedId", loginData.response.mitgliedId);
         this.pushOverviewPage();
@@ -125,6 +128,70 @@ export class LoginPageComponent {
       ]
     });
     prompt.present();
+  }
+
+  showPromptRequestSent() {
+    let prompt = this.alertCtrl.create({
+      title: 'Ein neues Passwort wurde angefordert.',
+      message: "Bitte überprüfen Sie Ihr Email-Postfach.",
+      buttons: [
+        {
+          text: 'Ok',
+          handler: data => {
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
+
+  showPromptEnterNumberOrEmail() {
+    let alert = this.alertCtrl.create({
+      title: 'Passwort anfordern',
+      inputs: [
+        {
+          name: '',
+          placeholder: 'Mitglieds-Nr. oder Email'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Abbrechen',
+          role: 'cancel'
+        },
+        {
+          text: 'Anfordern',
+          handler: data => {
+            /*if (User.isValid(data.username, data.password)) {
+              // logged in!
+            } else {
+              // invalid login
+              return false;
+            }*/
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  showPasswordForgottenDialogue() {
+    if (isNaN(this.inputNumberOrEmail)) {
+      if (this.emailAdressProperlyFormatted()) {
+        this.showPromptRequestSent();
+      }
+      else {
+        this.showPromptEnterNumberOrEmail()
+      }
+    }
+    else {
+      if (this.inputNumberOrEmail.length == 10) {
+        this.showPromptRequestSent();
+      }
+      else {
+        this.showPromptEnterNumberOrEmail()
+      }
+    }
   }
 
   presentLoading() {

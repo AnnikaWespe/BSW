@@ -9,7 +9,9 @@
 
     <div class="card-number-wrapper">
       <ion-input type="text" placeholder="Mitgliedsnummer / Email" [(ngModel)]="inputNumberOrEmail"></ion-input>
-      <ion-icon tappable color="primary" name="camera" class="camera" (click)="loadCameraPage()"></ion-icon>
+      <button ion-button icon-only class="camera">
+        <ion-icon tappable color="primary" name="camera" (click)="loadCameraPage()"></ion-icon>
+      </button>
     </div>
 
     <div class="password-wrapper">
@@ -18,7 +20,7 @@
   </div>
 
   <div class = "center-text">
-    <p class = "no-password">Passwort vergessen oder keines vergeben? Neues anfordern!</p>
+    <p class = "no-password" (click)="showPasswordForgottenDialogue()">Passwort vergessen oder keines vergeben? Neues anfordern!</p>
     <p class = "no-member" (click)="loadWebView('Mitglied werden', 'https://www.bsw.de/')">Noch kein Mitglied? Jetzt Mitglied werden!</p>
   </div>
 

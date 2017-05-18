@@ -203,10 +203,11 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       .subscribe(
         body => {
           let returnedObject = body.json();
-          this.getDifferentCategories(returnedObject);
           if (!returnedObject.contentEntities) {
             this.moreDataCanBeLoaded = false;
+            console.log("no data found");
           }
+          this.getDifferentCategories(returnedObject);
         },
         error => this.errorMessage = <any>error);
   }
@@ -281,7 +282,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
 
   showPartner(partner = 0) {
-    this.navCtrl.push(PartnerDetailComponent)
+    this.navCtrl.push(PartnerDetailComponent, {partner: partner})
   }
 
   askForValidCategories() {

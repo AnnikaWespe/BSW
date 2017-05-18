@@ -1,5 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Http, Headers} from "@angular/http";
+import {PartnerService} from "./partner-service";
 
 @Injectable()
 export class FavoritesService {
@@ -9,7 +10,8 @@ export class FavoritesService {
   mitgliedId = localStorage.getItem("mitgliedId");
 
 
-  constructor(private http: Http) {
+  constructor(private http: Http,
+              private partnerService: PartnerService) {
   }
 
   createAuthorizationHeader(headers: Headers) {
@@ -29,19 +31,13 @@ export class FavoritesService {
     let url = this.favoritesUrlSnippet + 'get?mandant_id=1&mitglied_id=' + this.mitgliedId + '&securityToken=' + this.securityToken;
     return(this.get(url));
   }
-  deleteFavorite(){}
-  rememberFavorite(){
-    let url = this.favoritesUrlSnippet + 'merken.json?mandant_id=1&mitglied_id=' + this.mitgliedId + '&pfNummer=11015201' + '&securityToken=' + this.securityToken;
+  deleteFavorite(pfNumber){
+    let url = this.favoritesUrlSnippet + 'loeschen.json?mandant_id=1&mitglied_id=' + this.mitgliedId + '&pfNummer=35280000' +  '&securityToken=' + this.securityToken;
     return(this.get(url));
   }
-
-
-  /*post(url, data) {
-   let headers = new Headers();
-   this.createAuthorizationHeader(headers);
-   return this.http.post(url, data, {
-   headers: headers
-   });
-   }*/
+  rememberFavorite(pfNumber){
+    let url = this.favoritesUrlSnippet + 'merken.json?mandant_id=1&mitglied_id=' + this.mitgliedId + '&pfNummer=35280000' + '&securityToken=' + this.securityToken;
+    return(this.get(url));
+  }
 }
 
