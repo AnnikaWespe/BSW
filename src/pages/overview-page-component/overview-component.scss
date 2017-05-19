@@ -83,13 +83,17 @@ page-overview {
     background-color: map-get($colors, light-grey);
     height: 8vh;
   }
-  ion-col.more{
+  button.more{
     color: map-get($colors, font-grey-dark);
     font-size: large;
     font-weight: bold;
-    line-height: 8vh;
-    max-width: 10vw;
-    padding-right: 4vw;
+    background: transparent;
+    box-shadow: none;
+    padding-right: 2vw !important;
+    //padding-bottom: 2vh !important;
+  }
+  ion-col.more{
+    text-align: right;
   }
   ion-col.title{
     color: map-get($colors, font-grey-dark);

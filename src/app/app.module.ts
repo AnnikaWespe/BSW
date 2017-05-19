@@ -44,6 +44,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {WebviewComponent} from "../pages/webview/webview";
 import {LoginService} from "../pages/login-page-component/login-service";
 import {FavoritesService} from "../services/favorites-service";
+import {UserSpecificPartnersComponent} from "../pages/overview-page-component/user-specific-partners-page-component/user-specific-partners-component";
 
 
 @NgModule({
@@ -73,6 +74,7 @@ import {FavoritesService} from "../services/favorites-service";
     WebviewComponent,
     SafePipe,
     ActionsPageComponent,
+    UserSpecificPartnersComponent
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -104,6 +106,7 @@ import {FavoritesService} from "../services/favorites-service";
     PictureScreenComponent,
     TypeaheadComponent,
     WebviewComponent,
+    UserSpecificPartnersComponent
   ],
 
   providers: [

@@ -1,0 +1,15 @@
+page-user-specific-partners-component {
+  ion-content{
+    background-color: map-get($colors, light) !important;
+  }
+  div.initialSpinner {
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 85px;
+    text-align: center;
+  }
+}

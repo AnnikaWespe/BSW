@@ -16,6 +16,9 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
-  <iframe #iframe [src]="url | safe" webkitallowfullscreen mozallowfullscreen allowfullscreen frameBorder="0"></iframe>
-  <div #mytext>Hello!</div>
+  <div class="initialSpinner" *ngIf="waitingForResults">
+    <ion-spinner tappable class="initialSpinner"></ion-spinner>
+  </div>
+  <partner-table [partners] = "partners"></partner-table>
 </ion-content>
+

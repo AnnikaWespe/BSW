@@ -79,7 +79,7 @@
       <p class="title-paragraph">Favoriten</p>
     </ion-col>
     <ion-col class="more">
-      ...
+      <button ion-button icon-only tappable class="more" (click) = "loadUserSpecificPartnerTable('favorites')">...</button>
     </ion-col>
   </ion-row>
   <partner-table [partners]="favoritePartners"
@@ -91,7 +91,7 @@
       <p class="title-paragraph">Zuletzt besuchte Partner</p>
     </ion-col>
     <ion-col class="more">
-      ...
+      <button ion-button icon-only tappable class="more" (click) = "loadUserSpecificPartnerTable('lastvisitedPartners')">...</button>
     </ion-col>
   </ion-row>
   <partner-table [partners]="lastVisitedPartners"
@@ -102,8 +102,8 @@
     <ion-col class="title">
       <p class="title-paragraph">Vor Ort Partner</p>
     </ion-col>
-    <ion-col tappable class="more" (click)="showOfflinePartners()">
-      ...
+    <ion-col class="more">
+      <button ion-button icon-only tappable class="more" (click) = "showOfflinePartners()">...</button>
     </ion-col>
   </ion-row>
   <partner-table [partners]="offlinePartners"
@@ -114,8 +114,8 @@
     <ion-col class="title">
       <p class="title-paragraph">Online Partner</p>
     </ion-col>
-    <ion-col tappable class="more" (click)="showOnlinePartners()">
-      ...
+    <ion-col class="more">
+      <button ion-button icon-only tappable class="more" (click) = "showOnlinePartners()">...</button>
     </ion-col>
   </ion-row>
   <partner-table [partners]="onlinePartners"

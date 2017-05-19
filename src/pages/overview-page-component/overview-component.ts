@@ -8,6 +8,7 @@ import {LocationService} from "../../services/location-service";
 import {PartnerDetailComponent} from "../partner-page-component/partner-detail-component/partner-detail-component";
 import {FavoritesService} from "../../services/favorites-service";
 import {FavoritesData} from "../../services/favorites-data";
+import {UserSpecificPartnersComponent} from "./user-specific-partners-page-component/user-specific-partners-component";
 
 
 @Component({
@@ -45,14 +46,12 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       let favoritesByPf = res.json().response.favoriten.map((obj) => {
         return obj.pfNummer;
       });
-      let firstFiveFavoritesByPf = favoritesByPf.slice(0, 5);
       FavoritesData.favoritesByPfArray = favoritesByPf;
-      console.log(favoritesByPf);
-      firstFiveFavoritesByPf.forEach((pfNummer) => {
-        let subscription = this.getPartnerFromPfNumber(pfNummer).subscribe((res) => {
-          console.log(res);
-        })
+      this.partnerService.getPartners(this.location, 0, "", false, 10000, favoritesByPf).subscribe((res) => {
+        this.favoritePartners = res.json().contentEntities.slice(0, 5);
+        this.waitingForResults = false;
       })
+
     })
   }
 
@@ -60,7 +59,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     if (this.getPartnersSubscription) {
       this.getPartnersSubscription.unsubscribe();
     }
-    ;
     if (this.getLocationSubscription) {
       this.getLocationSubscription.unsubscribe();
     }
@@ -149,6 +147,15 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   getPartnerFromPfNumber(number) {
     return this.partnerService.getPartners(this.location, 0, number, false)
+  }
+
+  loadUserSpecificPartnerTable(type){
+    if(type === "favorites"){
+      this.navCtrl.push(UserSpecificPartnersComponent, {title: "Favoriten"})
+    }
+    else{
+      this.navCtrl.push(UserSpecificPartnersComponent, {title: "Zuletzt besucht"})
+    }
   }
 
 //pure DOM method(s)

@@ -103,7 +103,7 @@ export class LoginPageComponent {
   showPromptLoginFailed() {
     let prompt = this.alertCtrl.create({
       title: 'Login fehlgeschlagen',
-      message: "Bitte versuche Sie es erneut.",
+      message: "Bitte versuc e Sie es erneut.",
       buttons: [
         {
           text: 'Ok',
