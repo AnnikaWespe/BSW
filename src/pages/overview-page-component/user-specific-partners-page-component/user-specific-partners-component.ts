@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {FavoritesData} from "../../../services/favorites-data";
 import {PartnerService} from "../../../services/partner-service";
-import {LocationData} from "../../../services/location-data";
 
 
 @Component({
@@ -30,7 +29,7 @@ export class UserSpecificPartnersComponent {
 
   treatAsFavoritesPage() {
     let favoritesPfArray = FavoritesData.favoritesByPfArray;
-    this.partnerService.getPartners({latitude: LocationData.latitude, longitude: LocationData.longitude}, 0, "", false, 10000, favoritesPfArray).subscribe((res) => {
+    this.partnerService.getPartners({latitude: Number(localStorage.getItem("latitude")), longitude: Number(localStorage.getItem("longitude"))}, 0, "", false, 10000, favoritesPfArray).subscribe((res) => {
       this.partners = res.json().contentEntities;
       this.waitingForResults = false;
     })

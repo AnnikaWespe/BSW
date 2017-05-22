@@ -3,6 +3,7 @@ page-partner-detail-component {
     color: map_get($colors, grey) !important;
   }
   ion-icon.favorites-icon{
+    display: inline-block;
     font-size: 2.5em;
     margin-right: 2.5vw;
   }

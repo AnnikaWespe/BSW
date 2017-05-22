@@ -17,7 +17,6 @@ import {LoginPageComponent} from '../pages/login-page-component/login-component'
 import {OverviewPageComponent} from '../pages/overview-page-component/overview-component';
 import  { AddPurchasePageComponent} from '../pages/add-purchase-page-component/add-purchase-component';
 import {ConfirmScanPageComponent} from '../pages/login-page-component/confirm-scan-page-component/confirm-scan-page-component';
-import {LogoutPageComponent} from "../pages/logout-page-component/logout-page-component";
 import {MyProfilePageComponent} from "../pages/my-profile-page-component/my-profile-page-component";
 import {PartnerPageComponent} from "../pages/partner-page-component/partner-page-component";
 import {SettingsPageComponent} from "../pages/settings-page-component/settings-page-component";
@@ -45,6 +44,7 @@ import {WebviewComponent} from "../pages/webview/webview";
 import {LoginService} from "../pages/login-page-component/login-service";
 import {FavoritesService} from "../services/favorites-service";
 import {UserSpecificPartnersComponent} from "../pages/overview-page-component/user-specific-partners-page-component/user-specific-partners-component";
+import {MapMarkerService} from "../services/map-marker-service";
 
 
 @NgModule({
@@ -54,7 +54,6 @@ import {UserSpecificPartnersComponent} from "../pages/overview-page-component/us
     AddPurchasePageComponent,
     LoginPageComponent,
     ConfirmScanPageComponent,
-    LogoutPageComponent,
     MyProfilePageComponent,
     PartnerPageComponent,
     SettingsPageComponent,
@@ -94,7 +93,6 @@ import {UserSpecificPartnersComponent} from "../pages/overview-page-component/us
     AddPurchasePageComponent,
     LoginPageComponent,
     ConfirmScanPageComponent,
-    LogoutPageComponent,
     MyProfilePageComponent,
     PartnerPageComponent,
     SettingsPageComponent,
@@ -121,6 +119,7 @@ import {UserSpecificPartnersComponent} from "../pages/overview-page-component/us
     SearchCompletionService,
     LoginService,
     FavoritesService,
+    MapMarkerService,
     GoogleMapsAPIWrapper
   ]
 })

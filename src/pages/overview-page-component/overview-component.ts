@@ -42,17 +42,19 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               private locationService: LocationService,
               private favoritesService: FavoritesService) {
     this.checkIfGPSEnabled();
-    this.favoritesService.getFavorites().subscribe((res) => {
-      let favoritesByPf = res.json().response.favoriten.map((obj) => {
-        return obj.pfNummer;
-      });
-      FavoritesData.favoritesByPfArray = favoritesByPf;
-      this.partnerService.getPartners(this.location, 0, "", false, 10000, favoritesByPf).subscribe((res) => {
-        this.favoritePartners = res.json().contentEntities.slice(0, 5);
-        this.waitingForResults = false;
-      })
+    if(localStorage.getItem('securityToken')){
+      this.favoritesService.getFavorites().subscribe((res) => {
+        let favoritesByPf = res.json().response.favoriten.map((obj) => {
+          return obj.pfNummer;
+        });
+        FavoritesData.favoritesByPfArray = favoritesByPf;
+        this.partnerService.getPartners(this.location, 0, "", false, 10000, favoritesByPf).subscribe((res) => {
+          this.favoritePartners = res.json().contentEntities.slice(0, 5);
+          this.waitingForResults = false;
+        })
 
-    })
+      })
+    }
   }
 
   ngOnDestroy() {

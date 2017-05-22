@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
-import {LocationData} from "../../../../services/location-data";
+import {AlertController, NavController, NavParams} from 'ionic-angular';
+import {FavoritesData} from "../../../../services/favorites-data";
+import {FavoritesService} from "../../../../services/favorites-service";
 
 declare let device: any;
 
@@ -19,31 +20,70 @@ export class PartnerDetailMap {
   currentLatitude: number;
   currentLongitude: number;
   locationExact = false;
-  starInactive = {
-    name: "star-outline",
-    color: "grey"
-  };
-  starActive = {
-    name: "star",
-    color: "primary"
-  };
-  star = this.starInactive;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+
+  partner: any;
+  pfNumber: string;
+  isInFavorites = true;
+
+
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              public favoritesService: FavoritesService,
+              public alertCtrl: AlertController) {
+    this.partner = navParams.get("partner");
+    console.log(this.partner);
     if (localStorage.getItem("locationExact") === "true"){
       this.currentLatitude = parseFloat(localStorage.getItem("latitude"));
       this.currentLongitude = parseFloat(localStorage.getItem("longitude"));
       this.locationExact = true;
     }
-    console.log("PartnerDetailMap: ", this.currentLatitude + " " + this.currentLongitude)
+    console.log("PartnerDetailMap: ", this.currentLatitude + " " + this.currentLongitude);
+    //TODO uncomment
+    //this.pfNumber = this.partner.number;
+    //this.isInFavorites = FavoritesData.isInFavorites(this.pfNumber);
   }
 
-  toggleFavorites(){
-    if (this.star == this.starActive) {
-      this.star = this.starInactive;
+  showPromptSomethingWentWrong() {
+    let prompt = this.alertCtrl.create({
+      title: 'Tut uns leid, etwas ist schiefgegangen',
+      message: "Bitte versuchen Sie es erneut.",
+      buttons: [
+        {
+          text: 'Ok',
+          handler: data => {
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
+
+
+  toggleFavorites() {
+    if (this.isInFavorites) {
+      this.favoritesService.deleteFavorite(this.pfNumber).subscribe((res) => {
+        let message = res.json().errors[0].beschreibung;
+        if (message === "Erfolg") {
+          FavoritesData.deleteFavorite("35280000");
+          this.isInFavorites = false;
+        }
+        else {
+          this.showPromptSomethingWentWrong();
+        }
+      })
     }
     else {
-      this.star = this.starActive
+      this.favoritesService.rememberFavorite(this.pfNumber).subscribe((res) => {
+        let message = res.json().errors[0].beschreibung;
+        if (message === "Erfolg") {
+          FavoritesData.addFavorite("35280000");
+          this.isInFavorites = true;
+        }
+        else {
+          this.showPromptSomethingWentWrong();
+        }
+      })
     }
   }
 

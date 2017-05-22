@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {Nav, NavController, NavParams, AlertController, LoadingController} from 'ionic-angular';
+import {Nav, NavController, NavParams, AlertController, LoadingController, ViewController} from 'ionic-angular';
 
 import {OverviewPageComponent} from "../overview-page-component/overview-component";
 import {ConfirmScanPageComponent} from "./confirm-scan-page-component/confirm-scan-page-component";
@@ -19,15 +19,19 @@ export class LoginPageComponent {
   password = "";
   loading;
 
+  navigatedFromPartnerDetail;
+
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public alertCtrl: AlertController,
               public loginService: LoginService,
-              public loadingCtrl: LoadingController) {
+              public loadingCtrl: LoadingController,
+  public viewCtrl: ViewController) {
     this.barcodeData = navParams.get('barcodeData');
     if (this.barcodeData) {
       this.inputNumberOrEmail = this.barcodeData.text;
     }
+    this.navigatedFromPartnerDetail = navParams.get("navigatedFromPartnerDetail");
   }
 
   loadCameraPage() {
@@ -78,7 +82,12 @@ export class LoginPageComponent {
       if (loginData.errors[0].code === "0") {
         localStorage.setItem("securityToken", loginData.response.securityToken);
         localStorage.setItem("mitgliedId", loginData.response.mitgliedId);
-        this.pushOverviewPage();
+        if(this.navigatedFromPartnerDetail){
+          this.viewCtrl.dismiss(loginData.response.mitgliedId);
+        }
+        else{
+          this.pushOverviewPage();
+        }
         console.log(loginData);
       }
       else(this.showPromptLoginFailed())
@@ -103,7 +112,7 @@ export class LoginPageComponent {
   showPromptLoginFailed() {
     let prompt = this.alertCtrl.create({
       title: 'Login fehlgeschlagen',
-      message: "Bitte versuc e Sie es erneut.",
+      message: "Bitte versuchen Sie es erneut.",
       buttons: [
         {
           text: 'Ok',

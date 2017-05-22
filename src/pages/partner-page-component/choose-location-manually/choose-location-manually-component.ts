@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import {NavController, NavParams} from "ionic-angular";
 import {PartnerPageComponent} from "../partner-page-component";
 import {GoogleMapsAPIWrapper} from "angular2-google-maps/core";
-import {LocationData} from "../../../services/location-data";
 import {LocationService} from "../../../services/location-service";
 
 @Component({

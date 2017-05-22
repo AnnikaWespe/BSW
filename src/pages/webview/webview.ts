@@ -5,25 +5,16 @@ import {NavController, NavParams} from "ionic-angular";
   selector: 'webview',
   templateUrl: 'webview.html'
 })
-export class WebviewComponent implements AfterViewInit {
+export class WebviewComponent {
 
   title: string;
   url;
   @ViewChild('iframe') iframe;
-  @ViewChild('mytext') mytext;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     //this.url = navParams.get('url');
-    this.url = "www.asdfasdfl.de";
+    this.url = "http://whatsmyuseragent.org/"
     this.title = navParams.get('title');
-  }
-
-  ngAfterViewInit() {
-    console.log(this.iframe, this.mytext);
-  }
-
-  onError(){
-    console.log("there was an error");
   }
 }
 

@@ -1,6 +1,6 @@
-import {OnInit, Directive, Output, EventEmitter} from '@angular/core';
+import {OnInit, Directive, Output, EventEmitter, Input} from '@angular/core';
 import {GoogleMapsAPIWrapper} from 'angular2-google-maps/core';
-import {LocationData} from '../../../../services/location-data';
+import {MapMarkerService} from "../../../../services/map-marker-service";
 declare let google: any;
 
 
@@ -12,34 +12,43 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
   @Output() travelTimeCarUpdated = new EventEmitter();
   @Output() travelTimePublicUpdated = new EventEmitter();
   @Output() travelTimePedestrianUpdated = new EventEmitter();
+  @Input() partner;
+
+  map;
 
 
-  constructor(private googleMapsWrapper: GoogleMapsAPIWrapper) {
+  constructor(private googleMapsWrapper: GoogleMapsAPIWrapper,
+              private mapMarkerService: MapMarkerService) {
   }
 
   ngOnInit() {
+    console.log(this.partner);
     this.googleMapsWrapper.getNativeMap()
       .then((map) => {
+        this.map = map;
+        this.setMapOptions(map);
         this.extendBounds(map);
       });
   }
 
   private extendBounds(map) {
     let bounds = new google.maps.LatLngBounds();
-
-    bounds.extend({lat: 48.1300, lng: 11.5700});
+    bounds.extend({lat: this.partner.location.latitude, lng: this.partner.location.longitude});
+    map.fitBounds(bounds);
     if (localStorage.getItem("locationExact") === "true") {
       bounds.extend({lat: Number(localStorage.getItem("latitude")), lng: Number(localStorage.getItem("longitude"))});
-      this.initializeDirectionService();
-
+      this.mapMarkerService.getImageAsBase64(this.partner.logoUrlForGMap, (imageAsBase64, validImage) => {
+        let marker = this.mapMarkerService.getMarker(this.partner, imageAsBase64, validImage, map, bounds);
+        this.initializeDirectionService();
+      })
     }
     map.setOptions({
       streetViewControl: false
     });
-    map.fitBounds(bounds);
   }
 
-  private initializeDirectionService() {
+  private
+  initializeDirectionService() {
 
     let directionsService = new google.maps.DirectionsService();
     let origin = new google.maps.LatLng(Number(localStorage.getItem("latitude")), Number(localStorage.getItem("longitude")));
@@ -63,7 +72,6 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
         let point = response.routes[0].legs[0];
         let travelTimePublic = shortenStringTravelTime(point.duration.text);
         this.travelTimePublicUpdated.emit(travelTimePublic);
-        console.log("travelTimePublic: " + travelTimePublic);
       }
       else(console.log(response));
     });
@@ -72,7 +80,6 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
         let point = response.routes[0].legs[0];
         let travelTimeCar = shortenStringTravelTime(point.duration.text);
         this.travelTimeCarUpdated.emit(travelTimeCar);
-        console.log("travelTimeCar: " + travelTimeCar);
       }
     });
     directionsService.route(requestPedestrian, (response, status) => {
@@ -80,8 +87,11 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
         let point = response.routes[0].legs[0];
         let travelTimePedestrian = shortenStringTravelTime(point.duration.text);
         this.travelTimePedestrianUpdated.emit(travelTimePedestrian);
-        console.log("travelTimePedestrian: " + travelTimePedestrian);
       }
     });
+  }
+
+  private setMapOptions(map: any) {
+    map.setOptions({clickableIcons: false});
   }
 }

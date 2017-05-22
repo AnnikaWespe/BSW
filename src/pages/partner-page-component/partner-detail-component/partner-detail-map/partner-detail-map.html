@@ -5,7 +5,8 @@
     </ion-title>
     <ion-buttons end>
       <button (click)="toggleFavorites()">
-        <ion-icon [name]="star.name" [color]="star.color" class="add-favourite-button-header"></ion-icon>
+        <ion-icon name="star-outline" color="grey" *ngIf="!isInFavorites" class="favorites-icon"></ion-icon>
+        <ion-icon name="star" color='primary' *ngIf="isInFavorites" class="favorites-icon"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -16,7 +17,6 @@
     [latitude]="49"
     [longitude]="11"
     [zoomControl] = "false">
-    <sebm-google-map-marker [latitude] = "48.1300" [longitude] = "11.5700"></sebm-google-map-marker>
     <sebm-google-map-circle [latitude]="currentLatitude"
                             [longitude]="currentLongitude"
                             [fillColor]="'red'"
@@ -29,6 +29,7 @@
     <styled-map-partner-details (travelTimePublicUpdated)="handleTravelTimePublicUpdated($event)"
                                 (travelTimeCarUpdated)="handleTravelTimeCarUpdated($event)"
                                 (travelTimePedestrianUpdated) ="handleTravelTimePedestrianUpdated($event)"
+                                [partner] = "partner"
     ></styled-map-partner-details>
   </sebm-google-map>
 

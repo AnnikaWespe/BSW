@@ -10,7 +10,6 @@ import {MyProfilePageComponent} from "../pages/my-profile-page-component/my-prof
 import {PartnerPageComponent} from "../pages/partner-page-component/partner-page-component";
 import {SettingsPageComponent} from "../pages/settings-page-component/settings-page-component";
 import {DeviceService} from "../services/device-data";
-import {FilterData} from "../services/filter-data";
 
 
 @Component({
@@ -79,8 +78,7 @@ export class MyApp {
   }
 
   logout(){
-    localStorage.deleteItem("securityToken");
-    console.log("securityToken:" + localStorage.getItem("securityToken"));
+    localStorage.removeItem("securityToken");
     this.nav.setRoot(LoginPageComponent);
   }
 }
