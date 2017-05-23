@@ -6,7 +6,8 @@ import {PartnerService} from "./partner-service";
 export class FavoritesService {
 
   favoritesUrlSnippet = 'https://vorsystem.avs.de/integ6/securityToken/favorit/';
-  securityToken = encodeURIComponent(localStorage.getItem("securityToken"));
+  //securityToken = encodeURIComponent(localStorage.getItem("securityToken"));
+  securityToken = localStorage.getItem("securityToken");
   mitgliedId = localStorage.getItem("mitgliedId");
 
 

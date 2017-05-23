@@ -16,5 +16,10 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
+  <ion-item *ngIf = "dataProtectionScreen">
+    <div item-content>User Tracking deaktivieren</div>
+    <ion-toggle item-right [(ngModel)]="disallowUserTracking" color="light-blue" mode="ios"
+                [class.checked]="disallowUserTracking"></ion-toggle>
+  </ion-item>
   <iframe #iframe [src]="url | safe" webkitallowfullscreen mozallowfullscreen allowfullscreen frameBorder="0"></iframe>
 </ion-content>

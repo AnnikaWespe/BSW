@@ -1,3 +1,50 @@
 settings-page-component {
+  div.ion-card-wrapper{
+    background-color: white;
+    padding: 3vh 3vw 3vh 3vw;
+    ion-item{
+      color: map_get($colors, font-color-for-filter-dropdown);
+      &.title{
+        font-weight:bolder;
+      }
+    }
 
+  }
+
+
+
+  div.profile-header-wrapper{
+    background-color: map_get($colors, light);
+    padding-top: 1vh;
+    ion-col{
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      p{
+        margin: 0 2vw 1vh 0 ;
+      }
+    }
+  }
+  div.text-div{
+    text-align: left;
+  }
+  ion-row.profile-header{
+    height: 8vh;
+    line-height: 8vh;
+    font-size: large;
+  }
+  ion-col.icon-col{
+    max-width: 20vw;
+    padding-left: 2vw;
+    font-size: larger;
+  }
+  ion-col.text-col{
+    max-width: 80vw;
+    border-bottom: 1px solid map_get($colors, font-color-for-filter-dropdown);
+    color: map_get($colors, font-color-for-filter-dropdown);
+  }
+
+  div.scroll-content{
+    background-color: map_get($colors, light);
+  }
 }

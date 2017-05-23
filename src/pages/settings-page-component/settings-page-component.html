@@ -16,5 +16,54 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content padding>
+<ion-content>
+
+  <div class="ion-card-wrapper">
+    <ion-item class="title">Push-Benachrichtigungen zu</ion-item>
+    <ion-item>
+      <div item-content>neuem oder veränderten Angebot bei einem Favoriten</div>
+      <ion-toggle item-right [(ngModel)]="favoritesPush" color="light-blue" mode="ios"
+                  [class.checked]="favoritesPush"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <div item-content>ortsgebundenem Angebot</div>
+      <ion-toggle item-right [(ngModel)]="localPush" color="light-blue" mode="ios"
+                  [class.checked]="localPush"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <div item-content>Kontostand (jeweils am Monatsende)</div>
+      <ion-toggle item-right [(ngModel)]="accountInfoPush" color="light-blue" mode="ios"
+                  [class.checked]="accountInfoPush"></ion-toggle>
+    </ion-item>
+  </div>
+
+
+
+
+  <div class="profile-header-wrapper">
+
+    <ion-row tappable class="profile-header" (click) = "getWebView('https://www.bsw.de/', 'Impressum', false, true)">
+      <ion-col class="icon-col">
+        <ion-icon name="bulb"></ion-icon>
+      </ion-col>
+      <ion-col class="text-col">
+        <div class="text-div">
+          <p class="description">Impressum</p>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row tappable class="profile-header" (click) = "getWebView('https://www.bsw.de/', 'Datenschutz', true, true)">
+      <ion-col class="icon-col">
+          <ion-icon name = "lock"></ion-icon>
+      </ion-col>
+      <ion-col class="text-col">
+        <div class="text-div">
+          <p class="description">Datenschutz</p>
+        </div>
+      </ion-col>
+    </ion-row>
+
+  </div>
+
 </ion-content>

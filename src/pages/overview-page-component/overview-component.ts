@@ -1,5 +1,5 @@
 import {Component, OnInit, OnDestroy, AfterViewChecked} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {AlertController, NavController, NavParams} from 'ionic-angular';
 
 
 import {PartnerService} from "../../services/partner-service";
@@ -40,10 +40,13 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               public navParams: NavParams,
               private partnerService: PartnerService,
               private locationService: LocationService,
-              private favoritesService: FavoritesService) {
+              private favoritesService: FavoritesService,
+              private alertCtrl: AlertController) {
     this.checkIfGPSEnabled();
-    if(localStorage.getItem('securityToken')){
+    if (localStorage.getItem('securityToken')) {
       this.favoritesService.getFavorites().subscribe((res) => {
+        console.log(res.json().errors[0].beschreibung);
+        console.log(res.json());
         let favoritesByPf = res.json().response.favoriten.map((obj) => {
           return obj.pfNummer;
         });
@@ -52,8 +55,10 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
           this.favoritePartners = res.json().contentEntities.slice(0, 5);
           this.waitingForResults = false;
         })
-
       })
+    }
+    if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
+      this.checkForPromptRateAppInStore()
     }
   }
 
@@ -151,13 +156,56 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     return this.partnerService.getPartners(this.location, 0, number, false)
   }
 
-  loadUserSpecificPartnerTable(type){
-    if(type === "favorites"){
+  loadUserSpecificPartnerTable(type) {
+    if (type === "favorites") {
       this.navCtrl.push(UserSpecificPartnersComponent, {title: "Favoriten"})
     }
-    else{
+    else {
       this.navCtrl.push(UserSpecificPartnersComponent, {title: "Zuletzt besucht"})
     }
+  }
+
+  checkForPromptRateAppInStore() {
+    let numberOfVisitsUpUntilNow = localStorage.getItem("numberOfVisits");
+    if (numberOfVisitsUpUntilNow) {
+      let numberOfVisits = parseInt(numberOfVisitsUpUntilNow) + 1;
+      localStorage.setItem("numberOfVisits", numberOfVisits.toString())
+      if (numberOfVisits >= 10 && numberOfVisits % 5 === 0) {
+        this.presentPromptRateApp();
+      }
+    }
+    else {
+      localStorage.setItem("numberOfVisits", "1");
+    }
+  }
+
+  presentPromptRateApp() {
+    let alert = this.alertCtrl.create({
+      title: 'App bewerten',
+      message: 'Gefällt Ihnen die BSW-App? Dann geben Sie eine Bewertung ab und lassen uns Ihre Meinung wissen.',
+      buttons: [
+        {
+          text: 'Ja',
+          role: 'cancel',
+          handler: () => {
+            window.open('http://example.com/login/{{user._id}}', '_system', 'location=yes');
+            localStorage.setItem("showPromptForRatingAppDisabled", "true");
+          }
+        },
+        {
+          text: 'Nein',
+          role: 'cancel'
+        },
+        {
+          text: 'Nein, nicht mehr anzeigen',
+          role: 'cancel',
+          handler: () => {
+            localStorage.setItem("showPromptForRatingAppDisabled", "true");
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
 //pure DOM method(s)
@@ -186,4 +234,5 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       searchInputField.focus();
     }
   }
+
 }
