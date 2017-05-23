@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
-import { Camera } from '@ionic-native/camera';
+import {Component} from '@angular/core';
+import {AlertController, NavController, NavParams} from 'ionic-angular';
+import {Camera, CameraOptions} from '@ionic-native/camera';
 import {PictureScreenComponent} from "./picture-screen/picture-screen";
 declare let window: any;
 
@@ -15,34 +15,70 @@ export class AddPurchasePageComponent {
   startScreenActive = true;
   startScreenFirstTime = true;
   public base64Image: string;
+  const
+  optionsImageFromGallery: CameraOptions = {
+    sourceType: 0,
+    destinationType: this.camera.DestinationType.DATA_URL,
+    targetWidth: 1000,
+    targetHeight: 1000,
+  };
 
 
-  constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    private camera: Camera
-  ) {
-    if (navParams.get("navParamsAvailable")){
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              private camera: Camera,
+              private alertCtrl: AlertController) {
+    if (navParams.get("navParamsAvailable")) {
       this.startScreenFirstTime = navParams.get('startScreenFirstTime');
     }
   }
 
 
-  scanReceipt(){
+  scanReceipt() {
     this.camera.getPicture({
       destinationType: this.camera.DestinationType.DATA_URL,
       targetWidth: 1000,
       targetHeight: 1000
     })
-    .then((imageData) => {
-      // imageData is a base64 encoded string
+      .then((imageData) => {
+        // imageData is a base64 encoded string
+        this.base64Image = "data:image/jpeg;base64," + imageData;
+        this.navCtrl.push(PictureScreenComponent, {"base64Image": this.base64Image});
+      })
+      .catch((error) => {
+        console.log("there was an error");
+        this.promptNoCameraAccess();
+      });
+  }
+
+  getPictureFromGallery(){
+    this.camera.getPicture(this.optionsImageFromGallery).then((imageData) => {
       this.base64Image = "data:image/jpeg;base64," + imageData;
-      this.navCtrl.push(PictureScreenComponent, {"base64Image" : this.base64Image});
+      this.navCtrl.push(PictureScreenComponent, {"base64Image": this.base64Image});
     })
-    .catch((error) => {
-      // TODO: what about user related error handling?
-      console.error(error);
+  }
+
+  promptNoCameraAccess() {
+    let alert = this.alertCtrl.create({
+      title: 'Kamerazugriff fehlgeschlagen',
+      message: 'Leider darf diese App nicht auf die Kamera zugreifen. Sie können dies in den Appeinstellungen ändern.',
+      buttons: [
+        {
+          text: 'Ok',
+          role: 'cancel',
+        },
+        {
+          text: 'Bild aus meiner Galerie auswählen',
+          handler: () => {
+            this.camera.getPicture(this.optionsImageFromGallery).then((imageData) => {
+              this.base64Image = "data:image/jpeg;base64," + imageData;
+              this.navCtrl.push(PictureScreenComponent, {"base64Image": this.base64Image});
+            })
+          }
+        }
+      ]
     });
+    alert.present();
   }
 }
 

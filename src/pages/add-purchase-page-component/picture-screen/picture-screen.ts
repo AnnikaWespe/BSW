@@ -34,25 +34,6 @@ export class PictureScreenComponent {
       });
   }
 
-  promptNoCameraAccess() {
-    let alert = this.alertCtrl.create({
-      title: 'Kamerazugriff fehlgeschlagen',
-      message: 'Leider darf diese App nicht auf die Kamera zugreifen. Sie können dies in den Appeinstellungen ändern.',
-      buttons: [
-        {
-          text: 'Ok',
-          role: 'cancel',
-        },
-        {
-          text: 'Bild aus meiner Galerie auswählen',
-          handler: () => {
-            console.log('Buy clicked');
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
 
 
   sendEmail() {

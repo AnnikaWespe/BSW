@@ -1,8 +1,13 @@
 add-purchase-page {
   button.scanReceipt{
-    margin: 40vh 10vw 0 10vw;
+    margin: 28vh 10vw 0 10vw;
     width: 80vw;
     text-transform: none;
+    &.gallery{
+      background-color: map-get($colors,light);
+      margin: 3vh 10vw 0 10vw;
+      color: grey;
+    }
   }
   div.explanation{
     margin: 10vh 7vw 10vh 7vw;
