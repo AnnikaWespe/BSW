@@ -45,6 +45,7 @@ import {LoginService} from "../pages/login-page-component/login-service";
 import {FavoritesService} from "../services/favorites-service";
 import {UserSpecificPartnersComponent} from "../pages/overview-page-component/user-specific-partners-page-component/user-specific-partners-component";
 import {MapMarkerService} from "../services/map-marker-service";
+import {GoogleAnalytics} from "@ionic-native/google-analytics";
 
 
 @NgModule({
@@ -120,7 +121,8 @@ import {MapMarkerService} from "../services/map-marker-service";
     LoginService,
     FavoritesService,
     MapMarkerService,
-    GoogleMapsAPIWrapper
+    GoogleMapsAPIWrapper,
+    GoogleAnalytics,
   ]
 })
 export class AppModule {}

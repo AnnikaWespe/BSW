@@ -9,6 +9,7 @@ import {PartnerDetailComponent} from "../partner-page-component/partner-detail-c
 import {FavoritesService} from "../../services/favorites-service";
 import {FavoritesData} from "../../services/favorites-data";
 import {UserSpecificPartnersComponent} from "./user-specific-partners-page-component/user-specific-partners-component";
+import {LoginPageComponent} from "../login-page-component/login-component";
 
 
 @Component({
@@ -45,16 +46,21 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     this.checkIfGPSEnabled();
     if (localStorage.getItem('securityToken')) {
       this.favoritesService.getFavorites().subscribe((res) => {
-        console.log(res.json().errors[0].beschreibung);
-        console.log(res.json());
-        let favoritesByPf = res.json().response.favoriten.map((obj) => {
-          return obj.pfNummer;
-        });
-        FavoritesData.favoritesByPfArray = favoritesByPf;
-        this.partnerService.getPartners(this.location, 0, "", false, 10000, favoritesByPf).subscribe((res) => {
-          this.favoritePartners = res.json().contentEntities.slice(0, 5);
-          this.waitingForResults = false;
-        })
+        let errorMessage = res.json().errors[0].beschreibung;
+        if(errorMessage === "Login fehlgeschlagen"){
+          localStorage.removeItem("securityToken");
+          navCtrl.setRoot(LoginPageComponent);
+        }
+        else if(errorMessage === "Erfolg"){
+          let favoritesByPf = res.json().response.favoriten.map((obj) => {
+            return obj.pfNummer;
+          });
+          FavoritesData.favoritesByPfArray = favoritesByPf;
+          this.partnerService.getPartners(this.location, 0, "", false, 10000, favoritesByPf).subscribe((res) => {
+            this.favoritePartners = res.json().contentEntities.slice(0, 5);
+            this.waitingForResults = false;
+          })
+        }
       })
     }
     if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
@@ -188,6 +194,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
           text: 'Ja',
           role: 'cancel',
           handler: () => {
+            //TODO real link to app store
             window.open('http://example.com/login/{{user._id}}', '_system', 'location=yes');
             localStorage.setItem("showPromptForRatingAppDisabled", "true");
           }
