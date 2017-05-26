@@ -34,14 +34,14 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
   private extendBounds(map) {
     let bounds = new google.maps.LatLngBounds();
     bounds.extend({lat: this.partner.location.latitude, lng: this.partner.location.longitude});
-    map.fitBounds(bounds);
     if (localStorage.getItem("locationExact") === "true") {
       bounds.extend({lat: Number(localStorage.getItem("latitude")), lng: Number(localStorage.getItem("longitude"))});
-      this.mapMarkerService.getImageAsBase64(this.partner.logoUrlForGMap, (imageAsBase64, validImage) => {
-        let marker = this.mapMarkerService.getMarker(this.partner, imageAsBase64, validImage, map, bounds);
-        this.initializeDirectionService();
-      })
     }
+    map.fitBounds(bounds);
+    this.mapMarkerService.getImageAsBase64(this.partner.logoUrlForGMap, (imageAsBase64, validImage) => {
+      let marker = this.mapMarkerService.getMarker(this.partner, imageAsBase64, validImage, map, bounds);
+      this.initializeDirectionService();
+    })
     map.setOptions({
       streetViewControl: false
     });

@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy, AfterViewChecked} from '@angular/core';
+import {Component, OnDestroy, AfterViewChecked} from '@angular/core';
 import {AlertController, NavController, NavParams} from 'ionic-angular';
 
 
@@ -10,6 +10,7 @@ import {FavoritesService} from "../../services/favorites-service";
 import {FavoritesData} from "../../services/favorites-data";
 import {UserSpecificPartnersComponent} from "./user-specific-partners-page-component/user-specific-partners-component";
 import {LoginPageComponent} from "../login-page-component/login-component";
+import {GoogleAnalytics} from "@ionic-native/google-analytics";
 
 
 @Component({
@@ -42,29 +43,15 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               private partnerService: PartnerService,
               private locationService: LocationService,
               private favoritesService: FavoritesService,
-              private alertCtrl: AlertController) {
+              private alertCtrl: AlertController,
+              private ga: GoogleAnalytics) {
     this.checkIfGPSEnabled();
-    if (localStorage.getItem('securityToken')) {
-      this.favoritesService.getFavorites().subscribe((res) => {
-        let errorMessage = res.json().errors[0].beschreibung;
-        if(errorMessage === "Login fehlgeschlagen"){
-          localStorage.removeItem("securityToken");
-          navCtrl.setRoot(LoginPageComponent);
-        }
-        else if(errorMessage === "Erfolg"){
-          let favoritesByPf = res.json().response.favoriten.map((obj) => {
-            return obj.pfNummer;
-          });
-          FavoritesData.favoritesByPfArray = favoritesByPf;
-          this.partnerService.getPartners(this.location, 0, "", false, 10000, favoritesByPf).subscribe((res) => {
-            this.favoritePartners = res.json().contentEntities.slice(0, 5);
-            this.waitingForResults = false;
-          })
-        }
-      })
-    }
+    this.getFavoriteAndLastVisitedPartners();
     if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
       this.checkForPromptRateAppInStore()
+    }
+    if (localStorage.getItem("disallowUserTracking") === "false") {
+      this.ga.trackView('Übersicht Screen')
     }
   }
 
@@ -77,6 +64,28 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     }
   }
 
+
+  getFavoriteAndLastVisitedPartners() {
+    if (localStorage.getItem('securityToken')) {
+      this.favoritesService.getFavorites().subscribe((res) => {
+        let errorMessage = res.json().errors[0].beschreibung;
+        if (errorMessage === "Login fehlgeschlagen") {
+          localStorage.removeItem("securityToken");
+          this.navCtrl.setRoot(LoginPageComponent);
+        }
+        else if (errorMessage === "Erfolg") {
+          let favoritesByPf = res.json().response.favoriten.map((obj) => {
+            return obj.pfNummer;
+          });
+          FavoritesData.favoritesByPfArray = favoritesByPf;
+          this.partnerService.getPartners(this.location, 0, "", false, 10000, favoritesByPf).subscribe((res) => {
+            this.favoritePartners = res.json().contentEntities.slice(0, 5);
+            this.waitingForResults = false;
+          })
+        }
+      })
+    }
+  }
 
   checkIfGPSEnabled() {
     if (localStorage.getItem("getLocationFromGPSEnabled") === "true") {

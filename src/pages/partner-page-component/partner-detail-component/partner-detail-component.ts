@@ -4,6 +4,7 @@ import {PartnerDetailMap} from "./partner-detail-map/partner-detail-map";
 import {FavoritesData} from "../../../services/favorites-data";
 import {FavoritesService} from "../../../services/favorites-service";
 import {LoginPageComponent} from "../../login-page-component/login-component";
+import {GoogleAnalytics} from "@ionic-native/google-analytics";
 
 @Component({
   selector: 'page-partner-detail-component',
@@ -19,9 +20,15 @@ export class PartnerDetailComponent {
               public navParams: NavParams,
               public favoritesService: FavoritesService,
               public alertCtrl: AlertController,
-              public modalCtrl: ModalController) {
+              public modalCtrl: ModalController,
+              private ga: GoogleAnalytics) {
     this.partner = this.navParams.get("partner");
     console.log(this.partner);
+    if (localStorage.getItem("disallowUserTracking") === "false") {
+      this.ga.trackView("Partner Detail Screen");
+      //TODO uncomment
+      //this.ga.trackEvent("Partner Detail Seite", "pf-Nummer: " + this.pfNumber + ", Name: " + this.partner.name)
+    }
     //TODO uncomment
     //this.pfNumber = this.partner.number;
     //this.isInFavorites = FavoritesData.isInFavorites(this.pfNumber);
@@ -67,9 +74,13 @@ export class PartnerDetailComponent {
         {
           text: 'Jetzt einloggen',
           handler: () => {
-            let profileModal = this.modalCtrl.create(LoginPageComponent, { navigatedFromPartnerDetail: true });
+            let profileModal = this.modalCtrl.create(LoginPageComponent, {navigatedFromPartnerDetail: true});
             profileModal.onDidDismiss(data => {
-              console.log(data);
+              //TODO: navigate to partner page and track event with GA; differ between case where data is passed on or not
+
+              if(data){}
+              else{}
+
             });
             profileModal.present();
           }
@@ -77,7 +88,8 @@ export class PartnerDetailComponent {
         {
           text: 'Trotzdem zum Shop',
           handler: () => {
-            console.log('Buy clicked');
+            //TODO: navigate to partner page and track event with GA
+
           }
         }
       ]

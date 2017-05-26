@@ -6,6 +6,7 @@ import {ConfirmScanPageComponent} from "./confirm-scan-page-component/confirm-sc
 import {BarcodeData} from "./confirm-scan-page-component/BarcodeData";
 import {WebviewComponent} from "../webview/webview";
 import {LoginService} from "./login-service";
+import {GoogleAnalytics} from "@ionic-native/google-analytics";
 
 @Component({
   selector: 'page-login-component',
@@ -26,11 +27,14 @@ export class LoginPageComponent {
               public alertCtrl: AlertController,
               public loginService: LoginService,
               public loadingCtrl: LoadingController,
-  public viewCtrl: ViewController) {
+              public viewCtrl: ViewController,
+              private ga: GoogleAnalytics) {
     this.barcodeData = navParams.get('barcodeData');
     if (this.barcodeData) {
       this.inputNumberOrEmail = this.barcodeData.text;
     }
+
+    this.ga.trackView('Login Screen');
     this.navigatedFromPartnerDetail = navParams.get("navigatedFromPartnerDetail");
   }
 
@@ -43,7 +47,12 @@ export class LoginPageComponent {
   }
 
   pushOverviewPage() {
-    this.navCtrl.setRoot(OverviewPageComponent);
+    if (this.navigatedFromPartnerDetail) {
+      this.viewCtrl.dismiss("");
+    }
+    else{
+      this.navCtrl.setRoot(OverviewPageComponent);
+    }
   }
 
   checkForValidInput() {
@@ -51,21 +60,21 @@ export class LoginPageComponent {
     this.login();
     //TODO: outcomment for production
     /*if (isNaN(this.inputNumberOrEmail)) {
-      if (this.emailAdressProperlyFormatted()) {
-        this.login();
-      }
-      else {
-        this.showPromptNoValidEmail();
-      }
-    }
-    else {
-      if (this.inputNumberOrEmail.length == 10) {
-        this.login();
-      }
-      else {
-        this.showPromptNoValidNumber()
-      }
-    }*/
+     if (this.emailAdressProperlyFormatted()) {
+     this.login();
+     }
+     else {
+     this.showPromptNoValidEmail();
+     }
+     }
+     else {
+     if (this.inputNumberOrEmail.length == 10) {
+     this.login();
+     }
+     else {
+     this.showPromptNoValidNumber()
+     }
+     }*/
   }
 
   emailAdressProperlyFormatted() {
@@ -82,17 +91,21 @@ export class LoginPageComponent {
       if (loginData.errors[0].code === "0") {
         localStorage.setItem("securityToken", loginData.response.securityToken);
         localStorage.setItem("mitgliedId", loginData.response.mitgliedId);
-        if(this.navigatedFromPartnerDetail){
+        if (this.navigatedFromPartnerDetail) {
           this.viewCtrl.dismiss(loginData.response.mitgliedId);
         }
-        else{
+        else {
           this.pushOverviewPage();
         }
         console.log(loginData);
+        if (localStorage.getItem("disallowUserTracking") === "false") {
+          this.ga.trackEvent('Login/Logout', 'login')
+        }
       }
       else(this.showPromptLoginFailed())
     });
   }
+
 
   showPromptNoValidEmail() {
     let prompt = this.alertCtrl.create({
@@ -172,11 +185,11 @@ export class LoginPageComponent {
           text: 'Anfordern',
           handler: data => {
             /*if (User.isValid(data.username, data.password)) {
-              // logged in!
-            } else {
-              // invalid login
-              return false;
-            }*/
+             // logged in!
+             } else {
+             // invalid login
+             return false;
+             }*/
           }
         }
       ]

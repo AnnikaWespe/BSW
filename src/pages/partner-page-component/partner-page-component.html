@@ -122,8 +122,8 @@
             class="showSelection"
             ion-button color="primary"
             (click)="filterButtonPushed()"
-            [class.searchPageComponent] = "searchPageComponent"
-            [class.onlinePartnerPageComponent] = "onlinePartnerPageComponent || showMap">
+            [class.searchPageComponent]="searchPageComponent"
+            [class.onlinePartnerPageComponent]="onlinePartnerPageComponent || showMap">
             Auswahl anzeigen
           </button>
         </div>
@@ -143,6 +143,10 @@
 
     <div style="height: 8vh"></div>
 
+    <ion-item *ngIf="noPartnersToDisplay">
+      <div ion-content>Wir können Ihnen leider derzeit keine Partner anzeigen.</div>
+    </ion-item>
+
     <div tappable class="partner-table-wrapper" (click)="hideDropdown()" *ngIf="!showMap">
       <partner-table [partners]="displayedPartners"
                      (showPartnerEventEmitter)="showPartner($event)"></partner-table>
@@ -156,10 +160,10 @@
       </ion-infinite-scroll>
     </div>
 
-    <partner-map [justPartnersWithCampaign$] = "justPartnersWithCampaign$"
-                 [justPartnersWithCampaign] = "showOnlyPartnersWithCampaign"
-                 [searchTerm$] = "searchTerm$"
-                 [searchTerm] = "searchTerm"
+    <partner-map [justPartnersWithCampaign$]="justPartnersWithCampaign$"
+                 [justPartnersWithCampaign]="showOnlyPartnersWithCampaign"
+                 [searchTerm$]="searchTerm$"
+                 [searchTerm]="searchTerm"
                  *ngIf="showMap"
                  (onListUpdated)="scrollToTop()"></partner-map>
 

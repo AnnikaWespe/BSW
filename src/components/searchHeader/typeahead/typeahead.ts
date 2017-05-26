@@ -11,6 +11,7 @@ import 'rxjs/add/operator/map';
 
 import {SearchCompletionService} from "../search-completion/search-completion-service";
 import {SearchTermCompletion} from '../search-completion/search-term-completion';
+import {GoogleAnalytics} from "@ionic-native/google-analytics";
 
 
 @Component({
@@ -31,13 +32,17 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
   searchTermCompletion: Observable<SearchTermCompletion[]>;
 
 
-  constructor(private searchCompletionService: SearchCompletionService) {
+  constructor(private searchCompletionService: SearchCompletionService,
+              private ga: GoogleAnalytics) {
     this.subscription = this.searchTerms.subscribe(term => console.log(term))
   }
 
   search(term: string, $event): void {
     if ($event.keyCode == 13 && this.searchTerm.length > 1) {
       this.getPartnersWithSearchTermEmitter.emit(this.searchTerm);
+      if (localStorage.getItem("disallowUserTracking") === "false") {
+        this.ga.trackEvent("Suchbegriff", this.searchTerm)
+      }
       this.searchTermCompletion = Observable.of<SearchTermCompletion[]>([]);
     }
     else {
@@ -72,6 +77,9 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
 
   completeSearchTerm(searchTerm) {
     this.getPartnersWithSearchTermEmitter.emit(searchTerm);
+    if (localStorage.getItem("disallowUserTracking") === "false") {
+      this.ga.trackEvent("Suchbegriff", searchTerm)
+    }
     this.searchTermCompletion = Observable.of<SearchTermCompletion[]>([]);
   }
 
@@ -79,11 +87,6 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
     this.searchTerm = "";
     this.searchTermCompletion = Observable.of<SearchTermCompletion[]>([]);
   }
-
-
-  /*toggleMapAndList() {
-    this.toggleMapAndListEmitter.emit(true);
-  }*/
 
 }
 

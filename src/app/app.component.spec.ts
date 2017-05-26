@@ -7,6 +7,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import {LoginPageComponent} from "../pages/login-page-component/login-component";
+import {GoogleAnalytics} from "@ionic-native/google-analytics";
 
 class NavMock {
   setRoot() {}
@@ -29,11 +30,13 @@ describe('App component', () => {
 
     let splashScreen = TestBed.get(SplashScreen);
     let statusBar = TestBed.get(StatusBar);
+    let googleAnalytics = TestBed.get(GoogleAnalytics);
 
     app = new MyApp(
       platform,
       splashScreen,
-      statusBar
+      statusBar,
+      googleAnalytics
     ); // = TestBed.get(MyApp);
     app.nav = TestBed.get(Nav);
   });

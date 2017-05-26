@@ -1,6 +1,7 @@
 import {Component, Input, ViewChild, Output, EventEmitter, AfterViewChecked, OnChanges, OnInit} from '@angular/core';
 import {NavParams, NavController} from "ionic-angular";
 import {StyledMapPartnersDirective} from "./styled-map-partners-directive";
+import {GoogleAnalytics} from "@ionic-native/google-analytics";
 
 
 @Component({
@@ -38,7 +39,12 @@ export class PartnerMapComponent implements AfterViewChecked{
 
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              private ga: GoogleAnalytics) {
+    if (localStorage.getItem("disallowUserTracking") === "false") {
+      this.ga.trackView('Kartenansicht Partner Screen')
+    }
     if (localStorage.getItem("locationExact") === "true") {
       this.currentLatitude = localStorage.getItem("latitude");
       this.currentLongitude = localStorage.getItem("longitude");

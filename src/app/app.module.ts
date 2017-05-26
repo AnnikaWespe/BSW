@@ -1,8 +1,8 @@
-import { NgModule, ErrorHandler } from '@angular/core';
+import {NgModule, ErrorHandler} from '@angular/core';
 import {IonicApp, IonicModule, IonicErrorHandler, Animation} from 'ionic-angular';
 import {FormsModule} from '@angular/forms';
 import {HttpModule, JsonpModule} from '@angular/http';
-import { BrowserModule } from '@angular/platform-browser';
+import {BrowserModule} from '@angular/platform-browser';
 
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {StatusBar} from '@ionic-native/status-bar';
@@ -10,12 +10,12 @@ import {Camera} from '@ionic-native/camera';
 import {BarcodeScanner} from '@ionic-native/barcode-scanner';
 import {Geolocation} from '@ionic-native/geolocation';
 
-import { AgmCoreModule } from 'angular2-google-maps/core';
+import {AgmCoreModule} from 'angular2-google-maps/core';
 
-import { MyApp } from './app.component';
+import {MyApp} from './app.component';
 import {LoginPageComponent} from '../pages/login-page-component/login-component';
 import {OverviewPageComponent} from '../pages/overview-page-component/overview-component';
-import  { AddPurchasePageComponent} from '../pages/add-purchase-page-component/add-purchase-component';
+import  {AddPurchasePageComponent} from '../pages/add-purchase-page-component/add-purchase-component';
 import {ConfirmScanPageComponent} from '../pages/login-page-component/confirm-scan-page-component/confirm-scan-page-component';
 import {MyProfilePageComponent} from "../pages/my-profile-page-component/my-profile-page-component";
 import {PartnerPageComponent} from "../pages/partner-page-component/partner-page-component";
@@ -37,7 +37,6 @@ import {StyledMapPartnersDirective} from "../pages/partner-page-component/partne
 import {TypeaheadComponent} from "../components/searchHeader/typeahead/typeahead";
 import {SafePipe} from "../pipes/safe-pipe";
 import {LocationService} from "../services/location-service";
-import {ActionsPageComponent} from "../pages/actions-page-component/actions-page-component";
 import {LoginWebviewComponent} from "../pages/login-page-component/login-webview/login-webview";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {WebviewComponent} from "../pages/webview/webview";
@@ -46,6 +45,7 @@ import {FavoritesService} from "../services/favorites-service";
 import {UserSpecificPartnersComponent} from "../pages/overview-page-component/user-specific-partners-page-component/user-specific-partners-component";
 import {MapMarkerService} from "../services/map-marker-service";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
+import {ChangePasswordModal} from "../pages/my-profile-page-component/ChangePassword/change-password-modal";
 
 
 @NgModule({
@@ -73,8 +73,8 @@ import {GoogleAnalytics} from "@ionic-native/google-analytics";
     TypeaheadComponent,
     WebviewComponent,
     SafePipe,
-    ActionsPageComponent,
-    UserSpecificPartnersComponent
+    UserSpecificPartnersComponent,
+    ChangePasswordModal,
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -105,7 +105,8 @@ import {GoogleAnalytics} from "@ionic-native/google-analytics";
     PictureScreenComponent,
     TypeaheadComponent,
     WebviewComponent,
-    UserSpecificPartnersComponent
+    UserSpecificPartnersComponent,
+    ChangePasswordModal,
   ],
 
   providers: [
@@ -125,4 +126,5 @@ import {GoogleAnalytics} from "@ionic-native/google-analytics";
     GoogleAnalytics,
   ]
 })
-export class AppModule {}
+export class AppModule {
+}

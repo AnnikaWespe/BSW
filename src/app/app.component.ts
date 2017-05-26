@@ -2,7 +2,8 @@ import {Component, ViewChild, OnInit} from '@angular/core';
 import {Nav, Platform} from 'ionic-angular';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {StatusBar} from '@ionic-native/status-bar';
-import {GoogleAnalytics} from '@ionic-native/google-analytics';
+import {GoogleAnalytics} from "@ionic-native/google-analytics";
+
 
 import  {AddPurchasePageComponent} from '../pages/add-purchase-page-component/add-purchase-component';
 import {OverviewPageComponent} from "../pages/overview-page-component/overview-component";
@@ -26,8 +27,7 @@ export class MyApp {
   constructor(private platform: Platform,
               private splashScreen: SplashScreen,
               private statusBar: StatusBar,
-              private ga: GoogleAnalytics
-  ) {
+              private ga: GoogleAnalytics) {
     this.initializeApp();
     this.setMenu();
     localStorage.setItem("locationExact", "false");
@@ -42,17 +42,18 @@ export class MyApp {
   initializeApp() {
     this.platform.ready()
       .then(() => {
+        if (localStorage.getItem("disallowUserTracking") === null) {
+          localStorage.setItem("disallowUserTracking", "false");
+        }
         this.statusBar.overlaysWebView(true);
         //this.statusBar.backgroundColorByHexString('#929395');
         this.splashScreen.hide();
         this.getDevice();
-        if (localStorage.getItem("disallowUserTracking") === null) {
+        if (localStorage.getItem("disallowUserTracking") === "false") {
           this.ga.startTrackerWithId('UA-99848389-1')
             .then(() => {
               console.log('Google analytics is ready now');
-              this.ga.trackView('test');
-              // Tracker is ready
-              // You can now track pages or set additional information such as AppVersion or UserId
+              this.ga.trackEvent('Login/Logout', 'Start der App');
             })
             .catch(e => console.log('Error starting GoogleAnalytics', e))
         }
@@ -95,6 +96,9 @@ export class MyApp {
 
   logout() {
     localStorage.removeItem("securityToken");
+    if (localStorage.getItem("disallowUserTracking") === "false") {
+      this.ga.trackEvent('Login/Logout', 'logout');
+    }
     this.nav.setRoot(LoginPageComponent);
   }
 }

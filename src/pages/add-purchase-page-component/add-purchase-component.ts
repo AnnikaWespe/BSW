@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {AlertController, NavController, NavParams} from 'ionic-angular';
 import {Camera, CameraOptions} from '@ionic-native/camera';
 import {PictureScreenComponent} from "./picture-screen/picture-screen";
+import {GoogleAnalytics} from "@ionic-native/google-analytics";
 declare let window: any;
 
 @Component({
@@ -27,9 +28,13 @@ export class AddPurchasePageComponent {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private camera: Camera,
-              private alertCtrl: AlertController) {
+              private alertCtrl: AlertController,
+              private ga: GoogleAnalytics) {
     if (navParams.get("navParamsAvailable")) {
       this.startScreenFirstTime = navParams.get('startScreenFirstTime');
+    }
+    if (localStorage.getItem("disallowUserTracking") === "false") {
+      this.ga.trackView('Einkauf hinzufügen Screen');
     }
   }
 
@@ -51,7 +56,7 @@ export class AddPurchasePageComponent {
       });
   }
 
-  getPictureFromGallery(){
+  getPictureFromGallery() {
     this.camera.getPicture(this.optionsImageFromGallery).then((imageData) => {
       this.base64Image = "data:image/jpeg;base64," + imageData;
       this.navCtrl.push(PictureScreenComponent, {"base64Image": this.base64Image});

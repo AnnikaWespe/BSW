@@ -2,6 +2,7 @@ import {Component, ViewChild, OnDestroy} from '@angular/core';
 import {NavController, NavParams} from "ionic-angular";
 import {Http} from "@angular/http";
 import {Observable} from "rxjs/Observable";
+import {GoogleAnalytics} from "@ionic-native/google-analytics";
 
 @Component({
   selector: 'webview',
@@ -18,7 +19,8 @@ export class WebviewComponent implements OnDestroy {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              public http: Http) {
+              public http: Http,
+              private ga: GoogleAnalytics) {
     //this.url = navParams.get('url');
     this.url = "https://www.bsw.de/ueber-bsw/impressum.htm"
     this.title = navParams.get('title');
@@ -44,7 +46,6 @@ export class WebviewComponent implements OnDestroy {
     console.log(error);
     let errMsg = error.message ? error.message : error.toString();
     return Observable.throw(errMsg);
-
   }
 
   private extractData(res) {
@@ -53,6 +54,9 @@ export class WebviewComponent implements OnDestroy {
 
   ngOnDestroy() {
     localStorage.setItem("disallowUserTracking", this.disallowUserTracking.toString());
+    if (!this.disallowUserTracking) {
+      this.ga.startTrackerWithId('UA-99848389-1');
+    }
   }
 
 }
