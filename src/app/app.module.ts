@@ -46,6 +46,7 @@ import {UserSpecificPartnersComponent} from "../pages/overview-page-component/us
 import {MapMarkerService} from "../services/map-marker-service";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {ChangePasswordModal} from "../pages/my-profile-page-component/ChangePassword/change-password-modal";
+import {ChangePasswordService} from "../pages/my-profile-page-component/ChangePassword/changePasswordService";
 
 
 @NgModule({
@@ -122,6 +123,7 @@ import {ChangePasswordModal} from "../pages/my-profile-page-component/ChangePass
     LoginService,
     FavoritesService,
     MapMarkerService,
+    ChangePasswordService,
     GoogleMapsAPIWrapper,
     GoogleAnalytics,
   ]
