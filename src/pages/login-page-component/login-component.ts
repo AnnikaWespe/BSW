@@ -83,8 +83,10 @@ export class LoginPageComponent {
   }
 
   login() {
+    //TODO get username and password from user input
     let username = "0016744807"
     let password = "muster01$$";
+    //let password = "hallo";
     this.loginService.login(username, password).subscribe((res) => {
       this.loading.dismiss();
       let loginData = res.json();

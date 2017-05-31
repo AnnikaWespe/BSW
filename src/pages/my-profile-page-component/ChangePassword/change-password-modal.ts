@@ -25,7 +25,6 @@ export class ChangePasswordModal {
       newPassword: ['', Validators.required],
       newPasswordRepeat: ['', Validators.required]
     }, {validator: this.passwordsMatch()})
-    ;
   }
 
   navigateBack() {

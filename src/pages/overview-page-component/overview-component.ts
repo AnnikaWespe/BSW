@@ -72,7 +72,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         if (errorMessage === "Login fehlgeschlagen") {
           //localStorage.removeItem("securityToken");
           //this.navCtrl.setRoot(LoginPageComponent);
-          console.log(errorMessage)
+          console.log(errorMessage);
         }
         else if (errorMessage === "Erfolg") {
           let favoritesByPf = res.json().response.favoriten.map((obj) => {

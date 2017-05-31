@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {AlertController, NavController, NavParams} from 'ionic-angular';
 import {Camera, CameraOptions} from '@ionic-native/camera';
 import {PictureScreenComponent} from "./picture-screen/picture-screen";
@@ -9,7 +9,7 @@ declare let window: any;
   selector: 'add-purchase-page',
   templateUrl: 'add-purchase-component.html'
 })
-export class AddPurchasePageComponent {
+export class AddPurchasePageComponent implements OnDestroy{
 
   title: string = "Einkauf nachtragen";
   successMessage: string = "";
@@ -84,6 +84,10 @@ export class AddPurchasePageComponent {
       ]
     });
     alert.present();
+  }
+
+  ngOnDestroy(){
+    this.camera.cleanup()
   }
 }
 

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {NavParams, NavController, AlertController} from "ionic-angular";
 import {Camera} from "@ionic-native/camera";
 
@@ -8,7 +8,7 @@ declare let window: any;
   selector: 'picture-screen',
   templateUrl: 'picture-screen.html'
 })
-export class PictureScreenComponent {
+export class PictureScreenComponent implements OnDestroy{
 
   base64Image: string;
   title = "Einkauf nachtragen";
@@ -47,6 +47,10 @@ export class PictureScreenComponent {
       //onSuccess, // called when sharing worked, but also when the user cancelled sharing via email. On iOS, the callbacks' boolean result parameter is true when sharing worked, false if cancelled. On Android, this parameter is always true so it can't be used). See section "Notes about the successCallback" below.
       //onError // called when sh*t hits the fan
     );
+  }
+
+  ngOnDestroy(){
+    this.camera.cleanup()
   }
 
 
