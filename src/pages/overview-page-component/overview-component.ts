@@ -69,12 +69,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     if (localStorage.getItem('securityToken')) {
       this.favoritesService.getFavorites().subscribe((res) => {
         let errorMessage = res.json().errors[0].beschreibung;
-        if (errorMessage === "Login fehlgeschlagen") {
-          //localStorage.removeItem("securityToken");
-          //this.navCtrl.setRoot(LoginPageComponent);
-          console.log(errorMessage);
-        }
-        else if (errorMessage === "Erfolg") {
+        if (errorMessage === "Erfolg") {
           let favoritesByPf = res.json().response.favoriten.map((obj) => {
             return obj.pfNummer;
           });
@@ -83,6 +78,11 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
             this.favoritePartners = res.json().contentEntities.slice(0, 5);
             this.waitingForResults = false;
           })
+        }
+        else if (errorMessage === "Login fehlgeschlagen") {
+          //localStorage.removeItem("securityToken");
+          //this.navCtrl.setRoot(LoginPageComponent);
+          console.log(errorMessage);
         }
       })
     }
