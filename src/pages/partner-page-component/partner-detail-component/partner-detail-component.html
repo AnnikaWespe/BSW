@@ -1,10 +1,10 @@
 <ion-header>
   <ion-navbar primary>
     <ion-title>
-      Matt Optik
+      {{partner?.nameOrigin}}
     </ion-title>
     <ion-buttons end>
-      <button (click)="toggleFavorites()">
+      <button (click)="toggleFavorites()" *ngIf="favoritesByPfArray">
         <ion-icon name="star-outline" color="grey" *ngIf="!isInFavorites" class="favorites-icon"></ion-icon>
         <ion-icon name="star" color='primary' *ngIf="isInFavorites" class="favorites-icon"></ion-icon>
       </button>
@@ -15,13 +15,11 @@
 
 
 <ion-content>
-  <img src="https://bild.avs.de/avsprod/1/11/025/671/bsw-advocado-11025671.png"
-       onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
-
-  <div class="offline-partner">
+  <img src="{{partnerDetails?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
+  <div class="offline-partner" *ngIf="offlinePartner">
     <div class="partner-details">
       <div class="titleAndButton">
-        <h3 class="title">Matt Optik</h3>
+        <h3 class="title">{{partner?.nameOrigin}}</h3>
         <div tappable class="btn-pill" (click)='goToPartnerDetailMap()'>
           <div class="btn-pill-text">
             Zur Karte
@@ -31,29 +29,25 @@
           </div>
         </div>
       </div>
-      <p class="grey">Augenoptik, Brillen, Kontaktlinsen, Ferngläser</p>
-      <p class="grey">Karlsplatz 12, 92323 Eschenbach</p>
-      <div class="description">
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-        dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-        clita kas...
-        <div class="showMore">mehr anzeigen</div>
+      <p class="grey">{{partnerDetails?.waBezeichnung}}</p>
+      <p class="grey">{{partnerDetails?.strasse}} {{partnerDetails?.hausnummer}}, {{partnerDetails?.ort}}</p>
+      <div class="description" *ngIf="partnerDetails?.kurzBeschreibung">
+        {{partnerDetails?.kurzBeschreibung}}
       </div>
     </div>
   </div>
 
-  <div class="online-partner">
+  <div class="online-partner" *ngIf="!offlinePartner">
     <div class="partner-details">
       <div class="titleAndButton">
-        <h3 class="title small">Wellsana</h3>
+        <h3 class="title small">{{partner?.nameOrigin}}</h3>
           <div tappable class="btn-pill online-partner" (click)="checkIfUserLoggedIn()">
             <div class="btn-pill-text">
               Online einkaufen
             </div>
           </div>
       </div>
-      <p class="grey">Gesundheitsprodukte und Alltagshilfen</p>
-      <a href="www.google.de">www.wellsana.de</a>
+      <p class="grey">{{partnerDetails?.waBezeichnung}}</p>
       <div class = "paymentIcons">
         <div class = "paymentIcon girocard"></div>
         <div class = "paymentIcon maestro"></div>
@@ -63,19 +57,22 @@
         <div class = "paymentIcon paypal"></div>
 
       </div>
-      <div class="description">
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-        dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-        clita kas...
-        <div class="showMore">mehr anzeigen</div>
+      <div class="description" *ngIf="partnerDetails?.kurzBeschreibung">
+        {{partnerDetails?.kurzBeschreibung}}
       </div>
     </div>
   </div>
 
-  <ion-row class="title-row">
-    <ion-col class="title">
-      <p class="title-paragraph">Aktuelles Angebot</p>
-    </ion-col>
-  </ion-row>
+  <div *ngIf="partnerDetails?.aktionen">
+    <ion-row class="title-row">
+      <ion-col class="title">
+        <p class="title-paragraph">Aktuelles Angebot</p>
+      </ion-col>
+    </ion-row>
+    <img src="{{partnerDetails?.aktionen[0].bildUrl}}">
+    <div class="partner-details aktion">
+      {{partnerDetails?.aktionen[0].aktionstext}}
+    </div>
+  </div>
 
 </ion-content>

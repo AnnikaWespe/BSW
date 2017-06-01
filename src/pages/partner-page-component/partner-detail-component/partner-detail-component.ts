@@ -5,6 +5,7 @@ import {FavoritesData} from "../../../services/favorites-data";
 import {FavoritesService} from "../../../services/favorites-service";
 import {LoginPageComponent} from "../../login-page-component/login-component";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
+import {PartnerDetailService} from "./partner-detail-map/partner-detail-service";
 
 @Component({
   selector: 'page-partner-detail-component',
@@ -14,24 +15,42 @@ export class PartnerDetailComponent {
 
   partner: any;
   pfNumber: string;
-  isInFavorites = true;
+  partnerDetails: any;
+  isInFavorites = false;
+  favoritesByPfArray;
+  partnerDetailsSubscription;
+  offlinePartner = false;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public favoritesService: FavoritesService,
               public alertCtrl: AlertController,
               public modalCtrl: ModalController,
-              private ga: GoogleAnalytics) {
+              private ga: GoogleAnalytics,
+              private partnerDetailService: PartnerDetailService) {
     this.partner = this.navParams.get("partner");
-    console.log(this.partner);
+    if(this.partner.city){
+      this.offlinePartner = true;
+    }
+    console.log("partner:", this.partner);
+    this.pfNumber = this.partner.number;
+    this.favoritesByPfArray = FavoritesData.favoritesByPfArray;
+    if(this.favoritesByPfArray){
+      this.isInFavorites = FavoritesData.isInFavorites(this.pfNumber);
+    }
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView("Partner Detail Screen");
-      //TODO uncomment
-      //this.ga.trackEvent("Partner Detail Seite", "pf-Nummer: " + this.pfNumber + ", Name: " + this.partner.name)
+      this.ga.trackEvent("Partner Detail Seite", "pf-Nummer: " + this.pfNumber + ", Name: " + this.partner.nameOrigin)
     }
-    //TODO uncomment
-    //this.pfNumber = this.partner.number;
-    //this.isInFavorites = FavoritesData.isInFavorites(this.pfNumber);
+    this.partnerDetailsSubscription = partnerDetailService.getDetails(this.pfNumber).subscribe((res) => {
+      if(res.json().errors[0].beschreibung === "Erfolg"){
+        this.partnerDetails = res.json().response;
+        console.log(this.partnerDetails);
+      }
+      else{
+        //TODO Error handling
+      }
+    })
   }
 
   goToPartnerDetailMap() {
@@ -78,8 +97,10 @@ export class PartnerDetailComponent {
             profileModal.onDidDismiss(data => {
               //TODO: navigate to partner page and track event with GA; differ between case where data is passed on or not
 
-              if(data){}
-              else{}
+              if (data) {
+              }
+              else {
+              }
 
             });
             profileModal.present();

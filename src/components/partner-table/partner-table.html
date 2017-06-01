@@ -1,11 +1,11 @@
 <ion-row class="partner-row" *ngFor="let partner of partners">
-  <ion-item tappable (click)="showPartner(partner)">
+  <ion-item tappable (click)="showPartner(partner)" *ngIf="partner">
     <div class="image" item-left>
       <div class="white-square">
         <img src="{{partner?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
       </div>
     </div>
-    <div class="bonus-title-adress-wrapper" item-content>
+    <div class="bonus-title-adress-wrapper" item-content >
       <div class="title-adress-wrapper" [style.max-width.vw]="getMaxWidth(partner)[0]">
         <div class="partner-title" [style.max-width.vw]="getMaxWidth(partner)[0]">
           {{ partner?.nameOrigin}}
@@ -23,3 +23,4 @@
     </div>
   </ion-item>
 </ion-row>
+

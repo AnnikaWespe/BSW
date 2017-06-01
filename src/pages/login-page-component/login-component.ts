@@ -99,7 +99,7 @@ export class LoginPageComponent {
         else {
           this.pushOverviewPage();
         }
-        console.log(loginData);
+        console.log("Login: " + loginData.errors[0].beschreibung);
         if (localStorage.getItem("disallowUserTracking") === "false") {
           this.ga.trackEvent('Login/Logout', 'login')
         }

@@ -54,8 +54,11 @@ input.text-input.text-input-md.ng-pristine.ng-valid{
     padding: 0;
   }
   div.input-fields-wrapper{
-  margin: 0 8vw;
-  font-size: larger;
+    margin: auto;
+    left: 0; right: 0;bottom: 4vh;
+    font-size: larger;
+    position: absolute;
+    padding: 0 8vw;
   }
   div.card-number-wrapper{
     position: relative;
@@ -74,6 +77,9 @@ input.text-input.text-input-md.ng-pristine.ng-valid{
   div.forgot-hyperlink{
     position: absolute; top: 1vh; right: 0;
     color:#E61B5A;
+  }
+  button.login{
+    margin-top: 4vh;
   }
 }
 

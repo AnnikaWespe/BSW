@@ -40,6 +40,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   waitingForResults: boolean = true;
   noPartnersToDisplay = false;
+  showTryAgainToGetPartnersButton = false;
   waitingForGPSSignal = false;
 
   errorMessage: string;
@@ -208,26 +209,31 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       .subscribe(
         body => {
           let returnedObject = body.json();
+          console.log(returnedObject);
           if (!returnedObject.contentEntities) {
             this.moreDataCanBeLoaded = false;
             console.log("no data found");
-            if(this.displayedPartners.length === 0){
+            this.getPartnersSubscription.unsubscribe();
+            if (this.displayedPartners.length === 0) {
               this.title = localStorage.getItem("title");
               this.waitingForResults = false;
-              if(this.searchTerm){
+              if (this.searchTerm) {
                 this.showPromptNoResultForSearch();
                 this.searchTerm = "";
                 this.getPartners();
               }
-              else{
+              else {
                 this.noPartnersToDisplay = true;
               }
-              return;
             }
+            return;
           }
           this.getDifferentCategories(returnedObject);
         },
-        error => this.errorMessage = <any>error);
+        error => {
+          this.showTryAgainToGetPartnersButton = true;
+          this.waitingForResults = false;
+        });
   }
 
   resetPartnersArrayMethod() {
@@ -237,18 +243,23 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.partnersWithCampaign = [];
     this.bucket = 0;
     this.waitingForResults = true;
+    this.displayedPartners = [];
+    this.showTryAgainToGetPartnersButton = false;
+    this.noPartnersToDisplay = false;
+    this.moreDataCanBeLoaded = true;
   }
 
   getDifferentCategories(returnedObject) {
-    console.log(returnedObject);
     this.allPartners = this.allPartners.concat(returnedObject.contentEntities);
     this.offlinePartners = this.offlinePartners.concat(returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities);
     this.onlinePartners = this.onlinePartners.concat(returnedObject.originalSearchResults.bucketToSearchResult["ONLINEPARTNER"].contentEntities);
+    console.log(this.offlinePartners);
     this.getDisplay();
     this.waitingForResults = false;
   }
 
   filterButtonPushed() {
+    this.content.scrollToTop(0);
     this.resetPartnersArray = true;
     this.waitingForResults = true;
     if (this.showOfflinePartners) {
@@ -373,13 +384,13 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   gaTrackPageView() {
     let trackingName;
-    if(this.pageType === "onlinePartnerPageComponent"){
+    if (this.pageType === "onlinePartnerPageComponent") {
       trackingName = "Online Partner"
     }
-    else if (this.pageType === "offlinePartnerPageComponent"){
+    else if (this.pageType === "offlinePartnerPageComponent") {
       trackingName = "Vor Ort Partner"
     }
-    else if (this.pageType === "searchPageComponent"){
+    else if (this.pageType === "searchPageComponent") {
       trackingName = "Alle Partner"
     }
     this.ga.trackView(trackingName + "Screen")

@@ -15,6 +15,11 @@ page-partner-detail-component {
   div.partner-details {
     padding: 0 0 0.5vh 7vw;
     background-color: map-get($colors, light);
+    &.aktion{
+      color: map-get($colors, primary);
+      line-height: 3vh;
+      padding: 3vh;
+    }
     p.grey {
       margin: 1vh 0;
       color: map_get($colors, font-color-for-filter-dropdown);
@@ -22,10 +27,6 @@ page-partner-detail-component {
     div.description {
       margin: 3vh 0 3vh 0;
       line-height: 3vh;
-      div.showMore {
-        color: map_get($colors, primary);
-        text-decoration: underline;
-      }
     }
     a {
       text-decoration: none;

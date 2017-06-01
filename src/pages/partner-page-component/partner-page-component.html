@@ -143,9 +143,17 @@
 
     <div style="height: 8vh"></div>
 
-    <ion-item *ngIf="noPartnersToDisplay">
-      <div ion-content>Wir können Ihnen leider derzeit keine Partner anzeigen.</div>
+    <ion-item *ngIf="noPartnersToDisplay" text-wrap>
+      Wir können Ihnen leider derzeit keine Partner anzeigen.
     </ion-item>
+
+    <div *ngIf="showTryAgainToGetPartnersButton">
+      <ion-item  text-wrap>
+        Der Aufruf hat einen Fehler zurückgegeben.
+        <button ion-button item-right (click)="getPartners()">Erneut versuchen</button>
+      </ion-item>
+    </div>
+
 
     <div tappable class="partner-table-wrapper" (click)="hideDropdown()" *ngIf="!showMap">
       <partner-table [partners]="displayedPartners"

@@ -10,8 +10,7 @@ export class FavoritesService {
   mitgliedId = localStorage.getItem("mitgliedId");
 
 
-  constructor(private http: Http,
-              private partnerService: PartnerService) {
+  constructor(private http: Http) {
   }
 
   createAuthorizationHeader(headers: Headers) {
