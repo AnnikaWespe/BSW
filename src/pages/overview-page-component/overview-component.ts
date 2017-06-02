@@ -11,6 +11,7 @@ import {FavoritesData} from "../../services/favorites-data";
 import {UserSpecificPartnersComponent} from "./user-specific-partners-page-component/user-specific-partners-component";
 import {LoginPageComponent} from "../login-page-component/login-component";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
+import {BonusService} from "./bonus-service";
 
 
 @Component({
@@ -44,9 +45,11 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               private locationService: LocationService,
               private favoritesService: FavoritesService,
               private alertCtrl: AlertController,
-              private ga: GoogleAnalytics) {
+              private ga: GoogleAnalytics,
+              private bonusService: BonusService) {
     this.checkIfGPSEnabled();
     this.getFavoriteAndLastVisitedPartners();
+    this.getBonusData();
     if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
       this.checkForPromptRateAppInStore()
     }
@@ -64,6 +67,11 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     }
   }
 
+  getBonusData(){
+    this.bonusService.getBonusData().subscribe((res) => {
+      console.log(res);
+    })
+  }
 
   getFavoriteAndLastVisitedPartners() {
     if (localStorage.getItem('securityToken')) {

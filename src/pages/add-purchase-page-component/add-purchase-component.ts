@@ -11,7 +11,7 @@ declare let window: any;
 })
 export class AddPurchasePageComponent implements OnDestroy{
 
-  title: string = "Einkauf nachtragen";
+  title: string = "Einkauf nacherfassen";
   successMessage: string = "";
   startScreenActive = true;
   startScreenFirstTime = true;

@@ -17,13 +17,8 @@ export class GetPartnersPost {
       "VEHICLEOFFER": 0,
       "TRAVELOFFER": 0
     },
-    rangeSize: 100
+    rangeSize: 50
   };
-  /*filter = {
-    buckets: ["OFFLINEPARTNER", "ONLINEPARTNER"],
-    PARTNER_HAS_CAMPAIGN: ["false"],
-    PARTNER_NUMBER: ["74000361","74000221"]
-  };*/
   filter?;
   showmap = true;
   template = "unified";

@@ -1,6 +1,5 @@
 import {Injectable} from "@angular/core";
 import {Http, Headers} from "@angular/http";
-import {PartnerService} from "./partner-service";
 
 @Injectable()
 export class FavoritesService {

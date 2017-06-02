@@ -29,8 +29,8 @@ export class MyProfilePageComponent {
     }
   }
 
-  getWebView(url, title) {
-    this.navCtrl.push(WebviewComponent, {url: url, title: title})
+  getWebView(urlType, title) {
+    this.navCtrl.push(WebviewComponent, {urlType: urlType, title: title})
   }
 
   presentChangePasswordModal(){

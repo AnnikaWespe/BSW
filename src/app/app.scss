@@ -138,6 +138,9 @@ ion-menu {
     ion-item{
       max-height: 2vh !important;
       background-color: map-get($colors, light);
+      &.inactive{
+        background-color: red;
+      }
     }
   }
 

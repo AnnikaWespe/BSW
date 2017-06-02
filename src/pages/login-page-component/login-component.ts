@@ -42,8 +42,8 @@ export class LoginPageComponent {
     this.navCtrl.push(ConfirmScanPageComponent);
   }
 
-  loadWebView(title, url) {
-    this.navCtrl.push(WebviewComponent, {url: url, title: title})
+  loadWebView(title, urlType) {
+    this.navCtrl.push(WebviewComponent, {urlType: urlType, title: title})
   }
 
   pushOverviewPage() {
@@ -93,6 +93,7 @@ export class LoginPageComponent {
       if (loginData.errors[0].code === "0") {
         localStorage.setItem("securityToken", loginData.response.securityToken);
         localStorage.setItem("mitgliedId", loginData.response.mitgliedId);
+
         if (this.navigatedFromPartnerDetail) {
           this.viewCtrl.dismiss(loginData.response.mitgliedId);
         }

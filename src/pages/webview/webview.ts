@@ -21,11 +21,22 @@ export class WebviewComponent implements OnDestroy {
               public navParams: NavParams,
               public http: Http,
               private ga: GoogleAnalytics) {
-    //this.url = navParams.get('url');
-    this.url = "https://www.bsw.de/ueber-bsw/impressum.htm"
+    console.log(localStorage.getItem("securityToken"));
+    console.log(localStorage.getItem("mitgliedId"));
+    let urlType = navParams.get('urlType');
+    let urlRaw = localStorage.getItem(urlType);
+    let mitgliedId = localStorage.getItem("mitgliedId");
+    let securityToken = localStorage.getItem("securityToken");
+    if (!securityToken || urlType === "ImpressumWebviewUrl" || urlType === "DatenschutzWebviewUrl") {
+      this.url = urlRaw.replace("/[MITGLIEDID]", "").replace("/[SECURITYTOKEN]", "");
+    }
+    else {
+      this.url = urlRaw.replace("[MITGLIEDID]", mitgliedId).replace("[SECURITYTOKEN]", securityToken);
+    }
+    console.log(this.url);
     this.title = navParams.get('title');
     this.cacheContent = navParams.get('cacheContent');
-    this.dataProtectionScreen = navParams.get('dataProtectionScreen') || false;
+    this.dataProtectionScreen = (urlType ==="DatenschutzWebviewUrl");
     this.disallowUserTracking = (localStorage.getItem("disallowUserTracking") == "true");
 
     if (this.cacheContent) {
@@ -60,5 +71,3 @@ export class WebviewComponent implements OnDestroy {
   }
 
 }
-
-

@@ -55,7 +55,7 @@
 
 
         <ion-row menuClose class="page get-large-distance" (click)="openPage(this.pages[4])">
-          <ion-item tappable>
+          <ion-item tappable [class.inactive] = "!userLoggedIn">
             <div item-left class="icon-col">
               <div class="icon my-profile"></div>
             </div>
@@ -78,7 +78,7 @@
         </ion-row>
 
 
-        <ion-row menuClose class="page get-small-distance" (click)="openPage(this.pages[6])">
+        <ion-row menuClose class="page get-small-distance" (click) = "loadContactPage()">
           <ion-item tappable>
             <div item-left class="icon-col">
               <div class="icon contact"></div>

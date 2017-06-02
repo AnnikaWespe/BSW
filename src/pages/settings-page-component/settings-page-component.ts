@@ -20,8 +20,8 @@ export class SettingsPageComponent implements OnDestroy{
 
   title = "Einstellungen";
 
-  getWebView(url, title, dataProtectionScreen, cacheContent){
-    this.navCtrl.push(WebviewComponent, {url: url, title: title, dataProtectionScreen: dataProtectionScreen, cacheContent: cacheContent})
+  getWebView(urlType, title, dataProtectionScreen, cacheContent){
+    this.navCtrl.push(WebviewComponent, {url: urlType, title: title, cacheContent: cacheContent})
   }
 
   ngOnDestroy(){

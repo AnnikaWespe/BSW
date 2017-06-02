@@ -8,6 +8,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import {LoginPageComponent} from "../pages/login-page-component/login-component";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
+import {Http} from "@angular/http";
+import {InitService} from "./init-service";
 
 class NavMock {
   setRoot() {}
@@ -31,12 +33,17 @@ describe('App component', () => {
     let splashScreen = TestBed.get(SplashScreen);
     let statusBar = TestBed.get(StatusBar);
     let googleAnalytics = TestBed.get(GoogleAnalytics);
+    let http = TestBed.get(Http);
+    let initService = TestBed.get(InitService)
+
 
     app = new MyApp(
       platform,
       splashScreen,
       statusBar,
-      googleAnalytics
+      googleAnalytics,
+      http,
+      initService
     ); // = TestBed.get(MyApp);
     app.nav = TestBed.get(Nav);
   });

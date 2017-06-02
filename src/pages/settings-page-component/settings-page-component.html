@@ -38,11 +38,9 @@
   </div>
 
 
-
-
   <div class="profile-header-wrapper">
 
-    <ion-row tappable class="profile-header" (click) = "getWebView('https://www.bsw.de/', 'Impressum', false, true)">
+    <ion-row tappable class="profile-header" (click) = "getWebView('ImpressumWebviewUrl', 'Impressum', false, true)">
       <ion-col class="icon-col">
         <ion-icon name="bulb"></ion-icon>
       </ion-col>
@@ -53,7 +51,7 @@
       </ion-col>
     </ion-row>
 
-    <ion-row tappable class="profile-header" (click) = "getWebView('https://www.bsw.de/', 'Datenschutz', true, true)">
+    <ion-row tappable class="profile-header" (click) = "getWebView('DatenschutzWebviewUrl', 'Datenschutz', true, true)">
       <ion-col class="icon-col">
           <ion-icon name = "lock"></ion-icon>
       </ion-col>

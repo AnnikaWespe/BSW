@@ -12,6 +12,9 @@ import {MyProfilePageComponent} from "../pages/my-profile-page-component/my-prof
 import {PartnerPageComponent} from "../pages/partner-page-component/partner-page-component";
 import {SettingsPageComponent} from "../pages/settings-page-component/settings-page-component";
 import {DeviceService} from "../services/device-data";
+import {WebviewComponent} from "../pages/webview/webview";
+import {Http, Headers} from "@angular/http";
+import {InitService} from "./init-service";
 
 
 @Component({
@@ -22,43 +25,74 @@ export class MyApp {
 
   rootPage: any;
   pages: Array<{ title: string, component: any, parameters: {} }>;
-
+  userLoggedIn = localStorage.getItem("securityToken");
 
   constructor(private platform: Platform,
               private splashScreen: SplashScreen,
               private statusBar: StatusBar,
-              private ga: GoogleAnalytics) {
-    this.initializeApp();
+              private ga: GoogleAnalytics,
+              private http: Http,
+              private initService: InitService) {
     this.setMenu();
-    localStorage.setItem("locationExact", "false");
     if (localStorage.getItem("securityToken")) {
       this.rootPage = OverviewPageComponent;
     }
     else {
       this.rootPage = LoginPageComponent;
     }
+    localStorage.setItem("locationExact", "false");
+    this.initializeApp();
+    this.setWebViewsUrls();
+    this.getUserData();
   }
 
   initializeApp() {
     this.platform.ready()
       .then(() => {
-        if (localStorage.getItem("disallowUserTracking") === null) {
-          localStorage.setItem("disallowUserTracking", "false");
-        }
-        this.statusBar.overlaysWebView(true);
-        //this.statusBar.backgroundColorByHexString('#929395');
+        this.startGoogleAnalyticsTracker();
+        //this.statusBar.overlaysWebView(true);
         this.splashScreen.hide();
         this.getDevice();
-        if (localStorage.getItem("disallowUserTracking") === "false") {
-          this.ga.startTrackerWithId('UA-99848389-1')
-            .then(() => {
-              console.log('Google analytics is ready now');
-              this.ga.trackEvent('Login/Logout', 'Start der App');
-            })
-            .catch(e => console.log('Error starting GoogleAnalytics', e))
-        }
       });
   }
+
+  getUserData() {
+    this.initService.getUserData().subscribe((res) => {
+      console.log(res.json())
+    })
+  }
+
+  startGoogleAnalyticsTracker() {
+    if (localStorage.getItem("disallowUserTracking") === null) {
+      localStorage.setItem("disallowUserTracking", "false");
+    }
+    if (localStorage.getItem("disallowUserTracking") === "false") {
+      this.ga.startTrackerWithId('UA-99848389-1')
+        .then(() => {
+          this.ga.trackEvent('Login/Logout', 'Start der App');
+        })
+        .catch(e => console.log('Error starting GoogleAnalytics', e))
+    }
+  }
+
+  setWebViewsUrls() {
+    this.initService.getWebViewUrls().subscribe((res) => {
+      let result = res.json();
+      if (result.errors[0].beschreibung === "Erfolg") {
+        localStorage.setItem("ImpressumWebviewUrl", result.response.bswAppWebviewUrl[0].webviewUrl);
+        localStorage.setItem("DatenschutzWebviewUrl", result.response.bswAppWebviewUrl[1].webviewUrl);
+        localStorage.setItem("KontaktWebviewUrl", result.response.bswAppWebviewUrl[2].webviewUrl);
+        localStorage.setItem("VorteilsuebersichtWebviewUrl", result.response.bswAppWebviewUrl[3].webviewUrl);
+        localStorage.setItem("ProfildatenWebviewUrl", result.response.bswAppWebviewUrl[4].webviewUrl);
+        localStorage.setItem("BankdatenWebviewUrl", result.response.bswAppWebviewUrl[5].webviewUrl);
+        localStorage.setItem("beitretenWebviewUrl", result.response.bswAppWebviewUrl[6].webviewUrl);
+      }
+      else {
+        localStorage.setItem("noWebViewUrlsAvailable", "true");
+      }
+    });
+  }
+
 
   openPage(page) {
     this.nav.setRoot(page.component, page.parameters);
@@ -96,9 +130,14 @@ export class MyApp {
 
   logout() {
     localStorage.removeItem("securityToken");
+    localStorage.removeItem("mitgliedId");
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackEvent('Login/Logout', 'logout');
     }
     this.nav.setRoot(LoginPageComponent);
+  }
+
+  loadContactPage() {
+    this.nav.push(WebviewComponent, {urlType: "KontaktWebviewUrl", title: "Kontakt"})
   }
 }
