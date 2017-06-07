@@ -118,14 +118,13 @@ ion-menu {
       }
       height: 11vw;
       width: 11vw;
-      /*overflow: hidden;
-      left: 50%;
-      margin: 0 auto;*/
     }
     .page-title {
-      //border-bottom: 1px solid map_get($colors, font-color-for-filter-dropdown);
       font-size: 120%;
       color: map_get($colors, font-color-for-filter-dropdown);
+      &.inactive{
+        color: darkgrey;
+      }
     }
     ion-row.page{
       &.get-large-distance{
@@ -135,12 +134,15 @@ ion-menu {
         margin-bottom: 3vh !important;
       }
     }
+    ion-row.salutation{
+      display: flex;
+      justify-content: center;
+      padding-top: 1vh;
+      color: grey;
+    }
     ion-item{
-      max-height: 2vh !important;
+      max-height: 1.8vh !important;
       background-color: map-get($colors, light);
-      &.inactive{
-        background-color: red;
-      }
     }
   }
 

@@ -1,5 +1,5 @@
 import {Component, trigger, state, style, OnInit} from '@angular/core';
-import {NavController, NavParams, ViewController} from 'ionic-angular';
+import {AlertController, NavController, NavParams, ViewController} from 'ionic-angular';
 import {FormGroup, Validators, FormBuilder} from "@angular/forms";
 import {ChangePasswordService} from "./changePasswordService";
 
@@ -19,7 +19,8 @@ export class ChangePasswordModal {
               public navParams: NavParams,
               public viewCtrl: ViewController,
               private formBuilder: FormBuilder,
-  private changePasswordService: ChangePasswordService) {
+              private changePasswordService: ChangePasswordService,
+              private alertCtrl: AlertController) {
     this.passwordForm = formBuilder.group({
       oldPassword: ['', Validators.required],
       newPassword: ['', Validators.required],
@@ -28,12 +29,12 @@ export class ChangePasswordModal {
   }
 
   navigateBack() {
-    this.viewCtrl.dismiss();
+    this.viewCtrl.dismiss({passwordChanged: false});
   }
 
 
   passwordsMatch() {
-    return (group: FormGroup): {[key: string]: any} => {
+    return (group: FormGroup): { [key: string]: any } => {
       let password = group.controls['newPassword'];
       let confirmPassword = group.controls['newPasswordRepeat'];
       if (password.value !== confirmPassword.value) {
@@ -45,10 +46,28 @@ export class ChangePasswordModal {
   }
 
 
-  onSubmit(){
+  onSubmit() {
     this.changePasswordService.changePassword(this.passwordForm.value.oldPassword, this.passwordForm.value.newPassword).subscribe((res) => {
-      console.log(res.json());
+      let response = res.json();
+      if (response.errors[0].beschreibung === "Erfolg") {
+        localStorage.setItem("securityToken", response.response.securityToken)
+        this.viewCtrl.dismiss({passwordChanged: true});
+      }
+      else {
+        console.log(response.errors[0].beschreibung);
+        this.presentAlertPasswordNotChanged();
+      }
     })
 
-    }
+  }
+
+  presentAlertPasswordNotChanged() {
+    let alert = this.alertCtrl.create({
+      title: 'Passwort ändern fehlgeschlagen',
+      subTitle: 'Bitte versuchen Sie es erneut.',
+      buttons: ['Ok']
+    });
+    alert.present();
+  }
+
 }

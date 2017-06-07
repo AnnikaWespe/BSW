@@ -26,6 +26,10 @@ export class MyApp {
   rootPage: any;
   pages: Array<{ title: string, component: any, parameters: {} }>;
   userLoggedIn = localStorage.getItem("securityToken");
+  name;
+  title;
+  salutation;
+  lastName;
 
   constructor(private platform: Platform,
               private splashScreen: SplashScreen,
@@ -58,7 +62,17 @@ export class MyApp {
 
   getUserData() {
     this.initService.getUserData().subscribe((res) => {
-      console.log(res.json())
+      let result = res.json();
+      if (result.errors[0].beschreibung === "Erfolg") {
+        let data = result.response.list[0].row;
+        this.lastName = data.NAME;
+        this.salutation = data.ANREDE;
+        this.title = data.TITEL || "";
+        localStorage.setItem("title", data.TITEL);
+        localStorage.setItem("salutation", data.ANREDE);
+        localStorage.setItem("firstName", data.VORNAME);
+        localStorage.setItem("lastName", data.NAME);
+      }
     })
   }
 
@@ -76,26 +90,13 @@ export class MyApp {
   }
 
   setWebViewsUrls() {
-    this.initService.getWebViewUrls().subscribe((res) => {
-      let result = res.json();
-      if (result.errors[0].beschreibung === "Erfolg") {
-        localStorage.setItem("ImpressumWebviewUrl", result.response.bswAppWebviewUrl[0].webviewUrl);
-        localStorage.setItem("DatenschutzWebviewUrl", result.response.bswAppWebviewUrl[1].webviewUrl);
-        localStorage.setItem("KontaktWebviewUrl", result.response.bswAppWebviewUrl[2].webviewUrl);
-        localStorage.setItem("VorteilsuebersichtWebviewUrl", result.response.bswAppWebviewUrl[3].webviewUrl);
-        localStorage.setItem("ProfildatenWebviewUrl", result.response.bswAppWebviewUrl[4].webviewUrl);
-        localStorage.setItem("BankdatenWebviewUrl", result.response.bswAppWebviewUrl[5].webviewUrl);
-        localStorage.setItem("beitretenWebviewUrl", result.response.bswAppWebviewUrl[6].webviewUrl);
-      }
-      else {
-        localStorage.setItem("noWebViewUrlsAvailable", "true");
-      }
-    });
+    this.initService.setWebViewUrls();
   }
 
 
   openPage(page) {
     this.nav.setRoot(page.component, page.parameters);
+
   }
 
   getDevice() {
@@ -135,6 +136,12 @@ export class MyApp {
       this.ga.trackEvent('Login/Logout', 'logout');
     }
     this.nav.setRoot(LoginPageComponent);
+    this.userLoggedIn = "";
+  }
+
+  goToOverviewPage(){
+    this.nav.push(OverviewPageComponent);
+    this.userLoggedIn = localStorage.getItem("securityToken");
   }
 
   loadContactPage() {

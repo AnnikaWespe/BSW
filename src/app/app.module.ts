@@ -20,7 +20,6 @@ import {ConfirmScanPageComponent} from '../pages/login-page-component/confirm-sc
 import {MyProfilePageComponent} from "../pages/my-profile-page-component/my-profile-page-component";
 import {PartnerPageComponent} from "../pages/partner-page-component/partner-page-component";
 import {SettingsPageComponent} from "../pages/settings-page-component/settings-page-component";
-import {MembershipDataFormComponent} from "../pages/my-profile-page-component/user-detail/membership-data-form.component";
 import {PartnerService} from '../services/partner-service';
 import {TruncatePipe, DynamicTruncatePipe} from '../pages/partner-page-component/truncate'
 import {ChooseLocationManuallyComponent} from "../pages/partner-page-component/choose-location-manually/choose-location-manually-component";
@@ -62,7 +61,6 @@ import {InitService} from "./init-service";
     MyProfilePageComponent,
     PartnerPageComponent,
     SettingsPageComponent,
-    MembershipDataFormComponent,
     ChooseLocationManuallyComponent,
     DynamicTruncatePipe,
     TruncatePipe,

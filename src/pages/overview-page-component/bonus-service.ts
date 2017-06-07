@@ -18,13 +18,13 @@ export class BonusService {
       btoa('BSW_App:ev1boio32fSrjSY9XwvcD9LkGr13J'));
   }
 
-  getBonusData() {
+  /*getBonusData() {
     console.log(this.mitgliedId, this.securityToken);
-    let loginUrl = 'https://vorsystem.avs.de/integ6/securityToken/bonus/summen';
+    let bonusUrl = 'https://vorsystem.avs.de/integ6/securityToken/bonus/summen';
     let headers = new Headers({'Content-Type': 'application/json'});
     this.createAuthorizationHeader(headers);
     let options = new RequestOptions({headers: headers});
-    return this.http.post(loginUrl, {
+    return this.http.post(bonusUrl, {
       "mandantId": "1",
       "fromDate": this.year + "-01-01",
       "toDate": this.year + "-12-31",
@@ -34,5 +34,16 @@ export class BonusService {
         "securityToken": this.securityToken
       }
     }, options);
+  }*/
+
+  getBonusData() {
+    let headers = new Headers({ 'Accept': 'application/json' });
+    let url = "https://vorsystem.avs.de/integ6/securityToken/bonus/summen?mandant_id=1&mitglied_id=" + this.mitgliedId + "&securityToken=" + this.securityToken + "&fromDate=" + this.year + "-01-10&toDate=" + this.year + "-12-31&kontoauszugsArtId=73"
+    this.createAuthorizationHeader(headers);
+    return this.http.get(url, {
+      headers: headers
+    });
   }
+
+
 }

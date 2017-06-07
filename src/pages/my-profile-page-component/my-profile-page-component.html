@@ -21,7 +21,7 @@
   <div class="ion-card-wrapper">
     <ion-card>
       <ion-card-content>
-        <div class="name">Pippi Langstrumpf</div>
+        <div class="name">{{firstName}} {{lastName}}</div>
           <div class="cardInfo">
             <p>Kartennummer</p>
             <p>12345678 9</p>
@@ -41,6 +41,7 @@
               </div>
             </ion-col>
           </ion-row>
+          <ion-row class="changePassword" *ngIf="passwordChanged">Ihr Passwort wurde erfolgreich geändert. </ion-row>
         </div>
       </ion-card-content>
     </ion-card>

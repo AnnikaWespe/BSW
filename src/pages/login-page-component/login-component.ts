@@ -90,7 +90,7 @@ export class LoginPageComponent {
     this.loginService.login(username, password).subscribe((res) => {
       this.loading.dismiss();
       let loginData = res.json();
-      if (loginData.errors[0].code === "0") {
+      if (loginData.errors[0].beschreibung === "Erfolg") {
         localStorage.setItem("securityToken", loginData.response.securityToken);
         localStorage.setItem("mitgliedId", loginData.response.mitgliedId);
 

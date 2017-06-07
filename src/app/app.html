@@ -4,12 +4,13 @@
   <ion-content class="scroll-content ionic-scroll">
     <div class="logo-wrapper">
       <div class="logo"></div>
+      <ion-row class="salutation" *ngIf = "userLoggedIn">
+        Grüß Sie, {{salutation}} {{title}} {{lastName}}!
+      </ion-row>
     </div>
 
-      <div class="list-wrapper">
-
-
-        <ion-row menuClose class="page" (click)="openPage(this.pages[0])">
+      <ion-scroll scrollX="true" class="list-wrapper">
+        <ion-row menuClose class="page" (click)="goToOverviewPage()">
           <ion-item tappable>
             <div item-left class="icon-col">
               <div class="icon overview"></div>
@@ -54,12 +55,23 @@
         </ion-row>
 
 
-        <ion-row menuClose class="page get-large-distance" (click)="openPage(this.pages[4])">
+        <ion-row menuClose class="page get-large-distance" (click)="openPage(this.pages[4])" *ngIf="userLoggedIn">
           <ion-item tappable [class.inactive] = "!userLoggedIn">
             <div item-left class="icon-col">
               <div class="icon my-profile"></div>
             </div>
-            <ion-label class="page-title">
+            <ion-label class="page-title" [class.inactive] = "!userLoggedIn">
+              Mein Profil
+            </ion-label>
+          </ion-item>
+        </ion-row>
+
+        <ion-row class="page get-large-distance" *ngIf="!userLoggedIn">
+          <ion-item class="inactive">
+            <div item-left class="icon-col">
+              <div class="icon my-profile"></div>
+            </div>
+            <ion-label class="page-title inactive">
               Mein Profil
             </ion-label>
           </ion-item>
@@ -90,7 +102,7 @@
         </ion-row>
 
 
-        <ion-row menuClose class="page" (click)="logout()">
+        <ion-row menuClose class="page" (click)="logout()" *ngIf="userLoggedIn">
           <ion-item tappable>
             <div item-left class="icon-col">
               <div class="icon sign-out"></div>
@@ -101,8 +113,19 @@
           </ion-item>
         </ion-row>
 
+        <ion-row menuClose class="page" (click)="logout()" *ngIf="!userLoggedIn">
+          <ion-item tappable>
+            <div item-left class="icon-col">
+              <div class="icon"></div>
+            </div>
+            <ion-label class="page-title">
+              Einloggen oder anmelden
+            </ion-label>
+          </ion-item>
+        </ion-row>
 
-      </div>
+
+      </ion-scroll>
   </ion-content>
 </ion-menu>
 

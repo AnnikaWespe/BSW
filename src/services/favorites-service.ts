@@ -20,7 +20,6 @@ export class FavoritesService {
   get(url) {
     let headers = new Headers({ 'Accept': 'application/json' });
     this.createAuthorizationHeader(headers);
-    console.log(url, headers);
     return this.http.get(url, {
       headers: headers
     });

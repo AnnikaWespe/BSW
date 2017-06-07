@@ -16,7 +16,7 @@ export class ChangePasswordService {
       btoa('BSW_App:ev1boio32fSrjSY9XwvcD9LkGr13J'));
   }
 
-  changePassword(oldPassword, newPassword) {
+  /*changePassword(oldPassword, newPassword) {
     console.log(this.mitgliedId, this.securityToken);
     let loginUrl = 'https://vorsystem.avs.de/integ6/securityToken/passwortAendern';
     let headers = new Headers({'Content-Type': 'application/json'});
@@ -31,5 +31,16 @@ export class ChangePasswordService {
         "securityToken": this.securityToken,
       }
     }, options);
+  }*/
+
+  changePassword(oldPassword, newPassword) {
+    let changePasswordUrl = 'https://vorsystem.avs.de/integ6/securityToken/passwortAendern?mitglied_id=' + this.mitgliedId + '&password=' + oldPassword + '&mandant_id=1&new_password=' + newPassword +'&securityToken=' + this.securityToken;
+    console.log(changePasswordUrl);
+    let headers = new Headers({ 'Accept': 'application/json' });
+    this.createAuthorizationHeader(headers);
+    return this.http.get(changePasswordUrl, {
+      headers: headers
+    });
   }
+
 }

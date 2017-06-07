@@ -18,7 +18,7 @@ export class InitService {
       btoa('BSW_App:ev1boio32fSrjSY9XwvcD9LkGr13J'));
   }
 
-  getWebViewUrls() {
+  getWebViewUrlsFromApi() {
     let headers = new Headers({'Accept': 'application/json'});
     let url = 'https://vorsystem.avs.de/integ6/cms/bswAppWebviewUrls?mandant_id=1'
     this.createAuthorizationHeader(headers);
@@ -35,4 +35,23 @@ export class InitService {
       headers: headers
     });
   }
+
+  setWebViewUrls(){
+    this.getWebViewUrlsFromApi().subscribe((res) => {
+      let result = res.json();
+      if (result.errors[0].beschreibung === "Erfolg") {
+        let resultArray = result.response.bswAppWebviewUrl;
+        for (let item of resultArray){
+          localStorage.setItem(item.viewname + "WebviewUrl", item.webviewUrl)
+        }
+      }
+      else {
+        localStorage.setItem("noWebViewUrlsAvailable", "true");
+      }
+    });
+  }
 }
+
+
+
+

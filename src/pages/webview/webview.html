@@ -21,5 +21,16 @@
     <ion-toggle item-right [(ngModel)]="disallowUserTracking" color="light-blue" mode="ios"
                 [class.checked]="disallowUserTracking"></ion-toggle>
   </ion-item>
-  <iframe #iframe [src]="url | safe" webkitallowfullscreen mozallowfullscreen allowfullscreen frameBorder="0"></iframe>
+  <iframe #iframe
+          [src]="url | safe"
+          webkitallowfullscreen
+          mozallowfullscreen
+          allowfullscreen
+          frameBorder="0"
+          *ngIf="!noWebViewUrlsAvailable"></iframe>
+  <ion-row *ngIf="noWebViewUrlsAvailable">
+    <ion-item text-wrap>
+      Wir können Ihnen derzeit keinen Screen anzeigen. Bitte versuchen Sie es später erneut.
+    </ion-item>
+  </ion-row>
 </ion-content>

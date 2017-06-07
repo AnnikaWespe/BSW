@@ -10,6 +10,9 @@ my-profile-page-component {
     ion-col.changePassword{
       text-align: right;
     }
+    ion-row.changePassword{
+      color: map-get($colors, primary);
+    }
   }
   div.name{
     font-weight: bolder;

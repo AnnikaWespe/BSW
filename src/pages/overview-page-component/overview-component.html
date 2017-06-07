@@ -23,7 +23,7 @@
 </ion-header>
 
 <ion-content>
-  <div class="bars">
+  <div class="bars" *ngIf="userLoggedIn">
     <ion-row>
       <ion-col>
         <div class="buffer" [style.height]="heightBlueBarRedBar()[2]"></div>
@@ -38,7 +38,7 @@
     </ion-row>
   </div>
 
-  <div class="moneyDetailsAccount">
+  <div class="moneyDetailsAccount" *ngIf="userLoggedIn">
 
     <ion-row class="money-detail-row balance-row">
       <ion-col class="icon-col">

@@ -22,8 +22,10 @@ import {BonusService} from "./bonus-service";
 export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   title: string = "Übersicht";
-  balance: number = 10;
-  bonusThisYear: number = 1;
+  userLoggedIn = localStorage.getItem('securityToken');
+  balance: number;
+  bonusThisYear: number;
+  bonusDataAvailable = false;
   heightBalanceBarBonusBarBuffer = ["0vh", "0vh", "0vh", "0vh"];
   maxHeightBarInVh = 14;
   location = {latitude: "0", longitude: "0"};
@@ -69,12 +71,18 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   getBonusData(){
     this.bonusService.getBonusData().subscribe((res) => {
-      console.log(res);
+      if(res.json().errors[0].beschreibung === "Erfolg"){
+        let response = res.json().response;
+        this.bonusDataAvailable = true;
+        this.bonusThisYear = response.bonusGesamtJahr;
+        this.balance = response.bonuskontostand;
+      }
+      else console.log("no bonus data found");
     })
   }
 
   getFavoriteAndLastVisitedPartners() {
-    if (localStorage.getItem('securityToken')) {
+    if (this.userLoggedIn) {
       this.favoritesService.getFavorites().subscribe((res) => {
         let errorMessage = res.json().errors[0].beschreibung;
         if (errorMessage === "Erfolg") {

@@ -15,6 +15,7 @@ export class WebviewComponent implements OnDestroy {
   disallowUserTracking = false;
   cacheContent: boolean;
   dataProtectionScreen: boolean;
+  noWebViewUrlsAvailable = false;
   @ViewChild('iframe') iframe;
 
   constructor(public navCtrl: NavController,
@@ -23,17 +24,20 @@ export class WebviewComponent implements OnDestroy {
               private ga: GoogleAnalytics) {
     console.log(localStorage.getItem("securityToken"));
     console.log(localStorage.getItem("mitgliedId"));
+    if(localStorage.getItem("noWebViewUrlsAvailable") === "true"){
+      this.noWebViewUrlsAvailable = true;
+    }
     let urlType = navParams.get('urlType');
     let urlRaw = localStorage.getItem(urlType);
     let mitgliedId = localStorage.getItem("mitgliedId");
     let securityToken = localStorage.getItem("securityToken");
+    console.log(urlType);
     if (!securityToken || urlType === "ImpressumWebviewUrl" || urlType === "DatenschutzWebviewUrl") {
       this.url = urlRaw.replace("/[MITGLIEDID]", "").replace("/[SECURITYTOKEN]", "");
     }
     else {
       this.url = urlRaw.replace("[MITGLIEDID]", mitgliedId).replace("[SECURITYTOKEN]", securityToken);
     }
-    console.log(this.url);
     this.title = navParams.get('title');
     this.cacheContent = navParams.get('cacheContent');
     this.dataProtectionScreen = (urlType ==="DatenschutzWebviewUrl");
