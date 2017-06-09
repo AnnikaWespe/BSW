@@ -30,11 +30,11 @@ export class FavoritesService {
     return(this.get(url));
   }
   deleteFavorite(pfNumber){
-    let url = this.favoritesUrlSnippet + 'loeschen.json?mandant_id=1&mitglied_id=' + this.mitgliedId + '&pfNummer=35280000' +  '&securityToken=' + this.securityToken;
+    let url = this.favoritesUrlSnippet + 'loeschen.json?mandant_id=1&mitglied_id=' + this.mitgliedId + '&pfNummer=' + pfNumber +  '&securityToken=' + this.securityToken;
     return(this.get(url));
   }
   rememberFavorite(pfNumber){
-    let url = this.favoritesUrlSnippet + 'merken.json?mandant_id=1&mitglied_id=' + this.mitgliedId + '&pfNummer=35280000' + '&securityToken=' + this.securityToken;
+    let url = this.favoritesUrlSnippet + 'merken.json?mandant_id=1&mitglied_id=' + this.mitgliedId + '&pfNummer=' + pfNumber + '&securityToken=' + this.securityToken;
     return(this.get(url));
   }
 }

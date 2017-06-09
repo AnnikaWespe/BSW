@@ -17,12 +17,13 @@ export class FavoritesData {
     }
   }
 
-  public static isInFavorites(number): boolean {
-    this.favoritesByPfArray.forEach((pfNummer) => {
-      if (pfNummer == number) {
-        return true;
-      }
-    })
-    return false;
+  public static isInFavorites(nummer): boolean {
+    if (this.favoritesByPfArray.indexOf(nummer) > -1) {
+      return true
+    }
+    else {
+      return false
+    }
+    ;
   }
 }

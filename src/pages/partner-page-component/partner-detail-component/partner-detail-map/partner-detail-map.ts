@@ -39,9 +39,8 @@ export class PartnerDetailMap {
       this.locationExact = true;
     }
     console.log("PartnerDetailMap: ", this.currentLatitude + " " + this.currentLongitude);
-    //TODO uncomment
-    //this.pfNumber = this.partner.number;
-    //this.isInFavorites = FavoritesData.isInFavorites(this.pfNumber);
+    this.pfNumber = this.partner.number;
+    this.isInFavorites = FavoritesData.isInFavorites(this.pfNumber);
   }
 
   showPromptSomethingWentWrong() {
@@ -65,7 +64,7 @@ export class PartnerDetailMap {
       this.favoritesService.deleteFavorite(this.pfNumber).subscribe((res) => {
         let message = res.json().errors[0].beschreibung;
         if (message === "Erfolg") {
-          FavoritesData.deleteFavorite("35280000");
+          FavoritesData.deleteFavorite(this.pfNumber);
           this.isInFavorites = false;
         }
         else {
@@ -77,7 +76,7 @@ export class PartnerDetailMap {
       this.favoritesService.rememberFavorite(this.pfNumber).subscribe((res) => {
         let message = res.json().errors[0].beschreibung;
         if (message === "Erfolg") {
-          FavoritesData.addFavorite("35280000");
+          FavoritesData.addFavorite(this.pfNumber);
           this.isInFavorites = true;
         }
         else {

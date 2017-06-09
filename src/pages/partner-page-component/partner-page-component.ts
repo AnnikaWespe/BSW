@@ -1,5 +1,5 @@
 import {Component, AfterViewChecked, ViewChild, OnDestroy, EventEmitter, Output} from '@angular/core';
-import {NavController, NavParams, Content} from 'ionic-angular';
+import {NavController, NavParams, Content, ModalController} from 'ionic-angular';
 
 import {PartnerService} from "../../services/partner-service";
 import {ChooseLocationManuallyComponent} from "./choose-location-manually/choose-location-manually-component";
@@ -43,7 +43,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   showTryAgainToGetPartnersButton = false;
   waitingForGPSSignal = false;
 
-  errorMessage: string;
 
   showMap = false;
   showMapIcon = false;
@@ -94,7 +93,8 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
               private partnerService: PartnerService,
               public alertCtrl: AlertController,
               public locationService: LocationService,
-              private ga: GoogleAnalytics) {
+              private ga: GoogleAnalytics,
+              private modalCtrl: ModalController) {
 
     let pageType = navParams.get("type");
     if (navParams.get('navigatedFromOverview')) {
@@ -195,7 +195,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     if (this.showMap) {
       this.searchTerm$.emit(searchTerm);
     }
-    this.getPartners();
+    this.resetPartnersArrays();
     this.getPartners();
   }
 
@@ -210,17 +210,16 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
             this.moreDataCanBeLoaded = false;
             console.log("no data found");
             this.getPartnersSubscription.unsubscribe();
-            if (this.displayedPartners.length === 0) {
-              this.title = localStorage.getItem("title");
-              this.waitingForResults = false;
-              if (this.searchTerm) {
-                this.showPromptNoResultForSearch();
-                this.searchTerm = "";
-                this.getPartners();
-              }
-              else {
-                this.noPartnersToDisplay = true;
-              }
+            this.title = localStorage.getItem("title");
+            this.waitingForResults = false;
+            if (this.searchTerm) {
+              this.showPromptNoResultForSearch();
+              this.searchTerm = "";
+              this.resetPartnersArrays();
+              this.getPartners();
+            }
+            else {
+              this.noPartnersToDisplay = true;
             }
             return;
           }
@@ -307,12 +306,17 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   chooseLocationManually() {
     event.stopPropagation();
-    this.navCtrl.push(ChooseLocationManuallyComponent, {
-      type: this.pageType,
-      showOfflinePartners: this.showOfflinePartners,
-      showOnlinePartners: this.showOnlinePartners,
-      showOnlyPartnersWithCampaign: this.showOnlyPartnersWithCampaign,
-    });
+    let chooseLocationManuallyModal = this.modalCtrl.create(ChooseLocationManuallyComponent);
+    chooseLocationManuallyModal.present();
+    chooseLocationManuallyModal.onDidDismiss((data) => {
+      this.location.latitude = data.latitude;
+      this.location.longitude = data.longitude;
+      if (data.name) {
+        this.cityName = data.name
+      };
+      this.resetPartnersArrays();
+      this.getPartners();
+    })
     this.showDropdown = [false, false, false];
     this.showDropdownForAnimation = ["false", "false"];
   }

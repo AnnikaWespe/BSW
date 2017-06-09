@@ -1,6 +1,6 @@
 import {TestBed} from '@angular/core/testing';
 // import {TestUtils} from 'dekra.core2';
-import {MyApp} from './app.component';
+import {BSWBonusApp} from './app.component';
 import { Nav, Platform } from 'ionic-angular';
 
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -16,7 +16,7 @@ class NavMock {
 }
 
 describe('App component', () => {
-  let app: MyApp;
+  let app: BSWBonusApp;
   let platform: Platform;
 
   beforeEach(() => {
@@ -37,7 +37,7 @@ describe('App component', () => {
     let initService = TestBed.get(InitService)
 
 
-    app = new MyApp(
+    app = new BSWBonusApp(
       platform,
       splashScreen,
       statusBar,

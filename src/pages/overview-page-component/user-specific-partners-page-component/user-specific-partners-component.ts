@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {FavoritesData} from "../../../services/favorites-data";
 import {PartnerService} from "../../../services/partner-service";
+import {PartnerDetailComponent} from "../../partner-page-component/partner-detail-component/partner-detail-component";
 
 
 @Component({
@@ -38,4 +39,8 @@ export class UserSpecificPartnersComponent {
   treatAsLastVisitedPartnersPage() {
   }
 
+
+  showPartner(partner = 0) {
+    this.navCtrl.push(PartnerDetailComponent, {partner: partner})
+  }
 }

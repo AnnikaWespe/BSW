@@ -19,6 +19,6 @@
   <div class="initialSpinner" *ngIf="waitingForResults">
     <ion-spinner tappable class="initialSpinner"></ion-spinner>
   </div>
-  <partner-table [partners] = "partners"></partner-table>
+  <partner-table [partners] = "partners" (showPartnerEventEmitter)="showPartner($event)"></partner-table>
 </ion-content>
 

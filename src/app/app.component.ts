@@ -1,5 +1,5 @@
 import {Component, ViewChild, OnInit} from '@angular/core';
-import {Nav, Platform} from 'ionic-angular';
+import {Events, Nav, Platform} from 'ionic-angular';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {StatusBar} from '@ionic-native/status-bar';
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
@@ -13,19 +13,18 @@ import {PartnerPageComponent} from "../pages/partner-page-component/partner-page
 import {SettingsPageComponent} from "../pages/settings-page-component/settings-page-component";
 import {DeviceService} from "../services/device-data";
 import {WebviewComponent} from "../pages/webview/webview";
-import {Http, Headers} from "@angular/http";
 import {InitService} from "./init-service";
 
 
 @Component({
   templateUrl: 'app.html'
 })
-export class MyApp {
+export class BSWBonusApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any;
   pages: Array<{ title: string, component: any, parameters: {} }>;
-  userLoggedIn = localStorage.getItem("securityToken");
+  userLoggedIn = localStorage.getItem("securityToken") !== null;
   name;
   title;
   salutation;
@@ -35,9 +34,12 @@ export class MyApp {
               private splashScreen: SplashScreen,
               private statusBar: StatusBar,
               private ga: GoogleAnalytics,
-              private http: Http,
-              private initService: InitService) {
+              private initService: InitService,
+              public events: Events) {
     this.setMenu();
+    events.subscribe("userLoggedIn", () => {
+      this.userLoggedIn = true;
+    })
     if (localStorage.getItem("securityToken")) {
       this.rootPage = OverviewPageComponent;
     }
@@ -96,7 +98,6 @@ export class MyApp {
 
   openPage(page) {
     this.nav.setRoot(page.component, page.parameters);
-
   }
 
   getDevice() {
@@ -136,13 +137,9 @@ export class MyApp {
       this.ga.trackEvent('Login/Logout', 'logout');
     }
     this.nav.setRoot(LoginPageComponent);
-    this.userLoggedIn = "";
+    this.userLoggedIn = false;
   }
 
-  goToOverviewPage(){
-    this.nav.push(OverviewPageComponent);
-    this.userLoggedIn = localStorage.getItem("securityToken");
-  }
 
   loadContactPage() {
     this.nav.push(WebviewComponent, {urlType: "KontaktWebviewUrl", title: "Kontakt"})

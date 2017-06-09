@@ -53,8 +53,14 @@ ion-menu {
     margin: 0 auto;
   }
   div.logo-wrapper {
-    padding: 5vh 0 3vh 0;
+    padding: 5vh 0 1vh 0;
     background-color: white;
+    ion-row.salutation{
+      display: flex;
+      justify-content: center;
+      color: map_get($colors, font-color-for-filter-dropdown);
+      margin-top: 1vh;
+    }
   }
   .item-md {
     background-color: inherit;
@@ -133,12 +139,6 @@ ion-menu {
       &.get-small-distance{
         margin-bottom: 3vh !important;
       }
-    }
-    ion-row.salutation{
-      display: flex;
-      justify-content: center;
-      padding-top: 1vh;
-      color: grey;
     }
     ion-item{
       max-height: 1.8vh !important;

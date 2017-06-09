@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {NavController, NavParams} from "ionic-angular";
+import {Component} from '@angular/core';
+import {NavController, NavParams, ViewController} from "ionic-angular";
 import {PartnerPageComponent} from "../partner-page-component";
 import {GoogleMapsAPIWrapper} from "angular2-google-maps/core";
 import {LocationService} from "../../../services/location-service";
@@ -21,12 +21,16 @@ export class ChooseLocationManuallyComponent {
   title = 'Standort auswählen';
   locationExact: boolean;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private _wrapper: GoogleMapsAPIWrapper, private locationService: LocationService) {
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              private _wrapper: GoogleMapsAPIWrapper,
+              private locationService: LocationService,
+              private viewCtrl: ViewController) {
     this.latitude = localStorage.getItem("latitude") || "52.5219";
     this.longitude = localStorage.getItem("longitude") || "13.4132";
   }
 
-  mapClicked($event: any){
+  mapClicked($event: any) {
     this.checkButtonVisible = true;
     this.markerVisible = true;
     this.longitude = $event.coords.lng.toFixed(4);
@@ -36,29 +40,33 @@ export class ChooseLocationManuallyComponent {
     this.setLocationData();
   }
 
-  setLocationData(){
+  setLocationData() {
     localStorage.setItem("latitude", this.latitude);
     localStorage.setItem("longitude", this.longitude);
     localStorage.setItem("locationAvailable", "true");
     localStorage.setItem("locationExact", "true");
   }
 
-  inputToSuggestions(){
+  inputToSuggestions() {
     this.locationExact = false;
   }
-  saveLocation(){
-    console.log(this.navParams.data);
+
+  saveLocation() {
     this.locationService.getLocationName(this.latitude, this.longitude).subscribe(
-      data => {
-        this.navCtrl.setRoot(PartnerPageComponent, this.navParams.data);
+      name => {
+        this.viewCtrl.dismiss({latitude: this.latitude, longitude: this.longitude, name: name});
       },
       err => {
-        this.navCtrl.setRoot(PartnerPageComponent, this.navParams.data);
+        this.viewCtrl.dismiss({latitude: this.latitude, longitude: this.longitude});
       }
     );
   }
 
-  parseFloat(string){
+  backButtonClicked() {
+    this.viewCtrl.dismiss();
+  }
+
+  parseFloat(string) {
     return parseFloat(string);
   }
 

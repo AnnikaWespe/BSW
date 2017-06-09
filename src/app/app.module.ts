@@ -12,7 +12,7 @@ import {Geolocation} from '@ionic-native/geolocation';
 
 import {AgmCoreModule} from 'angular2-google-maps/core';
 
-import {MyApp} from './app.component';
+import {BSWBonusApp} from './app.component';
 import {LoginPageComponent} from '../pages/login-page-component/login-component';
 import {OverviewPageComponent} from '../pages/overview-page-component/overview-component';
 import  {AddPurchasePageComponent} from '../pages/add-purchase-page-component/add-purchase-component';
@@ -53,7 +53,7 @@ import {InitService} from "./init-service";
 
 @NgModule({
   declarations: [
-    MyApp,
+    BSWBonusApp,
     OverviewPageComponent,
     AddPurchasePageComponent,
     LoginPageComponent,
@@ -79,7 +79,7 @@ import {InitService} from "./init-service";
     ChangePasswordModal,
   ],
   imports: [
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(BSWBonusApp),
     BrowserModule,
     FormsModule,
     HttpModule,
@@ -91,7 +91,7 @@ import {InitService} from "./init-service";
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
+    BSWBonusApp,
     OverviewPageComponent,
     AddPurchasePageComponent,
     LoginPageComponent,

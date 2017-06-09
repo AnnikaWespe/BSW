@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {Nav, NavController, NavParams, AlertController, LoadingController, ViewController} from 'ionic-angular';
+import {Nav, NavController, NavParams, AlertController, LoadingController, ViewController, Events} from 'ionic-angular';
 
 import {OverviewPageComponent} from "../overview-page-component/overview-component";
 import {ConfirmScanPageComponent} from "./confirm-scan-page-component/confirm-scan-page-component";
@@ -28,7 +28,8 @@ export class LoginPageComponent {
               public loginService: LoginService,
               public loadingCtrl: LoadingController,
               public viewCtrl: ViewController,
-              private ga: GoogleAnalytics) {
+              private ga: GoogleAnalytics,
+              public events: Events) {
     this.barcodeData = navParams.get('barcodeData');
     if (this.barcodeData) {
       this.inputNumberOrEmail = this.barcodeData.text;
@@ -93,7 +94,8 @@ export class LoginPageComponent {
       if (loginData.errors[0].beschreibung === "Erfolg") {
         localStorage.setItem("securityToken", loginData.response.securityToken);
         localStorage.setItem("mitgliedId", loginData.response.mitgliedId);
-
+        localStorage.setItem("mitgliedsnummer", loginData.response.mitgliedsnummer);
+        this.events.publish('userLoggedIn');
         if (this.navigatedFromPartnerDetail) {
           this.viewCtrl.dismiss(loginData.response.mitgliedId);
         }

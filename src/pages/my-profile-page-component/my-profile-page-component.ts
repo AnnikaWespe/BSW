@@ -15,6 +15,7 @@ export class MyProfilePageComponent {
   firstName: string;
   lastName: string;
   passwordChanged = false;
+  mitgliedsnummer;
 
 
   constructor(public navCtrl: NavController,
@@ -26,6 +27,7 @@ export class MyProfilePageComponent {
     }
     this.firstName = localStorage.getItem("firstName");
     this.lastName = localStorage.getItem("lastName");
+    this.mitgliedsnummer = localStorage.getItem("mitgliedsnummer");
   }
 
   getWebView(urlType, title) {

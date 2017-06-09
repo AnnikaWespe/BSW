@@ -7,6 +7,8 @@ import {LoginPageComponent} from "../../login-page-component/login-component";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {PartnerDetailService} from "./partner-detail-map/partner-detail-service";
 
+declare let window: any;
+
 @Component({
   selector: 'page-partner-detail-component',
   templateUrl: 'partner-detail-component.html'
@@ -19,7 +21,8 @@ export class PartnerDetailComponent {
   isInFavorites = false;
   favoritesByPfArray;
   partnerDetailsSubscription;
-  offlinePartner = false;
+  showDetails = true;
+
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -29,28 +32,32 @@ export class PartnerDetailComponent {
               private ga: GoogleAnalytics,
               private partnerDetailService: PartnerDetailService) {
     this.partner = this.navParams.get("partner");
-    if(this.partner.city){
-      this.offlinePartner = true;
-    }
     console.log("partner:", this.partner);
     this.pfNumber = this.partner.number;
     this.favoritesByPfArray = FavoritesData.favoritesByPfArray;
     if(this.favoritesByPfArray){
       this.isInFavorites = FavoritesData.isInFavorites(this.pfNumber);
     }
-    if (localStorage.getItem("disallowUserTracking") === "false") {
-      this.ga.trackView("Partner Detail Screen");
-      this.ga.trackEvent("Partner Detail Seite", "pf-Nummer: " + this.pfNumber + ", Name: " + this.partner.nameOrigin)
-    }
     this.partnerDetailsSubscription = partnerDetailService.getDetails(this.pfNumber).subscribe((res) => {
       if(res.json().errors[0].beschreibung === "Erfolg"){
         this.partnerDetails = res.json().response;
         console.log(this.partnerDetails);
+        if(this.partnerDetails.aktionen){
+          this.showDetails = false;
+          this.saveCampaignPictureAsBlob();
+        }
+        this.saveDetailLogoPictureAsBlob();
       }
       else{
         //TODO Error handling
       }
-    })
+    });
+
+    if (localStorage.getItem("disallowUserTracking") === "false") {
+      this.ga.trackView("Partner Detail Screen");
+      this.ga.trackEvent("Partner Detail Seite", "pf-Nummer: " + this.pfNumber + ", Name: " + this.partner.nameOrigin)
+    }
+    this.saveForOffline();
   }
 
   goToPartnerDetailMap() {
@@ -59,7 +66,13 @@ export class PartnerDetailComponent {
 
   checkIfUserLoggedIn() {
     if (localStorage.getItem("securityToken")) {
-      console.log("you're logged in")
+      let mitgliedsNummer = localStorage.getItem("mitgliedsnummer");
+      let url = this.partnerDetails.trackingUrl
+        .replace("#MGNUMMER#", "0016744807")
+        .replace("AVS9StAVS1St", "0016744807")
+        .replace("AVSMGNR9ST", "0016744807")
+        .replace("AVSMGPZ1ST", "0016744807");
+      window.open(url, '_system', 'location=yes')
     }
     else {
       this.showPromptUserNotLoggedIn();
@@ -124,7 +137,7 @@ export class PartnerDetailComponent {
       this.favoritesService.deleteFavorite(this.pfNumber).subscribe((res) => {
         let message = res.json().errors[0].beschreibung;
         if (message === "Erfolg") {
-          FavoritesData.deleteFavorite("35280000");
+          FavoritesData.deleteFavorite(this.pfNumber);
           this.isInFavorites = false;
         }
         else {
@@ -136,7 +149,7 @@ export class PartnerDetailComponent {
       this.favoritesService.rememberFavorite(this.pfNumber).subscribe((res) => {
         let message = res.json().errors[0].beschreibung;
         if (message === "Erfolg") {
-          FavoritesData.addFavorite("35280000");
+          FavoritesData.addFavorite(this.pfNumber);
           this.isInFavorites = true;
         }
         else {
@@ -144,5 +157,11 @@ export class PartnerDetailComponent {
         }
       })
     }
+  }
+
+  saveCampaignPictureAsBlob(){}
+  saveDetailLogoPictureAsBlob(){}
+  saveForOffline(){
+
   }
 }

@@ -13,13 +13,28 @@
 </ion-header>
 
 
-
 <ion-content>
   <img src="{{partnerDetails?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
-  <div class="offline-partner" *ngIf="offlinePartner">
-    <div class="partner-details">
-      <div class="titleAndButton">
-        <h3 class="title">{{partner?.nameOrigin}}</h3>
+  <div class="partner-details">
+    <div class="titleAndButton">
+      <h3 class="title" [class.small] = "partnerDetails?.trackingUrl && !partnerDetails?.ort">{{partnerDetails?.nameInternet}}</h3>
+
+      <div tappable class="btn-pill single-button" (click)='goToPartnerDetailMap()' *ngIf="partnerDetails?.ort && !partnerDetails?.trackingUrl">
+        <div class="btn-pill-text">
+          Zur Karte
+        </div>
+        <div class="centerMapIcon">
+          <div class="mapIcon"></div>
+        </div>
+      </div>
+
+      <div tappable class="btn-pill online-partner single-button" (click)="checkIfUserLoggedIn()" *ngIf="partnerDetails?.trackingUrl && !partnerDetails?.ort">
+        <div class="btn-pill-text">
+          Online einkaufen
+        </div>
+      </div>
+
+      <div class="buttonsWrapper" *ngIf="partnerDetails?.trackingUrl && partnerDetails?.ort">
         <div tappable class="btn-pill" (click)='goToPartnerDetailMap()'>
           <div class="btn-pill-text">
             Zur Karte
@@ -28,40 +43,63 @@
             <div class="mapIcon"></div>
           </div>
         </div>
-      </div>
-      <p class="grey">{{partnerDetails?.waBezeichnung}}</p>
-      <p class="grey">{{partnerDetails?.strasse}} {{partnerDetails?.hausnummer}}, {{partnerDetails?.ort}}</p>
-      <div class="description" *ngIf="partnerDetails?.kurzBeschreibung">
-        {{partnerDetails?.kurzBeschreibung}}
-      </div>
-    </div>
-  </div>
-
-  <div class="online-partner" *ngIf="!offlinePartner">
-    <div class="partner-details">
-      <div class="titleAndButton">
-        <h3 class="title small">{{partner?.nameOrigin}}</h3>
-          <div tappable class="btn-pill online-partner" (click)="checkIfUserLoggedIn()">
-            <div class="btn-pill-text">
-              Online einkaufen
-            </div>
+        <div tappable class="btn-pill online-partner" (click)="checkIfUserLoggedIn()">
+          <div class="btn-pill-text">
+            Online einkaufen
           </div>
+        </div>
       </div>
-      <p class="grey">{{partnerDetails?.waBezeichnung}}</p>
-      <div class = "paymentIcons">
-        <div class = "paymentIcon girocard"></div>
-        <div class = "paymentIcon maestro"></div>
-        <div class = "paymentIcon masterCard"></div>
-        <div class = "paymentIcon klarna"></div>
-        <div class = "paymentIcon vorkasse"></div>
-        <div class = "paymentIcon paypal"></div>
 
+    </div>
+
+
+    <div *ngIf="partnerDetails?.waEb">
+      <span class="blue">{{partnerDetails?.waEb}}</span>
+      <span class="grey">{{partnerDetails?.waBezeichnung}}</span>
+    </div>
+    <div *ngIf="partnerDetails?.wbEb">
+      <span class="blue">{{partnerDetails?.wbEb}}</span>
+      <span class="grey">{{partnerDetails?.wbBezeichnung}}</span>
+    </div>
+    <div *ngIf="partnerDetails?.wcEb">
+      <span class="blue">{{partnerDetails?.wcEb}}</span>
+      <span class="grey">{{partnerDetails?.wcBezeichnung}}</span>
+    </div>
+    <div *ngIf="partnerDetails?.aktionsbonus">
+      <span class="blue">{{partnerDetails?.aktionsbonus}}</span>
+      <span class="grey">Aktionsbonus</span>
+    </div>
+    <p class="grey" *ngIf="partnerDetails?.ort">{{partnerDetails?.strasse}} {{partnerDetails?.hausnummer}},
+      {{partnerDetails?.ort}}</p>
+    <div class="description">
+      <div *ngIf="partnerDetails?.kurzBeschreibung"
+           [innerHtml]="partnerDetails?.kurzBeschreibung">
       </div>
-      <div class="description" *ngIf="partnerDetails?.kurzBeschreibung">
-        {{partnerDetails?.kurzBeschreibung}}
+      <span class="toggleDisplay showMore" *ngIf="!showDetails" tappable (click)="showDetails = !showDetails">Mehr anzeigen</span>
+      <span class="toggleDisplay showLess" *ngIf="showDetails && partnerDetails?.aktionen" tappable (click)="showDetails = !showDetails">Weniger anzeigen</span>
+    </div>
+    <div *ngIf="showDetails">
+      <div *ngIf="partnerDetails?.abwicklungOnline">
+        <span class="blue title">Vorteil Online</span>
+        <div class="description" [innerHtml]="partnerDetails?.abwicklungOnline"></div>
+      </div>
+      <div *ngIf="partnerDetails?.abwicklungVorort">
+        <span class="blue title">Vorteil Vorort</span>
+        <div class="description" *ngIf="partnerDetails?.abwicklungVorort"
+             [innerHtml]="partnerDetails?.abwicklungVorort"></div>
       </div>
     </div>
   </div>
+
+  <!--<div class = "paymentIcons">
+    <div class = "paymentIcon girocard"></div>
+    <div class = "paymentIcon maestro"></div>
+    <div class = "paymentIcon masterCard"></div>
+    <div class = "paymentIcon klarna"></div>
+    <div class = "paymentIcon vorkasse"></div>
+    <div class = "paymentIcon paypal"></div>
+  </div>-->
+
 
   <div *ngIf="partnerDetails?.aktionen">
     <ion-row class="title-row">
