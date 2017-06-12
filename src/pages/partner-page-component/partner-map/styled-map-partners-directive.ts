@@ -101,19 +101,20 @@ export class StyledMapPartnersDirective {
           }
           offlinePartners.forEach((partner, index) => {
             let observable = Observable.create(observer => {
-              this.mapMarkerService.getImageAsBase64(partner.logoUrlForGMap, (imageAsBase64, validImage) => {
-                let bounds = new google.maps.LatLngBounds();
-                let marker = this.mapMarkerService.getMarker(partner, imageAsBase64, validImage, map, bounds);
-                this.markers.push(marker);
-                google.maps.event.addListener(marker, 'click', (function (marker) {
-                  //TODO: navigate to corresponding partner
-                  return function () {
-                    this.navCtrl.push(PartnerDetailComponent);
-                  }
-                })(marker));
-                observer.next(marker);
-                observer.complete();
-              });
+              this.mapMarkerService.getImageAsBase64("StyledMapPartnersDirective", partner.logoUrlForGMap,
+                (imageAsBase64, validImage) => {
+                  let bounds = new google.maps.LatLngBounds();
+                  let marker = this.mapMarkerService.getMarker(partner, imageAsBase64, validImage, map, bounds);
+                  this.markers.push(marker);
+                  google.maps.event.addListener(marker, 'click', (function (marker) {
+                    //TODO: navigate to corresponding partner
+                    return function () {
+                      this.navCtrl.push(PartnerDetailComponent);
+                    }
+                  })(marker));
+                  observer.next(marker);
+                  observer.complete();
+                });
             });
             observables.push(observable);
           });
@@ -165,7 +166,7 @@ export class StyledMapPartnersDirective {
       partners.forEach((partner, index) => {
         if (partner && partner.location) {
           promises.push(new Promise((resolve, reject) => {
-            this.mapMarkerService.getImageAsBase64(partner.logoUrlForGMap, (imageAsBase64, validImage) => {
+            this.mapMarkerService.getImageAsBase64("StyledMapPartnersDirective", partner.logoUrlForGMap, (imageAsBase64, validImage) => {
               let marker = this.mapMarkerService.getMarker(partner, imageAsBase64, validImage, map, bounds);
               this.markers.push(marker);
               google.maps.event.addListener(marker, 'click', (function (marker) {

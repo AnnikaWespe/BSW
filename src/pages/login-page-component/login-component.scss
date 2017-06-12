@@ -59,9 +59,11 @@ input.text-input.text-input-md.ng-pristine.ng-valid{
     font-size: larger;
     position: absolute;
     padding: 0 8vw;
+    background-color: map-get($colors, light);
   }
   div.card-number-wrapper{
     position: relative;
+
   }
   button.camera{
     position: absolute;

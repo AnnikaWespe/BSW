@@ -6,8 +6,10 @@ import {FavoritesService} from "../../../services/favorites-service";
 import {LoginPageComponent} from "../../login-page-component/login-component";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {PartnerDetailService} from "./partner-detail-map/partner-detail-service";
+import {MapMarkerService} from "../../../services/map-marker-service";
 
 declare let window: any;
+declare let cordova: any;
 
 @Component({
   selector: 'page-partner-detail-component',
@@ -30,38 +32,48 @@ export class PartnerDetailComponent {
               public alertCtrl: AlertController,
               public modalCtrl: ModalController,
               private ga: GoogleAnalytics,
-              private partnerDetailService: PartnerDetailService) {
-    this.partner = this.navParams.get("partner");
+              private partnerDetailService: PartnerDetailService,
+              private mapMarkerService: MapMarkerService) {
     console.log("partner:", this.partner);
+    this.setParameters();
+    this.getPartnerDetails();
+    this.googleAnalyticsTracking();
+  }
+
+  setParameters() {
+    this.partner = this.navParams.get("partner");
     this.pfNumber = this.partner.number;
     this.favoritesByPfArray = FavoritesData.favoritesByPfArray;
-    if(this.favoritesByPfArray){
+    if (this.favoritesByPfArray) {
       this.isInFavorites = FavoritesData.isInFavorites(this.pfNumber);
     }
-    this.partnerDetailsSubscription = partnerDetailService.getDetails(this.pfNumber).subscribe((res) => {
-      if(res.json().errors[0].beschreibung === "Erfolg"){
+  }
+
+  getPartnerDetails() {
+    this.partnerDetailsSubscription = this.partnerDetailService.getDetails(this.pfNumber).subscribe((res) => {
+      if (res.json().errors[0].beschreibung === "Erfolg") {
         this.partnerDetails = res.json().response;
         console.log(this.partnerDetails);
-        if(this.partnerDetails.aktionen){
+        if (this.partnerDetails.aktionen) {
           this.showDetails = false;
-          this.saveCampaignPictureAsBlob();
         }
-        this.saveDetailLogoPictureAsBlob();
+        this.saveForOfflineAndDisplayImages();
       }
-      else{
+      else {
         //TODO Error handling
       }
     });
+  }
 
+  googleAnalyticsTracking() {
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView("Partner Detail Screen");
       this.ga.trackEvent("Partner Detail Seite", "pf-Nummer: " + this.pfNumber + ", Name: " + this.partner.nameOrigin)
     }
-    this.saveForOffline();
   }
 
   goToPartnerDetailMap() {
-    this.navCtrl.push(PartnerDetailMap, {partner: this.partner});
+    this.navCtrl.push(PartnerDetailMap, {partnerDetails: this.partnerDetails, partner: this.partner});
   }
 
   checkIfUserLoggedIn() {
@@ -72,7 +84,7 @@ export class PartnerDetailComponent {
         .replace("AVS9StAVS1St", "0016744807")
         .replace("AVSMGNR9ST", "0016744807")
         .replace("AVSMGPZ1ST", "0016744807");
-      window.open(url, '_system', 'location=yes')
+      cordova.InAppBrowser.open(url, '_system', 'location=yes')
     }
     else {
       this.showPromptUserNotLoggedIn();
@@ -159,9 +171,20 @@ export class PartnerDetailComponent {
     }
   }
 
-  saveCampaignPictureAsBlob(){}
-  saveDetailLogoPictureAsBlob(){}
-  saveForOffline(){
+  saveForOfflineAndDisplayImages() {
+    let savePicturePromises = [];
+    if (this.partnerDetails.aktionen && this.partnerDetails.aktionen[0].bildUrl) {
+      savePicturePromises.push(new Promise((resolve, reject) => {
+        this.mapMarkerService.getImageAsBase64("PartnerDetailComponent", this.partnerDetails.aktionen[0].bildUrl, (imageAsBase64, validImage) => {
+
+        })
+      }));
+      savePicturePromises.push(new Promise((resolve, reject) => {
+        this.mapMarkerService.getImageAsBase64("PartnerDetailComponent", this.partnerDetails.aktionen[0].bildUrl, (imageAsBase64, validImage) => {
+
+        })
+      }));
+    }
 
   }
 }

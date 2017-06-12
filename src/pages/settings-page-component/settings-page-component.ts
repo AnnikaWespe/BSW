@@ -9,12 +9,10 @@ import {WebviewComponent} from "../webview/webview";
 export class SettingsPageComponent implements OnDestroy{
 
   favoritesPush = false;
-  localPush = false;
   accountInfoPush = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.favoritesPush = (localStorage.getItem("favoritesPush")=="true");
-    this.localPush = (localStorage.getItem("localPush")=="true");
     this.accountInfoPush = (localStorage.getItem("accountInfoPush")=="true");
   }
 
@@ -26,7 +24,6 @@ export class SettingsPageComponent implements OnDestroy{
 
   ngOnDestroy(){
     localStorage.setItem("favoritesPush", this.favoritesPush.toString());
-    localStorage.setItem("localPush", this.localPush.toString());
     localStorage.setItem("accountInfoPush", this.accountInfoPush.toString());
   }
 }

@@ -1,5 +1,8 @@
 import {Component, ViewChild} from '@angular/core';
-import {Nav, NavController, NavParams, AlertController, LoadingController, ViewController, Events} from 'ionic-angular';
+import {
+  Nav, NavController, NavParams, AlertController, LoadingController, ViewController, Events,
+  Keyboard
+} from 'ionic-angular';
 
 import {OverviewPageComponent} from "../overview-page-component/overview-component";
 import {ConfirmScanPageComponent} from "./confirm-scan-page-component/confirm-scan-page-component";
@@ -7,6 +10,8 @@ import {BarcodeData} from "./confirm-scan-page-component/BarcodeData";
 import {WebviewComponent} from "../webview/webview";
 import {LoginService} from "./login-service";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
+
+declare let window: any;
 
 @Component({
   selector: 'page-login-component',
@@ -19,6 +24,7 @@ export class LoginPageComponent {
   inputNumberOrEmail: any;
   password = "";
   loading;
+  showLogo = true;
 
   navigatedFromPartnerDetail;
 
@@ -29,12 +35,15 @@ export class LoginPageComponent {
               public loadingCtrl: LoadingController,
               public viewCtrl: ViewController,
               private ga: GoogleAnalytics,
-              public events: Events) {
+              public events: Events,
+              public keyboard: Keyboard) {
     this.barcodeData = navParams.get('barcodeData');
     if (this.barcodeData) {
       this.inputNumberOrEmail = this.barcodeData.text;
     }
-
+    this.keyboard.onClose(() => {
+      this.showLogo = true;
+    })
     this.ga.trackView('Login Screen');
     this.navigatedFromPartnerDetail = navParams.get("navigatedFromPartnerDetail");
   }
@@ -51,7 +60,7 @@ export class LoginPageComponent {
     if (this.navigatedFromPartnerDetail) {
       this.viewCtrl.dismiss("");
     }
-    else{
+    else {
       this.navCtrl.setRoot(OverviewPageComponent);
     }
   }
@@ -157,6 +166,13 @@ export class LoginPageComponent {
     prompt.present();
   }
 
+  keyboardCheck() {
+    console.log("keyboardCheck");
+    if (this.keyboard.isOpen) {
+      this.showLogo = false;
+    }
+  }
+
   showPromptRequestSent() {
     let prompt = this.alertCtrl.create({
       title: 'Ein neues Passwort wurde angefordert.',
@@ -228,5 +244,6 @@ export class LoginPageComponent {
 
     this.loading.present();
   }
+
 }
 

@@ -38,7 +38,7 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
       bounds.extend({lat: Number(localStorage.getItem("latitude")), lng: Number(localStorage.getItem("longitude"))});
     }
     map.fitBounds(bounds);
-    this.mapMarkerService.getImageAsBase64(this.partner.logoUrlForGMap, (imageAsBase64, validImage) => {
+    this.mapMarkerService.getImageAsBase64("StyledMapPartnersDirective", this.partner.logoUrlForGMap, (imageAsBase64, validImage) => {
       let marker = this.mapMarkerService.getMarker(this.partner, imageAsBase64, validImage, map, bounds);
       this.initializeDirectionService();
     })

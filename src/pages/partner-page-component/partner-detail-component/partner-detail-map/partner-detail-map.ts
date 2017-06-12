@@ -22,6 +22,7 @@ export class PartnerDetailMap {
   locationExact = false;
 
 
+  partnerDetails: any;
   partner: any;
   pfNumber: string;
   isInFavorites = true;
@@ -31,15 +32,16 @@ export class PartnerDetailMap {
               public navParams: NavParams,
               public favoritesService: FavoritesService,
               public alertCtrl: AlertController) {
+    this.partnerDetails = navParams.get("partnerDetails");
     this.partner = navParams.get("partner");
-    console.log(this.partner);
+    console.log(this.partnerDetails);
     if (localStorage.getItem("locationExact") === "true"){
       this.currentLatitude = parseFloat(localStorage.getItem("latitude"));
       this.currentLongitude = parseFloat(localStorage.getItem("longitude"));
       this.locationExact = true;
     }
     console.log("PartnerDetailMap: ", this.currentLatitude + " " + this.currentLongitude);
-    this.pfNumber = this.partner.number;
+    this.pfNumber = this.partnerDetails.pfNummer;
     this.isInFavorites = FavoritesData.isInFavorites(this.pfNumber);
   }
 

@@ -55,8 +55,9 @@ export class MapMarkerService {
     return marker;
   }
 
-  public getImageAsBase64(imageUrl, callback) {
-    if (imageUrl === "https://www.bsw.de/upload/bsw/partner-logo.png") {
+
+  public getImageAsBase64(originPage, imageUrl, callback) {
+    if (imageUrl === "https://www.bsw.de/upload/bsw/partner-logo.png" && originPage === "StyledMapPartnersDirective") {
       callback("", false)
     }
     else {

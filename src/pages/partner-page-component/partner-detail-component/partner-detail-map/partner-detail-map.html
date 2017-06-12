@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar primary>
     <ion-title>
-      Matt Optik
+      {{partnerDetails?.nameInternet}}
     </ion-title>
     <ion-buttons end>
       <button (click)="toggleFavorites()">
@@ -60,9 +60,9 @@
   </div>
 
   <div class="adress-div">
-    <h3>Matt Optik</h3>
-    <p>Augenoptik, Brillen, Kontaktlinsen, Ferngläser</p>
-    <p>Karlsplatz 12, 12345 Eschenbach</p>
+    <h3>{{partnerDetails?.nameInternet}}</h3>
+    <p>{{partnerDetails?.kurzBeschreibung}}</p>
+    <p>{{partnerDetails?.strasse}} {{partnerDetails?.hausnummer}}, {{partnerDetails?.ort}}</p>
   </div>
 
 </ion-content>
