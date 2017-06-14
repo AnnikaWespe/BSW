@@ -171,6 +171,7 @@ export class StyledMapPartnersDirective {
               this.markers.push(marker);
               google.maps.event.addListener(marker, 'click', (function (marker) {
                 return function () {
+                  //TODO hand over partner
                   this.navCtrl.push(PartnerDetailComponent);
                 }
               })(marker));

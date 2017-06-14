@@ -219,10 +219,13 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
               this.getPartners();
             }
             else {
-              this.noPartnersToDisplay = true;
+              if(this.displayedPartners.length == 0){
+                this.noPartnersToDisplay = true;
+              }
             }
             return;
           }
+          this.showTryAgainToGetPartnersButton = false;
           this.getDifferentCategories(returnedObject);
         },
         error => {

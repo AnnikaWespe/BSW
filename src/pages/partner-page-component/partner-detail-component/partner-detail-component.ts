@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {AlertController, NavController, NavParams, ModalController} from 'ionic-angular';
 import {PartnerDetailMap} from "./partner-detail-map/partner-detail-map";
 import {FavoritesData} from "../../../services/favorites-data";
@@ -7,6 +7,7 @@ import {LoginPageComponent} from "../../login-page-component/login-component";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {PartnerDetailService} from "./partner-detail-map/partner-detail-service";
 import {MapMarkerService} from "../../../services/map-marker-service";
+import {SavePartnersService} from "./save-partners-service";
 
 declare let window: any;
 declare let cordova: any;
@@ -15,7 +16,7 @@ declare let cordova: any;
   selector: 'page-partner-detail-component',
   templateUrl: 'partner-detail-component.html'
 })
-export class PartnerDetailComponent {
+export class PartnerDetailComponent implements OnDestroy {
 
   partner: any;
   pfNumber: string;
@@ -33,15 +34,25 @@ export class PartnerDetailComponent {
               public modalCtrl: ModalController,
               private ga: GoogleAnalytics,
               private partnerDetailService: PartnerDetailService,
-              private mapMarkerService: MapMarkerService) {
-    console.log("partner:", this.partner);
+              private mapMarkerService: MapMarkerService,
+              private savePartnersService: SavePartnersService) {
     this.setParameters();
-    this.getPartnerDetails();
-    this.googleAnalyticsTracking();
+    if(!this.partnerDetails){
+      this.getPartnerDetails();
+    }
+    this.googleAnalyticsTrackingOpenDetailScreen();
+  }
+
+  ngOnDestroy() {
+    if (this.partnerDetailsSubscription) {
+      this.partnerDetailsSubscription.unsubscribe;
+    }
   }
 
   setParameters() {
     this.partner = this.navParams.get("partner");
+    this.partnerDetails = this.navParams.get("partnerDetails");
+    console.log("partner:", this.partner);
     this.pfNumber = this.partner.number;
     this.favoritesByPfArray = FavoritesData.favoritesByPfArray;
     if (this.favoritesByPfArray) {
@@ -57,18 +68,46 @@ export class PartnerDetailComponent {
         if (this.partnerDetails.aktionen) {
           this.showDetails = false;
         }
-        this.saveForOfflineAndDisplayImages();
+        this.saveForOffline();
       }
       else {
-        //TODO Error handling
+        this.alertSomethingWentWrong();
       }
     });
   }
 
-  googleAnalyticsTracking() {
+  alertSomethingWentWrong() {
+    let prompt = this.alertCtrl.create({
+      title: 'Leider ist der Aufruf fehlgeschlagen.',
+      message: "Wollen Sie es erneut versuchen?",
+      buttons: [
+        {
+          text: 'Ja',
+          handler: data => {
+            this.getPartnerDetails();
+          }
+        },
+        {
+          text: 'Nein, zurück zur Übersicht',
+          handler: data => {
+            this.navCtrl.pop();
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
+
+  googleAnalyticsTrackingOpenDetailScreen() {
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView("Partner Detail Screen");
       this.ga.trackEvent("Partner Detail Seite", "pf-Nummer: " + this.pfNumber + ", Name: " + this.partner.nameOrigin)
+    }
+  }
+
+  googleAnalyticsTrackingGoToShop() {
+    if (localStorage.getItem("disallowUserTracking") === "false") {
+      this.ga.trackEvent("Online Shop geöffnet", "pf-Nummer: " + this.pfNumber + ", Name: " + this.partner.nameOrigin)
     }
   }
 
@@ -76,15 +115,19 @@ export class PartnerDetailComponent {
     this.navCtrl.push(PartnerDetailMap, {partnerDetails: this.partnerDetails, partner: this.partner});
   }
 
-  checkIfUserLoggedIn() {
-    if (localStorage.getItem("securityToken")) {
-      let mitgliedsNummer = localStorage.getItem("mitgliedsnummer");
+  goToPartnerShop(goEvenIfUserNotLoggedIn) {
+    if (localStorage.getItem("securityToken") || goEvenIfUserNotLoggedIn) {
       let url = this.partnerDetails.trackingUrl
-        .replace("#MGNUMMER#", "0016744807")
-        .replace("AVS9StAVS1St", "0016744807")
-        .replace("AVSMGNR9ST", "0016744807")
-        .replace("AVSMGPZ1ST", "0016744807");
-      cordova.InAppBrowser.open(url, '_system', 'location=yes')
+      if (!goEvenIfUserNotLoggedIn) {
+        let idNumber = localStorage.getItem("mitgliedsnummer");
+        url = url
+          .replace("#MGNUMMER#", "0016744807")
+          .replace("AVS9StAVS1St", "0016744807")
+        // .replace("AVSMGNR9ST", "0016744807")
+        // .replace("AVSMGPZ1ST", "0016744807");
+      }
+      cordova.InAppBrowser.open(url, '_system', 'location=yes');
+      this.googleAnalyticsTrackingGoToShop();
     }
     else {
       this.showPromptUserNotLoggedIn();
@@ -119,14 +162,8 @@ export class PartnerDetailComponent {
           text: 'Jetzt einloggen',
           handler: () => {
             let profileModal = this.modalCtrl.create(LoginPageComponent, {navigatedFromPartnerDetail: true});
-            profileModal.onDidDismiss(data => {
-              //TODO: navigate to partner page and track event with GA; differ between case where data is passed on or not
-
-              if (data) {
-              }
-              else {
-              }
-
+            profileModal.onDidDismiss(() => {
+              this.goToPartnerShop(false);
             });
             profileModal.present();
           }
@@ -134,8 +171,7 @@ export class PartnerDetailComponent {
         {
           text: 'Trotzdem zum Shop',
           handler: () => {
-            //TODO: navigate to partner page and track event with GA
-
+            this.goToPartnerShop(true);
           }
         }
       ]
@@ -150,6 +186,7 @@ export class PartnerDetailComponent {
         let message = res.json().errors[0].beschreibung;
         if (message === "Erfolg") {
           FavoritesData.deleteFavorite(this.pfNumber);
+          this.savePartnersService.togglePartnerType(this.pfNumber, "lastVisitedPartners");
           this.isInFavorites = false;
         }
         else {
@@ -162,6 +199,7 @@ export class PartnerDetailComponent {
         let message = res.json().errors[0].beschreibung;
         if (message === "Erfolg") {
           FavoritesData.addFavorite(this.pfNumber);
+          this.savePartnersService.togglePartnerType(this.pfNumber, "favorites");
           this.isInFavorites = true;
         }
         else {
@@ -171,20 +209,20 @@ export class PartnerDetailComponent {
     }
   }
 
-  saveForOfflineAndDisplayImages() {
-    let savePicturePromises = [];
+  saveForOffline() {
+    let partnerType = (this.isInFavorites) ? "favorites" : "lastVisitedPartners";
     if (this.partnerDetails.aktionen && this.partnerDetails.aktionen[0].bildUrl) {
-      savePicturePromises.push(new Promise((resolve, reject) => {
-        this.mapMarkerService.getImageAsBase64("PartnerDetailComponent", this.partnerDetails.aktionen[0].bildUrl, (imageAsBase64, validImage) => {
-
-        })
-      }));
-      savePicturePromises.push(new Promise((resolve, reject) => {
-        this.mapMarkerService.getImageAsBase64("PartnerDetailComponent", this.partnerDetails.aktionen[0].bildUrl, (imageAsBase64, validImage) => {
-
-        })
-      }));
+      console.log(this.partnerDetails.aktionen[0].bildUrl);
+      this.mapMarkerService.getImageAsBase64("PartnerDetailComponent", this.partnerDetails.aktionen[0].bildUrl, (imageAsBase64, validImage) => {
+        this.savePartnersService.saveCampaignImage(this.pfNumber, imageAsBase64);
+        console.log(imageAsBase64);
+      })
     }
-
+    this.mapMarkerService.getImageAsBase64("PartnerDetailComponent", this.partner.logoUrl, (imageAsBase64, validImage) => {
+      this.savePartnersService.saveLogo(this.pfNumber, imageAsBase64);
+      console.log(imageAsBase64);
+    })
+    this.savePartnersService.savePartnerAndPartnerDetails(this.pfNumber, this.partner, this.partnerDetails, partnerType)
   }
+
 }

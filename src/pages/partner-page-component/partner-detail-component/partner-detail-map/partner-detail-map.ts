@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {AlertController, NavController, NavParams} from 'ionic-angular';
 import {FavoritesData} from "../../../../services/favorites-data";
 import {FavoritesService} from "../../../../services/favorites-service";
+import {SavePartnersService} from "../save-partners-service";
 
 declare let device: any;
 
@@ -31,11 +32,12 @@ export class PartnerDetailMap {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public favoritesService: FavoritesService,
-              public alertCtrl: AlertController) {
+              public alertCtrl: AlertController,
+              private savePartnersService: SavePartnersService) {
     this.partnerDetails = navParams.get("partnerDetails");
     this.partner = navParams.get("partner");
     console.log(this.partnerDetails);
-    if (localStorage.getItem("locationExact") === "true"){
+    if (localStorage.getItem("locationExact") === "true") {
       this.currentLatitude = parseFloat(localStorage.getItem("latitude"));
       this.currentLongitude = parseFloat(localStorage.getItem("longitude"));
       this.locationExact = true;
@@ -67,6 +69,7 @@ export class PartnerDetailMap {
         let message = res.json().errors[0].beschreibung;
         if (message === "Erfolg") {
           FavoritesData.deleteFavorite(this.pfNumber);
+          this.savePartnersService.togglePartnerType(this.pfNumber, "lastVisitedPartners");
           this.isInFavorites = false;
         }
         else {
@@ -79,6 +82,7 @@ export class PartnerDetailMap {
         let message = res.json().errors[0].beschreibung;
         if (message === "Erfolg") {
           FavoritesData.addFavorite(this.pfNumber);
+          this.savePartnersService.togglePartnerType(this.pfNumber, "favorites");
           this.isInFavorites = true;
         }
         else {
@@ -88,8 +92,8 @@ export class PartnerDetailMap {
     }
   }
 
-  openExternalMapApp(){
-    if(device.platform == "Android"){
+  openExternalMapApp() {
+    if (device.platform == "Android") {
       window.open("geo:49,10?q=48,11(Hier wollen Sie hin)", '_system', 'location=yes');
     }
     else {
@@ -101,10 +105,12 @@ export class PartnerDetailMap {
     this.travelTimeAvailable = true;
     this.travelTimePublic = travelTimePublic;
   }
+
   handleTravelTimeCarUpdated(travelTimeCar) {
     this.travelTimeAvailable = true;
     this.travelTimeCar = travelTimeCar;
   }
+
   handleTravelTimePedestrianUpdated(travelTimePedestrian) {
     this.travelTimeAvailable = true;
     this.travelTimePedestrian = travelTimePedestrian;

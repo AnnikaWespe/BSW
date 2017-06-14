@@ -33,12 +33,13 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   waitingForResults = true;
   onlinePartners: any[];
   offlinePartners: any[];
-  favoritePartners: any[];
-  lastVisitedPartners: any[];
+  favoritePartners = [];
+  lastVisitedPartners = [];
   searchInterfaceOpen = false;
 
   getPartnersSubscription: any;
   getLocationSubscription: any;
+  favoritesFromCache = false;
 
 
   constructor(public navCtrl: NavController,
@@ -52,6 +53,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     this.checkIfGPSEnabled();
     this.getFavoriteAndLastVisitedPartners();
     this.getBonusData();
+    this.getLastVisitedPartners();
     if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
       this.checkForPromptRateAppInStore()
     }
@@ -69,9 +71,9 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     }
   }
 
-  getBonusData(){
+  getBonusData() {
     this.bonusService.getBonusData().subscribe((res) => {
-      if(res.json().errors[0].beschreibung === "Erfolg"){
+      if (res.json().errors[0].beschreibung === "Erfolg") {
         let response = res.json().response;
         this.bonusDataAvailable = true;
         this.bonusThisYear = response.bonusGesamtJahr;
@@ -84,24 +86,59 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   getFavoriteAndLastVisitedPartners() {
     if (this.userLoggedIn) {
       this.favoritesService.getFavorites().subscribe((res) => {
-        let errorMessage = res.json().errors[0].beschreibung;
-        if (errorMessage === "Erfolg") {
-          let favoritesByPf = res.json().response.favoriten.map((obj) => {
-            return obj.pfNummer;
-          });
-          FavoritesData.favoritesByPfArray = favoritesByPf;
-          this.partnerService.getPartners(this.location, 0, "", false, 10000, favoritesByPf).subscribe((res) => {
-            this.favoritePartners = res.json().contentEntities.slice(0, 5);
-            this.waitingForResults = false;
-          })
-        }
-        else if (errorMessage === "Login fehlgeschlagen") {
-          //localStorage.removeItem("securityToken");
-          //this.navCtrl.setRoot(LoginPageComponent);
-          console.log(errorMessage);
-        }
-      })
+          this.getFavoritesByPfArray(res);
+        },
+        error => {
+          this.displayFavoritesFromCache();
+        });
     }
+  }
+
+  getFavoritesByPfArray(res) {
+    let errorMessage = res.json().errors[0].beschreibung;
+    if (errorMessage === "Erfolg") {
+      let favoritesByPf = res.json().response.favoriten.map((obj) => {
+        return obj.pfNummer;
+      });
+      FavoritesData.favoritesByPfArray = favoritesByPf;
+      this.partnerService.getPartners(this.location, 0, "", false, 10000, favoritesByPf).subscribe((res) => {
+          this.favoritePartners = res.json().contentEntities.slice(0, 5);
+          this.waitingForResults = false;
+        },
+        error => {
+          this.displayFavoritesFromCache();
+        })
+    }
+    else if (errorMessage === "Login fehlgeschlagen") {
+      this.getUserToLogIn(errorMessage);
+    }
+  }
+
+  displayFavoritesFromCache() {
+    let cachedFavoritesArray = JSON.parse(localStorage.getItem("savedFavorites")) || [];
+    this.favoritesFromCache = true;
+    for (let pfNumber of cachedFavoritesArray) {
+      let partner = JSON.parse(localStorage.getItem(pfNumber + "partner"));
+      partner.logoUrl = localStorage.getItem(pfNumber + "logo");
+      this.favoritePartners.push(partner);
+    }
+  }
+
+  getLastVisitedPartners() {
+    let lastVisitedPartnersArray = JSON.parse(localStorage.getItem("savedLastVisitedPartners")) || [];
+    console.log(localStorage.getItem("savedLastVisitedPartners"));
+    for (let pfNumber of lastVisitedPartnersArray) {
+      console.log(localStorage.getItem(pfNumber + "logo"));
+      let partner = JSON.parse(localStorage.getItem(pfNumber + "partner"));
+      partner.logoString = localStorage.getItem(pfNumber + "logo");
+      this.lastVisitedPartners.push(partner);
+    }
+  }
+
+  getUserToLogIn(errorMessage) {
+    localStorage.removeItem("securityToken");
+    this.navCtrl.setRoot(LoginPageComponent);
+    console.log(errorMessage);
   }
 
   checkIfGPSEnabled() {
@@ -183,6 +220,12 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   showPartner(partner = 0) {
     this.navCtrl.push(PartnerDetailComponent, {partner: partner})
   }
+
+  showCachedPartner(partner) {
+    let partnerDetails = JSON.parse(localStorage.getItem(partner.number + "partnerDetails"));
+    this.navCtrl.push(PartnerDetailComponent, {partner: partner, partnerDetails: partnerDetails})
+  }
+
 
   getPartnerFromPfNumber(number) {
     return this.partnerService.getPartners(this.location, 0, number, false)

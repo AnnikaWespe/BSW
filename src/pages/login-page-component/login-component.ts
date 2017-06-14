@@ -56,9 +56,9 @@ export class LoginPageComponent {
     this.navCtrl.push(WebviewComponent, {urlType: urlType, title: title})
   }
 
-  pushOverviewPage() {
+  loadNextPageWithoutLogin() {
     if (this.navigatedFromPartnerDetail) {
-      this.viewCtrl.dismiss("");
+      this.viewCtrl.dismiss();
     }
     else {
       this.navCtrl.setRoot(OverviewPageComponent);
@@ -106,10 +106,10 @@ export class LoginPageComponent {
         localStorage.setItem("mitgliedsnummer", loginData.response.mitgliedsnummer);
         this.events.publish('userLoggedIn');
         if (this.navigatedFromPartnerDetail) {
-          this.viewCtrl.dismiss(loginData.response.mitgliedId);
+          this.viewCtrl.dismiss();
         }
         else {
-          this.pushOverviewPage();
+          this.navCtrl.setRoot(OverviewPageComponent);
         }
         console.log("Login: " + loginData.errors[0].beschreibung);
         if (localStorage.getItem("disallowUserTracking") === "false") {
@@ -205,12 +205,7 @@ export class LoginPageComponent {
         {
           text: 'Anfordern',
           handler: data => {
-            /*if (User.isValid(data.username, data.password)) {
-             // logged in!
-             } else {
-             // invalid login
-             return false;
-             }*/
+            //TODO Passwort anfordern
           }
         }
       ]

@@ -49,6 +49,8 @@ import {ChangePasswordService} from "../pages/my-profile-page-component/ChangePa
 import {PartnerDetailService} from "../pages/partner-page-component/partner-detail-component/partner-detail-map/partner-detail-service";
 import {BonusService} from "../pages/overview-page-component/bonus-service";
 import {InitService} from "./init-service";
+import {SavePartnersService} from "../pages/partner-page-component/partner-detail-component/save-partners-service";
+import {PartnerTableCachedComponent} from "../pages/overview-page-component/partner-table-cached/partner-table-cached";
 
 
 @NgModule({
@@ -77,6 +79,7 @@ import {InitService} from "./init-service";
     SafePipe,
     UserSpecificPartnersComponent,
     ChangePasswordModal,
+    PartnerTableCachedComponent,
   ],
   imports: [
     IonicModule.forRoot(BSWBonusApp),
@@ -108,6 +111,7 @@ import {InitService} from "./init-service";
     TypeaheadComponent,
     WebviewComponent,
     UserSpecificPartnersComponent,
+    PartnerTableCachedComponent,
     ChangePasswordModal,
   ],
 
@@ -126,6 +130,7 @@ import {InitService} from "./init-service";
     MapMarkerService,
     ChangePasswordService,
     PartnerDetailService,
+    SavePartnersService,
     BonusService,
     InitService,
     GoogleMapsAPIWrapper,

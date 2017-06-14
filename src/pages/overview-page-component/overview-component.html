@@ -1,6 +1,6 @@
 <ion-header *ngIf="searchInterfaceOpen">
   <typeahead (getPartnersWithSearchTermEmitter)="loadPartnerPage($event)"
-               (closeSearchInterfaceEmitter)="searchInterfaceOpen = false"></typeahead>
+             (closeSearchInterfaceEmitter)="searchInterfaceOpen = false"></typeahead>
 </ion-header>
 
 <ion-header *ngIf="!searchInterfaceOpen">
@@ -16,7 +16,7 @@
     <ion-buttons end>
       <button (click)="searchInterfaceOpen = true">
         <ion-icon name="search" color="grey" class="search-button-header"
-                  ></ion-icon>
+        ></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -79,31 +79,38 @@
       <p class="title-paragraph">Favoriten</p>
     </ion-col>
     <ion-col class="more">
-      <button ion-button icon-only tappable class="more" (click) = "loadUserSpecificPartnerTable('favorites')">...</button>
+      <button ion-button icon-only tappable class="more" (click)="loadUserSpecificPartnerTable('favorites')">...
+      </button>
     </ion-col>
   </ion-row>
   <partner-table [partners]="favoritePartners"
                  (showPartnerEventEmitter)="showPartner($event)"
-                 *ngIf="favoritePartners"></partner-table>
+                 *ngIf="favoritePartners && !favoritesFromCache"></partner-table>
+  <partner-table-cached [partners]="favoritePartners"
+                        (showCachedPartnerEventEmitter)="showCachedPartner($event)"
+                        *ngIf="favoritePartners && favoritesFromCache">
+  </partner-table-cached>
 
   <ion-row class="title-row" *ngIf="lastVisitedPartners">
-    <ion-col class="title">
+    <ion-col col-auto class="title">
       <p class="title-paragraph">Zuletzt besuchte Partner</p>
     </ion-col>
     <ion-col class="more">
-      <button ion-button icon-only tappable class="more" (click) = "loadUserSpecificPartnerTable('lastvisitedPartners')">...</button>
+      <button ion-button icon-only tappable class="more" (click)="loadUserSpecificPartnerTable('lastvisitedPartners')">
+        ...
+      </button>
     </ion-col>
   </ion-row>
-  <partner-table [partners]="lastVisitedPartners"
-                 (showPartnerEventEmitter)="showPartner($event)"
-                 *ngIf="lastVisitedPartners"></partner-table>
+  <partner-table-cached [partners]="lastVisitedPartners"
+                 (showCachedPartnerEventEmitter)="showCachedPartner($event)"
+                 *ngIf="lastVisitedPartners"></partner-table-cached>
 
   <ion-row class="title-row" *ngIf="offlinePartners">
     <ion-col class="title">
       <p class="title-paragraph">Vor Ort Partner</p>
     </ion-col>
     <ion-col class="more">
-      <button ion-button icon-only tappable class="more" (click) = "showOfflinePartners()">...</button>
+      <button ion-button icon-only tappable class="more" (click)="showOfflinePartners()">...</button>
     </ion-col>
   </ion-row>
   <partner-table [partners]="offlinePartners"
@@ -115,7 +122,7 @@
       <p class="title-paragraph">Online Partner</p>
     </ion-col>
     <ion-col class="more">
-      <button ion-button icon-only tappable class="more" (click) = "showOnlinePartners()">...</button>
+      <button ion-button icon-only tappable class="more" (click)="showOnlinePartners()">...</button>
     </ion-col>
   </ion-row>
   <partner-table [partners]="onlinePartners"
