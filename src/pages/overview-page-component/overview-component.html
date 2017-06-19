@@ -23,7 +23,7 @@
 </ion-header>
 
 <ion-content>
-  <div class="bars" *ngIf="userLoggedIn">
+  <div class="bars" *ngIf="userLoggedIn && balance && bonusThisYear">
     <ion-row>
       <ion-col>
         <div class="buffer" [style.height]="heightBlueBarRedBar()[2]"></div>
@@ -38,7 +38,7 @@
     </ion-row>
   </div>
 
-  <div class="moneyDetailsAccount" *ngIf="userLoggedIn">
+  <div class="moneyDetailsAccount" *ngIf="userLoggedIn && balance && bonusThisYear">
 
     <ion-row class="money-detail-row balance-row">
       <ion-col class="icon-col">
@@ -70,7 +70,7 @@
 
   </div>
 
-  <div class="initialSpinner" *ngIf="waitingForResults">
+  <div class="initialSpinner" *ngIf="waitingForResults && favoritePartners.length == 0 && lastVisitedPartners.length == 0">
     <ion-spinner class="initialSpinner"></ion-spinner>
   </div>
 
@@ -91,7 +91,7 @@
                         *ngIf="favoritePartners && favoritesFromCache">
   </partner-table-cached>
 
-  <ion-row class="title-row" *ngIf="lastVisitedPartners">
+  <ion-row class="title-row" *ngIf="lastVisitedPartners.length">
     <ion-col col-auto class="title">
       <p class="title-paragraph">Zuletzt besuchte Partner</p>
     </ion-col>

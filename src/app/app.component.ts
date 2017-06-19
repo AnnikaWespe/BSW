@@ -64,18 +64,25 @@ export class BSWBonusApp {
 
   getUserData() {
     this.initService.getUserData().subscribe((res) => {
-      let result = res.json();
-      if (result.errors[0].beschreibung === "Erfolg") {
-        let data = result.response.list[0].row;
-        this.lastName = data.NAME;
-        this.salutation = data.ANREDE;
-        this.title = data.TITEL || "";
-        localStorage.setItem("title", data.TITEL);
-        localStorage.setItem("salutation", data.ANREDE);
-        localStorage.setItem("firstName", data.VORNAME);
-        localStorage.setItem("lastName", data.NAME);
+        let result = res.json();
+        if (result.errors[0].beschreibung === "Erfolg") {
+          let data = result.response.list[0].row;
+          this.lastName = data.NAME;
+          this.salutation = data.ANREDE;
+          this.title = data.TITEL || "";
+          localStorage.setItem("userTitle", data.TITEL);
+          localStorage.setItem("salutation", data.ANREDE);
+          localStorage.setItem("firstName", data.VORNAME);
+          localStorage.setItem("lastName", data.NAME);
+        }
+      },
+      (error) => {
+        let title = localStorage.getItem("userTitle");
+        this.title = (title == "null") ? "" : title;
+        this.lastName = localStorage.getItem("lastName");
+        this.salutation = localStorage.getItem("salutation");
       }
-    })
+    )
   }
 
   startGoogleAnalyticsTracker() {

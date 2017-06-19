@@ -2,6 +2,7 @@ import {Component, Input, ViewChild, Output, EventEmitter, AfterViewChecked, OnC
 import {NavParams, NavController} from "ionic-angular";
 import {StyledMapPartnersDirective} from "./styled-map-partners-directive";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
+import {PartnerDetailComponent} from "../partner-detail-component/partner-detail-component";
 
 
 @Component({
@@ -95,6 +96,10 @@ export class PartnerMapComponent implements AfterViewChecked{
 
   getPartnersWithSearchTerm(searchTerm){
     this.map.getPartnersWithSearchTerm(searchTerm);
+  }
+
+  showPartner(partner = 0) {
+    this.navCtrl.push(PartnerDetailComponent, {partner: partner})
   }
 
 

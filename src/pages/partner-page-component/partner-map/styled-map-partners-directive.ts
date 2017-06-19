@@ -68,7 +68,7 @@ export class StyledMapPartnersDirective {
             clearTimeout(timer);
             timer = setTimeout(() => {
               observer.next();
-            }, 1500)
+            }, 500)
           })
         })
         const center$ = idle$.map(() => {
@@ -87,7 +87,7 @@ export class StyledMapPartnersDirective {
             let showOnlyPartnersWithCampaign = params[1];
             let searchTerm = params[2];
             console.log(this.center, this.radius, showOnlyPartnersWithCampaign);
-            return this.partnerService.getPartners(this.center, this.bucket, searchTerm, showOnlyPartnersWithCampaign, this.radius)
+            return this.partnerService.getPartners(this.center, this.bucket, searchTerm, showOnlyPartnersWithCampaign, "RELEVANCE", "ASC", this.radius)
           }).map(body => {
             let returnedObject = body.json();
             let offlinePartners = returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities;
@@ -106,10 +106,9 @@ export class StyledMapPartnersDirective {
                   let bounds = new google.maps.LatLngBounds();
                   let marker = this.mapMarkerService.getMarker(partner, imageAsBase64, validImage, map, bounds);
                   this.markers.push(marker);
-                  google.maps.event.addListener(marker, 'click', (function (marker) {
-                    //TODO: navigate to corresponding partner
-                    return function () {
-                      this.navCtrl.push(PartnerDetailComponent);
+                  google.maps.event.addListener(marker, 'click', ((marker) => {
+                    return () => {
+                      this.navCtrl.push(PartnerDetailComponent, {partner: partner});
                     }
                   })(marker));
                   observer.next(marker);
@@ -148,7 +147,7 @@ export class StyledMapPartnersDirective {
     if (this.getPartnersSubscription) {
       this.getPartnersSubscription.unsubscribe();
     }
-    this.getPartnersSubscription = this.partnerService.getPartners(this.center, this.bucket, this.searchTerm, null, this.radius)
+    this.getPartnersSubscription = this.partnerService.getPartners(this.center, this.bucket, this.searchTerm, false, "RELEVANCE", "ASC", this.radius)
       .subscribe(
         body => {
           let returnedObject = body.json();
@@ -192,6 +191,7 @@ export class StyledMapPartnersDirective {
         )
     }
   }
+
 
 
   private resizeMap() {

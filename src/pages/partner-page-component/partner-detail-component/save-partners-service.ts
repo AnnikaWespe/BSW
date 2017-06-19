@@ -69,10 +69,12 @@ export class SavePartnersService {
       }
       this.lastVisitedPartners.push(pfNumber)
     }
+    localStorage.setItem("savedLastVisitedPartners", JSON.stringify(this.lastVisitedPartners));
+    localStorage.setItem("savedFavorites", JSON.stringify(this.favorites));
   }
 
   private deleteLastVisitedPartnersIfTooMany() {
-    const maxNumberOfSavedLastVisitedPartners = 3;
+    const maxNumberOfSavedLastVisitedPartners = 15;
     if (this.lastVisitedPartners.length > maxNumberOfSavedLastVisitedPartners) {
       this.lastVisitedPartners.splice(0, 1);
     }

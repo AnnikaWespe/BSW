@@ -19,6 +19,7 @@
   <div class="initialSpinner" *ngIf="waitingForResults">
     <ion-spinner tappable class="initialSpinner"></ion-spinner>
   </div>
-  <partner-table [partners] = "partners" (showPartnerEventEmitter)="showPartner($event)"></partner-table>
+  <partner-table [partners] = "partners" (showPartnerEventEmitter)="showPartner($event)" *ngIf="!cached"></partner-table>
+  <partner-table-cached [partners] = "partners" (showCachedPartnerEventEmitter)="showCachedPartner($event)" *ngIf="cached"></partner-table-cached>
 </ion-content>
 

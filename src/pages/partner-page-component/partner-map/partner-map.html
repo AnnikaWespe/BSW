@@ -3,7 +3,7 @@
     [latitude]="stringToNumber(currentLatitude)"
     [longitude]="stringToNumber(currentLongitude)"
     [zoomControl]="false"
-    [zoom] = "12">
+    [zoom]="12">
     <sebm-google-map-circle [latitude]="stringToNumber(currentLatitude)"
                             [longitude]="stringToNumber(currentLongitude)"
                             [fillColor]="'red'"
@@ -30,6 +30,6 @@
 </div>
 <div #partnerList [scrollTop]="scrollTop">
   <div class="partnerList" *ngIf="partnerListOpen">
-    <partner-table [partners]="partnersInList"></partner-table>
+    <partner-table [partners]="partnersInList" (showPartnerEventEmitter)="showPartner($event)"></partner-table>
   </div>
 </div>

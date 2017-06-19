@@ -67,9 +67,13 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   searchPageComponent = false;
 
   getLocationFromGPSEnabled = false;
-  cityName;
+  cityName = "manuell gewählter Ort";
 
   searchInterfaceOpen: boolean = false;
+
+  sortByCriterion = "RELEVANCE";
+  sortOrder = "ASC";
+  sortByArray = [true, false, false, false, false, false, false]
 
   public ngAfterViewChecked() {
     this.setFocus();
@@ -199,9 +203,22 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.getPartners();
   }
 
+  sortBy(indexInSortByArray, criterion, order){
+    this.sortByArray = [false, false, false, false, false, false, false];
+    this.sortByArray[indexInSortByArray] = true;
+    this.sortByCriterion = criterion;
+    this.sortOrder = order;
+    this.resetPartnersArrays();
+    this.waitingForResults = true;
+    this.showDropdown = [false, false, false];
+    this.showDropdownForAnimation = ["false", "false"];
+    this.getPartners();
+  }
+
+
   getPartners() {
     console.log(this.location, this.bucket, this.searchTerm, this.showOnlyPartnersWithCampaign);
-    this.getPartnersSubscription = this.partnerService.getPartners(this.location, this.bucket, this.searchTerm, this.showOnlyPartnersWithCampaign)
+    this.getPartnersSubscription = this.partnerService.getPartners(this.location, this.bucket, this.searchTerm, this.showOnlyPartnersWithCampaign, this.sortByCriterion, this.sortOrder, 100)
       .subscribe(
         body => {
           let returnedObject = body.json();
@@ -312,13 +329,16 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     let chooseLocationManuallyModal = this.modalCtrl.create(ChooseLocationManuallyComponent);
     chooseLocationManuallyModal.present();
     chooseLocationManuallyModal.onDidDismiss((data) => {
-      this.location.latitude = data.latitude;
-      this.location.longitude = data.longitude;
-      if (data.name) {
-        this.cityName = data.name
-      };
-      this.resetPartnersArrays();
-      this.getPartners();
+      if(data){
+        this.location.latitude = data.latitude;
+        this.location.longitude = data.longitude;
+        if (data.name) {
+          console.log(data.name);
+          this.cityName = data.name;
+        }
+        this.resetPartnersArrays();
+        this.getPartners();
+      }
     })
     this.showDropdown = [false, false, false];
     this.showDropdownForAnimation = ["false", "false"];
@@ -433,7 +453,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     let anythingVisible = this.showDropdown[2];
     this.showDropdown = [false, false, false];
     this.showDropdown[position] = !isVisible;
-    this.showDropdown[2] = !anythingVisible;
+    this.showDropdown[2] = this.showDropdown[0] || this.showDropdown[1];
     this.showDropdownForAnimation = [this.showDropdown[0].toString(), this.showDropdown[1].toString()];
   }
 

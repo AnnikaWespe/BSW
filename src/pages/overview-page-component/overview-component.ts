@@ -116,8 +116,9 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   displayFavoritesFromCache() {
     let cachedFavoritesArray = JSON.parse(localStorage.getItem("savedFavorites")) || [];
+    let cachedFavoritesForDisplay = cachedFavoritesArray.slice(0,5);
     this.favoritesFromCache = true;
-    for (let pfNumber of cachedFavoritesArray) {
+    for (let pfNumber of cachedFavoritesForDisplay) {
       let partner = JSON.parse(localStorage.getItem(pfNumber + "partner"));
       partner.logoUrl = localStorage.getItem(pfNumber + "logo");
       this.favoritePartners.push(partner);
@@ -126,8 +127,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   getLastVisitedPartners() {
     let lastVisitedPartnersArray = JSON.parse(localStorage.getItem("savedLastVisitedPartners")) || [];
-    console.log(localStorage.getItem("savedLastVisitedPartners"));
-    for (let pfNumber of lastVisitedPartnersArray) {
+    let lastVisitedPartnersForDisplay = lastVisitedPartnersArray.slice(0,5);
+    for (let pfNumber of lastVisitedPartnersForDisplay) {
       console.log(localStorage.getItem(pfNumber + "logo"));
       let partner = JSON.parse(localStorage.getItem(pfNumber + "partner"));
       partner.logoString = localStorage.getItem(pfNumber + "logo");
@@ -181,7 +182,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
 
   getPartners() {
-    this.getPartnersSubscription = this.partnerService.getPartners(this.location, 0, "", false)
+    this.getPartnersSubscription = this.partnerService.getPartners(this.location, 0, "", false, "RELEVANCE", "ASC")
       .subscribe(
         body => {
           let returnedObject = body.json();
@@ -228,12 +229,12 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
 
   getPartnerFromPfNumber(number) {
-    return this.partnerService.getPartners(this.location, 0, number, false)
+    return this.partnerService.getPartners(this.location, 0, number, false, "RELEVANCE", "ASC")
   }
 
   loadUserSpecificPartnerTable(type) {
     if (type === "favorites") {
-      this.navCtrl.push(UserSpecificPartnersComponent, {title: "Favoriten"})
+      this.navCtrl.push(UserSpecificPartnersComponent, {title: "Favoriten", fromCache: this.favoritesFromCache})
     }
     else {
       this.navCtrl.push(UserSpecificPartnersComponent, {title: "Zuletzt besucht"})
