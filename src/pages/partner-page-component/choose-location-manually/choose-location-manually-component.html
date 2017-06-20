@@ -7,7 +7,7 @@
     </ion-buttons>
     <input id="searchLocation"
            placeholder="Ort eingeben oder auf Karte tippen"
-           (keyup) = "inputToSuggestions($event)"
+           (keyup) = "somethingTypedInInputField($event)"
            [(ngModel)]="searchTerm">
     <ion-buttons end>
       <button (click) = "saveLocation()">
@@ -25,12 +25,11 @@
     [zoom] = "zoom"
     (mapClick) = "mapClicked($event)"
     [zoomControl] = "false">
-    <sebm-google-map-marker [latitude] = "parseFloat(latitude)" [longitude] = "parseFloat(longitude)"></sebm-google-map-marker>
+    <sebm-google-map-marker [latitude] = "latitude" [longitude] = "longitude"></sebm-google-map-marker>
     <styled-map></styled-map>
   </sebm-google-map>
 </ion-content>
 
-<!--    [streetViewControl] = "false" -->
 
 
 

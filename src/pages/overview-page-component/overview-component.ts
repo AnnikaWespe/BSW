@@ -89,6 +89,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
           this.getFavoritesByPfArray(res);
         },
         error => {
+        console.log(error);
           this.displayFavoritesFromCache();
         });
     }
@@ -101,11 +102,12 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         return obj.pfNummer;
       });
       FavoritesData.favoritesByPfArray = favoritesByPf;
-      this.partnerService.getPartners(this.location, 0, "", false, 10000, favoritesByPf).subscribe((res) => {
+      this.partnerService.getPartners(this.location, 0, "", false, "RELEVANCE", "DESC", 10000, favoritesByPf).subscribe((res) => {
           this.favoritePartners = res.json().contentEntities.slice(0, 5);
           this.waitingForResults = false;
         },
         error => {
+        console.log(error);
           this.displayFavoritesFromCache();
         })
     }
@@ -228,9 +230,9 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
 
-  getPartnerFromPfNumber(number) {
+  /*getPartnerFromPfNumber(number) {
     return this.partnerService.getPartners(this.location, 0, number, false, "RELEVANCE", "ASC")
-  }
+  }*/
 
   loadUserSpecificPartnerTable(type) {
     if (type === "favorites") {

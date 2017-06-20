@@ -51,6 +51,7 @@ import {BonusService} from "../pages/overview-page-component/bonus-service";
 import {InitService} from "./init-service";
 import {SavePartnersService} from "../pages/partner-page-component/partner-detail-component/save-partners-service";
 import {PartnerTableCachedComponent} from "../pages/overview-page-component/partner-table-cached/partner-table-cached";
+import {NativeGeocoder} from "@ionic-native/native-geocoder";
 
 
 @NgModule({
@@ -135,6 +136,7 @@ import {PartnerTableCachedComponent} from "../pages/overview-page-component/part
     InitService,
     GoogleMapsAPIWrapper,
     GoogleAnalytics,
+    NativeGeocoder,
   ]
 })
 export class AppModule {

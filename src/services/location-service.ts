@@ -6,15 +6,15 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/fromPromise';
+import {NativeGeocoder, NativeGeocoderReverseResult} from "@ionic-native/native-geocoder";
 
 
 @Injectable()
 export class LocationService {
-  private getLocationNameUrl = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=';
   private latitude;
   private longitude;
 
-  constructor(private http: Http, private geolocation: Geolocation) {}
+  constructor(private http: Http, private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder) {}
 
 
   getLocation(): Observable<any> {
@@ -33,16 +33,21 @@ export class LocationService {
     )
   }
 
-  getLocationName(lat, lon): Observable <any> {
-    let url = this.getLocationNameUrl + lat + "," + lon + '&sensor=true';
+  getLocationName(lat, lon){
+    /*let getLocationNameUrl = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=';
+    let url = getLocationNameUrl + lat + "," + lon + '&sensor=true';
     console.log(url);
     return this.http.get(url)
-      .map(this.extractData)
-      .catch(this.handleError);
+      .map(this.extractDataLocationName)
+      .catch(this.handleErrorLocationName);*/
+    this.nativeGeocoder.reverseGeocode(lat, lon)
+      .then((result: NativeGeocoderReverseResult) => console.log('The address is ' + result.street + ' in ' + result.countryCode))
+      .catch((error: any) => console.log(error));
   }
 
 
-  extractData(res: Response) {
+
+  extractDataLocationName(res: Response) {
     let cityName;
     for (let result of res.json().results) {
       for (let addressComponent of result.address_components) {
@@ -57,7 +62,7 @@ export class LocationService {
     return cityName;
   }
 
-  private handleError(error: Response | any) {
+  private handleErrorLocationName(error: Response | any) {
     //TODO: In a real world app, we might use a remote logging infrastructure
     let errMsg: string;
     console.log("error");

@@ -20,10 +20,7 @@ export class GetPartnersPost {
     rangeSize: 50
   };
   filter?;
-  sort = {
-    criterion: "RELEVANCE",
-    order: "DESC"
-  }
+  sort?;
   showmap = true;
   template = "unified";
 
@@ -37,20 +34,25 @@ export class GetPartnersPost {
     this.query.location.radius = radius;
     this.ranges.bucketToFrom.OFFLINEPARTNER = bucket;
     this.ranges.bucketToFrom.ONLINEPARTNER = bucket;
-    this.sort.criterion = sortByCriterion;
-    this.sort.order = sortOrder;
     if (pfNummerArray.length > 0) {
       this.filter = {
         buckets: ["OFFLINEPARTNER", "ONLINEPARTNER"],
         PARTNER_NUMBER: pfNummerArray
       };
     }
-    else{
+    else {
+      console.log(pfNummerArray);
       this.filter = {
         buckets: ["OFFLINEPARTNER", "ONLINEPARTNER"],
         PARTNER_HAS_CAMPAIGN: ["false"],
       };
       this.filter.PARTNER_HAS_CAMPAIGN = [showOnlyPartnersWithCampaign.toString()];
+      this.sort = {
+        criterion: "RELEVANCE",
+        order: "DESC"
+      }
+      this.sort.criterion = sortByCriterion;
+      this.sort.order = sortOrder;
     }
   };
 }
