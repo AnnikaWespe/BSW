@@ -87,7 +87,7 @@ export class StyledMapPartnersDirective {
             let showOnlyPartnersWithCampaign = params[1];
             let searchTerm = params[2];
             console.log(this.center, this.radius, showOnlyPartnersWithCampaign);
-            return this.partnerService.getPartners(this.center, this.bucket, searchTerm, showOnlyPartnersWithCampaign, "RELEVANCE", "ASC", this.radius)
+            return this.partnerService.getPartners(this.center, this.bucket, searchTerm, showOnlyPartnersWithCampaign, "RELEVANCE", "DESC", this.radius)
           }).map(body => {
             let returnedObject = body.json();
             let offlinePartners = returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities;
@@ -147,7 +147,7 @@ export class StyledMapPartnersDirective {
     if (this.getPartnersSubscription) {
       this.getPartnersSubscription.unsubscribe();
     }
-    this.getPartnersSubscription = this.partnerService.getPartners(this.center, this.bucket, this.searchTerm, false, "RELEVANCE", "ASC", this.radius)
+    this.getPartnersSubscription = this.partnerService.getPartners(this.center, this.bucket, this.searchTerm, false, "RELEVANCE", "DESC", this.radius)
       .subscribe(
         body => {
           let returnedObject = body.json();

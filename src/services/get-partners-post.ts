@@ -5,7 +5,7 @@ export class GetPartnersPost {
     location: {
       latitude: null,
       longitude: null,
-      radius: 400.0,
+      radius: 50.0,
       cityName: ""
     }
   };
@@ -49,7 +49,7 @@ export class GetPartnersPost {
       this.filter.PARTNER_HAS_CAMPAIGN = [showOnlyPartnersWithCampaign.toString()];
       this.sort = {
         criterion: "RELEVANCE",
-        order: "DESC"
+        order: "ASC"
       }
       this.sort.criterion = sortByCriterion;
       this.sort.order = sortOrder;

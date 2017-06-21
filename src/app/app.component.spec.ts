@@ -34,7 +34,7 @@ describe('App component', () => {
     let statusBar = TestBed.get(StatusBar);
     let googleAnalytics = TestBed.get(GoogleAnalytics);
     let http = TestBed.get(Http);
-    let initService = TestBed.get(InitService)
+    let initService = TestBed.get(InitService);
 
 
     app = new BSWBonusApp(
@@ -43,7 +43,7 @@ describe('App component', () => {
       statusBar,
       googleAnalytics,
       http,
-      initService
+      initService,
     ); // = TestBed.get(MyApp);
     app.nav = TestBed.get(Nav);
   });

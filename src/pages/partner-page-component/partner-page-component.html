@@ -156,7 +156,8 @@
         </ion-item>
         <ion-item tappable class = "sort-by" (click) = "sortBy(6, 'DISTANCE', 'ASC')" *ngIf="offlinePartnerPageComponent">
         Distanz
-      </ion-item>
+          <ion-icon name="checkmark" item-end  color="primary" item-end *ngIf="sortByArray[6]"></ion-icon>
+        </ion-item>
       </div>
 
 

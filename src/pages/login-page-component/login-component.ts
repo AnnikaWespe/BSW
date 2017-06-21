@@ -10,6 +10,8 @@ import {BarcodeData} from "./confirm-scan-page-component/BarcodeData";
 import {WebviewComponent} from "../webview/webview";
 import {LoginService} from "./login-service";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
+import {Firebase} from "@ionic-native/firebase";
+import {PushNotificationsService} from "../../services/push-notifications-service";
 
 declare let window: any;
 
@@ -36,7 +38,9 @@ export class LoginPageComponent {
               public viewCtrl: ViewController,
               private ga: GoogleAnalytics,
               public events: Events,
-              public keyboard: Keyboard) {
+              public keyboard: Keyboard,
+              private firebase: Firebase,
+              private pushNotificationsService: PushNotificationsService) {
     this.barcodeData = navParams.get('barcodeData');
     if (this.barcodeData) {
       this.inputNumberOrEmail = this.barcodeData.text;
@@ -110,6 +114,7 @@ export class LoginPageComponent {
         }
         else {
           this.navCtrl.setRoot(OverviewPageComponent);
+          this.handlePushNotifications();
         }
         console.log("Login: " + loginData.errors[0].beschreibung);
         if (localStorage.getItem("disallowUserTracking") === "false") {
@@ -238,6 +243,34 @@ export class LoginPageComponent {
     });
 
     this.loading.present();
+  }
+
+
+  handlePushNotifications() {
+    let firebaseToken = localStorage.getItem("firebaseToken");
+    console.log("in handlePushNotifications");
+    if (firebaseToken != null) {
+      this.firebase.getToken()
+        .then(token => {
+          console.log("token");
+          localStorage.setItem("firebaseToken", token);
+          this.pushNotificationsService.sendPushNotificationsRequest(token, "").subscribe((res) => {
+            console.log(res.json().errors[0])
+          });
+        })
+        .catch(error => {
+          console.log(error)
+        });
+    }
+    this.firebase.onTokenRefresh()
+      .subscribe((newToken: string) => {
+        let oldToken = firebaseToken;
+        this.pushNotificationsService.sendPushNotificationsRequest(newToken, oldToken).subscribe((res) => {
+          console.log(res.json().errors[0])
+        }, error => {
+          console.log(error)
+        })
+      });
   }
 
 }

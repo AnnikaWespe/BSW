@@ -40,14 +40,8 @@ export class BSWBonusApp {
     events.subscribe("userLoggedIn", () => {
       this.userLoggedIn = true;
     })
-    if (localStorage.getItem("securityToken")) {
-      this.rootPage = OverviewPageComponent;
-    }
-    else {
-      this.rootPage = LoginPageComponent;
-    }
-    localStorage.setItem("locationExact", "false");
     this.initializeApp();
+    localStorage.setItem("locationExact", "false");
     this.setWebViewsUrls();
     this.getUserData();
   }
@@ -55,11 +49,24 @@ export class BSWBonusApp {
   initializeApp() {
     this.platform.ready()
       .then(() => {
-        this.startGoogleAnalyticsTracker();
-        //this.statusBar.overlaysWebView(true);
-        this.splashScreen.hide();
-        this.getDevice();
-      });
+          this.startGoogleAnalyticsTracker();
+          //this.statusBar.overlaysWebView(true);
+          this.splashScreen.hide();
+          this.getDevice();
+          this.setRootPage();
+        },
+        (err) => {
+          this.setRootPage()
+        });
+  }
+
+  setRootPage() {
+    if (localStorage.getItem("securityToken")) {
+      this.rootPage = OverviewPageComponent;
+    }
+    else {
+      this.rootPage = LoginPageComponent;
+    }
   }
 
   getUserData() {
@@ -151,4 +158,5 @@ export class BSWBonusApp {
   loadContactPage() {
     this.nav.push(WebviewComponent, {urlType: "KontaktWebviewUrl", title: "Kontakt"})
   }
+
 }

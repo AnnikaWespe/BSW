@@ -70,11 +70,14 @@
 
   </div>
 
-  <div class="initialSpinner" *ngIf="waitingForResults && favoritePartners.length == 0 && lastVisitedPartners.length == 0">
+  <div class="initialSpinner" *ngIf="waitingForResults && favoritePartners.length == 0 && lastVisitedPartners.length == 0 && !noDataToDisplay">
     <ion-spinner class="initialSpinner"></ion-spinner>
   </div>
+  <ion-item *ngIf="waitingForResults && noDataToDisplay" text-wrap>
+    Wir können Ihnen leider derzeit keine Daten anzeigen. Bitte verbinden Sie sich mit dem Internet.
+  </ion-item>
 
-  <ion-row class="title-row" *ngIf="favoritePartners">
+  <ion-row class="title-row" *ngIf="favoritePartners.length">
     <ion-col class="title">
       <p class="title-paragraph">Favoriten</p>
     </ion-col>
@@ -83,6 +86,7 @@
       </button>
     </ion-col>
   </ion-row>
+
   <partner-table [partners]="favoritePartners"
                  (showPartnerEventEmitter)="showPartner($event)"
                  *ngIf="favoritePartners && !favoritesFromCache"></partner-table>

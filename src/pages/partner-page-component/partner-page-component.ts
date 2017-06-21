@@ -72,7 +72,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   searchInterfaceOpen: boolean = false;
 
   sortByCriterion = "RELEVANCE";
-  sortOrder = "ASC";
+  sortOrder = "DESC";
   sortByArray = [true, false, false, false, false, false, false]
 
   public ngAfterViewChecked() {
@@ -108,7 +108,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.pageType = pageType;
     this.searchTerm = navParams.get("searchTerm") || "";
     this.getLocationFromGPSEnabled = (localStorage.getItem("getLocationFromGPSEnabled") === "true");
-    this.cityName = localStorage.getItem("cityName") || "Berlin";
+    this.cityName = localStorage.getItem("cityName");
     this.setParameters();
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.gaTrackPageView();
@@ -122,6 +122,9 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.displayedPartners = this.offlinePartners;
       this.title = "Vor Ort Partner";
       this.checkIfGPSEnabled();
+      this.sortByArray = [false, false, false, false, false, false, true]
+      this.sortByCriterion = "DISTANCE";
+      this.sortOrder = "ASC";
     }
     if (this.onlinePartnerPageComponent) {
       this.showOnlinePartners = true;
@@ -154,6 +157,12 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
             this.getManuallySetLocationData();
             this.getPartners();
           }
+        },
+        (err) =>{
+          localStorage.setItem("getLocationFromGPSEnabled", "false");
+          this.getLocationFromGPSEnabled = false;
+          this.getManuallySetLocationData();
+          this.getPartners();
         }
       )
     }
@@ -164,14 +173,8 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   }
 
   getManuallySetLocationData() {
-    if (localStorage.getItem("locationAvailable") === "true") {
       this.location.latitude = localStorage.getItem("latitude");
       this.location.longitude = localStorage.getItem("longitude");
-    }
-    else {
-      this.location.latitude = "52.5219";
-      this.location.longitude = "13.4132";
-    }
   }
 
   showPromptGPSDisabled() {
@@ -203,7 +206,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.getPartners();
   }
 
-  sortBy(indexInSortByArray, criterion, order){
+  sortBy(indexInSortByArray, criterion, order) {
     this.sortByArray = [false, false, false, false, false, false, false];
     this.sortByArray[indexInSortByArray] = true;
     this.sortByCriterion = criterion;
@@ -212,6 +215,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.waitingForResults = true;
     this.showDropdown = [false, false, false];
     this.showDropdownForAnimation = ["false", "false"];
+    this.content.scrollToTop(0);
     this.getPartners();
   }
 
@@ -236,7 +240,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
               this.getPartners();
             }
             else {
-              if(this.displayedPartners.length == 0){
+              if (this.displayedPartners.length == 0) {
                 this.noPartnersToDisplay = true;
               }
             }
@@ -329,13 +333,10 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     let chooseLocationManuallyModal = this.modalCtrl.create(ChooseLocationManuallyComponent);
     chooseLocationManuallyModal.present();
     chooseLocationManuallyModal.onDidDismiss((data) => {
-      if(data){
+      if (data) {
         this.location.latitude = data.latitude;
         this.location.longitude = data.longitude;
-        if (data.name) {
-          console.log(data.name);
-          this.cityName = data.name;
-        }
+        this.cityName = data.name;
         this.resetPartnersArrays();
         this.getPartners();
       }
@@ -398,15 +399,20 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
             this.location.longitude = object.lon;
             this.getLocationFromGPSEnabled = true;
             localStorage.setItem("getLocationFromGPSEnabled", "true");
+            localStorage.setItem("locationExact", "true");
             this.getLocationNameSubscription = this.locationService.getLocationName(this.location.latitude, this.location.longitude).subscribe((cityName) => {
-              this.cityName = cityName
+              this.cityName = cityName;
+              //localStorage.setItem()
             })
           }
           else {
             this.showPromptGPSDisabled();
             this.waitingForGPSSignal = false;
           }
-        }
+        },((err)=>{
+          this.showPromptGPSDisabled();
+          this.waitingForGPSSignal = false;
+        })
       )
     }
     else {

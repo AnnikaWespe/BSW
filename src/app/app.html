@@ -1,15 +1,18 @@
 <ion-menu [content]="content">
 
 
-  <ion-content class="scroll-content ionic-scroll">
-    <div class="logo-wrapper">
-      <div class="logo"></div>
-      <ion-row class="salutation" *ngIf = "userLoggedIn">
-        Grüß Sie, {{salutation}} {{title}} {{lastName}}!
-      </ion-row>
-    </div>
+  <ion-content>
 
-      <ion-scroll scrollX="true" class="list-wrapper">
+
+      <ion-scroll scrollY="true" class="list-wrapper">
+
+        <div class="logo-wrapper">
+          <div class="logo"></div>
+          <ion-row class="salutation" *ngIf = "salutation">
+            Grüß Sie, {{salutation}} {{title}} {{lastName}}!
+          </ion-row>
+        </div>
+
         <ion-row menuClose class="page" (click)="openPage(this.pages[0])">
           <ion-item tappable>
             <div item-left class="icon-col">
@@ -60,7 +63,7 @@
             <div item-left class="icon-col">
               <div class="icon my-profile"></div>
             </div>
-            <ion-label class="page-title" [class.inactive] = "!userLoggedIn">
+            <ion-label class="page-title">
               Mein Profil
             </ion-label>
           </ion-item>
@@ -78,12 +81,23 @@
         </ion-row>
 
 
-        <ion-row menuClose class="page" (click)="openPage(this.pages[5])">
+        <ion-row menuClose class="page" (click)="openPage(this.pages[5])"  *ngIf="userLoggedIn">
           <ion-item tappable>
             <div item-left class="icon-col">
               <div class="icon settings"></div>
             </div>
             <ion-label class="page-title">
+              Einstellungen
+            </ion-label>
+          </ion-item>
+        </ion-row>
+
+        <ion-row class="page" *ngIf="!userLoggedIn">
+          <ion-item class="inactive">
+            <div item-left class="icon-col">
+              <div class="icon settings"></div>
+            </div>
+            <ion-label class="page-title inactive">
               Einstellungen
             </ion-label>
           </ion-item>

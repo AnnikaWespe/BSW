@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {AlertController, NavController, NavParams, ViewController} from "ionic-angular";
+import {Component, OnDestroy} from '@angular/core';
+import {AlertController, NavController, NavParams, ViewController, Keyboard} from "ionic-angular";
 import {LocationService} from "../../../services/location-service";
 import {NativeGeocoderForwardResult, NativeGeocoder} from "@ionic-native/native-geocoder";
 
@@ -9,7 +9,7 @@ declare let google: any;
   selector: 'choose-location-manually',
   templateUrl: 'choose-location-manually-component.html'
 })
-export class ChooseLocationManuallyComponent {
+export class ChooseLocationManuallyComponent implements OnDestroy{
 
   latitude: number;
   longitude: number;
@@ -21,18 +21,30 @@ export class ChooseLocationManuallyComponent {
   zoom: number = 6;
   title = 'Standort auswählen';
   locationExact: boolean;
-  searchTerm;
+  locationNameInInputField;
+  mapClickedSubscription;
+  nameEnteredSubscription;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private locationService: LocationService,
               private viewCtrl: ViewController,
               private nativeGeocoder: NativeGeocoder,
-              private alertCtrl: AlertController) {
+              private alertCtrl: AlertController,
+              private keyboard: Keyboard) {
     let latitude = localStorage.getItem("latitude") || "52.5219";
     let longitude = localStorage.getItem("longitude") || "13.4132";
     this.latitude = parseFloat(latitude);
     this.longitude = parseFloat(longitude);
+  }
+
+  ngOnDestroy(){
+    if(this.mapClickedSubscription){
+      this.mapClickedSubscription.unsubscribe();
+    }
+    if(this.nameEnteredSubscription){
+      this.nameEnteredSubscription.unsubscribe();
+    }
   }
 
   mapClicked($event: any) {
@@ -40,14 +52,15 @@ export class ChooseLocationManuallyComponent {
     this.markerVisible = true;
     this.longitude = parseFloat($event.coords.lng.toFixed(4));
     this.latitude = parseFloat($event.coords.lat.toFixed(4));
-    console.log(this.longitude + " " + this.latitude);
     this.locationExact = true;
-    this.locationService.getLocationName(this.latitude, this.longitude).subscribe(
+    this.mapClickedSubscription = this.locationService.getLocationName(this.latitude, this.longitude).subscribe(
       (name) => {
-        this.searchTerm = name;
+        console.log(name);
+        this.locationNameInInputField = name;
       },
       (err) => {
-        this.searchTerm = "manuell gewählter Ort"
+        localStorage.setItem("cityName", "Manuell gewählter Ort");
+        this.locationNameInInputField = "manuell gewählter Ort"
       });
     this.setLocationData();
   }
@@ -57,26 +70,25 @@ export class ChooseLocationManuallyComponent {
     localStorage.setItem("longitude", this.longitude.toString());
     localStorage.setItem("locationAvailable", "true");
     localStorage.setItem("locationExact", "true");
-    localStorage.setItem("locationName", this.searchTerm);
+    localStorage.setItem("locationName", this.locationNameInInputField);
   }
 
   somethingTypedInInputField(event) {
+    this.checkButtonVisible = false;
     if (event.keyCode == 13) {
       this.locationExact = false;
-      this.nativeGeocoder.forwardGeocode(this.searchTerm)
-        .then((coordinates: NativeGeocoderForwardResult) => {
-          console.log(coordinates.latitude, coordinates.longitude)
-          this.longitude = parseFloat(coordinates.latitude);
-          this.latitude = parseFloat(coordinates.longitude);
-          this.setLocationData();
-          this.checkButtonVisible = true;
-        })
-        .catch((error: any) => {
-          this.alertSomethingWrentWrong();
-          this.latitude = parseFloat(53.5510846.toFixed(4));
-          this.longitude = parseFloat(9.9936818.toFixed(4));
-          this.setLocationData();
-        });
+      this.keyboard.close();
+      this.nameEnteredSubscription = this.locationService.getLocationCoordinates(this.locationNameInInputField).subscribe((data) => {
+        console.log("data", data);
+        this.longitude = data.longitude;
+        this.latitude = data.latitude;
+        this.setLocationData();
+        this.checkButtonVisible = true;
+        console.log("why am I here when");
+      }, (error) => {
+        this.alertSomethingWrentWrong();
+        console.log("something went wrong");
+      })
     }
   }
 
@@ -90,18 +102,11 @@ export class ChooseLocationManuallyComponent {
   }
 
   saveLocation() {
-
-    this.viewCtrl.dismiss({latitude: this.latitude, longitude: this.longitude, name: this.searchTerm});
-
+    this.viewCtrl.dismiss({latitude: this.latitude, longitude: this.longitude, name: this.locationNameInInputField});
   }
 
   backButtonClicked() {
     this.viewCtrl.dismiss();
   }
-
-  parseFloat(string) {
-    return parseFloat(string);
-  }
-
 
 }

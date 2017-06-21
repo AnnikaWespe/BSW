@@ -31,6 +31,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   location = {latitude: "0", longitude: "0"};
   errorMessage: string;
   waitingForResults = true;
+  noDataToDisplay = false;
   onlinePartners: any[];
   offlinePartners: any[];
   favoritePartners = [];
@@ -60,6 +61,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView('Übersicht Screen')
     }
+    setTimeout(()=>{this.noDataToDisplay = true}, 5000);
   }
 
   ngOnDestroy() {
@@ -89,7 +91,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
           this.getFavoritesByPfArray(res);
         },
         error => {
-        console.log(error);
+          console.log(error);
           this.displayFavoritesFromCache();
         });
     }
@@ -103,11 +105,14 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       });
       FavoritesData.favoritesByPfArray = favoritesByPf;
       this.partnerService.getPartners(this.location, 0, "", false, "RELEVANCE", "DESC", 10000, favoritesByPf).subscribe((res) => {
-          this.favoritePartners = res.json().contentEntities.slice(0, 5);
+          let result = res.json().contentEntities;
+          if (result) {
+            this.favoritePartners = res.json().contentEntities.slice(0, 5);
+          }
           this.waitingForResults = false;
         },
         error => {
-        console.log(error);
+          console.log(error);
           this.displayFavoritesFromCache();
         })
     }
@@ -118,23 +123,26 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   displayFavoritesFromCache() {
     let cachedFavoritesArray = JSON.parse(localStorage.getItem("savedFavorites")) || [];
-    let cachedFavoritesForDisplay = cachedFavoritesArray.slice(0,5);
-    this.favoritesFromCache = true;
-    for (let pfNumber of cachedFavoritesForDisplay) {
-      let partner = JSON.parse(localStorage.getItem(pfNumber + "partner"));
-      partner.logoUrl = localStorage.getItem(pfNumber + "logo");
-      this.favoritePartners.push(partner);
+    if (cachedFavoritesArray.length) {
+      let cachedFavoritesForDisplay = cachedFavoritesArray.slice(0, 5);
+      this.favoritesFromCache = true;
+      for (let pfNumber of cachedFavoritesForDisplay) {
+        let partner = JSON.parse(localStorage.getItem(pfNumber + "partner"));
+        partner.logoUrl = localStorage.getItem(pfNumber + "logo");
+        this.favoritePartners.push(partner);
+      }
     }
   }
 
   getLastVisitedPartners() {
     let lastVisitedPartnersArray = JSON.parse(localStorage.getItem("savedLastVisitedPartners")) || [];
-    let lastVisitedPartnersForDisplay = lastVisitedPartnersArray.slice(0,5);
-    for (let pfNumber of lastVisitedPartnersForDisplay) {
-      console.log(localStorage.getItem(pfNumber + "logo"));
-      let partner = JSON.parse(localStorage.getItem(pfNumber + "partner"));
-      partner.logoString = localStorage.getItem(pfNumber + "logo");
-      this.lastVisitedPartners.push(partner);
+    if (lastVisitedPartnersArray.length) {
+      let lastVisitedPartnersForDisplay = lastVisitedPartnersArray.slice(0, 5);
+      for (let pfNumber of lastVisitedPartnersForDisplay) {
+        let partner = JSON.parse(localStorage.getItem(pfNumber + "partner"));
+        partner.logoString = localStorage.getItem(pfNumber + "logo");
+        this.lastVisitedPartners.push(partner);
+      }
     }
   }
 
@@ -156,6 +164,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
           else {
             this.getStoredLocationData();
           }
+        }, () => {
+          this.getStoredLocationData();
         }
       )
     }
@@ -172,6 +182,11 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     else {
       this.location.latitude = "52.5219";
       this.location.longitude = "13.4132";
+      localStorage.setItem("latitude", "52.5219");
+      localStorage.setItem("longitude", "13.4132");
+      localStorage.setItem("locationAvailable", "false");
+      localStorage.setItem("locationExact", "false");
+      localStorage.setItem("locationName", "Berlin");
     }
     this.getPartners();
   }
@@ -184,7 +199,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
 
   getPartners() {
-    this.getPartnersSubscription = this.partnerService.getPartners(this.location, 0, "", false, "RELEVANCE", "ASC")
+    this.getPartnersSubscription = this.partnerService.getPartners(this.location, 0, "", false, "RELEVANCE", "DESC")
       .subscribe(
         body => {
           let returnedObject = body.json();
@@ -228,11 +243,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     let partnerDetails = JSON.parse(localStorage.getItem(partner.number + "partnerDetails"));
     this.navCtrl.push(PartnerDetailComponent, {partner: partner, partnerDetails: partnerDetails})
   }
-
-
-  /*getPartnerFromPfNumber(number) {
-    return this.partnerService.getPartners(this.location, 0, number, false, "RELEVANCE", "ASC")
-  }*/
 
   loadUserSpecificPartnerTable(type) {
     if (type === "favorites") {
@@ -287,6 +297,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     alert.present();
   }
 
+
 //pure DOM method(s)
 
   heightBlueBarRedBar() {
@@ -306,8 +317,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     return this.heightBalanceBarBonusBarBuffer;
   }
 
-  private
-  setFocus() {
+  private setFocus() {
     let searchInputField = document.getElementById('mySearchInputField');
     if (searchInputField) {
       searchInputField.focus();

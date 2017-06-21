@@ -8,10 +8,10 @@
     <input id="searchLocation"
            placeholder="Ort eingeben oder auf Karte tippen"
            (keyup) = "somethingTypedInInputField($event)"
-           [(ngModel)]="searchTerm">
+           [(ngModel)]="locationNameInInputField">
     <ion-buttons end>
       <button (click) = "saveLocation()">
-        <ion-icon name="checkmark" color="grey" class="search-button-header"  *ngIf="checkButtonVisible"></ion-icon>
+        <ion-icon name="checkmark" color="primary" class="search-button-header"  *ngIf="checkButtonVisible"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>

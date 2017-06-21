@@ -19,17 +19,24 @@
 <ion-content>
 
   <div class="ion-card-wrapper">
-    <ion-item class="title">Push-Benachrichtigungen zu</ion-item>
+    <ion-item class="title">Push-Benachrichtigungen</ion-item>
     <ion-item>
-      <div item-content>neuem oder veränderten Angebot bei einem Favoriten</div>
-      <ion-toggle item-right [(ngModel)]="favoritesPush" color="light-blue" mode="ios"
-                  [class.checked]="favoritesPush"></ion-toggle>
+      <div item-content>Alle ausschalten</div>
+      <ion-toggle item-right [(ngModel)]="disableAllPushes" color="light-blue" mode="ios"
+                  [class.checked]="!enablePushesInGeneral"></ion-toggle>
     </ion-item>
-    <ion-item>
-      <div item-content>Kontostand (jeweils am Monatsende)</div>
-      <ion-toggle item-right [(ngModel)]="accountInfoPush" color="light-blue" mode="ios"
-                  [class.checked]="accountInfoPush"></ion-toggle>
-    </ion-item>
+    <div *ngIf="enablePushesInGeneral">
+      <ion-item>
+        <div item-content>Bei neuem oder veränderten Angebot bei einem Favoriten</div>
+        <ion-toggle item-right [(ngModel)]="favoritesPush" color="light-blue" mode="ios"
+                    [class.checked]="favoritesPush"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <div item-content>zum Kontostand (jeweils am Monatsende)</div>
+        <ion-toggle item-right [(ngModel)]="accountInfoPush" color="light-blue" mode="ios"
+                    [class.checked]="accountInfoPush"></ion-toggle>
+      </ion-item>
+    </div>
   </div>
 
 
