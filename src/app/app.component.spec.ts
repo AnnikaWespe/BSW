@@ -10,6 +10,8 @@ import {LoginPageComponent} from "../pages/login-page-component/login-component"
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {Http} from "@angular/http";
 import {InitService} from "./init-service";
+import {PushNotificationsService} from "../services/push-notifications-service";
+import {Firebase} from "@ionic-native/firebase";
 
 class NavMock {
   setRoot() {}
@@ -35,6 +37,9 @@ describe('App component', () => {
     let googleAnalytics = TestBed.get(GoogleAnalytics);
     let http = TestBed.get(Http);
     let initService = TestBed.get(InitService);
+    let firebase = TestBed.get(Firebase);
+    let pushNotificationsService = TestBed.get(PushNotificationsService);
+
 
 
     app = new BSWBonusApp(
@@ -44,6 +49,8 @@ describe('App component', () => {
       googleAnalytics,
       http,
       initService,
+      firebase,
+      pushNotificationsService
     ); // = TestBed.get(MyApp);
     app.nav = TestBed.get(Nav);
   });

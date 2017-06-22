@@ -52,8 +52,8 @@ import {InitService} from "./init-service";
 import {SavePartnersService} from "../pages/partner-page-component/partner-detail-component/save-partners-service";
 import {PartnerTableCachedComponent} from "../pages/overview-page-component/partner-table-cached/partner-table-cached";
 import {NativeGeocoder} from "@ionic-native/native-geocoder";
-import {Firebase} from "@ionic-native/firebase";
 import {PushNotificationsService} from "../services/push-notifications-service";
+import {Firebase} from "@ionic-native/firebase";
 
 
 @NgModule({

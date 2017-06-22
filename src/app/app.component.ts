@@ -14,6 +14,8 @@ import {SettingsPageComponent} from "../pages/settings-page-component/settings-p
 import {DeviceService} from "../services/device-data";
 import {WebviewComponent} from "../pages/webview/webview";
 import {InitService} from "./init-service";
+import {PushNotificationsService} from "../services/push-notifications-service";
+import {Firebase} from "@ionic-native/firebase";
 
 
 @Component({
@@ -35,7 +37,9 @@ export class BSWBonusApp {
               private statusBar: StatusBar,
               private ga: GoogleAnalytics,
               private initService: InitService,
-              public events: Events) {
+              public events: Events,
+              private firebase: Firebase,
+              private pushNotificationsService: PushNotificationsService) {
     this.setMenu();
     events.subscribe("userLoggedIn", () => {
       this.userLoggedIn = true;
@@ -44,6 +48,7 @@ export class BSWBonusApp {
     localStorage.setItem("locationExact", "false");
     this.setWebViewsUrls();
     this.getUserData();
+    this.handlePushNotifications();
   }
 
   initializeApp() {
@@ -157,6 +162,43 @@ export class BSWBonusApp {
 
   loadContactPage() {
     this.nav.push(WebviewComponent, {urlType: "KontaktWebviewUrl", title: "Kontakt"})
+  }
+
+  handlePushNotifications() {
+    //let firebaseToken = localStorage.getItem("firebaseToken");
+    let firebaseToken = null;
+    if (firebaseToken == null) {
+      this.getFirebaseToken();
+    }
+    this.firebase.onTokenRefresh()
+      .subscribe((newToken: string) => {
+        let oldToken = firebaseToken;
+        this.pushNotificationsService.sendPushNotificationsRequest(newToken, oldToken).subscribe((res) => {
+          console.log(res.json().errors[0])
+        }, error => {
+          console.log(error)
+        })
+      });
+  }
+
+  getFirebaseToken() {
+    console.log(this);
+    this.firebase.getToken()
+      .then(token => {
+        if (token == "" || token == null) {
+          console.log("null token");
+          setTimeout(this.getFirebaseToken.bind(this), 1000);
+        } else {
+          console.log("token", token);
+          localStorage.setItem("firebaseToken", token);
+          this.pushNotificationsService.sendPushNotificationsRequest(token, "").subscribe((res) => {
+            console.log(res.json().errors[0])
+          });
+        }
+      })
+      .catch(error => {
+        console.log(error)
+      });
   }
 
 }
