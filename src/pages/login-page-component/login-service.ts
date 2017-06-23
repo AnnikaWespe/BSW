@@ -25,5 +25,17 @@ export class LoginService {
     }, options);
   }
 
+  forgotPassword(loginString){
+    let forgotPasswordUrl = 'https://vorsystem.avs.de/integ6/passwortAnfordern?mandant_id=1&login=';
+    let securityToken = encodeURIComponent(localStorage.getItem("securityToken"));
+    let headers = new Headers({ 'Accept': 'application/json' });
+    this.createAuthorizationHeader(headers);
+    let url = forgotPasswordUrl + loginString;
+    return this.http.get(url, {
+      headers: headers
+    });
+  }
 
 }
+
+

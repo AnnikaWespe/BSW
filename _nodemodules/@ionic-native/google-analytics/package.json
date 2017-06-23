@@ -1,0 +1,94 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "@ionic-native/google-analytics@^3.10.3",
+        "scope": "@ionic-native",
+        "escapedName": "@ionic-native%2fgoogle-analytics",
+        "name": "@ionic-native/google-analytics",
+        "rawSpec": "^3.10.3",
+        "spec": ">=3.10.3 <4.0.0",
+        "type": "range"
+      },
+      "/Users/annikawestphaling/Documents/Projekte/BSW Rabatt App/app"
+    ]
+  ],
+  "_from": "@ionic-native/google-analytics@>=3.10.3 <4.0.0",
+  "_id": "@ionic-native/google-analytics@3.10.3",
+  "_inCache": true,
+  "_location": "/@ionic-native/google-analytics",
+  "_nodeVersion": "7.4.0",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/google-analytics-3.10.3.tgz_1495436358115_0.6647365614771843"
+  },
+  "_npmUser": {
+    "name": "ihadeed",
+    "email": "i.hadeed@zyra.ca"
+  },
+  "_npmVersion": "4.0.5",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "@ionic-native/google-analytics@^3.10.3",
+    "scope": "@ionic-native",
+    "escapedName": "@ionic-native%2fgoogle-analytics",
+    "name": "@ionic-native/google-analytics",
+    "rawSpec": "^3.10.3",
+    "spec": ">=3.10.3 <4.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@ionic-native/google-analytics/-/google-analytics-3.10.3.tgz",
+  "_shasum": "c55561ba9b6ebabe11ff982379248473f5512e07",
+  "_shrinkwrap": null,
+  "_spec": "@ionic-native/google-analytics@^3.10.3",
+  "_where": "/Users/annikawestphaling/Documents/Projekte/BSW Rabatt App/app",
+  "author": {
+    "name": "ionic"
+  },
+  "bugs": {
+    "url": "https://github.com/driftyco/ionic-native/issues"
+  },
+  "dependencies": {},
+  "description": "Ionic Native - Native plugins for ionic apps",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "c55561ba9b6ebabe11ff982379248473f5512e07",
+    "tarball": "https://registry.npmjs.org/@ionic-native/google-analytics/-/google-analytics-3.10.3.tgz"
+  },
+  "homepage": "https://github.com/driftyco/ionic-native#readme",
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "ihadeed",
+      "email": "i.hadeed@zyra.ca"
+    },
+    {
+      "name": "maxlynch",
+      "email": "max@ionic.io"
+    },
+    {
+      "name": "ionicjs",
+      "email": "hi@ionicframework.com"
+    }
+  ],
+  "module": "index.js",
+  "name": "@ionic-native/google-analytics",
+  "optionalDependencies": {},
+  "peerDependencies": {
+    "@ionic-native/core": "^3.6.0",
+    "@angular/core": "*",
+    "rxjs": "^5.0.1"
+  },
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/driftyco/ionic-native.git"
+  },
+  "scripts": {},
+  "typings": "index.d.ts",
+  "version": "3.10.3"
+}

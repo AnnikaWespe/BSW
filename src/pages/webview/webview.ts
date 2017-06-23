@@ -24,9 +24,8 @@ export class WebviewComponent implements OnDestroy {
               private ga: GoogleAnalytics) {
     console.log(localStorage.getItem("securityToken"));
     console.log(localStorage.getItem("mitgliedId"));
-    if(localStorage.getItem("noWebViewUrlsAvailable") === "true"){
-      this.noWebViewUrlsAvailable = true;
-    }
+    this.noWebViewUrlsAvailable = (localStorage.getItem("noWebViewUrlsAvailable") === "true");
+    this.title = navParams.get('title');
     let urlType = navParams.get('urlType');
     let urlRaw = localStorage.getItem(urlType);
     let mitgliedId = localStorage.getItem("mitgliedId");
@@ -38,9 +37,9 @@ export class WebviewComponent implements OnDestroy {
     else {
       this.url = urlRaw.replace("[MITGLIEDID]", mitgliedId).replace("[SECURITYTOKEN]", securityToken);
     }
-    this.title = navParams.get('title');
+    console.log(this.url);
     this.cacheContent = navParams.get('cacheContent');
-    this.dataProtectionScreen = (urlType ==="DatenschutzWebviewUrl");
+    this.dataProtectionScreen = (urlType === "DatenschutzWebviewUrl");
     this.disallowUserTracking = (localStorage.getItem("disallowUserTracking") == "true");
 
     if (this.cacheContent) {

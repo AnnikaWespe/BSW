@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "860620525720",
+    "firebase_url": "https://bsw-app-5fab1.firebaseio.com",
+    "project_id": "bsw-app-5fab1",
+    "storage_bucket": "bsw-app-5fab1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860620525720:android:80fa7a9043c6af94",
+        "android_client_info": {
+          "package_name": "com.ionicframework.app459066"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "860620525720-v5abmvj5rd16dfennbqker5heutackm4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSa4_a5tDQMvH9L7MKVPrA-RQC7nn_r1g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

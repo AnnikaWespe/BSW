@@ -1,4 +1,4 @@
-import {TestBed} from '@angular/core/testing';
+/*import {TestBed} from '@angular/core/testing';
 // import {TestUtils} from 'dekra.core2';
 import {BSWBonusApp} from './app.component';
 import { Nav, Platform } from 'ionic-angular';
@@ -83,3 +83,4 @@ describe('App component', () => {
     });
   });
 });
+*/

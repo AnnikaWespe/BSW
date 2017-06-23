@@ -41,7 +41,6 @@
     "@ionic-native/status-bar": "3.6.1",
     "@ionic/storage": "2.0.1",
     "angular2-google-maps": "^0.16.0",
-    "dekra.core2": "git+https://git.dekra.com/scm/msk/dekra.core2.git#develop",
     "ionic-angular": "3.2.0",
     "ionicons": "3.0.0",
     "rxjs": "5.1.1",

@@ -1,0 +1,51 @@
+{
+  "_from": "@ionic-native/barcode-scanner@^3.4.4",
+  "_id": "@ionic-native/barcode-scanner@3.12.1",
+  "_inBundle": false,
+  "_integrity": "sha512-zj4VL7NYs+QmrFRi7zBIUNKZrHy3hHEVSfv6qOAbCJDInlf76ID5mSRynuuhxut2ECsgRLfTtaGxPxanBx/NzQ==",
+  "_location": "/@ionic-native/barcode-scanner",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "@ionic-native/barcode-scanner@^3.4.4",
+    "name": "@ionic-native/barcode-scanner",
+    "escapedName": "@ionic-native%2fbarcode-scanner",
+    "scope": "@ionic-native",
+    "rawSpec": "^3.4.4",
+    "saveSpec": null,
+    "fetchSpec": "^3.4.4"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@ionic-native/barcode-scanner/-/barcode-scanner-3.12.1.tgz",
+  "_shasum": "1e6254269790ce7bb135bc269ae99f9c2864d872",
+  "_spec": "@ionic-native/barcode-scanner@^3.4.4",
+  "_where": "/Users/annikawestphaling/Documents/Projekte/BSW Rabatt App/app",
+  "author": {
+    "name": "ionic"
+  },
+  "bugs": {
+    "url": "https://github.com/ionic-team/ionic-native/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Ionic Native - Native plugins for ionic apps",
+  "homepage": "https://github.com/ionic-team/ionic-native#readme",
+  "license": "MIT",
+  "module": "index.js",
+  "name": "@ionic-native/barcode-scanner",
+  "peerDependencies": {
+    "@ionic-native/core": "^3.6.0",
+    "@angular/core": "*",
+    "rxjs": "^5.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ionic-team/ionic-native.git"
+  },
+  "typings": "index.d.ts",
+  "version": "3.12.1"
+}

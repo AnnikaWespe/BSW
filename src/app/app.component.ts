@@ -1,7 +1,6 @@
 import {Component, ViewChild, OnInit} from '@angular/core';
 import {Events, Nav, Platform} from 'ionic-angular';
 import {SplashScreen} from '@ionic-native/splash-screen';
-import {StatusBar} from '@ionic-native/status-bar';
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 
 
@@ -34,7 +33,6 @@ export class BSWBonusApp {
 
   constructor(private platform: Platform,
               private splashScreen: SplashScreen,
-              private statusBar: StatusBar,
               private ga: GoogleAnalytics,
               private initService: InitService,
               public events: Events,
@@ -48,7 +46,7 @@ export class BSWBonusApp {
     localStorage.setItem("locationExact", "false");
     this.setWebViewsUrls();
     this.getUserData();
-    this.handlePushNotifications();
+    //this.manageToken();
   }
 
   initializeApp() {
@@ -164,41 +162,31 @@ export class BSWBonusApp {
     this.nav.push(WebviewComponent, {urlType: "KontaktWebviewUrl", title: "Kontakt"})
   }
 
-  handlePushNotifications() {
+
+  manageToken() {
     //let firebaseToken = localStorage.getItem("firebaseToken");
     let firebaseToken = null;
     if (firebaseToken == null) {
-      this.getFirebaseToken();
+      this.firebase.getToken()
+        .then(token => {
+          if (token) {
+            this.updateToken(token);
+          }
+        })
     }
     this.firebase.onTokenRefresh()
-      .subscribe((newToken: string) => {
-        let oldToken = firebaseToken;
-        this.pushNotificationsService.sendPushNotificationsRequest(newToken, oldToken).subscribe((res) => {
-          console.log(res.json().errors[0])
-        }, error => {
-          console.log(error)
-        })
-      });
+      .subscribe((token) => {
+        this.updateToken(token)
+      })
   }
 
-  getFirebaseToken() {
-    console.log(this);
-    this.firebase.getToken()
-      .then(token => {
-        if (token == "" || token == null) {
-          console.log("null token");
-          setTimeout(this.getFirebaseToken.bind(this), 1000);
-        } else {
-          console.log("token", token);
-          localStorage.setItem("firebaseToken", token);
-          this.pushNotificationsService.sendPushNotificationsRequest(token, "").subscribe((res) => {
-            console.log(res.json().errors[0])
-          });
-        }
-      })
-      .catch(error => {
-        console.log(error)
-      });
+  updateToken(token) {
+    let oldToken = localStorage.getItem("firebaseToken") || "";
+    localStorage.setItem("firebaseToken", token);
+    this.pushNotificationsService.sendPushNotificationsRequest(token, oldToken).subscribe((res) => {
+      console.log(res.json().errors[0])
+    });
   }
 
 }
+

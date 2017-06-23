@@ -175,27 +175,13 @@ export class LoginPageComponent {
     }
   }
 
-  showPromptRequestSent() {
-    let prompt = this.alertCtrl.create({
-      title: 'Ein neues Passwort wurde angefordert.',
-      message: "Bitte überprüfen Sie Ihr Email-Postfach.",
-      buttons: [
-        {
-          text: 'Ok',
-          handler: data => {
-          }
-        }
-      ]
-    });
-    prompt.present();
-  }
 
-  showPromptEnterNumberOrEmail() {
+  showPromptEnterNumberOrEmailToRequestPassword() {
     let alert = this.alertCtrl.create({
       title: 'Passwort anfordern',
       inputs: [
         {
-          name: '',
+          name: 'loginString',
           placeholder: 'Mitglieds-Nr. oder Email'
         }
       ],
@@ -207,7 +193,7 @@ export class LoginPageComponent {
         {
           text: 'Anfordern',
           handler: data => {
-            //TODO Passwort anfordern
+            this.sendPasswordResetRequest(data.loginString);
           }
         }
       ]
@@ -218,20 +204,63 @@ export class LoginPageComponent {
   showPasswordForgottenDialogue() {
     if (isNaN(this.inputNumberOrEmail)) {
       if (this.emailAdressProperlyFormatted()) {
-        this.showPromptRequestSent();
+        this.sendPasswordResetRequest(this.inputNumberOrEmail);
       }
       else {
-        this.showPromptEnterNumberOrEmail()
+        this.showPromptEnterNumberOrEmailToRequestPassword()
       }
     }
     else {
       if (this.inputNumberOrEmail.length == 10) {
-        this.showPromptRequestSent();
+        this.sendPasswordResetRequest(this.inputNumberOrEmail);
       }
       else {
-        this.showPromptEnterNumberOrEmail()
+        this.showPromptEnterNumberOrEmailToRequestPassword()
       }
     }
+  }
+
+  sendPasswordResetRequest(loginString) {
+    this.loginService.forgotPassword(loginString)
+      .subscribe((res) => {
+        let errorCode = res.json().errors[0].code;
+        console.log(res.json().errors[0]);
+        this.inputNumberOrEmail = "";
+        switch (errorCode) {
+          case "0":
+            this.showPromptPasswordForgottenRequestSent('Ein neues Passwort wurde angefordert.', "Bitte überprüfen Sie Ihr Email-Postfach.", false)
+            break;
+          case "100134":
+            this.showPromptPasswordForgottenRequestSent('Leider ist von Ihnen keine Emailadresse hinterlegt.', "Bitte wenden Sie sich an den Support.", false)
+            break;
+          case "100100":
+            this.showPromptPasswordForgottenRequestSent('Zu Ihren Daten wurde kein Mitglied gefunden.', "Bitte überprüfen Sie Ihre Eingabe.", true);
+            this.inputNumberOrEmail = "";
+            break;
+          default:
+            this.showPromptPasswordForgottenRequestSent('Etwas ist schiefgelaufen.', "Bitte versuchen Sie es erneut.", true)
+            break;
+        }
+      })
+  }
+
+
+  showPromptPasswordForgottenRequestSent(title, message, showPasswordForgottenPromptAgain) {
+    let prompt = this.alertCtrl.create({
+      title: title,
+      message: message,
+      buttons: [
+        {
+          text: 'Ok',
+          handler: data => {
+            if(showPasswordForgottenPromptAgain){
+              this.showPromptEnterNumberOrEmailToRequestPassword();
+            }
+          }
+        }
+      ]
+    });
+    prompt.present();
   }
 
   presentLoading() {
@@ -243,7 +272,6 @@ export class LoginPageComponent {
   }
 
 
-
-
 }
+
 

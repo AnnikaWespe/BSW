@@ -14,17 +14,24 @@ export class PushNotificationsService {
   }
 
   sendPushNotificationsRequest(newToken, oldToken) {
+
+    let pushUrl = 'https://vorsystem.avs.de/integ6/securityToken/saveFirebaseToken';
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+
+    this.createAuthorizationHeader(headers);
+    let options = new RequestOptions({ headers: headers });
+    let body = this.createBody(newToken, oldToken);
+    console.log(body);
+    return this.http.post(pushUrl, body, options);
+  }
+
+  createBody(newToken, oldToken){
+    let securityToken = encodeURIComponent(localStorage.getItem("securityToken"));
     let favoritesPush = (localStorage.getItem("favoritesPush") == "false") || true;
     let accountInfoPush = (localStorage.getItem("accountInfoPush") == "false") || true;
     let enablePushesInGeneral = (localStorage.getItem("enablePushesInGeneral") == "false") || true;
     let mitgliedId = localStorage.getItem("mitgliedId");
-    let pushUrl = 'https://vorsystem.avs.de/integ6/securityToken/saveFirebaseToken';
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let securityToken = encodeURIComponent(localStorage.getItem("securityToken"));
-
-    this.createAuthorizationHeader(headers);
-    let options = new RequestOptions({ headers: headers });
-    return this.http.post(pushUrl, {
+    let body =  {
       "mandantId": "1",
       "mitglied": {
         "mitgliedId": mitgliedId,
@@ -37,7 +44,8 @@ export class PushNotificationsService {
         },
         "securityToken": securityToken
       }
-    }, options);
+    }
+    return body;
   }
 
 }

@@ -1,0 +1,106 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "karma-jasmine-diff-reporter@^1.0.0",
+        "scope": null,
+        "escapedName": "karma-jasmine-diff-reporter",
+        "name": "karma-jasmine-diff-reporter",
+        "rawSpec": "^1.0.0",
+        "spec": ">=1.0.0 <2.0.0",
+        "type": "range"
+      },
+      "/Users/annikawestphaling/Documents/Projekte/BSW Rabatt App/app"
+    ]
+  ],
+  "_from": "karma-jasmine-diff-reporter@>=1.0.0 <2.0.0",
+  "_id": "karma-jasmine-diff-reporter@1.0.0",
+  "_inCache": true,
+  "_location": "/karma-jasmine-diff-reporter",
+  "_nodeVersion": "6.0.0",
+  "_npmOperationalInternal": {
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/karma-jasmine-diff-reporter-1.0.0.tgz_1485696407724_0.9894134677015245"
+  },
+  "_npmUser": {
+    "name": "mradionov",
+    "email": "micrddrgn@gmail.com"
+  },
+  "_npmVersion": "3.8.6",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "karma-jasmine-diff-reporter@^1.0.0",
+    "scope": null,
+    "escapedName": "karma-jasmine-diff-reporter",
+    "name": "karma-jasmine-diff-reporter",
+    "rawSpec": "^1.0.0",
+    "spec": ">=1.0.0 <2.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "#DEV:/"
+  ],
+  "_resolved": "https://registry.npmjs.org/karma-jasmine-diff-reporter/-/karma-jasmine-diff-reporter-1.0.0.tgz",
+  "_shasum": "74a738394f8509c41f05ed991f933df71de6a27f",
+  "_shrinkwrap": null,
+  "_spec": "karma-jasmine-diff-reporter@^1.0.0",
+  "_where": "/Users/annikawestphaling/Documents/Projekte/BSW Rabatt App/app",
+  "author": {
+    "name": "Michael Radionov"
+  },
+  "bugs": {
+    "url": "https://github.com/mradionov/karma-jasmine-diff-reporter/issues"
+  },
+  "dependencies": {
+    "chalk": "^1.1.0",
+    "diff": "^1.4.0",
+    "karma": ">=0.9"
+  },
+  "description": "Diff and pretty print for failed tests",
+  "devDependencies": {
+    "eslint": "^3.14.1",
+    "eslint-config-airbnb-es5": "^1.1.0",
+    "eslint-config-es5": "^0.5.0",
+    "jasmine-core": "*",
+    "karma": "*",
+    "karma-chrome-launcher": "*",
+    "karma-jasmine": "*",
+    "tap-min": "^1.1.0",
+    "tape": "^4.5.1"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "74a738394f8509c41f05ed991f933df71de6a27f",
+    "tarball": "https://registry.npmjs.org/karma-jasmine-diff-reporter/-/karma-jasmine-diff-reporter-1.0.0.tgz"
+  },
+  "gitHead": "d690d92cc15f01b138fdb9e98832ac913173f0e0",
+  "homepage": "https://github.com/mradionov/karma-jasmine-diff-reporter#readme",
+  "keywords": [
+    "karma-reporter",
+    "karma-plugin",
+    "jasmine",
+    "diff",
+    "pretty"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "maintainers": [
+    {
+      "name": "mradionov",
+      "email": "micrddrgn@gmail.com"
+    }
+  ],
+  "name": "karma-jasmine-diff-reporter",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mradionov/karma-jasmine-diff-reporter.git"
+  },
+  "scripts": {
+    "lint": "eslint index.js demo src test",
+    "start": "karma start demo/setup/karma.conf.js",
+    "test": "tape 'test/**/*.test.js' | tap-min"
+  },
+  "version": "1.0.0"
+}
