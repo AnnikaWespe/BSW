@@ -253,7 +253,7 @@ export class LoginPageComponent {
         {
           text: 'Ok',
           handler: data => {
-            if(showPasswordForgottenPromptAgain){
+            if (showPasswordForgottenPromptAgain) {
               this.showPromptEnterNumberOrEmailToRequestPassword();
             }
           }

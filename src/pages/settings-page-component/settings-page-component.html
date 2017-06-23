@@ -22,10 +22,10 @@
     <ion-item class="title">Push-Benachrichtigungen</ion-item>
     <ion-item>
       <div item-content>Alle ausschalten</div>
-      <ion-toggle item-right [(ngModel)]="disableAllPushes" color="light-blue" mode="ios"
-                  [class.checked]="!enablePushesInGeneral"></ion-toggle>
+      <ion-toggle item-right [(ngModel)]="disablePushesInGeneral" color="light-blue" mode="ios"
+                  [class.checked]="!disablePushesInGeneral"></ion-toggle>
     </ion-item>
-    <div *ngIf="enablePushesInGeneral">
+    <div *ngIf="!disablePushesInGeneral">
       <ion-item>
         <div item-content>Bei neuem oder veränderten Angebot bei einem Favoriten</div>
         <ion-toggle item-right [(ngModel)]="favoritesPush" color="light-blue" mode="ios"

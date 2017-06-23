@@ -46,7 +46,7 @@ export class BSWBonusApp {
     localStorage.setItem("locationExact", "false");
     this.setWebViewsUrls();
     this.getUserData();
-    //this.manageToken();
+    //this.managePushes();
   }
 
   initializeApp() {
@@ -163,7 +163,7 @@ export class BSWBonusApp {
   }
 
 
-  manageToken() {
+  managePushes() {
     //let firebaseToken = localStorage.getItem("firebaseToken");
     let firebaseToken = null;
     if (firebaseToken == null) {

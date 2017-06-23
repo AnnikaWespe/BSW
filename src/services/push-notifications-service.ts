@@ -16,28 +16,28 @@ export class PushNotificationsService {
   sendPushNotificationsRequest(newToken, oldToken) {
 
     let pushUrl = 'https://vorsystem.avs.de/integ6/securityToken/saveFirebaseToken';
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({'Content-Type': 'application/json'});
 
     this.createAuthorizationHeader(headers);
-    let options = new RequestOptions({ headers: headers });
+    let options = new RequestOptions({headers: headers});
     let body = this.createBody(newToken, oldToken);
-    console.log(body);
+    console.log(JSON.stringify(body));
     return this.http.post(pushUrl, body, options);
   }
 
-  createBody(newToken, oldToken){
+  createBody(newToken, oldToken) {
     let securityToken = encodeURIComponent(localStorage.getItem("securityToken"));
-    let favoritesPush = (localStorage.getItem("favoritesPush") == "false") || true;
-    let accountInfoPush = (localStorage.getItem("accountInfoPush") == "false") || true;
-    let enablePushesInGeneral = (localStorage.getItem("enablePushesInGeneral") == "false") || true;
+    let favoritesPush = (localStorage.getItem("favoritesPush") == "false") ? false : true;
+    let accountInfoPush = (localStorage.getItem("accountInfoPush") == "false") ? false : true;
+    let enablePushesInGeneral = (localStorage.getItem("enablePushesInGeneral") == "false") ? false : true;
     let mitgliedId = localStorage.getItem("mitgliedId");
-    let body =  {
+    let body = {
       "mandantId": "1",
       "mitglied": {
         "mitgliedId": mitgliedId,
         "firebaseToken": newToken,
         "oldFirebaseToken": oldToken,
-        "firebasePermission":{
+        "firebasePermission": {
           "PUSH_GENERELL": enablePushesInGeneral,
           "PUSH_BONUSWERT": accountInfoPush,
           "PUSH_FAVORITEN_AKTION_START": favoritesPush
