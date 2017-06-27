@@ -164,7 +164,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
           else {
             this.getStoredLocationData();
           }
-        }, () => {
+        }, (error) => {
           this.getStoredLocationData();
         }
       )

@@ -13,9 +13,9 @@ export class WebviewComponent implements OnDestroy {
   title: string;
   url;
   disallowUserTracking = false;
-  cacheContent: boolean;
   dataProtectionScreen: boolean;
   noWebViewUrlsAvailable = false;
+  cachedContent: string;
   @ViewChild('iframe') iframe;
 
   constructor(public navCtrl: NavController,
@@ -32,38 +32,25 @@ export class WebviewComponent implements OnDestroy {
     let securityToken = localStorage.getItem("securityToken");
     console.log(urlType);
     if (!securityToken || urlType === "ImpressumWebviewUrl" || urlType === "DatenschutzWebviewUrl") {
+      let content = localStorage.getItem(urlType + "CachedContent");
+      if (content) {
+        this.cachedContent = content;
+      }
       this.url = urlRaw.replace("/[MITGLIEDID]", "").replace("/[SECURITYTOKEN]", "");
+      this.http.get(this.url).subscribe((result) => {
+        let entirePageHTML = result["_body"];
+        let bodyHtml = /<body.*?>([\s\S]*)<\/body>/.exec(entirePageHTML)[1].replace(/<script[\s\S]*?<\/script>/, "");
+        localStorage.setItem(urlType + "CachedContent", bodyHtml)
+      }, (err) => {
+      })
     }
     else {
       this.url = urlRaw.replace("[MITGLIEDID]", mitgliedId).replace("[SECURITYTOKEN]", securityToken);
     }
     console.log(this.url);
-    this.cacheContent = navParams.get('cacheContent');
     this.dataProtectionScreen = (urlType === "DatenschutzWebviewUrl");
     this.disallowUserTracking = (localStorage.getItem("disallowUserTracking") == "true");
 
-    if (this.cacheContent) {
-      this.saveContentOrDisplay().subscribe((res) => {
-        console.log(res);
-      })
-    }
-  }
-
-// methods for webviews "data security" and "imprint"
-  saveContentOrDisplay(): Observable<any> {
-    return this.http.get(this.url)
-      .map(this.extractData)
-      .catch(this.handleError);
-  }
-
-  private handleError(error) {
-    console.log(error);
-    let errMsg = error.message ? error.message : error.toString();
-    return Observable.throw(errMsg);
-  }
-
-  private extractData(res) {
-    return res;
   }
 
   ngOnDestroy() {

@@ -154,27 +154,32 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
           else {
             localStorage.setItem("getLocationFromGPSEnabled", "false");
             this.getLocationFromGPSEnabled = false;
-            this.getManuallySetLocationData();
+            this.getStoredLocationData();
             this.getPartners();
           }
         },
-        (err) =>{
+        (err) => {
           localStorage.setItem("getLocationFromGPSEnabled", "false");
           this.getLocationFromGPSEnabled = false;
-          this.getManuallySetLocationData();
+          this.getStoredLocationData();
           this.getPartners();
         }
       )
     }
     else {
-      this.getManuallySetLocationData();
+      this.getStoredLocationData();
       this.getPartners();
     }
   }
 
-  getManuallySetLocationData() {
-      this.location.latitude = localStorage.getItem("latitude");
-      this.location.longitude = localStorage.getItem("longitude");
+  getStoredLocationData() {
+    this.location.latitude = localStorage.getItem("latitude");
+    this.location.longitude = localStorage.getItem("longitude");
+    this.cityName = localStorage.getItem("locationName");
+    if (this.cityName === "undefined") {
+      this.cityName = "zuletzt verfügbarer Ort"
+    }
+    ;
   }
 
   showPromptGPSDisabled() {
@@ -226,8 +231,9 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       .subscribe(
         body => {
           let returnedObject = body.json();
+          let partners = returnedObject.contentEntities;
           console.log(returnedObject);
-          if (!returnedObject.contentEntities) {
+          if (!partners) {
             this.moreDataCanBeLoaded = false;
             console.log("no data found");
             this.getPartnersSubscription.unsubscribe();
@@ -254,6 +260,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
           this.waitingForResults = false;
         });
   }
+
 
   resetPartnersArrays() {
     this.allPartners = [];
@@ -409,7 +416,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
             this.showPromptGPSDisabled();
             this.waitingForGPSSignal = false;
           }
-        },((err)=>{
+        }, ((err) => {
           this.showPromptGPSDisabled();
           this.waitingForGPSSignal = false;
         })
@@ -419,7 +426,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       localStorage.setItem("getLocationFromGPSEnabled", "false");
       localStorage.setItem("locationExact", "false");
       this.getLocationFromGPSEnabled = false;
-      this.getManuallySetLocationData();
+      this.getStoredLocationData();
     }
   }
 

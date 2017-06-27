@@ -11,6 +11,8 @@ import {WebviewComponent} from "../webview/webview";
 import {LoginService} from "./login-service";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 
+declare let cordova: any;
+
 @Component({
   selector: 'page-login-component',
   templateUrl: 'login-component.html',
@@ -271,6 +273,12 @@ export class LoginPageComponent {
     this.loading.present();
   }
 
+  gotToExternalSiteForJoiningBsw(){
+    let url = localStorage.getItem('beitretenWebviewUrl');
+    console.log(url);
+    cordova.InAppBrowser.open(url, '_system', 'location=yes');
+
+  }
 
 }
 

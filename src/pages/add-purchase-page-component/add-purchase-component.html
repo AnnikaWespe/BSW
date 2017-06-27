@@ -19,19 +19,22 @@
 <ion-content class="startScreen" *ngIf="startScreenActive">
   <div class="explanation">
     <b *ngIf="startScreenFirstTime">
-      Haben Sie bei einem unserer Partner eingekauft, und Ihren Bonus noch nicht angefordert?
+      Sie waren bei einem BSW-Partner vor Ort einkaufen, hatten aber Ihre BSW-Karte nicht zur Hand und müssten jetzt auf Ihren Vorteil verzichten?
     </b>
     <b *ngIf="!startScreenFirstTime">
       Vielen Dank für Ihre Email! Wir werden uns umgehend kümmern.
     </b>
     <br><br>
-    <p *ngIf="startScreenFirstTime">
-      Sie können hier einen Scan des Kassenzettels erstellen. <br>Wenn alles passt,
-    wählen Sie im nächsten Schritt Ihr Emailprogramm aus einer Liste aus, und
-      schicken dann eine vorausgefüllte Email an das BSW.
-      <br>
+    <div *ngIf="startScreenFirstTime">
+      Hier können Sie ihren Einkauf auf Kulanz nacherfassen lassen. Und so funktionierts:
+      <ol>
+        <li>Den Kassenzettel fotografieren</li>
+        <li>E-Mail Programm zum Versand auswählen</li>
+        <li>Vorausgefüllte E-Mail an BSW schicken</li>
+      </ol>
       Fertig!
-    </p>
+      Unser Mitgliederservice informiert Sie anschließend über den Status Ihrer Nacherfassung.
+    </div>
     <p *ngIf="!startScreenFirstTime">
       Sie können jetzt noch einen Kassenzettel einscannen, oder sich weiter über unser Angebot informieren.
     </p>
@@ -41,4 +44,5 @@
     <button tappable ion-button block color="primary" (click)="getPictureFromGallery()" class="scanReceipt gallery">Bild aus Galerie auswählen</button>
 
 </ion-content>
+
 

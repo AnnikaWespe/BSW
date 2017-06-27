@@ -65,8 +65,8 @@ export class AddPurchasePageComponent implements OnDestroy{
 
   promptNoCameraAccess() {
     let alert = this.alertCtrl.create({
-      title: 'Kamerazugriff fehlgeschlagen',
-      message: 'Leider darf diese App nicht auf die Kamera zugreifen. Sie können dies in den Appeinstellungen ändern.',
+      title: 'Etwas ist schiefgegangen',
+      message: 'Eventuell darf die App nicht auf die Kamera zugreifen. Sie können dies in den Appeinstellungen ändern.',
       buttons: [
         {
           text: 'Ok',

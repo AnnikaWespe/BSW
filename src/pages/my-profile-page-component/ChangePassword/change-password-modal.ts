@@ -10,9 +10,9 @@ import {ChangePasswordService} from "./changePasswordService";
 })
 export class ChangePasswordModal {
   title: string = "Passwort ändern";
-  private passwordForm: FormGroup;
-  oldPassword: string;
-  newPassword: string;
+  oldPassword = "";
+  newPassword = "";
+  newPasswordConfirm = "";
 
 
   constructor(public navCtrl: NavController,
@@ -21,11 +21,6 @@ export class ChangePasswordModal {
               private formBuilder: FormBuilder,
               private changePasswordService: ChangePasswordService,
               private alertCtrl: AlertController) {
-    this.passwordForm = formBuilder.group({
-      oldPassword: ['', Validators.required],
-      newPassword: ['', Validators.required],
-      newPasswordRepeat: ['', Validators.required]
-    }, {validator: this.passwordsMatch()})
   }
 
   navigateBack() {
@@ -33,32 +28,41 @@ export class ChangePasswordModal {
   }
 
 
-  passwordsMatch() {
-    return (group: FormGroup): { [key: string]: any } => {
-      let password = group.controls['newPassword'];
-      let confirmPassword = group.controls['newPasswordRepeat'];
-      if (password.value !== confirmPassword.value) {
-        return {
-          mismatchedPasswords: true
-        };
-      }
+  onSubmit() {
+    if (this.oldPassword == "") {
+      this.presentAlertPleaseChangeInput("Fehlende Eingabe: Altes Passwort")
+    }
+    else if (this.newPassword == "") {
+      this.presentAlertPleaseChangeInput("Fehlende Eingabe: Neues Passwort")
+    }
+    else if (this.newPasswordConfirm == "") {
+      this.presentAlertPleaseChangeInput("Fehlende Eingabe: Neues Passwort bestätigen")
+    }
+    else if (this.newPassword !== this.newPasswordConfirm) {
+      this.presentAlertPleaseChangeInput('"Passwort" und "Passwort bestätigen" stimmen nicht überein')
+    }
+    else {
+      this.changePasswordService.changePassword(this.oldPassword, this.newPassword).subscribe((res) => {
+        let response = res.json();
+        if (response.errors[0].beschreibung === "Erfolg") {
+          localStorage.setItem("securityToken", response.response.securityToken)
+          this.viewCtrl.dismiss({passwordChanged: true});
+        }
+        else {
+          console.log(response.errors[0].beschreibung);
+          this.presentAlertPasswordNotChanged();
+        }
+      })
     }
   }
 
-
-  onSubmit() {
-    this.changePasswordService.changePassword(this.passwordForm.value.oldPassword, this.passwordForm.value.newPassword).subscribe((res) => {
-      let response = res.json();
-      if (response.errors[0].beschreibung === "Erfolg") {
-        localStorage.setItem("securityToken", response.response.securityToken)
-        this.viewCtrl.dismiss({passwordChanged: true});
-      }
-      else {
-        console.log(response.errors[0].beschreibung);
-        this.presentAlertPasswordNotChanged();
-      }
-    })
-
+  presentAlertPleaseChangeInput(title) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: 'Bitte korrigieren Sie Ihre Eingabe.',
+      buttons: ['Ok']
+    });
+    alert.present();
   }
 
   presentAlertPasswordNotChanged() {

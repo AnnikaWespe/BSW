@@ -1,9 +1,13 @@
 webview {
-iframe{
-  width: 100%;
-  height: 100%;
-}
-  ion-item div{
+  iframe {
+    width: 100%;
+    height: 100%;
+  }
+  ion-item div {
     color: map-get($colors, font-color-for-filter-dropdown)
+  }
+  .displayCachedContent {
+    background-color: map_get($colors, light);
+    padding: 3vh 3vw;
   }
 }

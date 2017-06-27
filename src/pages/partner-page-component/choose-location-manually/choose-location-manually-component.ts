@@ -62,14 +62,14 @@ export class ChooseLocationManuallyComponent implements OnDestroy{
         localStorage.setItem("cityName", "Manuell gewählter Ort");
         this.locationNameInInputField = "manuell gewählter Ort"
       });
-    this.setLocationData();
+    this.setLocationData("true");
   }
 
-  setLocationData() {
+  setLocationData(locationExact) {
     localStorage.setItem("latitude", this.latitude.toString());
     localStorage.setItem("longitude", this.longitude.toString());
     localStorage.setItem("locationAvailable", "true");
-    localStorage.setItem("locationExact", "true");
+    localStorage.setItem("locationExact", locationExact);
     localStorage.setItem("locationName", this.locationNameInInputField);
   }
 
@@ -82,12 +82,10 @@ export class ChooseLocationManuallyComponent implements OnDestroy{
         console.log("data", data);
         this.longitude = data.longitude;
         this.latitude = data.latitude;
-        this.setLocationData();
+        this.setLocationData("false");
         this.checkButtonVisible = true;
-        console.log("why am I here when");
       }, (error) => {
         this.alertSomethingWrentWrong();
-        console.log("something went wrong");
       })
     }
   }

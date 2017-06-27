@@ -123,8 +123,6 @@ export class PartnerDetailComponent implements OnDestroy {
         url = url
           .replace("#MGNUMMER#", "0016744807")
           .replace("AVS9StAVS1St", "0016744807")
-        // .replace("AVSMGNR9ST", "0016744807")
-        // .replace("AVSMGPZ1ST", "0016744807");
       }
       cordova.InAppBrowser.open(url, '_system', 'location=yes');
       this.googleAnalyticsTrackingGoToShop();

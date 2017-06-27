@@ -54,12 +54,12 @@
 
       <ion-row *ngIf="!showMap" class="filter-button-row" [class.dropdownOpen]="showDropdown[2]">
         <ion-col tappable class="filter-button left-button" (click)="toggleVisibilityDropdowns(0)">
-          <div class="filter-button-text" [class.notActive]="showDropdown[1]">FILTER
+          <div class="filter-button-text" [class.notActive]="showDropdown[1]">Filter
             <ion-icon name="arrow-dropdown" [class.singleButton]="showMap"></ion-icon>
           </div>
         </ion-col>
         <ion-col tappable class="filter-button" (click)="toggleVisibilityDropdowns(1)">
-          <div class="filter-button-text" [class.notActive]="showDropdown[0]">SORTIEREN
+          <div class="filter-button-text" [class.notActive]="showDropdown[0]">Sortieren
             <ion-icon name="arrow-dropdown"></ion-icon>
           </div>
         </ion-col>
@@ -67,7 +67,7 @@
 
       <ion-row class="filter-button-row" *ngIf="showMap" [class.dropdownOpen]="showDropdown[2]">
         <ion-col tappable class="filter-button left-button singleButton" (click)="toggleVisibilityDropdowns(0)">
-          <div class="filter-button-text" [class.notActive]="showDropdown[1]">FILTER
+          <div class="filter-button-text" [class.notActive]="showDropdown[1]">Filter
             <ion-icon name="arrow-dropdown"></ion-icon>
           </div>
         </ion-col>

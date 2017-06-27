@@ -26,7 +26,6 @@ input.text-input.text-input-md.ng-pristine.ng-valid{
   div.center-text{
     text-align: center;
     p.no-login{
-      //margin-bottom: 8vh;
       color: map_get($colors, font-grey);
       text-decoration: underline;
       font-size: 85%;
@@ -34,13 +33,14 @@ input.text-input.text-input-md.ng-pristine.ng-valid{
     p.no-password{
       color: map_get($colors, font-grey);
       font-size: 85%;
-      margin-bottom: 0.5vh;
+      margin: 4vh 0;
+      text-decoration: underline;
     }
     p.no-member{
-      margin-bottom: 1vh;
+      margin-bottom: 4vh;
       color: map_get($colors, font-grey);
       font-size: 85%;
-      margin-top: 1vh;
+      text-decoration: underline;
     }
   }
   .footer-md::before{
@@ -71,6 +71,7 @@ input.text-input.text-input-md.ng-pristine.ng-valid{
     right: 0;
     background: transparent;
     box-shadow: none;
+    margin: 0;
   }
   div.password-wrapper{
     margin-top: 2vh;

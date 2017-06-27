@@ -69,20 +69,24 @@ partner-page-component {
         background-color:map_get($colors, secondary-grey);
       }
       ion-row.currentLocation {
-        height: 8vh;
+        height: 10vh;
         line-height: 8vh;
         border-bottom: 1px solid grey;
         margin-bottom: 3vw;
         p {
           margin: 0;
           &.changeLocation {
-            font-size: x-small;
+            font-size: medium;
             line-height: 1.5vh;
             color: map_get($colors, primary);
+            text-decoration: underline;
+            margin-bottom: 2vw;
           }
           &.cityName {
             line-height: 4vh;
-            margin-top: 2vh;
+            font-size: medium;
+
+            margin: 1vh 0;
           }
         }
       }
@@ -129,10 +133,10 @@ partner-page-component {
         padding: 0;
         margin-top: 55vh;
         &.searchPageComponent{
-          margin-top: 42vh;
+          margin-top: 40vh;
         }
         &.onlinePartnerPageComponent{
-          margin-top: 60vh;
+          margin-top: 58vh;
         }
       }
       ion-row.toggle {
@@ -158,11 +162,15 @@ partner-page-component {
     div.filter-button-text {
       color: map_get($colors, secondary);
       vertical-align: middle;
-      font-size: xx-small;
+      font-size: small;
       font-weight: bolder;
       line-height: 6.5vh;
       &.notActive {
         color: map_get($colors, font-grey);
+      }
+      ion-icon{
+        font-size: larger;
+        margin-left: 1vh;
       }
     }
   }

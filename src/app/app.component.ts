@@ -46,6 +46,7 @@ export class BSWBonusApp {
     localStorage.setItem("locationExact", "false");
     this.setWebViewsUrls();
     this.getUserData();
+    //TODO uncomment and manage Pushes :)
     //this.managePushes();
   }
 
@@ -53,7 +54,6 @@ export class BSWBonusApp {
     this.platform.ready()
       .then(() => {
           this.startGoogleAnalyticsTracker();
-          //this.statusBar.overlaysWebView(true);
           this.splashScreen.hide();
           this.getDevice();
           this.setRootPage();

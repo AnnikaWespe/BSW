@@ -2,6 +2,10 @@ ion-content {
   background-color: map-get($colors, light);
 }
 
+button{
+  text-transform: none !important;
+}
+
 * {
   font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !important;
 }
@@ -24,7 +28,7 @@ ion-header {
     color: map-get($colors, secondary);
   }
   .menu-button-header, .search-button-header, .add-favourite-button-header {
-    font-size: 4vh;
+    font-size: 2em;
     margin: 0 3vw;
   }
 
@@ -49,8 +53,9 @@ ion-menu {
     width: 40vh;
     overflow: hidden;
     background-size: contain;
-    left: 50%;
-    margin: 0 auto;
+    //left: 50%;
+    //margin: 0 auto;
+    margin-left: 4.5vw;
   }
   div.logo-wrapper {
     padding: 5vh 0 1vh 0;
@@ -64,6 +69,7 @@ ion-menu {
   }
   .item-md {
     background-color: inherit;
+    padding-left: 3vw!important;
   }
   div.scroll-content {
     overflow-y: hidden;
