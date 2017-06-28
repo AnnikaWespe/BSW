@@ -16,7 +16,7 @@
 <ion-content>
 
   <div class="partner-details">
-    <!--<div class="titleAndButton">
+    <div class="titleAndButton">
       <div class="title" [class.small] = "partnerDetails?.trackingUrl && !partnerDetails?.ort">
         <div class="white-square">
           <img src="{{partner?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
@@ -54,43 +54,6 @@
         </div>
       </div>
 
-    </div>-->
-
-    <div class = "titleAndButton">
-      <ion-row>
-        <ion-col>
-          <div class="image" item-left>
-            <div class="white-square">
-              <img src="{{partner?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
-            </div>
-          </div>
-        </ion-col>
-
-        <ion-col class="buttons-wrapper">
-          <div class="buttons">
-
-            <div class="goToMap" *ngIf="partnerDetails?.ort">
-              <div tappable class="btn-pill goToMap" (click)='goToPartnerDetailMap()'>
-                <div class="btn-pill-text">
-                  Zur Karte
-                </div>
-                <div class="centerMapIcon">
-                  <div class="mapIcon"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="goToOnlineShop" *ngIf="partnerDetails?.trackingUrl" >
-              <div tappable class="btn-pill online-partner" (click)="goToPartnerShop(false)" *ngIf="partnerDetails?.trackingUrl && !partnerDetails?.ort">
-                <div class="btn-pill-text">
-                  Online einkaufen
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </ion-col>
-      </ion-row>
     </div>
 
 
