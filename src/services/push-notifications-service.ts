@@ -26,7 +26,7 @@ export class PushNotificationsService {
   }
 
   createBody(newToken, oldToken) {
-    let securityToken = encodeURIComponent(localStorage.getItem("securityToken"));
+    let securityToken = encodeURI(localStorage.getItem("securityToken"));
     let favoritesPush = (localStorage.getItem("favoritesPush") == "false") ? false : true;
     let accountInfoPush = (localStorage.getItem("accountInfoPush") == "false") ? false : true;
     let enablePushesInGeneral = (localStorage.getItem("enablePushesInGeneral") == "false") ? false : true;

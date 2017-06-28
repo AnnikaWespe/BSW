@@ -218,7 +218,6 @@ export class PartnerDetailComponent implements OnDestroy {
     }
     this.mapMarkerService.getImageAsBase64("PartnerDetailComponent", this.partner.logoUrl, (imageAsBase64, validImage) => {
       this.savePartnersService.saveLogo(this.pfNumber, imageAsBase64);
-      console.log(imageAsBase64);
     })
     this.savePartnersService.savePartnerAndPartnerDetails(this.pfNumber, this.partner, this.partnerDetails, partnerType)
   }

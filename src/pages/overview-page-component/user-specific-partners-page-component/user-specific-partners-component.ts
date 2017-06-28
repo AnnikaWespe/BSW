@@ -14,54 +14,56 @@ export class UserSpecificPartnersComponent {
 
   title: string;
   partners = [];
-  waitingForResults = true;
+  partnersInAlphabeticalOrder = [];
+  partnersInChronologicalOrder = [];
   cached = false;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public partnerService: PartnerService) {
     this.title = navParams.get("title");
-    if (this.title === "Favoriten") {
-      this.cached = navParams.get("fromCache");
-      this.treatAsFavoritesPage();
-    }
-    else {
+    this.partners = navParams.get("partners");
+    if (navParams.get("cached")) {
       this.cached = true;
-      this.treatAsLastVisitedPartnersPage();
+      this.sortCachedArray();
+    }
+    else if (this.title === "Zuletzt besucht") {
+      this.getAllLastVisitedPartners();
     }
   }
 
-  treatAsFavoritesPage() {
-    let favoritesPfArray = FavoritesData.favoritesByPfArray;
-    if(this.cached){
-      let cachedFavoritesArray = JSON.parse(localStorage.getItem("savedFavorites")) || [];
-      this.waitingForResults = false;
-      for (let pfNumber of cachedFavoritesArray) {
-        let partner = JSON.parse(localStorage.getItem(pfNumber + "partner"));
-        partner.logoUrl = localStorage.getItem(pfNumber + "logo");
-        this.partners.push(partner);
-      }
+  sortCachedArray(){
+    let duplicateArray = this.partners.slice();
+    let secondDuplicateArray = this.partners.slice();
+    this.partnersInAlphabeticalOrder = duplicateArray.sort((a,b)=>{
+      return a.shortName.localeCompare(b.shortName);
+    });
+    this.partnersInChronologicalOrder = secondDuplicateArray;
+  }
+
+  getAllLastVisitedPartners() {
+    let allLastVisitedPartners = JSON.parse(localStorage.getItem("savedLastVisitedPartnersComplete"));
+    let location = {
+      latitude: "52.5219",
+      longitude: "13.4132"
     }
-    else {
-      let latitude = Number(localStorage.getItem("latitude"));
-      let longitude = Number(localStorage.getItem("longitude"));
-      this.partnerService.getPartners({latitude: latitude, longitude: longitude}, 0, "", false, 10000, favoritesPfArray)
-        .subscribe((res) => {
-        this.partners = res.json().contentEntities;
-        this.waitingForResults = false;
+    this.partnerService.getPartners(location, 0, "", false, "SHORTNAME", "ASC", 10000, allLastVisitedPartners).subscribe((res) => {
+        let partnersArray = res.json().contentEntities;
+        let chronologicalOrderOfLastVisitedPartners = JSON.parse(localStorage.getItem("savedLastVisitedPartners"));
+        let alphabeticalOrderOfLastVisitedPartners;
+        this.cached = false;
+        for (let partner of partnersArray){
+          let maxLength = partnersArray.length;
+          let position = maxLength - chronologicalOrderOfLastVisitedPartners.indexOf(partner.number) - 1;
+          this.partnersInChronologicalOrder[position] = partner;
+        }
+        this.partners = this.partnersInChronologicalOrder;
+        this.partnersInAlphabeticalOrder = partnersArray.sort((a,b)=>{
+          return a.shortName.localeCompare(b.shortName);
+        })
+      },
+      error => {
       })
-    }
-  }
-
-  treatAsLastVisitedPartnersPage() {
-    let lastVisitedPartnersArray = JSON.parse(localStorage.getItem("savedLastVisitedPartners")) || [];
-    this.waitingForResults = false;
-    for (let pfNumber of lastVisitedPartnersArray) {
-      console.log(localStorage.getItem(pfNumber + "logo"));
-      let partner = JSON.parse(localStorage.getItem(pfNumber + "partner"));
-      partner.logoString = localStorage.getItem(pfNumber + "logo");
-      this.partners.push(partner);
-    }
   }
 
 
@@ -69,7 +71,7 @@ export class UserSpecificPartnersComponent {
     this.navCtrl.push(PartnerDetailComponent, {partner: partner})
   }
 
-  showCachedPartner(partner){
+  showCachedPartner(partner) {
     let partnerDetails = JSON.parse(localStorage.getItem(partner.number + "partnerDetails"));
     this.navCtrl.push(PartnerDetailComponent, {partner: partner, partnerDetails: partnerDetails})
   }

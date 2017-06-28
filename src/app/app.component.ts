@@ -184,7 +184,7 @@ export class BSWBonusApp {
     let oldToken = localStorage.getItem("firebaseToken") || "";
     localStorage.setItem("firebaseToken", token);
     this.pushNotificationsService.sendPushNotificationsRequest(token, oldToken).subscribe((res) => {
-      console.log(res.json().errors[0])
+      console.log("result from Firebase API request", res.json().errors[0])
     });
   }
 

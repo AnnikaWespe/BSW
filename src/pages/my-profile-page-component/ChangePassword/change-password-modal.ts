@@ -52,7 +52,10 @@ export class ChangePasswordModal {
           console.log(response.errors[0].beschreibung);
           this.presentAlertPasswordNotChanged();
         }
-      })
+      },
+        (err) =>{
+          this.presentAlertPasswordNotChanged();
+        })
     }
   }
 

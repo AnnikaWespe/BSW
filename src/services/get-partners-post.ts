@@ -41,7 +41,6 @@ export class GetPartnersPost {
       };
     }
     else {
-      console.log(pfNummerArray);
       this.filter = {
         buckets: ["OFFLINEPARTNER", "ONLINEPARTNER"],
         PARTNER_HAS_CAMPAIGN: ["false"],

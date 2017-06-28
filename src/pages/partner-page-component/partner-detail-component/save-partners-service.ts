@@ -4,22 +4,26 @@ import {Injectable} from "@angular/core";
 export class SavePartnersService {
 
   lastVisitedPartners = [];
+  lastVisitedPartnersComplete = [];
   favorites = [];
 
   constructor() {
     let savedLastVisitedPartners = localStorage.getItem("savedLastVisitedPartners");
     let savedFavorites = localStorage.getItem("savedFavorites");
+    let savedLastVisitedPartnersComplete = localStorage.getItem("savedLastVisitedPartnersComplete");
     if (savedLastVisitedPartners && savedLastVisitedPartners != "undefined") {
       this.lastVisitedPartners = JSON.parse(savedLastVisitedPartners);
     }
     if (savedFavorites && savedFavorites != "undefined") {
       this.favorites = JSON.parse(savedFavorites);
     }
+    if (savedLastVisitedPartnersComplete && savedLastVisitedPartnersComplete != "undefined") {
+      this.lastVisitedPartnersComplete = JSON.parse(savedLastVisitedPartnersComplete);
+    }
   }
 
   saveLogo(pfNumber, imageString) {
     let localStorageKey = pfNumber + "logo";
-    console.log(localStorageKey, imageString);
     localStorage.setItem(localStorageKey, imageString);
   }
 
@@ -35,10 +39,17 @@ export class SavePartnersService {
     }
     this[partnerType].push(pfNumber);
     if (partnerType == "lastVisitedPartners") {
+      console.log("inhere");
       this.deleteLastVisitedPartnersIfTooMany();
+      let indexInLastVisitedPartnersByPf = this.lastVisitedPartnersComplete.indexOf(pfNumber);
+      if (indexInLastVisitedPartnersByPf > -1) {
+        this.lastVisitedPartnersComplete.splice(index, 1);
+      }
+      this.lastVisitedPartnersComplete.push(pfNumber);
     }
     localStorage.setItem("savedLastVisitedPartners", JSON.stringify(this.lastVisitedPartners));
     localStorage.setItem("savedFavorites", JSON.stringify(this.favorites));
+    localStorage.setItem("savedLastVisitedPartnersComplete", JSON.stringify(this.lastVisitedPartnersComplete));
     localStorage.setItem(pfNumber + "partner", JSON.stringify(partner));
     localStorage.setItem(pfNumber + "partnerDetails", JSON.stringify(partnerDetails));
   }
@@ -57,8 +68,12 @@ export class SavePartnersService {
   togglePartnerType(pfNumber, newPartnerType) {
     if (newPartnerType == "favorites") {
       let index = this.lastVisitedPartners.indexOf(pfNumber);
+      let indexInLastVisitedPartnersByPf = this.lastVisitedPartnersComplete.indexOf(pfNumber);
       if (index > -1) {
         this.lastVisitedPartners.splice(index, 1);
+      }
+      if (indexInLastVisitedPartnersByPf > -1) {
+        this.lastVisitedPartnersComplete.splice(index, 1);
       }
       this.favorites.push(pfNumber)
     }
@@ -67,16 +82,20 @@ export class SavePartnersService {
       if (index > -1) {
         this.favorites.splice(index, 1);
       }
-      this.lastVisitedPartners.push(pfNumber)
+      this.lastVisitedPartners.push(pfNumber);
+      this.lastVisitedPartnersComplete.push(pfNumber);
+      this.deleteLastVisitedPartnersIfTooMany();
     }
     localStorage.setItem("savedLastVisitedPartners", JSON.stringify(this.lastVisitedPartners));
     localStorage.setItem("savedFavorites", JSON.stringify(this.favorites));
+    localStorage.setItem("savedLastVisitedPartnersComplete", JSON.stringify(this.lastVisitedPartnersComplete));
+
   }
 
   private deleteLastVisitedPartnersIfTooMany() {
     const maxNumberOfSavedLastVisitedPartners = 15;
     if (this.lastVisitedPartners.length > maxNumberOfSavedLastVisitedPartners) {
-      this.lastVisitedPartners.splice(0, 1);
+      this.deleteFromStorage(this.lastVisitedPartners[0], "lastVisitedPartners");
     }
   }
 

@@ -37,6 +37,10 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   favoritePartners = [];
   lastVisitedPartners = [];
   searchInterfaceOpen = false;
+  moreThanFiveFavorites = false;
+  moreThanFiveLastVisitedPartners = false;
+  firstFiveFavorites;
+  lastVisitedFive = [];
 
   getPartnersSubscription: any;
   getLocationSubscription: any;
@@ -61,7 +65,11 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView('Übersicht Screen')
     }
-    setTimeout(()=>{this.noDataToDisplay = true}, 5000);
+    setTimeout(() => {
+      if (this.lastVisitedPartners.length == 0) {
+        this.noDataToDisplay = true
+      }
+    }, 5000);
   }
 
   ngOnDestroy() {
@@ -105,11 +113,16 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       });
       FavoritesData.favoritesByPfArray = favoritesByPf;
       this.partnerService.getPartners(this.location, 0, "", false, "RELEVANCE", "DESC", 10000, favoritesByPf).subscribe((res) => {
-          let result = res.json().contentEntities;
-          if (result) {
-            this.favoritePartners = res.json().contentEntities.slice(0, 5);
+        let partnersArray = res.json().contentEntities;
+          if (partnersArray) {
+            this.favoritePartners = partnersArray;
+            this.firstFiveFavorites = this.favoritePartners.slice(0, 5);
+            if (this.favoritePartners.length > 5) {
+              this.moreThanFiveFavorites = true;
+            }
+            this.waitingForResults = false;
           }
-          this.waitingForResults = false;
+
         },
         error => {
           console.log(error);
@@ -124,25 +137,30 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   displayFavoritesFromCache() {
     let cachedFavoritesArray = JSON.parse(localStorage.getItem("savedFavorites")) || [];
     if (cachedFavoritesArray.length) {
-      let cachedFavoritesForDisplay = cachedFavoritesArray.slice(0, 5);
       this.favoritesFromCache = true;
-      for (let pfNumber of cachedFavoritesForDisplay) {
+      for (let pfNumber of cachedFavoritesArray) {
         let partner = JSON.parse(localStorage.getItem(pfNumber + "partner"));
         partner.logoUrl = localStorage.getItem(pfNumber + "logo");
         this.favoritePartners.push(partner);
       }
+      this.firstFiveFavorites = this.favoritePartners.slice(0, 5);
     }
   }
 
   getLastVisitedPartners() {
     let lastVisitedPartnersArray = JSON.parse(localStorage.getItem("savedLastVisitedPartners")) || [];
     if (lastVisitedPartnersArray.length) {
-      let lastVisitedPartnersForDisplay = lastVisitedPartnersArray.slice(0, 5);
-      for (let pfNumber of lastVisitedPartnersForDisplay) {
+      let maxIndex = lastVisitedPartnersArray.length - 1;
+      for (let i = maxIndex; i > -1; i--) {
+        let pfNumber = lastVisitedPartnersArray[i];
         let partner = JSON.parse(localStorage.getItem(pfNumber + "partner"));
-        partner.logoString = localStorage.getItem(pfNumber + "logo");
+        partner.logoString = localStorage.getItem(pfNumber + "logo")
         this.lastVisitedPartners.push(partner);
       }
+      this.lastVisitedFive = this.lastVisitedPartners.slice(0, 5);
+    }
+    if (lastVisitedPartnersArray.length > 5) {
+      this.moreThanFiveLastVisitedPartners = true;
     }
   }
 
@@ -246,10 +264,18 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   loadUserSpecificPartnerTable(type) {
     if (type === "favorites") {
-      this.navCtrl.push(UserSpecificPartnersComponent, {title: "Favoriten", fromCache: this.favoritesFromCache})
+      this.navCtrl.push(UserSpecificPartnersComponent, {
+        title: "Favoriten",
+        fromCache: this.favoritesFromCache,
+        partners: this.favoritePartners
+      })
     }
     else {
-      this.navCtrl.push(UserSpecificPartnersComponent, {title: "Zuletzt besucht"})
+      this.navCtrl.push(UserSpecificPartnersComponent, {
+        title: "Zuletzt besucht",
+        fromCache: true,
+        partners: this.lastVisitedPartners
+      })
     }
   }
 
@@ -323,5 +349,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       searchInputField.focus();
     }
   }
+
 
 }

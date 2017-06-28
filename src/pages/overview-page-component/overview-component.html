@@ -81,16 +81,16 @@
     <ion-col class="title">
       <p class="title-paragraph">Favoriten</p>
     </ion-col>
-    <ion-col class="more">
+    <ion-col class="more" *ngIf="moreThanFiveFavorites">
       <button ion-button icon-only tappable class="more" (click)="loadUserSpecificPartnerTable('favorites')">...
       </button>
     </ion-col>
   </ion-row>
 
-  <partner-table [partners]="favoritePartners"
+  <partner-table [partners]="firstFiveFavorites"
                  (showPartnerEventEmitter)="showPartner($event)"
                  *ngIf="favoritePartners && !favoritesFromCache"></partner-table>
-  <partner-table-cached [partners]="favoritePartners"
+  <partner-table-cached [partners]="firstFiveFavorites"
                         (showCachedPartnerEventEmitter)="showCachedPartner($event)"
                         *ngIf="favoritePartners && favoritesFromCache">
   </partner-table-cached>
@@ -99,13 +99,13 @@
     <ion-col col-auto class="title">
       <p class="title-paragraph">Zuletzt besuchte Partner</p>
     </ion-col>
-    <ion-col class="more">
+    <ion-col class="more" *ngIf="moreThanFiveLastVisitedPartners">
       <button ion-button icon-only tappable class="more" (click)="loadUserSpecificPartnerTable('lastvisitedPartners')">
         ...
       </button>
     </ion-col>
   </ion-row>
-  <partner-table-cached [partners]="lastVisitedPartners"
+  <partner-table-cached [partners]="lastVisitedFive"
                  (showCachedPartnerEventEmitter)="showCachedPartner($event)"
                  *ngIf="lastVisitedPartners"></partner-table-cached>
 

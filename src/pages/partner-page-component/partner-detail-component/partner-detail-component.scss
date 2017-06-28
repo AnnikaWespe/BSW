@@ -7,13 +7,26 @@ page-partner-detail-component {
     font-size: 2.5em;
     margin-right: 2.5vw;
   }
-  img {
-    width: 80%;
-    display: block;
-    margin: auto;
+
+  div.white-square {
+    //height: 25vw;
+    //width: 25vw;
+    height:81px;
+    width:135px;
+    background-color: white;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+  }
+  ion-content{
+    background-color: map-get($colors, light)!important;
   }
   div.partner-details {
-    padding: 0 0.5vw 0.5vh 7vw;
+    padding: 0 3vw 0.5vh 7vw;
     background-color: map-get($colors, light);
     &.aktion{
       color: map-get($colors, font-color-for-filter-dropdown);
@@ -25,18 +38,12 @@ page-partner-detail-component {
       color: map_get($colors, font-color-for-filter-dropdown);
     }
     .blue{
-      margin: 1vh 0;
+      margin: 1vh 2vw 1vh 0;
       color: map_get($colors, secondary);
-      font-size: larger;
+      font-size: xx-large;
       &.title{
         margin: 0.5vh 0;
       }
-    }
-    .buttonsWrapper{
-      div.goToMap{
-        margin-right: 5vw;
-      }
-      margin-bottom: 2vh;
     }
     div.description {
       margin: 3vh 0 3vh 0;
@@ -50,6 +57,27 @@ page-partner-detail-component {
       }
     }
     div.titleAndButton {
+      ion-item{
+        background-color: map_get($colors, light);
+        border: none !important;
+        padding: 0 !important;
+        height: 30vh;
+      }
+      .item-md.item-block .item-inner {
+        border: none !important;
+
+      }
+      .buttons{
+        display: block;
+        //position: absolute;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        //z-index: 0;
+        //display: inline;
+        min-width: 75vw;
+        position: relative;
+      }
       a {
         display: inline-block;
       }
@@ -65,9 +93,6 @@ page-partner-detail-component {
         border: solid 1px map_get($colors, primary);
         &.online-partner {
           padding: 0 4vw;
-        }
-        &.single-button{
-          display: inline-block;
         }
         div.btn-pill-text {
           display: inline-block;
@@ -89,15 +114,9 @@ page-partner-detail-component {
           transform: translateY(-50%);
         }
       }
-      h3 {
-        width: 55vw;
-        display: inline-block;
-        &.small {
-          width: 44vw;
-        }
-      }
     }
   }
+
   div.online-partner {
     div.paymentIcons {
       margin-top: 2vh;

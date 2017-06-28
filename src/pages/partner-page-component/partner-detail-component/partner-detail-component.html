@@ -14,10 +14,14 @@
 
 
 <ion-content>
-  <img src="{{partner?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
+
   <div class="partner-details">
-    <div class="titleAndButton">
-      <h3 class="title" [class.small] = "partnerDetails?.trackingUrl && !partnerDetails?.ort">{{partnerDetails?.nameInternet}}</h3>
+    <!--<div class="titleAndButton">
+      <div class="title" [class.small] = "partnerDetails?.trackingUrl && !partnerDetails?.ort">
+        <div class="white-square">
+          <img src="{{partner?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
+        </div>
+      </div>
 
       <div tappable class="btn-pill single-button" (click)='goToPartnerDetailMap()' *ngIf="partnerDetails?.ort && !partnerDetails?.trackingUrl">
         <div class="btn-pill-text">
@@ -50,6 +54,43 @@
         </div>
       </div>
 
+    </div>-->
+
+    <div class = "titleAndButton">
+      <ion-row>
+        <ion-col>
+          <div class="image" item-left>
+            <div class="white-square">
+              <img src="{{partner?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
+            </div>
+          </div>
+        </ion-col>
+
+        <ion-col class="buttons-wrapper">
+          <div class="buttons">
+
+            <div class="goToMap" *ngIf="partnerDetails?.ort">
+              <div tappable class="btn-pill goToMap" (click)='goToPartnerDetailMap()'>
+                <div class="btn-pill-text">
+                  Zur Karte
+                </div>
+                <div class="centerMapIcon">
+                  <div class="mapIcon"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="goToOnlineShop" *ngIf="partnerDetails?.trackingUrl" >
+              <div tappable class="btn-pill online-partner" (click)="goToPartnerShop(false)" *ngIf="partnerDetails?.trackingUrl && !partnerDetails?.ort">
+                <div class="btn-pill-text">
+                  Online einkaufen
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </ion-col>
+      </ion-row>
     </div>
 
 
@@ -60,10 +101,6 @@
     <div *ngIf="partnerDetails?.wbEb">
       <span class="blue">{{partnerDetails?.wbEb}}</span>
       <span class="grey">{{partnerDetails?.wbBezeichnung}}</span>
-    </div>
-    <div *ngIf="partnerDetails?.wcEb">
-      <span class="blue">{{partnerDetails?.wcEb}}</span>
-      <span class="grey">{{partnerDetails?.wcBezeichnung}}</span>
     </div>
     <div *ngIf="partnerDetails?.aktionsbonus">
       <span class="blue">{{partnerDetails?.aktionsbonus}}</span>
