@@ -17,8 +17,16 @@ scan-number-page-component {
     box-shadow: 0px -10px 48px -4px rgba(0,0,0,0.77);
   };
   .button-padding{
-    margin: 2vh 3vw 6vh 2vh;
+    margin: 2vh 3vw 3vh 2vh;
   }
+  div.back{
+    margin: 3vh 3vw 2vh 3vw;
+    button{
+      background-color: map-get($colors,light);
+      color: grey;
+    }
+  }
+
   div.img-div{
     background: url('../assets/icon/scanScreenPreview.png')no-repeat;
     height: 100%;

@@ -53,7 +53,6 @@ export class StyledMapPartnersDirective {
     if (DeviceService.isInBrowser) {
       this.pathToGmapsClusterIcons = '../assets/icon/m';
     }
-    //TODO: check path on IOS and WindowsPhone
     else if (DeviceService.isAndroid || DeviceService.isIos || DeviceService.isWindowsPhone) {
       this.pathToGmapsClusterIcons = '../www/assets/icon/m';
     }

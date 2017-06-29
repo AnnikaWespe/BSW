@@ -47,14 +47,13 @@ ion-navbar.toolbar.toolbar-md {
 }
 
 ion-menu {
+  background-color: white !important;
   div.logo {
     background: url('../assets/icon/bsw-logo.png') no-repeat;
     height: 20vh;
     width: 40vh;
     overflow: hidden;
     background-size: contain;
-    //left: 50%;
-    //margin: 0 auto;
     margin-left: 4.5vw;
   }
   div.logo-wrapper {

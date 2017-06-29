@@ -15,6 +15,7 @@ import {WebviewComponent} from "../pages/webview/webview";
 import {InitService} from "./init-service";
 import {PushNotificationsService} from "../services/push-notifications-service";
 import {Firebase} from "@ionic-native/firebase";
+import {StatusBar} from "@ionic-native/status-bar";
 
 
 @Component({
@@ -37,7 +38,8 @@ export class BSWBonusApp {
               private initService: InitService,
               public events: Events,
               private firebase: Firebase,
-              private pushNotificationsService: PushNotificationsService) {
+              private pushNotificationsService: PushNotificationsService,
+              private statusBar: StatusBar) {
     this.setMenu();
     events.subscribe("userLoggedIn", () => {
       this.userLoggedIn = true;
@@ -57,6 +59,8 @@ export class BSWBonusApp {
           this.splashScreen.hide();
           this.getDevice();
           this.setRootPage();
+          this.statusBar.overlaysWebView(false);
+          this.statusBar.backgroundColorByHexString('#929395');
         },
         (err) => {
           this.setRootPage()

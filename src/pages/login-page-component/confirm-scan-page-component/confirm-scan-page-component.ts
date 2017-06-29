@@ -63,5 +63,9 @@ export class ConfirmScanPageComponent {
     });
     prompt.present();
   }
+
+  goBackToLoginPage(){
+    this.navCtrl.push(LoginPageComponent);
+  }
 }
 
