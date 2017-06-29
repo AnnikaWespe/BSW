@@ -9,6 +9,7 @@ partner-table {
     border: none !important;
     padding: 0 !important;
     background-color: map_get($colors, light) !important;
+    max-height: 25vw;
   }
   row.partner-div {
     background-color: map_get($colors, light);

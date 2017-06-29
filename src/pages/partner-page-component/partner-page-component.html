@@ -40,18 +40,7 @@
         </button>
       </ion-buttons>
     </ion-navbar>
-  </div>
-
-
-</ion-header>
-
-
-<ion-content class='has-header has-subheader'>
-
-  <div class="wrapper-div">
-
-    <div class="filter-wrapper">
-
+    <ion-toolbar>
       <ion-row *ngIf="!showMap" class="filter-button-row" [class.dropdownOpen]="showDropdown[2]">
         <ion-col tappable class="filter-button left-button" (click)="toggleVisibilityDropdowns(0)">
           <div class="filter-button-text" [class.notActive]="showDropdown[1]">Filter
@@ -72,6 +61,19 @@
           </div>
         </ion-col>
       </ion-row>
+    </ion-toolbar>
+  </div>
+
+
+
+</ion-header>
+
+
+<ion-content>
+
+
+    <div class="filter-wrapper">
+
 
       <div class="filter-menu" [@show]="showDropdownForAnimation[0]">
         <ion-row class="currentLocation" *ngIf="(offlinePartnerPageComponent || searchPageComponent) && !showMap ">
@@ -167,7 +169,6 @@
       <ion-spinner tappable class="initialSpinner" (click)="hideDropdown()"></ion-spinner>
     </div>
 
-    <div style="height: 8vh"></div>
 
     <ion-item *ngIf="noPartnersToDisplay" text-wrap>
       Wir können Ihnen leider derzeit keine Partner anzeigen.
@@ -201,6 +202,5 @@
                  *ngIf="showMap"
                  (onListUpdated)="scrollToTop()"></partner-map>
 
-  </div>
 </ion-content>
 

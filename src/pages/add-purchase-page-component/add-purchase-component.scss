@@ -1,17 +1,21 @@
 add-purchase-page {
-  button.scanReceipt{
-    margin: 28vh 10vw 0 10vw;
-    width: 80vw;
-    text-transform: none;
-    &.gallery{
-      background-color: map-get($colors,light);
-      margin: 3vh 10vw 0 10vw;
-      color: grey;
+  ion-content{
+    display: inline;
+  }
+  div.buttons{
+    button.scanReceipt{
+      margin: 0 10vw 0 10vw;
+      width: 80vw;
+      &.gallery{
+        background-color: map-get($colors,light);
+        margin: 3vh 10vw 0 10vw;
+        color: grey;
+      }
     }
   }
+
   div.explanation{
-    margin: 10vh 7vw 10vh 7vw;
-    height: 30vh;
+    margin: 5vh 7vw 10vh 7vw;
     line-height: 150%;
   }
 }

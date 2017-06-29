@@ -1,6 +1,5 @@
 partner-page-component {
   div.scroll-content {
-    margin-top: 0;
     background-color: map_get($colors, light);
     margin-top: 0px !important;
   }
@@ -31,9 +30,34 @@ partner-page-component {
 
   ion-content {
     position: relative;
+    margin-top: 100px;
   }
 
-  div.filter-wrapper {
+  ion-toolbar{
+    padding: 0!important;
+    min-height: initial!important;
+    ion-row.filter-button-row {
+      border-bottom: 1px solid map_get($colors, secondary);
+      text-align: center;
+      background-color: white;
+      &.dropdownOpen {
+        border-bottom: 2px solid white;
+      }
+    }
+    div.filter-button-text {
+      color: map_get($colors, secondary);
+      vertical-align: middle;
+      font-size: small;
+      font-weight: bolder;
+      line-height: 40px;
+      &.notActive {
+        color: map_get($colors, font-grey);
+      }
+      ion-icon{
+        font-size: larger;
+        margin-left: 1vh;
+      }
+    }
     .left-button {
       margin-right: 1.5px;
       &.singleButton {
@@ -44,11 +68,13 @@ partner-page-component {
         }
       }
     }
-
     ion-col.filter-button {
-      height: 8vh;
+      height: 50px;
       background-color: map_get($colors, secondary-grey);
     }
+  }
+
+  div.filter-wrapper {
     position: fixed;
     width: 100%;
     z-index: 150;
@@ -60,6 +86,7 @@ partner-page-component {
       left: 0;
       width: 100%;
       height: 84vh;
+      //min-height: 56px;
       background-color: map_get($colors, secondary-grey);
       z-index: 100;
       overflow: hidden;
@@ -119,10 +146,6 @@ partner-page-component {
           }
         }
       }
-      div.wrapper-div {
-        height: 4vh;
-        text-align: center;
-      }
       button.showSelection {
         font-size: larger;
         width: 80vw;
@@ -151,28 +174,7 @@ partner-page-component {
         padding: 3vw 5vw;
       }
     }
-    ion-row.filter-button-row {
-      border-bottom: 1px solid map_get($colors, secondary);
-      text-align: center;
-      background-color: white;
-      &.dropdownOpen {
-        border-bottom: 2px solid white;
-      }
-    }
-    div.filter-button-text {
-      color: map_get($colors, secondary);
-      vertical-align: middle;
-      font-size: small;
-      font-weight: bolder;
-      line-height: 6.5vh;
-      &.notActive {
-        color: map_get($colors, font-grey);
-      }
-      ion-icon{
-        font-size: larger;
-        margin-left: 1vh;
-      }
-    }
+
   }
 
   div.initialSpinner {
