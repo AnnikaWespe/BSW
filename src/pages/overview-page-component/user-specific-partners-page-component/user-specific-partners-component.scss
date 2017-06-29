@@ -12,4 +12,74 @@ page-user-specific-partners-component {
     height: 85px;
     text-align: center;
   }
+  ion-toolbar{
+    padding: 0!important;
+    min-height: initial!important;
+    ion-row.filter-button-row {
+      border-bottom: 1px solid map_get($colors, secondary);
+      text-align: center;
+      background-color: white;
+      &.dropdownOpen {
+        border-bottom: 2px solid white;
+      }
+    }
+    div.filter-button-text {
+      color: map_get($colors, secondary);
+      vertical-align: middle;
+      font-size: small;
+      font-weight: bolder;
+      line-height: 40px;
+      &.notActive {
+        color: map_get($colors, font-grey);
+      }
+      ion-icon{
+        font-size: larger;
+        margin-left: 1vh;
+      }
+    }
+    .left-button {
+      margin-right: 1.5px;
+      &.singleButton {
+        text-align: center;
+        margin-right: 0;
+        ion-icon {
+          margin-left: 2vw;
+        }
+      }
+    }
+    ion-col.filter-button {
+      height: 50px;
+      background-color: map_get($colors, secondary-grey);
+    }
+  }
+
+  div.filter-menu {
+    color: map_get($colors, font-color-for-filter-dropdown);
+    text-align: center;
+    font-size: larger;
+    left: 0;
+    width: 100%;
+    height: 84vh;
+    background-color: map_get($colors, secondary-grey);
+    z-index: 100;
+    overflow: hidden;
+    ion-item.sort-by{
+      color: map-get($colors, font-color-for-filter-dropdown);
+      font-weight: bolder;
+      background-color:map_get($colors, secondary-grey);
+    }
+    ion-row.toggle {
+      font-weight: bolder;
+      &.biggerMarginTop {
+        padding-top: 2vh;
+      }
+    }
+    ion-col.toggle-text {
+      min-width: 75%;
+      text-align: left;
+      padding: 3vw 5vw;
+    }
+  }
+
 }
+

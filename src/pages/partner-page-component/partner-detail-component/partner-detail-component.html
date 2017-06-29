@@ -12,16 +12,15 @@
   </ion-navbar>
 </ion-header>
 
-
 <ion-content>
+  <div class="white-background">
+    <div class="center-image">
+      <img src="{{partner?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
+    </div>
+  </div>
 
   <div class="partner-details">
     <div class="titleAndButton">
-      <div class="title" [class.small] = "partnerDetails?.trackingUrl && !partnerDetails?.ort">
-        <div class="white-square">
-          <img src="{{partner?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
-        </div>
-      </div>
 
       <div tappable class="btn-pill single-button" (click)='goToPartnerDetailMap()' *ngIf="partnerDetails?.ort && !partnerDetails?.trackingUrl">
         <div class="btn-pill-text">
@@ -69,7 +68,7 @@
       <span class="blue">{{partnerDetails?.aktionsbonus}}</span>
       <span class="grey">Aktionsbonus</span>
     </div>
-    <p class="grey" *ngIf="partnerDetails?.ort">{{partnerDetails?.strasse}} {{partnerDetails?.hausnummer}},
+    <p *ngIf="partnerDetails?.ort"><b>Ort:</b> {{partnerDetails?.strasse}} {{partnerDetails?.hausnummer}},
       {{partnerDetails?.ort}}</p>
     <div class="description">
       <div *ngIf="partnerDetails?.kurzBeschreibung"
@@ -91,14 +90,7 @@
     </div>
   </div>
 
-  <!--<div class = "paymentIcons">
-    <div class = "paymentIcon girocard"></div>
-    <div class = "paymentIcon maestro"></div>
-    <div class = "paymentIcon masterCard"></div>
-    <div class = "paymentIcon klarna"></div>
-    <div class = "paymentIcon vorkasse"></div>
-    <div class = "paymentIcon paypal"></div>
-  </div>-->
+
 
 
   <div *ngIf="partnerDetails?.aktionen">
@@ -114,3 +106,12 @@
   </div>
 
 </ion-content>
+
+<!--<div class = "paymentIcons">
+   <div class = "paymentIcon girocard"></div>
+   <div class = "paymentIcon maestro"></div>
+   <div class = "paymentIcon masterCard"></div>
+   <div class = "paymentIcon klarna"></div>
+   <div class = "paymentIcon vorkasse"></div>
+   <div class = "paymentIcon paypal"></div>
+ </div>-->

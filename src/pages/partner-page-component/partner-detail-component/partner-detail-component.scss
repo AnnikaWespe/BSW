@@ -2,7 +2,7 @@ page-partner-detail-component {
   .bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default {
     color: map_get($colors, grey) !important;
   }
-  ion-icon.favorites-icon{
+  ion-icon.favorites-icon {
     display: inline-block;
     font-size: 2.5em;
     margin-right: 2.5vw;
@@ -22,9 +22,9 @@ page-partner-detail-component {
 
     margin-right: 0 !important;
   }
-  div.white-square {
-    height: 90px;
-    width: 150px;
+  div.center-image {
+    height: 60px;
+    width: 100px;
     background-color: white;
     display: -ms-flexbox;
     display: -webkit-flex;
@@ -39,13 +39,17 @@ page-partner-detail-component {
     margin-left: auto;
     margin-right: auto;
   }
-  ion-content{
-    background-color: map-get($colors, light)!important;
+  div.white-background{
+    background-color: white;
+    margin-bottom: 3vh;
+  }
+  ion-content {
+    background-color: map-get($colors, light) !important;
   }
   div.partner-details {
     padding: 0 4vw 0.5vh 4vw;
     background-color: map-get($colors, light);
-    &.aktion{
+    &.aktion {
       color: map-get($colors, font-color-for-filter-dropdown);
       line-height: 3vh;
       padding: 3vh;
@@ -54,28 +58,31 @@ page-partner-detail-component {
       margin: 1vh 0;
       color: map_get($colors, font-color-for-filter-dropdown);
     }
-    .blue{
+    .blue {
       margin: 1vh 2vw 1vh 0;
       color: map_get($colors, secondary);
       font-size: xx-large;
-      &.title{
+      &.title {
         margin: 0.5vh 0;
       }
     }
-    .buttonsWrapper{
-      div.goToMap{
+    .buttonsWrapper {
+      div.goToMap {
         margin-right: 5vw;
       }
       margin-bottom: 2vh;
+      div.online-partner{
+        float: right;
+      }
     }
     div.description {
       margin: 3vh 0 3vh 0;
       line-height: 3vh;
     }
-    span.toggleDisplay{
+    span.toggleDisplay {
       color: map_get($colors, primary);
       text-decoration: underline;
-      &.showLess{
+      &.showLess {
         margin-top: 1vh;
       }
     }
@@ -96,8 +103,9 @@ page-partner-detail-component {
         &.online-partner {
           padding: 0 4vw;
         }
-        &.single-button{
-          display: inline-block;
+        &.single-button {
+          float: right;
+          margin-bottom: 1vh;
         }
         div.btn-pill-text {
           display: inline-block;
@@ -128,41 +136,40 @@ page-partner-detail-component {
       }
     }
   }
-  div.online-partner {
-    div.paymentIcons {
-      margin-top: 2vh;
-      div.paymentIcon {
-        &.maestro {
-          background: url('../assets/icon/payment-icons/maestro.png') no-repeat;
-          background-size: contain;
-        }
-        &.girocard {
-          background: url('../assets/icon/payment-icons/girocard.png') no-repeat;
-          background-size: contain;
-        }
-        &.vorkasse {
-          background: url('../assets/icon/payment-icons/payment-in-advance.png') no-repeat;
-          background-size: contain;
-        }
-        &.klarna {
-          background: url('../assets/icon/payment-icons/klarna.png') no-repeat;
-          background-size: contain;
-        }
-        &.paypal {
-          background: url('../assets/icon/payment-icons/paypal.png') no-repeat;
-          background-size: contain;
-        }
-        &.masterCard {
-          background: url('../assets/icon/payment-icons/mastercard.png') no-repeat;
-          background-size: contain;
-        }
-        height: 5vh;
-        width: 7vh;
-        overflow: hidden;
-        display: inline-block;
+  div.paymentIcons {
+    margin-top: 2vh;
+    div.paymentIcon {
+      &.maestro {
+        background: url('../assets/icon/payment-icons/maestro.png') no-repeat;
+        background-size: contain;
       }
+      &.girocard {
+        background: url('../assets/icon/payment-icons/girocard.png') no-repeat;
+        background-size: contain;
+      }
+      &.vorkasse {
+        background: url('../assets/icon/payment-icons/payment-in-advance.png') no-repeat;
+        background-size: contain;
+      }
+      &.klarna {
+        background: url('../assets/icon/payment-icons/klarna.png') no-repeat;
+        background-size: contain;
+      }
+      &.paypal {
+        background: url('../assets/icon/payment-icons/paypal.png') no-repeat;
+        background-size: contain;
+      }
+      &.masterCard {
+        background: url('../assets/icon/payment-icons/mastercard.png') no-repeat;
+        background-size: contain;
+      }
+      height: 5vh;
+      width: 7vh;
+      overflow: hidden;
+      display: inline-block;
     }
   }
+
   ion-row.title-row {
     background-color: map-get($colors, light-grey);
     height: 8vh;
