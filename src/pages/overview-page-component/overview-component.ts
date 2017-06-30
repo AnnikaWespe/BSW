@@ -56,7 +56,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               private ga: GoogleAnalytics,
               private bonusService: BonusService) {
     this.checkIfGPSEnabled();
-    this.getFavoriteAndLastVisitedPartners();
+    this.getFavoritePartners();
     this.getBonusData();
     this.getLastVisitedPartners();
     if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
@@ -93,7 +93,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     })
   }
 
-  getFavoriteAndLastVisitedPartners() {
+  getFavoritePartners() {
     if (this.userLoggedIn) {
       this.favoritesService.getFavorites().subscribe((res) => {
           this.getFavoritesByPfArray(res);
@@ -273,7 +273,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     else {
       this.navCtrl.push(UserSpecificPartnersComponent, {
         title: "Zuletzt besucht",
-        fromCache: true,
+        fromCache: false,
         partners: this.lastVisitedPartners
       })
     }

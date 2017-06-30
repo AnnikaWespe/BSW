@@ -8,6 +8,9 @@
         <ion-icon name="star-outline" color="grey" *ngIf="!isInFavorites" class="favorites-icon"></ion-icon>
         <ion-icon name="star" color='primary' *ngIf="isInFavorites" class="favorites-icon"></ion-icon>
       </button>
+      <button *ngIf="!favoritesByPfArray">
+        <ion-icon name="search" color="grey" class="search-button-header" style="visibility: hidden"></ion-icon>
+      </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
@@ -22,23 +25,8 @@
   <div class="partner-details">
     <div class="titleAndButton">
 
-      <div tappable class="btn-pill single-button" (click)='goToPartnerDetailMap()' *ngIf="partnerDetails?.ort && !partnerDetails?.trackingUrl">
-        <div class="btn-pill-text">
-          Zur Karte
-        </div>
-        <div class="centerMapIcon">
-          <div class="mapIcon"></div>
-        </div>
-      </div>
-
-      <div tappable class="btn-pill online-partner single-button" (click)="goToPartnerShop(false)" *ngIf="partnerDetails?.trackingUrl && !partnerDetails?.ort">
-        <div class="btn-pill-text">
-          Online einkaufen
-        </div>
-      </div>
-
-      <div class="buttonsWrapper" *ngIf="partnerDetails?.trackingUrl && partnerDetails?.ort">
-        <div tappable class="btn-pill goToMap" (click)='goToPartnerDetailMap()'>
+      <div class="buttonsWrapper">
+        <div tappable class="btn-pill goToMap" (click)='goToPartnerDetailMap()' *ngIf="partnerDetails?.ort">
           <div class="btn-pill-text">
             Zur Karte
           </div>
@@ -46,7 +34,7 @@
             <div class="mapIcon"></div>
           </div>
         </div>
-        <div tappable class="btn-pill online-partner" (click)="goToPartnerShop(false)">
+        <div tappable class="btn-pill online-partner" (click)="goToPartnerShop(false)" *ngIf="partnerDetails?.trackingUrl">
           <div class="btn-pill-text">
             Online einkaufen
           </div>
@@ -60,7 +48,7 @@
       <span class="blue">{{partnerDetails?.waEb}}</span>
       <span class="grey">{{partnerDetails?.waBezeichnung}}</span>
     </div>
-    <div *ngIf="partnerDetails?.wbEb">
+    <div *ngIf="partnerDetails?.wbEb" class="second-bonus">
       <span class="blue">{{partnerDetails?.wbEb}}</span>
       <span class="grey">{{partnerDetails?.wbBezeichnung}}</span>
     </div>

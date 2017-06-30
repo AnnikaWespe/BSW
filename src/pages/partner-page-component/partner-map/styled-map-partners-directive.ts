@@ -1,4 +1,4 @@
-import {Directive, Input, Output, EventEmitter, OnChanges} from '@angular/core';
+import {Directive, Input, Output, EventEmitter, OnChanges, OnDestroy} from '@angular/core';
 import {GoogleMapsAPIWrapper} from 'angular2-google-maps/core';
 import {generate} from "../../Observable";
 import {NavController, Platform} from 'ionic-angular';
@@ -27,7 +27,7 @@ declare let MarkerClusterer: any;
 @Directive({
   selector: 'styled-map-partners',
 })
-export class StyledMapPartnersDirective {
+export class StyledMapPartnersDirective implements OnDestroy{
 
   @Output() fillList = new EventEmitter();
   @Output() removeList = new EventEmitter();
@@ -63,11 +63,16 @@ export class StyledMapPartnersDirective {
         this.setMapOptions(map);
         const idle$ = Observable.create((observer) => {
           let timer;
+          let firstTimeOut = true;
           map.addListener('idle', () => {
+            if(firstTimeOut){
+              firstTimeOut = false;
+              return;
+            }
             clearTimeout(timer);
             timer = setTimeout(() => {
               observer.next();
-            }, 500)
+            }, 1000)
           })
         })
         const center$ = idle$.map(() => {
@@ -224,5 +229,8 @@ export class StyledMapPartnersDirective {
     return roundedDis;
   }
 
+  ngOnDestroy(){
+    this.unsubscribeFromGetPartnersRequest();
+  }
 }
 

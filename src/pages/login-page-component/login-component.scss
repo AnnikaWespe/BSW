@@ -1,22 +1,17 @@
 page-login-component {
-  ion-input{
-    border-bottom: dotted grey 0.5px;
-  }
-input.text-input.text-input-md.ng-pristine.ng-valid{
-  margin : 1vh;
-}
+
+
   .img-div{
     background: url('../assets/icon/bsw-logo.png')no-repeat;
-    //height: 30vh;
-    //width: 60vw;
-    height:1000%;
+    height: 30vh;
+    width: 60vw;
     overflow: hidden;
     background-size: contain;
     left:50%;
-    margin: 0 auto;
+    margin: 10vh auto;
   }
-  .distance-div{
-    height: 13vh;
+  div.full-height{
+    background-color: green;
   }
   .scroll-content{
     background-color: map-get($colors, light);
@@ -44,16 +39,7 @@ input.text-input.text-input-md.ng-pristine.ng-valid{
       text-decoration: underline;
     }
   }
-  .footer-md::before{
-    content: none;
-  }
-  ion-footer{
-    margin-bottom: 1vh;
-    padding: 0 4vw;
-  }
-  div.input-cover{
-    padding: 0;
-  }
+
   div.input-fields-wrapper{
     margin: auto;
     left: 0; right: 0;bottom: 4vh;
@@ -61,6 +47,12 @@ input.text-input.text-input-md.ng-pristine.ng-valid{
     position: absolute;
     padding: 0 8vw;
     background-color: map-get($colors, light);
+    ion-input{
+      border-bottom: dotted grey 0.5px;
+    }
+    input.text-input.text-input-md.ng-pristine.ng-valid{
+      margin : 1vh;
+    }
   }
   div.card-number-wrapper{
     position: relative;

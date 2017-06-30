@@ -9,6 +9,7 @@ partner-table-cached {
     border: none !important;
     padding: 0 !important;
     background-color: map_get($colors, light) !important;
+    max-height: 25vw;
   }
   row.partner-div {
     background-color: map_get($colors, light);
@@ -78,6 +79,9 @@ partner-table-cached {
     color: map_get($colors, primary);
     font-size: large;
     text-align: right;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
   .partner-adress {
     font-size: smaller;
@@ -101,6 +105,5 @@ partner-table-cached {
     white-space: nowrap;
     height: 25vw;
     position: relative;
-    right: 2vw;
   }
 }

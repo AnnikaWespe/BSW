@@ -35,22 +35,24 @@ export class UserSpecificPartnersComponent {
               public partnerService: PartnerService) {
     this.title = navParams.get("title");
     this.partners = navParams.get("partners");
-    if (navParams.get("cached")) {
-      this.cached = true;
-      this.sortCachedArray();
+    this.cached = (navParams.get("cached") == "true");
+    if (this.title === "Favoriten" || this.cached) {
+      this.sortPartnersArray();
     }
-    else if (this.title === "Zuletzt besucht") {
+    else {
       this.getAllLastVisitedPartners();
     }
   }
 
-  sortCachedArray(){
+  sortPartnersArray(){
     let duplicateArray = this.partners.slice();
     let secondDuplicateArray = this.partners.slice();
     this.partnersInAlphabeticalOrder = duplicateArray.sort((a,b)=>{
       return a.shortName.localeCompare(b.shortName);
     });
     this.partnersInChronologicalOrder = secondDuplicateArray;
+    console.log(duplicateArray);
+    console.log(secondDuplicateArray);
   }
 
   getAllLastVisitedPartners() {

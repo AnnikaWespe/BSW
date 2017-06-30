@@ -38,6 +38,7 @@ page-partner-detail-component {
 
     margin-left: auto;
     margin-right: auto;
+    padding: 6vh 0;
   }
   div.white-background{
     background-color: white;
@@ -66,13 +67,23 @@ page-partner-detail-component {
         margin: 0.5vh 0;
       }
     }
+    .second-bonus{
+      margin-top: 1.5vh;
+    }
     .buttonsWrapper {
-      div.goToMap {
-        margin-right: 5vw;
+      div.btn-pill{
+        float: right;
+        &.goToMap{
+          margin-left: 4vw;
+        }
       }
       margin-bottom: 2vh;
-      div.online-partner{
-        float: right;
+      &:after {
+        content: ".";
+        clear: both;
+        display: block;
+        visibility: hidden;
+        height: 0px;
       }
     }
     div.description {

@@ -66,25 +66,26 @@ export class LoginPageComponent {
   }
 
   checkForValidInput() {
-    this.presentLoading();
     this.login();
-    //TODO: outcomment for production
+    this.presentLoading();
     /*if (isNaN(this.inputNumberOrEmail)) {
-     if (this.emailAdressProperlyFormatted()) {
-     this.login();
-     }
-     else {
-     this.showPromptNoValidEmail();
-     }
-     }
-     else {
-     if (this.inputNumberOrEmail.length == 10) {
-     this.login();
-     }
-     else {
-     this.showPromptNoValidNumber()
-     }
-     }*/
+      if (this.emailAdressProperlyFormatted()) {
+        this.login();
+      }
+      else {
+        this.showPromptNoValidEmail();
+        this.loading.dismiss();
+      }
+    }
+    else {
+      if (this.inputNumberOrEmail.length == 10) {
+        this.login();
+      }
+      else {
+        this.showPromptNoValidNumber();
+        this.loading.dismiss();
+      }
+    }*/
   }
 
   emailAdressProperlyFormatted() {
@@ -96,7 +97,6 @@ export class LoginPageComponent {
     //TODO get username and password from user input
     let username = "0016744807"
     let password = "muster01$$";
-    //let password = "hallo";
     this.loginService.login(username, password).subscribe((res) => {
       this.loading.dismiss();
       let loginData = res.json();
@@ -269,11 +269,10 @@ export class LoginPageComponent {
     this.loading = this.loadingCtrl.create({
       content: 'Sie werden eingeloggt...'
     });
-
     this.loading.present();
   }
 
-  gotToExternalSiteForJoiningBsw(){
+  gotToExternalSiteForJoiningBsw() {
     let url = localStorage.getItem('beitretenWebviewUrl');
     console.log(url);
     cordova.InAppBrowser.open(url, '_system', 'location=yes');
