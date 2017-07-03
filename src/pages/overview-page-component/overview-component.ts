@@ -115,6 +115,14 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       this.partnerService.getPartners(this.location, 0, "", false, "RELEVANCE", "DESC", 10000, favoritesByPf).subscribe((res) => {
         let partnersArray = res.json().contentEntities;
           if (partnersArray) {
+            for (let pfNumber of favoritesByPf){
+              for (let partner of partnersArray){
+                if(partner.number == pfNumber){
+                  this.favoritePartners.push(partner);
+                  break;
+                }
+              }
+            }
             this.favoritePartners = partnersArray;
             this.firstFiveFavorites = this.favoritePartners.slice(0, 5);
             if (this.favoritePartners.length > 5) {

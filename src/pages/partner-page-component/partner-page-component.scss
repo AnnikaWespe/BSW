@@ -1,7 +1,6 @@
 partner-page-component {
-  div.scroll-content {
+  ion-content {
     background-color: map_get($colors, light);
-    margin-top: 0px !important;
   }
 
   div.standard-header {
@@ -26,11 +25,6 @@ partner-page-component {
     button {
       padding: 0 0 0 2vw !important;
     }
-  }
-
-  ion-content {
-    position: relative;
-    margin-top: 100px;
   }
 
   ion-toolbar{

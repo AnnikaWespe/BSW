@@ -54,6 +54,8 @@ export class SettingsPageComponent implements OnDestroy {
     let token = localStorage.getItem("firebaseToken") || "";
     this.pushNotificationsService.sendPushNotificationsRequest(token, "").subscribe((res) => {
       console.log(res.json().errors[0])
+    }, (err) => {
+      localStorage.setItem("updatePushNotificationsNextTime", "true");
     });
   }
 }
