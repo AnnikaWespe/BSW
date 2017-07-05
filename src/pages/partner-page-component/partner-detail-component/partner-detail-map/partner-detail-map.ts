@@ -94,7 +94,9 @@ export class PartnerDetailMap {
 
   openExternalMapApp() {
     if (device.platform == "Android") {
-      window.open("geo:49,10?q=48,11(Hier wollen Sie hin)", '_system', 'location=yes');
+      let link = "geo:" + this.currentLatitude + "," + this.currentLongitude + "?q=" + this.partnerDetails.latitude + "," + this.partnerDetails.longitude + "(" + this.partnerDetails.nameInternet + ")";
+      console.log(link);
+      window.open(link, '_system', 'location=yes');
     }
     else {
       window.open("http://maps.apple.com/?saddr=48,11&daddr=49,10");
