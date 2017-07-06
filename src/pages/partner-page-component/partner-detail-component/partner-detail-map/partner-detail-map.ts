@@ -99,7 +99,11 @@ export class PartnerDetailMap {
       window.open(link, '_system', 'location=yes');
     }
     else {
-      window.open("http://maps.apple.com/?saddr=48,11&daddr=49,10");
+      let currentLocationString = "";
+      if(this.locationExact){
+        currentLocationString = "saddr=" + this.currentLatitude + "," + this.currentLongitude + "&";
+      }
+      window.open("http://maps.apple.com/?" + currentLocationString + "daddr=" + this.partnerDetails.latitude + "," + this.partnerDetails.longitude, '_system', 'location=yes');
     }
   }
 

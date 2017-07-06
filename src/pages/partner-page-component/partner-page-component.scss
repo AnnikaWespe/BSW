@@ -69,7 +69,6 @@ partner-page-component {
   }
 
   div.filter-wrapper {
-    position: fixed;
     width: 100%;
     z-index: 150;
 
@@ -180,11 +179,13 @@ partner-page-component {
     right: 0;
     height: 85px;
     text-align: center;
+    z-index: 50 !important;
   }
 
   ion-spinner.initialSpinner {
     width: 19% !important;
     height: 85px !important;
+    z-index: 50 !important;
   }
 
   partner-map {

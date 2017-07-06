@@ -40,6 +40,7 @@
         </button>
       </ion-buttons>
     </ion-navbar>
+
     <ion-toolbar>
       <ion-row *ngIf="!showMap" class="filter-button-row" [class.dropdownOpen]="showDropdown[2]">
         <ion-col tappable class="filter-button left-button" (click)="toggleVisibilityDropdowns(0)">
@@ -165,7 +166,7 @@
 
     </div>
 
-    <div class="initialSpinner" *ngIf="waitingForResults">
+    <div class="initialSpinner" *ngIf="waitingForResults && !showDropdown[2]">
       <ion-spinner tappable class="initialSpinner" (click)="hideDropdown()"></ion-spinner>
     </div>
 

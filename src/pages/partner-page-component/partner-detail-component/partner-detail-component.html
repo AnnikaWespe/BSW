@@ -66,14 +66,14 @@
       <span class="toggleDisplay showLess" *ngIf="showDetails && partnerDetails?.aktionen" tappable (click)="showDetails = !showDetails">Weniger anzeigen</span>
     </div>
     <div *ngIf="showDetails">
+      <div *ngIf="partnerDetails?.abwicklungVorort">
+        <span class="blue title">Vorteil Vor Ort</span>
+        <div class="description" *ngIf="partnerDetails?.abwicklungVorort"
+             [innerHtml]="partnerDetails?.abwicklungVorort"></div>
+      </div>
       <div *ngIf="partnerDetails?.abwicklungOnline">
         <span class="blue title">Vorteil Online</span>
         <div class="description" [innerHtml]="partnerDetails?.abwicklungOnline"></div>
-      </div>
-      <div *ngIf="partnerDetails?.abwicklungVorort">
-        <span class="blue title">Vorteil Vorort</span>
-        <div class="description" *ngIf="partnerDetails?.abwicklungVorort"
-             [innerHtml]="partnerDetails?.abwicklungVorort"></div>
       </div>
     </div>
   </div>

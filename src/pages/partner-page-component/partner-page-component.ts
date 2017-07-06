@@ -55,6 +55,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   partnersWithCampaign = [];
   moreDataCanBeLoaded = true;
   bucket: number = 0;
+  onReload = false;
   searchTerm = "";
 
   showOfflinePartners = false;
@@ -237,11 +238,11 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
             this.moreDataCanBeLoaded = false;
             console.log("no data found");
             this.getPartnersSubscription.unsubscribe();
-            this.title = localStorage.getItem("title");
             this.waitingForResults = false;
-            if (this.searchTerm) {
+            if (this.searchTerm && this.displayedPartners.length == 0 && !this.onReload) {
               this.showPromptNoResultForSearch();
               this.searchTerm = "";
+              this.title = localStorage.getItem("title");
               this.resetPartnersArrays();
               this.getPartners();
             }
@@ -268,6 +269,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.offlinePartners = [];
     this.partnersWithCampaign = [];
     this.bucket = 0;
+    this.onReload = false;
     this.waitingForResults = true;
     this.displayedPartners = [];
     this.showTryAgainToGetPartnersButton = false;
@@ -491,6 +493,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   doInfinite(infiniteScroll) {
     this.bucket += 50;
+    this.onReload = true;
     this.getPartners();
     infiniteScroll.complete();
   }

@@ -14,6 +14,8 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
   @Output() travelTimePedestrianUpdated = new EventEmitter();
   @Input() partner;
 
+
+
   map;
 
 
@@ -35,6 +37,7 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
     let bounds = new google.maps.LatLngBounds();
     bounds.extend({lat: this.partner.location.latitude, lng: this.partner.location.longitude});
     if (localStorage.getItem("locationExact") === "true") {
+      console.log("location Exact is so true");
       bounds.extend({lat: Number(localStorage.getItem("latitude")), lng: Number(localStorage.getItem("longitude"))});
     }
     map.fitBounds(bounds);
@@ -52,7 +55,7 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
 
     let directionsService = new google.maps.DirectionsService();
     let origin = new google.maps.LatLng(Number(localStorage.getItem("latitude")), Number(localStorage.getItem("longitude")));
-    let destination = new google.maps.LatLng(48.1300, 11.5700);
+    let destination = new google.maps.LatLng(this.partner.location.latitude, this.partner.location.longitude);
 
     let requestPublic = {origin: origin, destination: destination, travelMode: google.maps.TravelMode.TRANSIT};
     let requestCar = {origin: origin, destination: destination, travelMode: google.maps.TravelMode.DRIVING};
