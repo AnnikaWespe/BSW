@@ -40,7 +40,7 @@ page-partner-detail-component {
     margin-right: auto;
     padding: 6vh 0;
   }
-  div.white-background{
+  div.white-background {
     background-color: white;
     margin-bottom: 3vh;
   }
@@ -67,13 +67,13 @@ page-partner-detail-component {
         margin: 0.5vh 0;
       }
     }
-    .second-bonus{
+    .second-bonus {
       margin-top: 1.5vh;
     }
     .buttonsWrapper {
-      div.btn-pill{
+      div.btn-pill {
         float: right;
-        &.goToMap{
+        &.goToMap {
           margin-left: 4vw;
         }
       }
@@ -98,51 +98,42 @@ page-partner-detail-component {
       }
     }
     div.titleAndButton {
-      a {
-        display: inline-block;
-      }
-      .btn-pill {
+      ion-item {
         text-decoration: none;
         color: map_get($colors, primary);
-        font-size: 5vw;
-        padding: 0 2vw 0 4vw;
-        height: auto;
-        display: inline-block;
         text-align: center;
-        border-radius: 5vw;
         border: solid 1px map_get($colors, primary);
-        &.online-partner {
-          padding: 0 4vw;
+        float: right;
+        font-size: 4vw;
+        border-radius: 6vw;
+        max-width: 30vw;
+        max-height: 10vw;
+        padding: 0!important;
+        margin: 0 4vw;
+        &.online-partner{
+          min-width: 80vw;
+          max-width: 80vw !important;
+          margin-left: 4vw;
         }
-        &.single-button {
-          float: right;
-          margin-bottom: 1vh;
+        .goToMapText{
+          padding-left: 3vw;
         }
-        div.btn-pill-text {
-          display: inline-block;
-          line-height: 10vw;
-        }
-        div.centerMapIcon {
-          display: inline-block;
-          height: 8vw;
-        }
-        div.mapIcon {
-          background-size: contain;
+        div.mapIcon{
+          max-height: 6vw;
+          width: 8vw;
           height: 6vw;
-          width: 6vw;
-          overflow: hidden;
           background: url('../assets/icon/map-pink.svg') no-repeat;
           background-size: contain;
-          position: relative;
-          top: 50%;
-          transform: translateY(-50%);
+          margin-right: 0;
         }
-      }
-      h3 {
-        width: 55vw;
-        display: inline-block;
-        &.small {
-          width: 44vw;
+        div.item-inner {
+          border-bottom: map_get($colors, light);
+          //max-height: 10vw;
+          div.input-wrapper {
+            //max-height: 10vw;
+          }
+        }
+        div.btn-pill-text {
         }
       }
     }

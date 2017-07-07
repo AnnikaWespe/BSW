@@ -70,7 +70,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   getLocationFromGPSEnabled = false;
   cityName = "manuell gewählter Ort";
 
-  searchInterfaceOpen: boolean = false;
+  searchInterfaceOpen = false;
 
   sortByCriterion = "RELEVANCE";
   sortOrder = "DESC";

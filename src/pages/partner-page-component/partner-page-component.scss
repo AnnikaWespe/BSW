@@ -3,7 +3,7 @@ partner-page-component {
     background-color: map_get($colors, light);
   }
 
-  div.standard-header {
+  .standard-header {
     ion-icon {
       margin-left: 1vw;
     }
@@ -119,6 +119,12 @@ partner-page-component {
           text-align: left;
           min-width: 80vw;
           padding-right: 0;
+          &.chooseLocationManually{
+            padding-top: 0.5vh;
+          }
+          &.getLocationFromGPS{
+
+          }
         }
         &.map-icon {
           padding-left: 0;
@@ -155,16 +161,18 @@ partner-page-component {
           margin-top: 58vh;
         }
       }
-      ion-row.toggle {
+      ion-item.toggle {
         font-weight: bolder;
+        background-color: map_get($colors, light) !important;
         &.biggerMarginTop {
           padding-top: 2vh;
         }
       }
-      ion-col.toggle-text {
+      div.toggle-text {
+        font-weight: bolder;
         min-width: 75%;
         text-align: left;
-        padding: 3vw 5vw;
+        color: map_get($colors, font-color-for-filter-dropdown);
       }
     }
 

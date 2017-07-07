@@ -25,20 +25,20 @@
   <div class="partner-details">
     <div class="titleAndButton">
 
+
       <div class="buttonsWrapper">
-        <div tappable class="btn-pill goToMap" (click)='goToPartnerDetailMap()' *ngIf="partnerDetails?.ort">
-          <div class="btn-pill-text">
-            Zur Karte
-          </div>
-          <div class="centerMapIcon">
-            <div class="mapIcon"></div>
-          </div>
-        </div>
-        <div tappable class="btn-pill online-partner" (click)="goToPartnerShop(false)" *ngIf="partnerDetails?.trackingUrl">
-          <div class="btn-pill-text">
-            Online einkaufen
-          </div>
-        </div>
+
+        <ion-item class="online-Partner" color="light" tappable class="button-map btn-pill"
+                  (click)="goToPartnerShop(false)" *ngIf="partnerDetails?.trackingUrl">
+          <div item-content>Online einkaufen</div>
+        </ion-item>
+
+        <ion-item color="light" tappable class="button-map" (click)='goToPartnerDetailMap()'
+                  *ngIf="partnerDetails?.ort">
+          <div item-left class="goToMapText">Zur Karte</div>
+          <div item-end class="mapIcon"></div>
+        </ion-item>
+
       </div>
 
     </div>
@@ -63,7 +63,8 @@
            [innerHtml]="partnerDetails?.kurzBeschreibung">
       </div>
       <span class="toggleDisplay showMore" *ngIf="!showDetails" tappable (click)="showDetails = !showDetails">Mehr anzeigen</span>
-      <span class="toggleDisplay showLess" *ngIf="showDetails && partnerDetails?.aktionen" tappable (click)="showDetails = !showDetails">Weniger anzeigen</span>
+      <span class="toggleDisplay showLess" *ngIf="showDetails && partnerDetails?.aktionen" tappable
+            (click)="showDetails = !showDetails">Weniger anzeigen</span>
     </div>
     <div *ngIf="showDetails">
       <div *ngIf="partnerDetails?.abwicklungVorort">
@@ -77,8 +78,6 @@
       </div>
     </div>
   </div>
-
-
 
 
   <div *ngIf="partnerDetails?.aktionen">
