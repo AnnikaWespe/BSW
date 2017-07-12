@@ -1,4 +1,3 @@
-
 <div class="sebmGoogleMap" [style.height]="getMapHeight()" style="overflow: hidden">
   <sebm-google-map
     [latitude]="stringToNumber(currentLatitude)"
@@ -30,8 +29,13 @@
   </div>
 </div>
 
-<div #partnerList [scrollTop]="scrollTop">
+<ion-scroll scrollY="true" #partnerList [scrollTop]="scrollTop" class="partner-list-wrapper">
+  <div tappable class="hidePartnerList" (click)="closePartnerList()" *ngIf="partnerListOpen">
+    <ion-icon name="arrow-dropdown" color="grey"></ion-icon>
+  </div>
   <div class="partnerList" *ngIf="partnerListOpen">
     <partner-table [partners]="partnersInList" (showPartnerEventEmitter)="showPartner($event)"></partner-table>
   </div>
-</div>
+</ion-scroll>
+
+

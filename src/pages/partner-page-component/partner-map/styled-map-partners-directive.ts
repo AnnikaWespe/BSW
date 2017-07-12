@@ -67,6 +67,7 @@ export class StyledMapPartnersDirective implements OnDestroy{
           map.addListener('idle', () => {
             if(firstTimeOut){
               firstTimeOut = false;
+              observer.next();
               return;
             }
             clearTimeout(timer);

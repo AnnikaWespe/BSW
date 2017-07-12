@@ -55,12 +55,12 @@ export class BSWBonusApp {
   initializeApp() {
     this.platform.ready()
       .then(() => {
-          this.startGoogleAnalyticsTracker();
           this.splashScreen.hide();
-          this.getDevice();
           this.setRootPage();
           this.statusBar.overlaysWebView(false);
           this.statusBar.backgroundColorByHexString('#929395');
+          this.startGoogleAnalyticsTracker();
+          this.getDevice();
         },
         (err) => {
           this.setRootPage()
@@ -181,7 +181,14 @@ export class BSWBonusApp {
     this.firebase.onTokenRefresh()
       .subscribe((token) => {
         this.updateToken(token)
-      })
+      });
+    if(localStorage.getItem("updatePushNotificationsNextTime") == "true"){
+      let token = localStorage.getItem("firebaseToken") || "";
+      this.pushNotificationsService.sendPushNotificationsRequest(token, "").subscribe((res) => {
+        console.log("result from Firebase API request", res.json().errors[0]);
+        localStorage.setItem("updatePushNotificationsNextTime", "false");
+      });
+    };
   }
 
   updateToken(token) {

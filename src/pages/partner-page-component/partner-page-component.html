@@ -118,22 +118,24 @@
         </ion-col>
       </ion-row>
 
-      <ion-item color = "secondary-grey" tappable (click)="showOfflinePartners = !showOfflinePartners" *ngIf="searchPageComponent">
+      <ion-item color="secondary-grey" tappable (click)="showOfflinePartners = !showOfflinePartners"
+                *ngIf="searchPageComponent">
         <div item-content class="toggle-text">Vor-Ort Partner</div>
         <ion-toggle item-right [(ngModel)]="showOfflinePartners" color="light-blue" mode="ios"
                     [class.checked]="showOfflinePartners"></ion-toggle>
       </ion-item>
 
-      <ion-item color = "secondary-grey" tappable (click)="showOnlinePartners = !showOnlinePartners" *ngIf="searchPageComponent">
+      <ion-item color="secondary-grey" tappable (click)="showOnlinePartners = !showOnlinePartners"
+                *ngIf="searchPageComponent">
         <div item-content class="toggle-text">Online Partner</div>
         <ion-toggle item-right color="light-blue" [(ngModel)]="showOnlinePartners" mode="ios"
                     [class.checked]="showOnlinePartners"></ion-toggle>
       </ion-item>
 
-      <ion-item color = "secondary-grey" tappable (click)="showOnlyPartnersWithCampaign = !showOnlyPartnersWithCampaign"
-                 [class.biggerMarginTop]="onlinePartnerPageComponent || showMap">
+      <ion-item color="secondary-grey" tappable (click)="showOnlyPartnersWithCampaign = !showOnlyPartnersWithCampaign"
+                [class.biggerMarginTop]="onlinePartnerPageComponent || showMap">
         <div item-content class="toggle-text">Nur Partner mit Aktionen</div>
-        <ion-toggle item-right  color="light-blue" mode="ios" [(ngModel)]="showOnlyPartnersWithCampaign"></ion-toggle>
+        <ion-toggle item-right color="light-blue" mode="ios" [(ngModel)]="showOnlyPartnersWithCampaign"></ion-toggle>
       </ion-item>
 
       <div class="showSelectionWrapper">
@@ -200,10 +202,10 @@
   </div>
 
 
-  <div tappable class="partner-table-wrapper" (click)="hideDropdown()" *ngIf="!showMap">
+  <ion-scroll tappable class="partner-table-wrapper" (click)="hideDropdown()" *ngIf="!showMap">
     <partner-table [partners]="displayedPartners"
                    (showPartnerEventEmitter)="showPartner($event)"></partner-table>
-  </div>
+  </ion-scroll>
 
   <div *ngIf="!showMap">
     <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="moreDataCanBeLoaded">
@@ -218,7 +220,8 @@
                [searchTerm$]="searchTerm$"
                [searchTerm]="searchTerm"
                *ngIf="showMap"
-               (onListUpdated)="scrollToTop()"></partner-map>
+               (onListUpdated)="scrollToTop()"
+  ></partner-map>
 
 </ion-content>
 
