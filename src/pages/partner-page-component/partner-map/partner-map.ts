@@ -76,8 +76,8 @@ export class PartnerMapComponent implements AfterViewChecked{
   }
 
   getMapHeight() {
-    if (this.partnerListOpen) return "53%"
-    else return "100%";
+    if (this.partnerListOpen) return "53vh"
+    else return "100vh";
   }
 
 

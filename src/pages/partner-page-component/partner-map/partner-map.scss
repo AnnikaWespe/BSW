@@ -2,7 +2,6 @@ partner-map {
   .sebmGoogleMap {
     width: 100%;
     z-index: 1;
-    position: fixed;
     border-bottom: 1px solid grey;
   }
   .sebm-google-map-container {
@@ -12,14 +11,14 @@ partner-map {
   .hidePartnerList {
     text-align: center;
     padding-top: 0.5vh;
-    height: 4vh;
+    height: 5vh;
     width: 100%;
     font-size: 150%;
     background-color: map_get($colors, light);
-  }
-  .partner-list-wrapper {
-    margin-top: 53vh;
-    overflow-y: scroll !important;
+    z-index: 200;
+    ion-icon{
+      z-index: 200;
+    }
   }
 
   div.initialSpinner {
@@ -39,8 +38,6 @@ partner-map {
       margin-top: 30vh;
     }
   }
-  ion-scroll {
-   height: 100%;
-  }
+
 }
 

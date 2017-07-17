@@ -29,13 +29,13 @@
   </div>
 </div>
 
-<ion-scroll scrollY="true" #partnerList [scrollTop]="scrollTop" class="partner-list-wrapper">
+<div #partnerList [scrollTop]="scrollTop" class="partner-list-wrapper">
   <div tappable class="hidePartnerList" (click)="closePartnerList()" *ngIf="partnerListOpen">
     <ion-icon name="arrow-dropdown" color="grey"></ion-icon>
   </div>
   <div class="partnerList" *ngIf="partnerListOpen">
     <partner-table [partners]="partnersInList" (showPartnerEventEmitter)="showPartner($event)"></partner-table>
   </div>
-</ion-scroll>
+</div>
 
 

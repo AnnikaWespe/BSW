@@ -40,6 +40,8 @@ export class MapMarkerService {
     let textIcon;
     if (validImage) {
       imageIcon = 'data:image/svg+xml;utf8,' + svg + '<image x="10" y="-18" width="110" height="110" xlink:href="' + imageAsBase64 + '"/>' + this.bonusElement(partner.pfBonus) + '</svg>';
+      console.log(imageIcon);
+
     }
     else {
       textIcon = 'data:image/svg+xml;utf8,' + svg + this.bonusElement(partner.pfBonus) + this.partnerElement(partner.nameOrigin) + '</svg>';

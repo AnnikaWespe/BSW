@@ -202,10 +202,10 @@
   </div>
 
 
-  <ion-scroll tappable class="partner-table-wrapper" (click)="hideDropdown()" *ngIf="!showMap">
+  <div tappable class="partner-table-wrapper" (click)="hideDropdown()" *ngIf="!showMap">
     <partner-table [partners]="displayedPartners"
                    (showPartnerEventEmitter)="showPartner($event)"></partner-table>
-  </ion-scroll>
+  </div>
 
   <div *ngIf="!showMap">
     <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="moreDataCanBeLoaded">
