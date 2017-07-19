@@ -56,7 +56,7 @@ export class BSWBonusApp {
       .then(() => {
           this.splashScreen.hide();
           this.setRootPage();
-          this.statusBar.overlaysWebView(true);
+          this.statusBar.overlaysWebView(false);
           this.statusBar.backgroundColorByHexString('#929395');
           this.startGoogleAnalyticsTracker();
           this.getDevice();
@@ -65,6 +65,7 @@ export class BSWBonusApp {
           this.setRootPage()
         });
   }
+
 
   setRootPage() {
     if (localStorage.getItem("securityToken")) {
