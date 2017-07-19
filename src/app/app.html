@@ -8,8 +8,17 @@
 
         <div class="logo-wrapper">
           <div class="logo"></div>
-          <ion-row class="salutation" *ngIf = "salutation">
-            Hallo, {{salutation}} {{title}} {{lastName}}!
+          <ion-row class="page salutation">
+            <ion-item  class="salutation">
+              <div item-left class="icon-col">
+                <div class="icon salutation"></div>
+              </div>
+              <ion-label class="page-title">
+                <!--Hallo, {{salutation}} {{title}} {{lastName} *ngIf = "salutation"}!-->
+                Hallo, du Zuckerschwein!
+              </ion-label>
+            </ion-item>
+
           </ion-row>
         </div>
 
@@ -46,12 +55,23 @@
           </ion-item>
         </ion-row>
 
-        <ion-row menuClose class="page" (click)="openPage(this.pages[3])">
+        <ion-row menuClose class="page" (click)="openPage(this.pages[3])"  *ngIf="userLoggedIn">
           <ion-item tappable>
             <div item-left class="icon-col">
               <div class="icon add-purchase"></div>
             </div>
             <ion-label class="page-title">
+              Einkauf nacherfassen
+            </ion-label>
+          </ion-item>
+        </ion-row>
+
+        <ion-row menuClose class="page" *ngIf="!userLoggedIn">
+          <ion-item class="inactive">
+            <div item-left class="icon-col">
+              <div class="icon add-purchase"></div>
+            </div>
+            <ion-label class="page-title inactive">
               Einkauf nacherfassen
             </ion-label>
           </ion-item>

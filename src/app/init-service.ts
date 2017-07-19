@@ -11,6 +11,7 @@ export class InitService {
 
 
   constructor(private http: Http) {
+
   }
 
   createAuthorizationHeader(headers: Headers) {
@@ -27,8 +28,8 @@ export class InitService {
     });
   }
 
-  getUserData() {
-    let url = 'https://vorsystem.avs.de/integ6/securityToken/getList/getMitgliedData?mitglied_id=' + this.mitgliedId + '&mandant_id=1&securityToken=' + this.securityToken;
+  getUserData(mitgliedId, securityToken) {
+    let url = 'https://vorsystem.avs.de/integ6/securityToken/getList/getMitgliedData?mitglied_id=' + mitgliedId + '&mandant_id=1&securityToken=' + securityToken;
     let headers = new Headers({ 'Accept': 'application/json' });
     this.createAuthorizationHeader(headers);
     return this.http.get(url, {
@@ -50,6 +51,7 @@ export class InitService {
       }
     });
   }
+
 }
 
 

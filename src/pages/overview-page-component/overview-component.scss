@@ -18,7 +18,7 @@ page-overview {
     height: 14vh;
     width: 44vw;
     &.blue{
-      background-color: map_get($colors, light-blue);
+      background-color: map_get($colors, secondary);
       margin-right: 2vw;
     }
     &.red{
@@ -31,6 +31,10 @@ page-overview {
   div.text-div{
     text-align: left;
     font-size: 90%;
+    &.underline{
+      text-decoration: underline;
+      color: map_get($colors, secondary);
+    }
     //max-width: 80%;
   }
   ion-row.money-detail-row{
@@ -45,11 +49,11 @@ page-overview {
   }
   div.icon{
     &.piggyBank{
-      background: url('../assets/icon/piggyBank.png')no-repeat;
+      background: url('../assets/icon/sparschwein.svg')no-repeat;
       background-size: contain;
     }
     &.coins{
-      background: url('../assets/icon/icon_muenzen.png')no-repeat;
+      background: url('../assets/icon/muenzen.svg')no-repeat;
       background-size: contain;
     }
     height: 11vw;
@@ -67,7 +71,6 @@ page-overview {
   ion-col.bonus-col{
     max-width: 20vw;
     padding-left: 0;
-    color: map_get($colors, secondary)
   }
   ion-row.balance-row{
     border-top: 0.5px solid grey;

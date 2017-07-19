@@ -31,6 +31,8 @@ export class BSWBonusApp {
   title;
   salutation;
   lastName;
+  mitgliedId = localStorage.getItem("mitgliedId");
+  securityToken = localStorage.getItem("securityToken");
 
   constructor(private platform: Platform,
               private splashScreen: SplashScreen,
@@ -40,15 +42,18 @@ export class BSWBonusApp {
               private firebase: Firebase,
               private pushNotificationsService: PushNotificationsService,
               private statusBar: StatusBar) {
-    this.setMenu();
-    events.subscribe("userLoggedIn", () => {
+    events.subscribe("userLoggedIn", (id, token) => {
       this.userLoggedIn = true;
-    })
+      this.mitgliedId = id;
+      this.securityToken = token;
+      console.log(id, token);
+      this.getUserData(id, token);
+    });
+    this.setMenu();
     this.initializeApp();
     localStorage.setItem("locationExact", "false");
     this.setWebViewsUrls();
-    this.getUserData();
-
+    this.getUserData(this.mitgliedId, this.securityToken);
   }
 
   initializeApp() {
@@ -76,9 +81,10 @@ export class BSWBonusApp {
     }
   }
 
-  getUserData() {
-    this.initService.getUserData().subscribe((res) => {
+  getUserData(mitgliedId, securityToken) {
+    this.initService.getUserData(mitgliedId, securityToken).subscribe((res) => {
         let result = res.json();
+        console.log("in getUserData");
         if (result.errors[0].beschreibung === "Erfolg") {
           let data = result.response.list[0].row;
           this.lastName = data.NAME;
@@ -88,6 +94,10 @@ export class BSWBonusApp {
           localStorage.setItem("salutation", data.ANREDE);
           localStorage.setItem("firstName", data.VORNAME);
           localStorage.setItem("lastName", data.NAME);
+          console.log("got data alright");
+        }
+        else{
+          console.log(result.errors[0].beschreibung);
         }
       },
       (error) => {
@@ -95,6 +105,8 @@ export class BSWBonusApp {
         this.title = (title == "null") ? "" : title;
         this.lastName = localStorage.getItem("lastName");
         this.salutation = localStorage.getItem("salutation");
+        console.log("got no data");
+
       }
     )
   }

@@ -40,13 +40,13 @@
 
   <div class="moneyDetailsAccount" *ngIf="userLoggedIn && balance && bonusThisYear">
 
-    <ion-row class="money-detail-row balance-row">
+    <ion-row class="money-detail-row balance-row" (click) = "navigateToBonusOverview()">
       <ion-col class="icon-col">
         <div class="piggyBank icon"></div>
       </ion-col>
       <ion-col class="text-col">
-        <div class="text-div">
-          BSW Bonus insgesamt
+        <div class="text-div underline">
+          Dieses Jahr mit BSW gespart
         </div>
       </ion-col>
       <ion-col class="bonus-col">

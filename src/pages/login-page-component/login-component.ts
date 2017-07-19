@@ -97,7 +97,7 @@ export class LoginPageComponent {
         localStorage.setItem("securityToken", loginData.response.securityToken);
         localStorage.setItem("mitgliedId", loginData.response.mitgliedId);
         localStorage.setItem("mitgliedsnummer", loginData.response.mitgliedsnummer);
-        this.events.publish('userLoggedIn');
+        this.events.publish('userLoggedIn', loginData.response.mitgliedId, loginData.response.securityToken);
         console.log("Login: " + loginData.errors[0].beschreibung);
         if (localStorage.getItem("disallowUserTracking") === "false") {
           this.ga.trackEvent('Login/Logout', 'login')
@@ -117,6 +117,12 @@ export class LoginPageComponent {
     }
     else {
       this.navCtrl.setRoot(OverviewPageComponent);
+    }
+  }
+
+  checkForEnterButtonPressed(event){
+    if (event.keyCode == 13){
+      this.checkForValidInput();
     }
   }
 
@@ -179,12 +185,6 @@ export class LoginPageComponent {
       ]
     });
     prompt.present();
-  }
-
-  checkForEnterButtonPressed(event){
-    if (event.keyCode == 13){
-      this.checkForValidInput();
-    }
   }
 
 

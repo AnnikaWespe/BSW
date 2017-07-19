@@ -38,7 +38,7 @@ export class BonusService {
 
   getBonusData() {
     let headers = new Headers({ 'Accept': 'application/json' });
-    let url = "https://vorsystem.avs.de/integ6/securityToken/bonus/summen?mandant_id=1&mitglied_id=" + this.mitgliedId + "&securityToken=" + this.securityToken + "&fromDate=" + this.year + "-01-10&toDate=" + this.year + "-12-31&kontoauszugsArtId=73"
+    let url = "https://vorsystem.avs.de/integ6/securityToken/bonus/summen?mandant_id=1&mitglied_id=" + this.mitgliedId + "&securityToken=" + this.securityToken + "&fromDate=" + this.year + "-01-01&toDate=" + this.year + "-12-31&kontoauszugsArtId=73"
     this.createAuthorizationHeader(headers);
     return this.http.get(url, {
       headers: headers

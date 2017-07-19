@@ -165,12 +165,6 @@ export class PartnerDetailComponent implements OnDestroy {
             });
             profileModal.present();
           }
-        },
-        {
-          text: 'Trotzdem zum Shop',
-          handler: () => {
-            this.goToPartnerShop(true);
-          }
         }
       ]
     });

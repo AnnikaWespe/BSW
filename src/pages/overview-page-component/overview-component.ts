@@ -12,6 +12,7 @@ import {UserSpecificPartnersComponent} from "./user-specific-partners-page-compo
 import {LoginPageComponent} from "../login-page-component/login-component";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {BonusService} from "./bonus-service";
+import {WebviewComponent} from "../webview/webview";
 
 
 @Component({
@@ -89,7 +90,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         this.bonusThisYear = response.bonusGesamtJahr;
         this.balance = response.bonuskontostand;
       }
-      else console.log("no bonus data found");
+      else console.log("no bonus data found: ", res.json().errors[0].beschreibung);
     })
   }
 
@@ -333,6 +334,9 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     alert.present();
   }
 
+  navigateToBonusOverview(){
+    this.navCtrl.push(WebviewComponent, {urlType: 'VorteilsuebersichtWebviewUrl', title: 'Vorteilsübersicht'})
+  }
 
 //pure DOM method(s)
 
