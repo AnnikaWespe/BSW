@@ -48,8 +48,7 @@ export class BSWBonusApp {
     localStorage.setItem("locationExact", "false");
     this.setWebViewsUrls();
     this.getUserData();
-    //TODO uncomment and manage Pushes :)
-    //this.managePushes();
+
   }
 
   initializeApp() {
@@ -57,9 +56,8 @@ export class BSWBonusApp {
       .then(() => {
           this.splashScreen.hide();
           this.setRootPage();
-          //this.statusBar.overlaysWebView(true);
-          //this.statusBar.backgroundColorByHexString('#929395');
-          // this.statusBar.styleDefault();
+          this.statusBar.overlaysWebView(true);
+          this.statusBar.backgroundColorByHexString('#929395');
           this.startGoogleAnalyticsTracker();
           this.getDevice();
         },
@@ -127,17 +125,20 @@ export class BSWBonusApp {
       DeviceService.isInBrowser = true;
       console.log("isInBrowser");
     }
-    else if (this.platform.is('ios')) {
-      DeviceService.isIos = true;
-      console.log("ios");
-    }
-    else if (this.platform.is('android')) {
-      DeviceService.isAndroid = true;
-      console.log("android");
-    }
-    else if (this.platform.is('windows')) {
-      DeviceService.isIos = true;
-      console.log("windowsPhone");
+    else {
+      this.managePushes();
+      if (this.platform.is('ios')) {
+        DeviceService.isIos = true;
+        console.log("ios");
+      }
+      else if (this.platform.is('android')) {
+        DeviceService.isAndroid = true;
+        console.log("android");
+      }
+      else if (this.platform.is('windows')) {
+        DeviceService.isIos = true;
+        console.log("windowsPhone");
+      }
     }
   }
 
@@ -169,8 +170,7 @@ export class BSWBonusApp {
 
 
   managePushes() {
-    //let firebaseToken = localStorage.getItem("firebaseToken");
-    let firebaseToken = null;
+    let firebaseToken = localStorage.getItem("firebaseToken");
     if (firebaseToken == null) {
       this.firebase.getToken()
         .then(token => {
@@ -190,7 +190,6 @@ export class BSWBonusApp {
         localStorage.setItem("updatePushNotificationsNextTime", "false");
       });
     }
-    ;
   }
 
   updateToken(token) {

@@ -19,7 +19,6 @@ declare let cordova: any;
 export class LoginPageComponent {
 
   @ViewChild(Nav) nav: Nav;
-  barcodeData: any;
   inputNumberOrEmail: any;
   password = "";
   loading;
@@ -36,13 +35,8 @@ export class LoginPageComponent {
               private ga: GoogleAnalytics,
               public events: Events,
               public keyboard: Keyboard,) {
-    this.barcodeData = navParams.get('barcodeData');
-    if (this.barcodeData) {
-      this.inputNumberOrEmail = this.barcodeData.text;
-    }
-    this.keyboard.onClose(() => {
-      this.showLogo = true;
-    })
+    let loginNumberFromBarCode = navParams.get('loginNumberFromBarCode');
+    this.inputNumberOrEmail = loginNumberFromBarCode || "";
     this.ga.trackView('Login Screen');
     this.navigatedFromPartnerDetail = navParams.get("navigatedFromPartnerDetail");
   }
@@ -66,25 +60,24 @@ export class LoginPageComponent {
 
   checkForValidInput() {
     this.login();
-    this.presentLoading();
     /*if (isNaN(this.inputNumberOrEmail)) {
-      if (this.emailAdressProperlyFormatted()) {
-        this.login();
-      }
-      else {
-        this.showPromptNoValidEmail();
-        this.loading.dismiss();
-      }
-    }
-    else {
-      if (this.inputNumberOrEmail.length == 10) {
-        this.login();
-      }
-      else {
-        this.showPromptNoValidNumber();
-        this.loading.dismiss();
-      }
-    }*/
+     if (this.emailAdressProperlyFormatted()) {
+     this.login();
+     }
+     else {
+     this.showPromptNoValidEmail();
+     this.loading.dismiss();
+     }
+     }
+     else {
+     if (this.inputNumberOrEmail.length == 10) {
+     this.login();
+     }
+     else {
+     this.showPromptNoValidNumber();
+     this.loading.dismiss();
+     }
+     }*/
   }
 
   emailAdressProperlyFormatted() {
@@ -96,6 +89,7 @@ export class LoginPageComponent {
     //TODO get username and password from user input
     let username = "0016744807"
     let password = "muster01$$";
+    this.presentLoading();
     this.loginService.login(username, password).subscribe((res) => {
       this.loading.dismiss();
       let loginData = res.json();
@@ -111,7 +105,10 @@ export class LoginPageComponent {
         this.navigateToNextPage();
       }
       else(this.showPromptLoginFailed())
-    });
+    }, (err) => {
+      this.loading.dismiss();
+      this.showPromptNoNetwork();
+    })
   }
 
   navigateToNextPage() {
@@ -154,6 +151,21 @@ export class LoginPageComponent {
     prompt.present();
   }
 
+  showPromptNoNetwork() {
+    let prompt = this.alertCtrl.create({
+      title: 'Login fehlgeschlagen',
+      message: "Bitte überprüfen Sie Ihr Netzwerk.",
+      buttons: [
+        {
+          text: 'Ok',
+          handler: data => {
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
+
   showPromptNoValidNumber() {
     let prompt = this.alertCtrl.create({
       title: 'Mitgliedsnummer ungültig',
@@ -169,10 +181,9 @@ export class LoginPageComponent {
     prompt.present();
   }
 
-  keyboardCheck() {
-    console.log("keyboardCheck");
-    if (this.keyboard.isOpen) {
-      this.showLogo = false;
+  checkForEnterButtonPressed(event){
+    if (event.keyCode == 13){
+      this.checkForValidInput();
     }
   }
 

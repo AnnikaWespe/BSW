@@ -8,15 +8,15 @@
   <div class="input-fields-wrapper">
 
     <div class="card-number-wrapper">
-      <ion-input type="text" placeholder="Mitgliedsnummer / E-Mail" [(ngModel)]="inputNumberOrEmail"
-                 (click)="keyboardCheck()"></ion-input>
+      <ion-input type="text" placeholder="Mitgliedsnummer / E-Mail" [(ngModel)]="inputNumberOrEmail" (keypress) = "checkForEnterButtonPressed($event)">
+      </ion-input>
       <button ion-button icon-only class="camera" (click)="loadCameraPage()">
         <ion-icon tappable color="primary" name="camera"></ion-icon>
       </button>
     </div>
 
     <div class="password-wrapper">
-      <ion-input [(ngModel)]="password" type="password" placeholder="Passwort" (click)="keyboardCheck()"></ion-input>
+      <ion-input [(ngModel)]="password" type="password" placeholder="Passwort" (keypress) = "checkForEnterButtonPressed($event)"></ion-input>
     </div>
     <div class="center-text">
       <p class="no-password" (click)="showPasswordForgottenDialogue()">Passwort vergessen oder keines vergeben?<br>Neues

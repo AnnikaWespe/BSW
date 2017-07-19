@@ -12,8 +12,6 @@ import {GoogleAnalytics} from "@ionic-native/google-analytics";
 })
 export class ConfirmScanPageComponent {
 
-  //@ViewChild(Nav) nav: Nav;
-
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public alertCtrl: AlertController,
@@ -28,9 +26,12 @@ export class ConfirmScanPageComponent {
     this.barcodeScanner.scan()
       .then((result) => {
         if (!result.cancelled) {
-          const barcodeData = new BarcodeData(result.text, result.format);
-          if (barcodeData.text.length === 10) {
-            this.backToLoginPage(barcodeData);
+          let numberFromCard = result.text;
+          let mutilatedNumberFromCard = '928' + numberFromCard.slice(0, -1);
+          let verificationNumber = this.verificationNumber(mutilatedNumberFromCard);
+          let logInNumber = numberFromCard.slice(-10, -1) + verificationNumber;
+          if (logInNumber.length === 10) {
+            this.backToLoginPage(logInNumber);
             if (localStorage.getItem("disallowUserTracking") === "false") {
               this.ga.trackEvent("Mitgliedskarte", "Mitgliedskarte gescannt")
             }
@@ -45,13 +46,37 @@ export class ConfirmScanPageComponent {
       });
   }
 
-  backToLoginPage(barcodeData) {
-    this.navCtrl.push(LoginPageComponent, {barcodeData: barcodeData});
+  verificationNumber(inputNumber) {
+    let z = inputNumber.length;
+    let k = 0;
+    let j = 2;
+    while (z > 0) {
+      let i = j * Number(inputNumber.slice(z - 1, z));
+      console.log(inputNumber.slice(z - 1, z));
+      if (i >= 10) {
+        i = i - 9;
+      }
+      k = k + i;
+      if (j == 2) {
+        j = 1;
+      }
+      else if (j == 1) {
+        j = 2;
+      }
+      z--;
+    }
+    console.log(k);
+    k = Math.floor(10 - (k % 10)) % 10;
+    return k.toString();
+  }
+
+  backToLoginPage(loginNumber) {
+    this.navCtrl.push(LoginPageComponent, {loginNumberFromBarCode: loginNumber});
   }
 
   showPromptIncorrectBarcode() {
     let prompt = this.alertCtrl.create({
-      title: 'Barcode konnte nicht gelesen werden.',
+      title: 'Authentifizierung fehlgeschlagen',
       message: "Stellen Sie sicher, dass es sich dabei um den Barcode auf der Rückseite Ihrer BSW-Karte handelt.",
       buttons: [
         {
@@ -64,7 +89,7 @@ export class ConfirmScanPageComponent {
     prompt.present();
   }
 
-  goBackToLoginPage(){
+  goBackToLoginPage() {
     this.navCtrl.push(LoginPageComponent);
   }
 }
