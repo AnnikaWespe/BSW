@@ -40,6 +40,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   waitingForResults: boolean = true;
   noPartnersToDisplay = false;
+  noPartnersToDisplayBecauseOfParameters = false;
   showTryAgainToGetPartnersButton = false;
   waitingForGPSSignal = false;
 
@@ -121,7 +122,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     if (this.offlinePartnerPageComponent) {
       this.showOfflinePartners = true;
       this.displayedPartners = this.offlinePartners;
-      this.title = "Vor Ort Partner";
+      this.title = "Vor-Ort-Partner";
       this.checkIfGPSEnabled();
       this.sortByArray = [false, false, false, false, false, false, true]
       this.sortByCriterion = "DISTANCE";
@@ -130,7 +131,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     if (this.onlinePartnerPageComponent) {
       this.showOnlinePartners = true;
       this.displayedPartners = this.onlinePartners;
-      this.title = "Online Partner";
+      this.title = "Online-Partner";
       this.getPartners();
     }
     if (this.searchPageComponent) {
@@ -239,7 +240,8 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
             console.log("no data found");
             this.getPartnersSubscription.unsubscribe();
             this.waitingForResults = false;
-            if (this.searchTerm && this.displayedPartners.length == 0 && !this.onReload) {
+            // && this.displayedPartners.length == 0
+            if (this.searchTerm && !this.onReload) {
               this.showPromptNoResultForSearch();
               this.searchTerm = "";
               this.title = localStorage.getItem("title");
@@ -274,6 +276,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.displayedPartners = [];
     this.showTryAgainToGetPartnersButton = false;
     this.noPartnersToDisplay = false;
+    this.noPartnersToDisplayBecauseOfParameters = false;
     this.moreDataCanBeLoaded = true;
   }
 
@@ -334,6 +337,9 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.displayedPartners = this.allPartners;
     }
     console.log(this.displayedPartners);
+    if (this.displayedPartners.length === 0){
+      this.noPartnersToDisplayBecauseOfParameters = true;
+    }
   }
 
 

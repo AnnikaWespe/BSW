@@ -33,11 +33,14 @@
           <div item-content>Online einkaufen</div>
         </ion-item>
 
+
         <ion-item color="light" tappable class="button-map" (click)='goToPartnerDetailMap()'
                   *ngIf="partnerDetails?.ort">
-          <div item-left class="goToMapText">Zur Karte</div>
+          <div item-content class="goToMapText">Zur Karte </div>
           <div item-end class="mapIcon"></div>
         </ion-item>
+
+
 
       </div>
 

@@ -71,12 +71,6 @@ page-partner-detail-component {
       margin-top: 1.5vh;
     }
     .buttonsWrapper {
-      div.btn-pill {
-        float: right;
-        &.goToMap {
-          margin-left: 4vw;
-        }
-      }
       margin-bottom: 2vh;
       &:after {
         content: ".";
@@ -105,7 +99,7 @@ page-partner-detail-component {
         border: solid 1px map_get($colors, primary);
         float: right;
         font-size: 4vw;
-        border-radius: 6vw;
+        border-radius: 10vw;
         max-width: 30vw;
         max-height: 10vw;
         padding: 0!important;
@@ -115,11 +109,10 @@ page-partner-detail-component {
           max-width: 80vw !important;
           margin-left: 4vw;
         }
-        .goToMapText{
-          padding-left: 3vw;
-        }
         div.mapIcon{
           max-height: 6vw;
+          min-height: 6vw;
+          min-width: 8vw;
           width: 8vw;
           height: 6vw;
           background: url('../assets/icon/map-pink.svg') no-repeat;
@@ -132,8 +125,6 @@ page-partner-detail-component {
           div.input-wrapper {
             //max-height: 10vw;
           }
-        }
-        div.btn-pill-text {
         }
       }
     }
@@ -187,6 +178,17 @@ page-partner-detail-component {
   }
   ion-col.title.col {
     padding: 0
+  }
+
+  div.mapIcon{
+    max-height: 6vw;
+    min-height: 6vw;
+    min-width: 8vw;
+    width: 8vw;
+    height: 6vw;
+    background: url('../assets/icon/map-pink.svg') no-repeat;
+    background-size: contain;
+    margin-right: 0;
   }
 }
 

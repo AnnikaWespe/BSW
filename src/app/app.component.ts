@@ -57,8 +57,9 @@ export class BSWBonusApp {
       .then(() => {
           this.splashScreen.hide();
           this.setRootPage();
-          this.statusBar.overlaysWebView(false);
-          this.statusBar.backgroundColorByHexString('#929395');
+          //this.statusBar.overlaysWebView(true);
+          //this.statusBar.backgroundColorByHexString('#929395');
+          // this.statusBar.styleDefault();
           this.startGoogleAnalyticsTracker();
           this.getDevice();
         },
@@ -182,13 +183,14 @@ export class BSWBonusApp {
       .subscribe((token) => {
         this.updateToken(token)
       });
-    if(localStorage.getItem("updatePushNotificationsNextTime") == "true"){
+    if (localStorage.getItem("updatePushNotificationsNextTime") == "true") {
       let token = localStorage.getItem("firebaseToken") || "";
       this.pushNotificationsService.sendPushNotificationsRequest(token, "").subscribe((res) => {
         console.log("result from Firebase API request", res.json().errors[0]);
         localStorage.setItem("updatePushNotificationsNextTime", "false");
       });
-    };
+    }
+    ;
   }
 
   updateToken(token) {

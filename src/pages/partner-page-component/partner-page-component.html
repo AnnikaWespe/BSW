@@ -100,9 +100,11 @@
 
     <div class="filter-menu" [@show]="showDropdownForAnimation[0]">
       <ion-row class="currentLocation" *ngIf="(offlinePartnerPageComponent || searchPageComponent) && !showMap ">
-        <ion-col class="currentPosition getLocationFromGPS" *ngIf="getLocationFromGPSEnabled">
-          Aktueller Standort
+        <ion-col class="currentPosition getLocationFromGPS" *ngIf="getLocationFromGPSEnabled" (click)="chooseLocationManually()">
+          <p class="cityName">Aktueller Standort</p>
+          <p class="changeLocation">Ort ändern</p>
         </ion-col>
+
         <ion-col class="currentPosition chooseLocationManually" *ngIf="!getLocationFromGPSEnabled"
                  (click)="chooseLocationManually()">
           <p class="cityName">{{cityName}}</p>
@@ -120,14 +122,14 @@
 
       <ion-item color="secondary-grey" tappable (click)="showOfflinePartners = !showOfflinePartners"
                 *ngIf="searchPageComponent">
-        <div item-content class="toggle-text">Vor-Ort Partner</div>
+        <div item-content class="toggle-text">Vor-Ort-Partner</div>
         <ion-toggle item-right [(ngModel)]="showOfflinePartners" color="light-blue" mode="ios"
                     [class.checked]="showOfflinePartners"></ion-toggle>
       </ion-item>
 
       <ion-item color="secondary-grey" tappable (click)="showOnlinePartners = !showOnlinePartners"
                 *ngIf="searchPageComponent">
-        <div item-content class="toggle-text">Online Partner</div>
+        <div item-content class="toggle-text">Online-Partner</div>
         <ion-toggle item-right color="light-blue" [(ngModel)]="showOnlinePartners" mode="ios"
                     [class.checked]="showOnlinePartners"></ion-toggle>
       </ion-item>
@@ -190,7 +192,11 @@
 
 
   <ion-item *ngIf="noPartnersToDisplay" text-wrap>
-    Wir können Ihnen leider derzeit keine Partner anzeigen.
+    Wir können Ihnen leider derzeit keine Partner anzeigen. Überprüfen Sie Ihr Netzwerk.
+  </ion-item>
+
+  <ion-item *ngIf="noPartnersToDisplayBecauseOfParameters" text-wrap>
+    Wir können Ihnen leider derzeit keine Partner anzeigen. Versuchen Sie gegebenenfalls andere Suchparameter.
   </ion-item>
 
   <div *ngIf="showTryAgainToGetPartnersButton">

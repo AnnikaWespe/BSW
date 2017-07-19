@@ -113,11 +113,11 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       });
       FavoritesData.favoritesByPfArray = favoritesByPf;
       this.partnerService.getPartners(this.location, 0, "", false, "RELEVANCE", "DESC", 10000, favoritesByPf).subscribe((res) => {
-        let partnersArray = res.json().contentEntities;
+          let partnersArray = res.json().contentEntities;
           if (partnersArray) {
-            for (let pfNumber of favoritesByPf){
-              for (let partner of partnersArray){
-                if(partner.number == pfNumber){
+            for (let pfNumber of favoritesByPf) {
+              for (let partner of partnersArray) {
+                if (partner.number == pfNumber) {
                   this.favoritePartners.push(partner);
                   break;
                 }
@@ -179,10 +179,11 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
   checkIfGPSEnabled() {
-    if (localStorage.getItem("getLocationFromGPSEnabled") === "true") {
+    if (localStorage.getItem("getLocationFromGPSEnabled") !== "false") {
       this.getLocationSubscription = this.locationService.getLocation().subscribe(
         (object) => {
           if (object.locationFound == true) {
+            localStorage.setItem("getLocationFromGPSEnabled", "true");
             this.location.latitude = object.lat;
             this.location.longitude = object.lon;
             this.getPartners();
@@ -191,6 +192,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
             this.getStoredLocationData();
           }
         }, (error) => {
+          localStorage.setItem("getLocationFromGPSEnabled", "false");
           this.getStoredLocationData();
         }
       )

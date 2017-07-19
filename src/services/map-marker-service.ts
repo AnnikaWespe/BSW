@@ -39,8 +39,9 @@ export class MapMarkerService {
     let imageIcon;
     let textIcon;
     if (validImage) {
-      imageIcon = 'data:image/svg+xml;utf8,' + svg + '<image x="10" y="-18" width="110" height="110" xlink:href="' + imageAsBase64 + '"/>' + this.bonusElement(partner.pfBonus) + '</svg>';
-      console.log(imageIcon);
+      // xlink : href = ""
+      imageIcon = 'data:image/svg+xml;utf8,' + svg + '<image  x="10" y="-18" width="110" height="110" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="' + imageAsBase64 + '" />' + this.bonusElement(partner.pfBonus) + '</svg>';
+      console.log(imageAsBase64);
 
     }
     else {

@@ -6,7 +6,6 @@ import {
 
 import {OverviewPageComponent} from "../overview-page-component/overview-component";
 import {ConfirmScanPageComponent} from "./confirm-scan-page-component/confirm-scan-page-component";
-import {BarcodeData} from "./confirm-scan-page-component/BarcodeData";
 import {WebviewComponent} from "../webview/webview";
 import {LoginService} from "./login-service";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
@@ -20,7 +19,7 @@ declare let cordova: any;
 export class LoginPageComponent {
 
   @ViewChild(Nav) nav: Nav;
-  barcodeData: BarcodeData;
+  barcodeData: any;
   inputNumberOrEmail: any;
   password = "";
   loading;

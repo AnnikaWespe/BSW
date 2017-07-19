@@ -25,7 +25,7 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
   @Output() closeSearchInterfaceEmitter = new EventEmitter();
   @Output() getPartnersWithSearchTermEmitter = new EventEmitter();
   @Output() toggleMapAndListEmitter = new EventEmitter();
-  searchTerm: string;
+  searchTerm = "";
   subscription: any;
 
   private searchTerms = new Subject<string>();
@@ -38,12 +38,17 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
   }
 
   search(term: string, $event): void {
-    if ($event.keyCode == 13 && this.searchTerm.length > 1) {
-      this.getPartnersWithSearchTermEmitter.emit(this.searchTerm);
-      if (localStorage.getItem("disallowUserTracking") === "false") {
-        this.ga.trackEvent("Suchbegriff", this.searchTerm)
+    if ($event.keyCode == 13) {
+      if (this.searchTerm.length > 0) {
+        this.getPartnersWithSearchTermEmitter.emit(this.searchTerm);
+        if (localStorage.getItem("disallowUserTracking") === "false") {
+          this.ga.trackEvent("Suchbegriff", this.searchTerm)
+        }
+        this.searchTermCompletion = Observable.of<SearchTermCompletion[]>([]);
       }
-      this.searchTermCompletion = Observable.of<SearchTermCompletion[]>([]);
+      else {
+        this.closeSearchInterface();
+      }
     }
     else {
       this.searchTerms.next(term)
@@ -71,7 +76,7 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
   }
 
 
-  closeSearchInterface($event) {
+  closeSearchInterface() {
     this.closeSearchInterfaceEmitter.emit();
   }
 

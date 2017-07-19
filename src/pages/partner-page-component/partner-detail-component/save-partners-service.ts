@@ -94,8 +94,12 @@ export class SavePartnersService {
 
   private deleteLastVisitedPartnersIfTooMany() {
     const maxNumberOfSavedLastVisitedPartners = 15;
+    const maxNumberOfSavedLastVisitedPartnersComplete = 100;
     if (this.lastVisitedPartners.length > maxNumberOfSavedLastVisitedPartners) {
       this.deleteFromStorage(this.lastVisitedPartners[0], "lastVisitedPartners");
+    }
+    if (this.lastVisitedPartnersComplete.length > maxNumberOfSavedLastVisitedPartnersComplete) {
+      this.lastVisitedPartnersComplete.splice(0, 1);
     }
   }
 
