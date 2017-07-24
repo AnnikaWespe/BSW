@@ -22,7 +22,6 @@ export class LoginPageComponent {
   inputNumberOrEmail: any;
   password = "";
   loading;
-  showLogo = true;
 
   navigatedFromPartnerDetail;
 
@@ -59,8 +58,10 @@ export class LoginPageComponent {
   }
 
   checkForValidInput() {
+    this.presentLoading();
     this.login();
-    /*if (isNaN(this.inputNumberOrEmail)) {
+    /*this.presentLoading();
+     if (isNaN(this.inputNumberOrEmail)) {
      if (this.emailAdressProperlyFormatted()) {
      this.login();
      }
@@ -89,7 +90,7 @@ export class LoginPageComponent {
     //TODO get username and password from user input
     let username = "0016744807"
     let password = "muster01$$";
-    this.presentLoading();
+    //this.loginService.login(this.inputNumberOrEmail, this.password).subscribe((res) => {
     this.loginService.login(username, password).subscribe((res) => {
       this.loading.dismiss();
       let loginData = res.json();
@@ -104,8 +105,12 @@ export class LoginPageComponent {
         }
         this.navigateToNextPage();
       }
-      else(this.showPromptLoginFailed())
+      else {
+        console.log("this.showPromptLoginFailed()");
+        this.showPromptLoginFailed();
+      }
     }, (err) => {
+      console.log("this.showPromptNoNetwork()");
       this.loading.dismiss();
       this.showPromptNoNetwork();
     })
@@ -120,8 +125,8 @@ export class LoginPageComponent {
     }
   }
 
-  checkForEnterButtonPressed(event){
-    if (event.keyCode == 13){
+  checkForEnterButtonPressed(event) {
+    if (event.keyCode == 13) {
       this.checkForValidInput();
     }
   }

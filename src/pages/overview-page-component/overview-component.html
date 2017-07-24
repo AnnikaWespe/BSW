@@ -23,7 +23,7 @@
 </ion-header>
 
 <ion-content>
-  <div class="bars" *ngIf="userLoggedIn && balance && bonusThisYear">
+  <div class="bars" *ngIf="userLoggedIn && balance && bonusThisYear" tappable (click) = "navigateToBonusOverview()">
     <ion-row>
       <ion-col>
         <div class="buffer" [style.height]="heightBlueBarRedBar()[2]"></div>
@@ -38,14 +38,14 @@
     </ion-row>
   </div>
 
-  <div class="moneyDetailsAccount" *ngIf="userLoggedIn && balance && bonusThisYear">
+  <div class="moneyDetailsAccount" *ngIf="userLoggedIn && balance && bonusThisYear" tappable (click) = "navigateToBonusOverview()">
 
-    <ion-row class="money-detail-row balance-row" (click) = "navigateToBonusOverview()">
+    <ion-row class="money-detail-row balance-row">
       <ion-col class="icon-col">
         <div class="piggyBank icon"></div>
       </ion-col>
       <ion-col class="text-col">
-        <div class="text-div underline">
+        <div class="text-div">
           Dieses Jahr mit BSW gespart
         </div>
       </ion-col>

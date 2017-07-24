@@ -46,14 +46,13 @@ export class BSWBonusApp {
       this.userLoggedIn = true;
       this.mitgliedId = id;
       this.securityToken = token;
-      console.log(id, token);
-      this.getUserData(id, token);
+      console.log("userLoggedInEventHasFired", id, token);
+      this.getUserData( id, token);
     });
     this.setMenu();
     this.initializeApp();
     localStorage.setItem("locationExact", "false");
     this.setWebViewsUrls();
-    this.getUserData(this.mitgliedId, this.securityToken);
   }
 
   initializeApp() {
@@ -97,7 +96,7 @@ export class BSWBonusApp {
           console.log("got data alright");
         }
         else{
-          console.log(result.errors[0].beschreibung);
+          console.log("in getUserData", result.errors[0].beschreibung);
         }
       },
       (error) => {
@@ -169,6 +168,10 @@ export class BSWBonusApp {
   logout() {
     localStorage.removeItem("securityToken");
     localStorage.removeItem("mitgliedId");
+    localStorage.removeItem("userTitle");
+    localStorage.removeItem("salutation");
+    localStorage.removeItem("firstName");
+    localStorage.removeItem("lastName");
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackEvent('Login/Logout', 'logout');
     }

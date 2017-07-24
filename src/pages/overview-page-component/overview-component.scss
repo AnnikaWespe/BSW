@@ -31,10 +31,7 @@ page-overview {
   div.text-div{
     text-align: left;
     font-size: 90%;
-    &.underline{
-      text-decoration: underline;
-      color: map_get($colors, secondary);
-    }
+
     //max-width: 80%;
   }
   ion-row.money-detail-row{

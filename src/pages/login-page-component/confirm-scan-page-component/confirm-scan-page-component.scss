@@ -1,4 +1,7 @@
 scan-number-page-component {
+  .scroll-content{
+    background-color: map_get($colors, light);
+  }
   div.footer-text{
     text-align: center;
     h3{
