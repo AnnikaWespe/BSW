@@ -31,8 +31,8 @@ export class BSWBonusApp {
   title;
   salutation;
   lastName;
-  mitgliedId = localStorage.getItem("mitgliedId");
-  securityToken = localStorage.getItem("securityToken");
+  mitgliedId;
+  securityToken;
 
   constructor(private platform: Platform,
               private splashScreen: SplashScreen,
@@ -46,12 +46,18 @@ export class BSWBonusApp {
       this.userLoggedIn = true;
       this.mitgliedId = id;
       this.securityToken = token;
-      console.log("userLoggedInEventHasFired", id, token);
       this.getUserData( id, token);
     });
+    this.mitgliedId = localStorage.getItem("mitgliedId");
+    this.securityToken = localStorage.getItem("securityToken");
     this.setMenu();
     this.initializeApp();
     localStorage.setItem("locationExact", "false");
+    if(this.securityToken){
+      this.title = localStorage.getItem("userTitle") || "";
+      this.salutation = localStorage.getItem("salutation");
+      this.lastName = localStorage.getItem("lastName");
+    }
     this.setWebViewsUrls();
   }
 
@@ -83,7 +89,6 @@ export class BSWBonusApp {
   getUserData(mitgliedId, securityToken) {
     this.initService.getUserData(mitgliedId, securityToken).subscribe((res) => {
         let result = res.json();
-        console.log("in getUserData");
         if (result.errors[0].beschreibung === "Erfolg") {
           let data = result.response.list[0].row;
           this.lastName = data.NAME;
@@ -93,7 +98,6 @@ export class BSWBonusApp {
           localStorage.setItem("salutation", data.ANREDE);
           localStorage.setItem("firstName", data.VORNAME);
           localStorage.setItem("lastName", data.NAME);
-          console.log("got data alright");
         }
         else{
           console.log("in getUserData", result.errors[0].beschreibung);
@@ -104,8 +108,6 @@ export class BSWBonusApp {
         this.title = (title == "null") ? "" : title;
         this.lastName = localStorage.getItem("lastName");
         this.salutation = localStorage.getItem("salutation");
-        console.log("got no data");
-
       }
     )
   }
@@ -168,10 +170,6 @@ export class BSWBonusApp {
   logout() {
     localStorage.removeItem("securityToken");
     localStorage.removeItem("mitgliedId");
-    localStorage.removeItem("userTitle");
-    localStorage.removeItem("salutation");
-    localStorage.removeItem("firstName");
-    localStorage.removeItem("lastName");
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackEvent('Login/Logout', 'logout');
     }

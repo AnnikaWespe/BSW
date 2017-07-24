@@ -20,7 +20,7 @@ export class ChooseLocationManuallyComponent implements OnDestroy{
   checkButtonVisible = false;
   zoom: number = 6;
   title = 'Standort auswählen';
-  locationExact: boolean;
+  locationExact: string;
   locationNameInInputField;
   mapClickedSubscription;
   nameEnteredSubscription;
@@ -52,7 +52,7 @@ export class ChooseLocationManuallyComponent implements OnDestroy{
     this.markerVisible = true;
     this.longitude = parseFloat($event.coords.lng.toFixed(4));
     this.latitude = parseFloat($event.coords.lat.toFixed(4));
-    this.locationExact = true;
+    this.locationExact = "true";
     this.mapClickedSubscription = this.locationService.getLocationName(this.latitude, this.longitude).subscribe(
       (name) => {
         console.log(name);
@@ -62,27 +62,26 @@ export class ChooseLocationManuallyComponent implements OnDestroy{
         localStorage.setItem("cityName", "Manuell gewählter Ort");
         this.locationNameInInputField = "manuell gewählter Ort"
       });
-    this.setLocationData("true");
+    this.locationExact = "true";
   }
 
-  setLocationData(locationExact) {
+  setLocationData() {
     localStorage.setItem("latitude", this.latitude.toString());
     localStorage.setItem("longitude", this.longitude.toString());
     localStorage.setItem("locationAvailable", "true");
-    localStorage.setItem("locationExact", locationExact);
+    localStorage.setItem("locationExact",this.locationExact);
     localStorage.setItem("locationName", this.locationNameInInputField);
   }
 
   somethingTypedInInputField(event) {
     this.checkButtonVisible = false;
     if (event.keyCode == 13) {
-      this.locationExact = false;
+      this.locationExact = "false";
       this.keyboard.close();
       this.nameEnteredSubscription = this.locationService.getLocationCoordinates(this.locationNameInInputField).subscribe((data) => {
         console.log("data", data);
         this.longitude = data.longitude;
         this.latitude = data.latitude;
-        this.setLocationData("false");
         this.checkButtonVisible = true;
       }, (error) => {
         this.alertSomethingWrentWrong();
@@ -100,6 +99,7 @@ export class ChooseLocationManuallyComponent implements OnDestroy{
   }
 
   saveLocation() {
+    this.setLocationData();
     this.viewCtrl.dismiss({latitude: this.latitude, longitude: this.longitude, name: this.locationNameInInputField});
   }
 

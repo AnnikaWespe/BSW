@@ -23,7 +23,7 @@ import {WebviewComponent} from "../webview/webview";
 export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   title: string = "Übersicht";
-  userLoggedIn = localStorage.getItem('securityToken');
+  userLoggedIn = null;
   balance: number;
   bonusThisYear: number;
   bonusDataAvailable = false;
@@ -56,9 +56,14 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               private alertCtrl: AlertController,
               private ga: GoogleAnalytics,
               private bonusService: BonusService) {
+    if(navParams.data.login == true || localStorage.getItem('securityToken')){
+      let id = navParams.data.id || localStorage.getItem('mitgliedId');
+      let token = navParams.data.token || localStorage.getItem('securityToken');
+      this.userLoggedIn = true;
+      this.getBonusData(id, token);
+    }
     this.checkIfGPSEnabled();
     this.getFavoritePartners();
-    this.getBonusData();
     this.getLastVisitedPartners();
     if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
       this.checkForPromptRateAppInStore()
@@ -82,8 +87,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     }
   }
 
-  getBonusData() {
-    this.bonusService.getBonusData().subscribe((res) => {
+  getBonusData(id, token) {
+    this.bonusService.getBonusData(id, token).subscribe((res) => {
       if (res.json().errors[0].beschreibung === "Erfolg") {
         let response = res.json().response;
         this.bonusDataAvailable = true;
@@ -334,7 +339,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     alert.present();
   }
 
-  navigateToBonusOverview(){
+  navigateToBonusOverview() {
     this.navCtrl.push(WebviewComponent, {urlType: 'VorteilsuebersichtWebviewUrl', title: 'Vorteilsübersicht'})
   }
 

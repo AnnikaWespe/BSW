@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "860620525720",
-    "firebase_url": "https://bsw-app-5fab1.firebaseio.com",
-    "project_id": "bsw-app-5fab1",
-    "storage_bucket": "bsw-app-5fab1.appspot.com"
+    "project_number": "587732516268",
+    "firebase_url": "https://bsw-app-relaunch.firebaseio.com",
+    "project_id": "bsw-app-relaunch",
+    "storage_bucket": "bsw-app-relaunch.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:860620525720:android:80fa7a9043c6af94",
+        "mobilesdk_app_id": "1:587732516268:android:c1d831602cf80b46",
         "android_client_info": {
-          "package_name": "com.ionicframework.app459066"
+          "package_name": "de.avs.bswapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "860620525720-v5abmvj5rd16dfennbqker5heutackm4.apps.googleusercontent.com",
+          "client_id": "587732516268-5h01pt6efns9burhh6n4fjlu06dfftsc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBSa4_a5tDQMvH9L7MKVPrA-RQC7nn_r1g"
+          "current_key": "AIzaSyAN2soahL5zB0UH7ltiA2AKaVgRyn7miQI"
         }
       ],
       "services": {

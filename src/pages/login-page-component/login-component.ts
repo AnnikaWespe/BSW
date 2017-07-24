@@ -58,9 +58,9 @@ export class LoginPageComponent {
   }
 
   checkForValidInput() {
+    //this.presentLoading();
+    //this.login();
     this.presentLoading();
-    this.login();
-    /*this.presentLoading();
      if (isNaN(this.inputNumberOrEmail)) {
      if (this.emailAdressProperlyFormatted()) {
      this.login();
@@ -78,7 +78,7 @@ export class LoginPageComponent {
      this.showPromptNoValidNumber();
      this.loading.dismiss();
      }
-     }*/
+     }
   }
 
   emailAdressProperlyFormatted() {
@@ -88,10 +88,10 @@ export class LoginPageComponent {
 
   login() {
     //TODO get username and password from user input
-    let username = "0016744807"
-    let password = "muster01$$";
-    //this.loginService.login(this.inputNumberOrEmail, this.password).subscribe((res) => {
-    this.loginService.login(username, password).subscribe((res) => {
+    //let username = "0016744807"
+    //let password = "muster01$$";
+    this.loginService.login(this.inputNumberOrEmail, this.password).subscribe((res) => {
+    //this.loginService.login(username, password).subscribe((res) => {
       this.loading.dismiss();
       let loginData = res.json();
       if (loginData.errors[0].beschreibung === "Erfolg") {
@@ -103,25 +103,23 @@ export class LoginPageComponent {
         if (localStorage.getItem("disallowUserTracking") === "false") {
           this.ga.trackEvent('Login/Logout', 'login')
         }
-        this.navigateToNextPage();
+        this.navigateToNextPageWithLoginSuccessful(loginData.response.mitgliedId, loginData.response.securityToken);
       }
       else {
-        console.log("this.showPromptLoginFailed()");
         this.showPromptLoginFailed();
       }
     }, (err) => {
-      console.log("this.showPromptNoNetwork()");
       this.loading.dismiss();
       this.showPromptNoNetwork();
     })
   }
 
-  navigateToNextPage() {
+  navigateToNextPageWithLoginSuccessful(id, token) {
     if (this.navigatedFromPartnerDetail) {
       this.viewCtrl.dismiss();
     }
     else {
-      this.navCtrl.setRoot(OverviewPageComponent);
+      this.navCtrl.setRoot(OverviewPageComponent, {id: id, token: token, login: true});
     }
   }
 

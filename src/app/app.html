@@ -8,14 +8,13 @@
 
         <div class="logo-wrapper">
           <div class="logo"></div>
-          <ion-row class="page salutation">
+          <ion-row class="page salutation" *ngIf="salutation">
             <ion-item  class="salutation">
               <div item-left class="icon-col">
                 <div class="icon salutation"></div>
               </div>
               <ion-label class="page-title">
-                <!--Hallo, {{salutation}} {{title}} {{lastName} *ngIf = "salutation"}!-->
-                Hallo, Platzhalter!
+                Hallo, {{salutation}} {{title}} {{lastName}}!
               </ion-label>
             </ion-item>
 

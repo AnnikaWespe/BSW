@@ -352,6 +352,8 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
         this.location.latitude = data.latitude;
         this.location.longitude = data.longitude;
         this.cityName = data.name;
+        this.getLocationFromGPSEnabled = false;
+        localStorage.setItem("getLocationFromGPSEnabled", "false");
         this.resetPartnersArrays();
         this.getPartners();
       }
