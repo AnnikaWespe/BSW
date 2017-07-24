@@ -28,7 +28,7 @@
     </ion-item>
     <div *ngIf="!disablePushesInGeneral">
       <ion-item>
-        <div item-content>Bei neuem oder veränderten Angebot bei einem Favoriten</div>
+        <div item-content>Bei neuer Aktion eines Favoriten</div>
         <ion-toggle item-right [(ngModel)]="favoritesPush" color="light-blue" mode="ios"
                     [class.checked]="favoritesPush"></ion-toggle>
       </ion-item>
@@ -36,6 +36,11 @@
         <div item-content>zum Kontostand (jeweils am Monatsende)</div>
         <ion-toggle item-right [(ngModel)]="accountInfoPush" color="light-blue" mode="ios"
                     [class.checked]="accountInfoPush"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <div item-content>Erinnerung an BSW-Karte vor Ort</div>
+        <ion-toggle item-right [(ngModel)]="localReminder" color="light-blue" mode="ios"
+                    [class.checked]="localReminder"></ion-toggle>
       </ion-item>
     </div>
   </div>

@@ -54,7 +54,8 @@ export class BSWBonusApp {
     this.initializeApp();
     localStorage.setItem("locationExact", "false");
     if(this.securityToken){
-      this.title = localStorage.getItem("userTitle") || "";
+      let title = localStorage.getItem("userTitle");
+      this.title = (title == "null") ? "" : title;
       this.salutation = localStorage.getItem("salutation");
       this.lastName = localStorage.getItem("lastName");
     }

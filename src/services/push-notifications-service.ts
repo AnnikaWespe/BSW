@@ -25,7 +25,7 @@ export class PushNotificationsService {
     return this.http.post(pushUrl, body, options);
   }
 
-  createBody(newToken, oldToken) {
+  private createBody(newToken, oldToken) {
     let securityToken = encodeURI(localStorage.getItem("securityToken"));
     let favoritesPush = (localStorage.getItem("favoritesPush") == "false") ? false : true;
     let accountInfoPush = (localStorage.getItem("accountInfoPush") == "false") ? false : true;
@@ -37,6 +37,38 @@ export class PushNotificationsService {
         "mitgliedId": mitgliedId,
         "firebaseToken": newToken,
         "oldFirebaseToken": oldToken,
+        "firebasePermission": {
+          "PUSH_GENERELL": enablePushesInGeneral,
+          "PUSH_BONUSWERT": accountInfoPush,
+          "PUSH_FAVORITEN_AKTION_START": favoritesPush
+        },
+        "securityToken": securityToken
+      }
+    }
+    return body;
+  }
+
+  sendPushNotificationsRequestWithNewSettings(favoritesPush, accountInfoPush, enablePushesInGeneral) {
+
+    let pushUrl = 'https://vorsystem.avs.de/integ6/securityToken/saveFirebaseToken';
+    let headers = new Headers({'Content-Type': 'application/json'});
+
+    this.createAuthorizationHeader(headers);
+    let options = new RequestOptions({headers: headers});
+    let body = this.createBodyNewSettings(favoritesPush, accountInfoPush, enablePushesInGeneral);
+    console.log(JSON.stringify(body));
+    return this.http.post(pushUrl, body, options);
+  }
+
+  private createBodyNewSettings(favoritesPush, accountInfoPush, enablePushesInGeneral) {
+    let securityToken = encodeURI(localStorage.getItem("securityToken"));
+    let mitgliedId = localStorage.getItem("mitgliedId");
+    let body = {
+      "mandantId": "1",
+      "mitglied": {
+        "mitgliedId": mitgliedId,
+        "firebaseToken": securityToken,
+        "oldFirebaseToken": "",
         "firebasePermission": {
           "PUSH_GENERELL": enablePushesInGeneral,
           "PUSH_BONUSWERT": accountInfoPush,

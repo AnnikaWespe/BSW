@@ -101,6 +101,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   getFavoritePartners() {
     if (this.userLoggedIn) {
+      console.log("getting favorites");
       this.favoritesService.getFavorites().subscribe((res) => {
           this.getFavoritesByPfArray(res);
         },
