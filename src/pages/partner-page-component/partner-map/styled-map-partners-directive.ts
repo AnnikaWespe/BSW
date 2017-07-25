@@ -41,6 +41,7 @@ export class StyledMapPartnersDirective implements OnDestroy{
   map: any;
   pathToGmapsClusterIcons: string;
   markers = [];
+  lastMarkers;
   markerClusterer;
   bucket = 0;
   center;
@@ -51,10 +52,10 @@ export class StyledMapPartnersDirective implements OnDestroy{
               private navCtrl: NavController,
               private mapMarkerService: MapMarkerService) {
     if (DeviceService.isInBrowser) {
-      this.pathToGmapsClusterIcons = '../assets/icon/mapcluster/m';
+      this.pathToGmapsClusterIcons = '../assets/icon/m';
     }
     else if (DeviceService.isAndroid || DeviceService.isIos || DeviceService.isWindowsPhone) {
-      this.pathToGmapsClusterIcons = '../www/assets/icon/mapcluster/m';
+      this.pathToGmapsClusterIcons = '../www/assets/icon/m';
     }
 
     this.googleMapsWrapper.getNativeMap()

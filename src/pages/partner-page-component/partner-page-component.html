@@ -59,7 +59,7 @@
       </button>
     </ion-buttons>
     <ion-buttons end *ngIf="showOfflinePartners && !showTryAgainToGetPartnersButton">
-      <button (click)="toggleMapAndList()" class="mapIcon">
+      <button (click)="toggleMapAndList(); waitingForResults = false" class="mapIcon">
         <div class="toggleListAndMapIcon" [class.mapIcon]="!showMap"></div>
       </button>
     </ion-buttons>
@@ -107,7 +107,8 @@
 
         <ion-col class="currentPosition chooseLocationManually" *ngIf="!getLocationFromGPSEnabled"
                  (click)="chooseLocationManually()">
-          <p class="cityName">{{cityName}}</p>
+          <p class="cityName" *ngIf="cityName">{{cityName}}</p>
+          <p class="cityName" *ngIf="!cityName">zuletzt verfügbarer Standort</p>
           <p class="changeLocation">Ort ändern</p>
         </ion-col>
 

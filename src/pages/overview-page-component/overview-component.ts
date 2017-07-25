@@ -56,14 +56,15 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               private alertCtrl: AlertController,
               private ga: GoogleAnalytics,
               private bonusService: BonusService) {
-    if(navParams.data.login == true || localStorage.getItem('securityToken')){
+    if (navParams.data.login == true || localStorage.getItem('securityToken')) {
       let id = navParams.data.id || localStorage.getItem('mitgliedId');
       let token = navParams.data.token || localStorage.getItem('securityToken');
       this.userLoggedIn = true;
       this.getBonusData(id, token);
+      this.getFavoritePartners();
+
     }
     this.checkIfGPSEnabled();
-    this.getFavoritePartners();
     this.getLastVisitedPartners();
     if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
       this.checkForPromptRateAppInStore()
@@ -100,16 +101,15 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
   getFavoritePartners() {
-    if (this.userLoggedIn) {
-      console.log("getting favorites");
-      this.favoritesService.getFavorites().subscribe((res) => {
-          this.getFavoritesByPfArray(res);
-        },
-        error => {
-          console.log(error);
-          this.displayFavoritesFromCache();
-        });
-    }
+    console.log("getting favorites");
+    this.favoritesService.getFavorites().subscribe((res) => {
+        this.getFavoritesByPfArray(res);
+      },
+      error => {
+        console.log(error);
+        this.displayFavoritesFromCache();
+      });
+
   }
 
   getFavoritesByPfArray(res) {

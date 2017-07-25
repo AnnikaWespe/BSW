@@ -118,7 +118,7 @@ export class BSWBonusApp {
       localStorage.setItem("disallowUserTracking", "false");
     }
     if (localStorage.getItem("disallowUserTracking") === "false") {
-      this.ga.startTrackerWithId('UA-99848389-1')
+      this.ga.startTrackerWithId('587732516268-5h01pt6efns9burhh6n4fjlu06dfftsc.apps.googleusercontent.com')
         .then(() => {
           this.ga.trackEvent('Login/Logout', 'Start der App');
         })
