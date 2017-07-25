@@ -21,6 +21,7 @@ export class PartnerService {
     let headers = new Headers({'Content-Type': 'application/json'});
     let options = new RequestOptions({headers: headers});
     let getPartnersPostJson = JSON.stringify(post);
+    console.log(getPartnersPostJson)
     return this.http.post(this.partnersUrl, getPartnersPostJson, options)
       .map(this.extractData)
       .catch(this.handleError)

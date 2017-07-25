@@ -9,6 +9,7 @@ import {PartnerDetailService} from "./partner-detail-map/partner-detail-service"
 import {MapMarkerService} from "../../../services/map-marker-service";
 import {SavePartnersService} from "./save-partners-service";
 
+
 declare let window: any;
 declare let cordova: any;
 
@@ -119,10 +120,10 @@ export class PartnerDetailComponent implements OnDestroy {
     if (localStorage.getItem("securityToken") || goEvenIfUserNotLoggedIn) {
       let url = this.partnerDetails.trackingUrl
       if (!goEvenIfUserNotLoggedIn) {
-        let idNumber = localStorage.getItem("mitgliedsnummer");
+        let mitgliedsnummer = localStorage.getItem("mitgliedsnummer");
         url = url
-          .replace("#MGNUMMER#", "0016744807")
-          .replace("AVS9StAVS1St", "0016744807")
+          .replace("#MGNUMMER#", mitgliedsnummer)
+          .replace("AVS9StAVS1St", mitgliedsnummer)
       }
       cordova.InAppBrowser.open(url, '_system', 'location=yes');
       this.googleAnalyticsTrackingGoToShop();
@@ -204,7 +205,6 @@ export class PartnerDetailComponent implements OnDestroy {
   saveForOffline() {
     let partnerType = (this.isInFavorites) ? "favorites" : "lastVisitedPartners";
     if (this.partnerDetails.aktionen && this.partnerDetails.aktionen[0].bildUrl) {
-      console.log(this.partnerDetails.aktionen[0].bildUrl);
       this.mapMarkerService.getImageAsBase64("PartnerDetailComponent", this.partnerDetails.aktionen[0].bildUrl, (imageAsBase64, validImage) => {
         this.savePartnersService.saveCampaignImage(this.pfNumber, imageAsBase64);
         console.log(imageAsBase64);

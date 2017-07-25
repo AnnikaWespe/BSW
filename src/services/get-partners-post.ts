@@ -43,9 +43,10 @@ export class GetPartnersPost {
     else {
       this.filter = {
         buckets: ["OFFLINEPARTNER", "ONLINEPARTNER"],
-        PARTNER_HAS_CAMPAIGN: ["false"],
       };
-      this.filter.PARTNER_HAS_CAMPAIGN = [showOnlyPartnersWithCampaign.toString()];
+      if (showOnlyPartnersWithCampaign) {
+        this.filter.PARTNER_HAS_CAMPAIGN = ["true"];
+      }
       this.sort = {
         criterion: "RELEVANCE",
         order: "ASC"

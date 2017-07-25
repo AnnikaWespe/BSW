@@ -48,7 +48,7 @@
 
 
     <div *ngIf="partnerDetails?.waEb">
-      <span class="blue">{{partnerDetails?.waEb}}</span>
+      <span class="blue" [innerHTML] = "partnerDetails?.waEb | formatTelephoneNumber"></span>
       <span class="grey">{{partnerDetails?.waBezeichnung}}</span>
     </div>
     <div *ngIf="partnerDetails?.wbEb" class="second-bonus">

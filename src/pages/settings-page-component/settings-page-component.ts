@@ -49,20 +49,11 @@ export class SettingsPageComponent implements OnDestroy {
     this.updatePushRequests();
   }
 
-
   updatePushRequests() {
-    let token = localStorage.getItem("firebaseToken") || "";
-    this.pushNotificationsService.sendPushNotificationsRequest(token, "").subscribe((res) => {
-      console.log("result from Firebase API request", res.json().errors[0]);
-    }, (err) => {
-      localStorage.setItem("updatePushNotificationsNextTime", "true");
-    });
-  }
-  /*  updatePushRequests() {
    this.pushNotificationsService.sendPushNotificationsRequestWithNewSettings(this.favoritesPush, this.accountInfoPush, this.enablePushesInGeneral).subscribe((res) => {
    console.log("result from Firebase API request", res.json().errors[0]);
    }, (err) => {
    localStorage.setItem("updatePushNotificationsNextTime", "true");
    });
-   }*/
+   }
 }

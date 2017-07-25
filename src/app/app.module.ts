@@ -54,6 +54,7 @@ import {PartnerTableCachedComponent} from "../pages/overview-page-component/part
 import {NativeGeocoder} from "@ionic-native/native-geocoder";
 import {PushNotificationsService} from "../services/push-notifications-service";
 import {Firebase} from "@ionic-native/firebase";
+import {FormatTelephoneNumberPipe} from "../pages/partner-page-component/partner-detail-component/format.pipe";
 
 
 @NgModule({
@@ -68,6 +69,7 @@ import {Firebase} from "@ionic-native/firebase";
     SettingsPageComponent,
     ChooseLocationManuallyComponent,
     DynamicTruncatePipe,
+    FormatTelephoneNumberPipe,
     TruncatePipe,
     StyledMapChooseManually,
     PartnerDetailComponent,
