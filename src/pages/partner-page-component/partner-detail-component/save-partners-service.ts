@@ -39,7 +39,6 @@ export class SavePartnersService {
     }
     this[partnerType].push(pfNumber);
     if (partnerType == "lastVisitedPartners") {
-      console.log("inhere");
       this.deleteLastVisitedPartnersIfTooMany();
       let indexInLastVisitedPartnersByPf = this.lastVisitedPartnersComplete.indexOf(pfNumber);
       if (indexInLastVisitedPartnersByPf > -1) {

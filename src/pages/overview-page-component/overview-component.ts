@@ -62,7 +62,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       this.userLoggedIn = true;
       this.getBonusData(id, token);
       this.getFavoritePartners();
-
     }
     this.checkIfGPSEnabled();
     this.getLastVisitedPartners();

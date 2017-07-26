@@ -41,7 +41,7 @@ export class StyledMapPartnersDirective implements OnDestroy{
   map: any;
   pathToGmapsClusterIcons: string;
   markers = [];
-  lastMarkers;
+  previousMarkers;
   markerClusterer;
   bucket = 0;
   center;
@@ -107,19 +107,28 @@ export class StyledMapPartnersDirective implements OnDestroy{
           }
           offlinePartners.forEach((partner, index) => {
             let observable = Observable.create(observer => {
-              this.mapMarkerService.getImageAsBase64("StyledMapPartnersDirective", partner.logoUrlForGMap,
-                (imageAsBase64, validImage) => {
-                  let bounds = new google.maps.LatLngBounds();
-                  let marker = this.mapMarkerService.getMarker(partner, imageAsBase64, validImage, map, bounds);
-                  this.markers.push(marker);
-                  google.maps.event.addListener(marker, 'click', ((marker) => {
-                    return () => {
-                      this.navCtrl.push(PartnerDetailComponent, {partner: partner});
-                    }
-                  })(marker));
-                  observer.next(marker);
-                  observer.complete();
-                });
+              let marker = this.previousMarkers.find(marker => marker.partner.id == partner.id);
+              if(marker){
+                let bounds = new google.maps.LatLngBounds();
+                this.markers.push(marker);
+                observer.next(marker);
+                observer.complete();
+              }
+              else{
+                this.mapMarkerService.getImageAsBase64("StyledMapPartnersDirective", partner.logoUrlForGMap,
+                  (imageAsBase64, validImage) => {
+                    let bounds = new google.maps.LatLngBounds();
+                    marker = this.mapMarkerService.getMarker(partner, imageAsBase64, validImage, map, bounds);
+                    this.markers.push(marker);
+                    google.maps.event.addListener(marker, 'click', ((marker) => {
+                      return () => {
+                        this.navCtrl.push(PartnerDetailComponent, {partner: partner});
+                      }
+                    })(marker));
+                    observer.next(marker);
+                    observer.complete();
+                  });
+              }
             });
             observables.push(observable);
           });
@@ -138,6 +147,7 @@ export class StyledMapPartnersDirective implements OnDestroy{
   }
 
   clearMarkers() {
+    this.previousMarkers = this.markers.slice(0);
     while (this.markers.length > 0) {
       let markerObj = this.markers.pop();
       markerObj.setMap(null);
@@ -148,56 +158,6 @@ export class StyledMapPartnersDirective implements OnDestroy{
       this.markerClusterer.clearMarkers();
     }
   }
-
-  getPartners() {
-    if (this.getPartnersSubscription) {
-      this.getPartnersSubscription.unsubscribe();
-    }
-    this.getPartnersSubscription = this.partnerService.getPartners(this.center, this.bucket, this.searchTerm, false, "RELEVANCE", "DESC", this.radius)
-      .subscribe(
-        body => {
-          let returnedObject = body.json();
-          let offlinePartners = returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities;
-          this.placeMarkers(this.map, offlinePartners);
-        })
-  }
-
-
-  private placeMarkers(map, partners) {
-    let bounds = new google.maps.LatLngBounds();
-    let promises = [];
-    this.clearMarkers();
-    if (partners && this.markers.length === 0) {
-      partners.forEach((partner, index) => {
-        if (partner && partner.location) {
-          promises.push(new Promise((resolve, reject) => {
-            this.mapMarkerService.getImageAsBase64("StyledMapPartnersDirective", partner.logoUrlForGMap, (imageAsBase64, validImage) => {
-              let marker = this.mapMarkerService.getMarker(partner, imageAsBase64, validImage, map, bounds);
-              this.markers.push(marker);
-              google.maps.event.addListener(marker, 'click', (function (marker) {
-                return function () {
-                  //TODO hand over partner
-                  this.navCtrl.push(PartnerDetailComponent);
-                }
-              })(marker));
-              resolve();
-            });
-          }))
-        }
-      });
-      Promise.all(promises)
-        .then(() => {
-            this.markerClusterer = new MarkerClusterer(map, this.markers,
-              {imagePath: this.pathToGmapsClusterIcons});
-            google.maps.event.addListener(this.markerClusterer, 'clusterclick', (cluster) => {
-              this.fillList.emit(cluster.getMarkers());
-              google.maps.event.trigger(map, 'resize');
-            });
-          }
-        )
-    }
-  }
-
 
 
   private resizeMap() {

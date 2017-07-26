@@ -69,7 +69,6 @@ export class BSWBonusApp {
           this.setRootPage();
           this.statusBar.overlaysWebView(false);
           this.statusBar.backgroundColorByHexString('#929395');
-          this.startGoogleAnalyticsTracker();
           this.getDevice();
         },
         (err) => {
@@ -113,12 +112,12 @@ export class BSWBonusApp {
     )
   }
 
-  startGoogleAnalyticsTracker() {
+  startGoogleAnalyticsTracker(id) {
     if (localStorage.getItem("disallowUserTracking") === null) {
       localStorage.setItem("disallowUserTracking", "false");
     }
     if (localStorage.getItem("disallowUserTracking") === "false") {
-      this.ga.startTrackerWithId('587732516268-5h01pt6efns9burhh6n4fjlu06dfftsc.apps.googleusercontent.com')
+      this.ga.startTrackerWithId(id)
         .then(() => {
           this.ga.trackEvent('Login/Logout', 'Start der App');
         })
@@ -144,10 +143,13 @@ export class BSWBonusApp {
       this.managePushes();
       if (this.platform.is('ios')) {
         DeviceService.isIos = true;
+        this.startGoogleAnalyticsTracker("UA-64402282-1");
         console.log("ios");
       }
       else if (this.platform.is('android')) {
         DeviceService.isAndroid = true;
+        this.startGoogleAnalyticsTracker("UA-64402282-2");
+
         console.log("android");
       }
       else if (this.platform.is('windows')) {
@@ -171,6 +173,10 @@ export class BSWBonusApp {
   logout() {
     localStorage.removeItem("securityToken");
     localStorage.removeItem("mitgliedId");
+    localStorage.removeItem("userTitle");
+    localStorage.removeItem("salutation");
+    localStorage.removeItem("firstName");
+    localStorage.removeItem("lastName");
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackEvent('Login/Logout', 'logout');
     }

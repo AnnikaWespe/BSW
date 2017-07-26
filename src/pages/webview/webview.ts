@@ -3,6 +3,7 @@ import {NavController, NavParams} from "ionic-angular";
 import {Http} from "@angular/http";
 import {Observable} from "rxjs/Observable";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
+import {DeviceService} from "../../services/device-data";
 
 @Component({
   selector: 'webview',
@@ -37,6 +38,7 @@ export class WebviewComponent implements OnDestroy {
         this.cachedContent = content;
       }
       this.url = urlRaw.replace("/[MITGLIEDID]", "").replace("/[SECURITYTOKEN]", "");
+       console.log(this.url);
       this.http.get(this.url).subscribe((result) => {
         let entirePageHTML = result["_body"];
         let bodyHtml = /<body.*?>([\s\S]*)<\/body>/.exec(entirePageHTML)[1].replace(/<script[\s\S]*?<\/script>/, "");
@@ -56,7 +58,12 @@ export class WebviewComponent implements OnDestroy {
   ngOnDestroy() {
     localStorage.setItem("disallowUserTracking", this.disallowUserTracking.toString());
     if (!this.disallowUserTracking) {
-      this.ga.startTrackerWithId('UA-99848389-1');
+      if (DeviceService.isAndroid) {
+        this.ga.startTrackerWithId("UA-64402282-2");
+      }
+      else if (DeviceService.isIos) {
+        this.ga.startTrackerWithId("UA-64402282-1");
+      }
     }
   }
 
