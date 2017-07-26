@@ -54,6 +54,8 @@ ion-menu {
     overflow: hidden;
     background-size: contain;
     margin-left: 4.5vw;
+    max-height: 250px;
+    max-width: 250px;
   }
   div.logo-wrapper {
     padding: 5vh 0 1vh 0;
@@ -137,6 +139,8 @@ ion-menu {
       }
       height: 11vw;
       width: 11vw;
+      max-height: 30px;
+      max-width: 30px;
     }
     .page-title {
       font-size: 120%;

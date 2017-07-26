@@ -91,11 +91,36 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     this.bonusService.getBonusData(id, token).subscribe((res) => {
       if (res.json().errors[0].beschreibung === "Erfolg") {
         let response = res.json().response;
+        let date = new Date();
+        let timeStamp = date.getTime().toString();
         this.bonusDataAvailable = true;
         this.bonusThisYear = response.bonusGesamtJahr;
         this.balance = response.bonuskontostand;
+        localStorage.setItem("bonusThisYear", response.bonusGesamtJahr);
+        localStorage.setItem("balance", response.bonuskontostand);
+        localStorage.setItem("bonusDataTimeStamp", timeStamp)
       }
-      else console.log("no bonus data found: ", res.json().errors[0].beschreibung);
+      else {
+        let date = new Date();
+        let now = date.getTime();
+        let timeStamp = Number(localStorage.getItem("bonusDataTimeStamp"));
+        let timeDiff = now - timeStamp;
+        if (timeDiff < 86400000) {
+          this.bonusDataAvailable = true;
+          this.bonusThisYear = Number(localStorage.getItem("bonusThisYear"));
+          this.balance = Number(localStorage.getItem("balance"));
+        }
+      }
+    }, (err) => {
+      let date = new Date();
+      let now = date.getTime();
+      let timeStamp = Number(localStorage.getItem("bonusDataTimeStamp"));
+      let timeDiff = now - timeStamp;
+      if (timeDiff < 86400000) {
+        this.bonusDataAvailable = true;
+        this.bonusThisYear = Number(localStorage.getItem("bonusThisYear"));
+        this.balance = Number(localStorage.getItem("balance"));
+      }
     })
   }
 

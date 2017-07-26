@@ -1,18 +1,6 @@
 export class CachedContentService {
   public static ImpressumWebviewUrl =
-    `<section class="customhtml track_impression track_click module200-w">
-		<div class="track_id">
-	<div class="ctype">2</div>
-	<div class="cid">838</div>
-	<div class="clabel">Service Impressum</div>
-	<div class="gacategory">modul</div>
-	<div class="utype">1</div>
-	<div class="uid">2576</div>
-	<div class="ulabel">Service Impressum</div>
-</div>
-<header>
-<h1><a id="teilnahmebedingungen" class="anchor" name="Teilnahmebedingungen"></a><span>Impressum &amp; Teilnahmebedingungen</span></h1>
-</header>
+    `
 <div class="content text">
 
 <h3>Angaben nach §5 TMG und §55 Abs. 2 RStV</h3>

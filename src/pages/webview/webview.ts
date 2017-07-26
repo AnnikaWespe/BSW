@@ -1,17 +1,19 @@
-import {Component, ViewChild, OnDestroy} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {NavController, NavParams} from "ionic-angular";
 import {Http} from "@angular/http";
-import {Observable} from "rxjs/Observable";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {DeviceService} from "../../services/device-data";
 import {DomSanitizer} from "@angular/platform-browser";
 import {CachedContentService} from "./cached-content-data";
 
+declare let cordova: any;
+
+
 @Component({
   selector: 'webview',
   templateUrl: 'webview.html'
 })
-export class WebviewComponent implements OnDestroy {
+export class WebviewComponent implements OnDestroy{
 
   title: string;
   url;
@@ -19,7 +21,6 @@ export class WebviewComponent implements OnDestroy {
   dataProtectionScreen: boolean;
   noWebViewUrlsAvailable = false;
   cachedContent = "";
-  @ViewChild('iframe') iframe;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -30,6 +31,7 @@ export class WebviewComponent implements OnDestroy {
     this.title = navParams.get('title');
     let urlType = navParams.get('urlType');
     let urlRaw = localStorage.getItem(urlType);
+    console.log(urlRaw);
     let mitgliedId = localStorage.getItem("mitgliedId");
     let securityToken = encodeURIComponent(localStorage.getItem("securityToken"));
     console.log(urlType);
@@ -40,21 +42,23 @@ export class WebviewComponent implements OnDestroy {
       this.url = urlRaw.replace("/[MITGLIEDID]", "").replace("/[SECURITYTOKEN]", "");
     }
     if (urlType === "ImpressumWebviewUrl" || urlType === "DatenschutzWebviewUrl") {
-      let content = localStorage.getItem(urlType + "CachedContent");
+      let content// = localStorage.getItem(urlType + "CachedContent");
       if (content) {
         this.cachedContent = content;
       }
       else {
         this.cachedContent = CachedContentService[urlType];
       }
+      this.getLinksToOpenInExternalBrowser();
       this.http.get(this.url).subscribe((result) => {
         let entirePageHTML = result["_body"];
+        console.log(entirePageHTML);
         let bodyHtml = /<body.*?>([\s\S]*)<\/body>/.exec(entirePageHTML)[1].replace(/<script[\s\S]*?<\/script>/, "");
+        console.log(bodyHtml);
         localStorage.setItem(urlType + "CachedContent", bodyHtml)
       }, (err) => {
       })
     }
-    // this.url = sanitizer.bypassSecurityTrustHtml(this.url);
     console.log(this.url);
     this.dataProtectionScreen = (urlType === "DatenschutzWebviewUrl");
     this.disallowUserTracking = (localStorage.getItem("disallowUserTracking") == "true");
@@ -74,6 +78,19 @@ export class WebviewComponent implements OnDestroy {
     else {
 
     }
+  }
+
+
+
+
+  getLinksToOpenInExternalBrowser(){
+
+    // <a href="http://ideenpla.net/" titel="weiter zur Webseite von Ideenplanet" target="blank">www.ideenpla.net</a>
+
+  }
+
+  openLinksInExternalBrowser(url){
+    cordova.InAppBrowser.open(url, '_system', 'location=yes');
   }
 
 }
