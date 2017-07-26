@@ -47,6 +47,7 @@ export class BSWBonusApp {
       this.mitgliedId = id;
       this.securityToken = token;
       this.getUserData( id, token);
+      this.setWebViewsUrls();
     });
     this.mitgliedId = localStorage.getItem("mitgliedId");
     this.securityToken = localStorage.getItem("securityToken");

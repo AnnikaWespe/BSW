@@ -100,23 +100,12 @@
         </ion-row>
 
 
-        <ion-row menuClose class="page" (click)="openPage(this.pages[5])"  *ngIf="userLoggedIn">
+        <ion-row menuClose class="page" (click)="openPage(this.pages[5])">
           <ion-item tappable>
             <div item-left class="icon-col">
               <div class="icon settings"></div>
             </div>
             <ion-label class="page-title">
-              Einstellungen
-            </ion-label>
-          </ion-item>
-        </ion-row>
-
-        <ion-row class="page" *ngIf="!userLoggedIn">
-          <ion-item class="inactive">
-            <div item-left class="icon-col">
-              <div class="icon settings"></div>
-            </div>
-            <ion-label class="page-title inactive">
               Einstellungen
             </ion-label>
           </ion-item>
