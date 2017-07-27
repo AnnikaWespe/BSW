@@ -93,6 +93,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         let response = res.json().response;
         let date = new Date();
         let timeStamp = date.getTime().toString();
+        console.log("success with bonus data");
         this.bonusDataAvailable = true;
         this.bonusThisYear = response.bonusGesamtJahr;
         this.balance = response.bonuskontostand;
@@ -101,6 +102,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         localStorage.setItem("bonusDataTimeStamp", timeStamp)
       }
       else {
+        console.log("error with bonus data");
         let date = new Date();
         let now = date.getTime();
         let timeStamp = Number(localStorage.getItem("bonusDataTimeStamp"));
@@ -112,6 +114,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         }
       }
     }, (err) => {
+      console.log("error with bonus data");
       let date = new Date();
       let now = date.getTime();
       let timeStamp = Number(localStorage.getItem("bonusDataTimeStamp"));

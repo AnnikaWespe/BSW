@@ -16,7 +16,7 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
-  <ion-item *ngIf = "dataProtectionScreen">
+  <ion-item *ngIf="dataProtectionScreen">
     <div item-content>User Tracking deaktivieren</div>
     <ion-toggle item-right [(ngModel)]="disallowUserTracking" color="light-blue" mode="ios"
                 [class.checked]="disallowUserTracking"></ion-toggle>
@@ -28,7 +28,7 @@
           allowfullscreen
           frameBorder="0"
           *ngIf="!noWebViewUrlsAvailable && !cachedContent"></iframe>
-  <div class = "displayCachedContent" [innerHTML] = "cachedContent"></div>
+  <div class="displayCachedContent" [innerHTML]="cachedContent"></div>
   <ion-row *ngIf="noWebViewUrlsAvailable">
     <ion-item text-wrap>
       Wir können Ihnen derzeit keinen Screen anzeigen. Bitte loggen Sie sich aus und erneut wieder ein.

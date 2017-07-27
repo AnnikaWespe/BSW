@@ -1,113 +1,39 @@
 export class CachedContentService {
   public static ImpressumWebviewUrl =
     `
-<div class="content text">
-
-<h3>Angaben nach §5 TMG und §55 Abs. 2 RStV</h3>
-
-<p>BSW Verbraucher-Service Beamtenselbsthilfewerk GmbH, Bayreuth. <br>
-Amtsgericht Bayreuth HRB 2478<br>
+<div>
+      <h1>Impressum</h1>
+<p>Angaben nach §5 TMG und §55 Abs. 2 RStV</p>
+<p>BSW Verbraucher-Service Beamtenselbsthilfewerk GmbH</p>
+<p>Amtsgericht Bayreuth HRB 2478<br>
 Sitz der Gesellschaft: Josephsplatz 8, 95444 Bayreuth<br>
 USt.-IdNr. DE 813369420<br>
-Geschäftsführung: Rainer Saalfrank (Sprecher), Martin Steinlein, Bernhard Löffler <br>
+Geschäftsführung: Rainer Saalfrank (Sprecher), Martin Steinlein, Bernhard Löffler<br>
 Verantwortlich für den Inhalt i.S.v. §55 Abs. 2 RStV: Rainer Saalfrank, Josephsplatz 8, 95444 Bayreuth<br>
-Telefon: 0800 - 279 25 82<br>
+Telefon: (09 21) 802 587<br>
 Telefax: (09 21) 802 300<br>
-E-Mail: dialog@bsw.de<br><br>
-Das Impressum gilt auch für folgende Social Media Auftritte:<br>
-Facebook: www.bsw.de/facebook<br>
-Twitter: https://twitter.com/BSW_de<br>
-Google+: https://plus.google.com/+BswDeBeamtenselbsthilfewerk<br>
-Google+: https://plus.google.com/+bswde<br>
-Xing: https://www.xing.com/companies/bswverbraucher-servicegmbh
+E-Mail: dialog@bsw.de</p>
+<h2>Copyright</h2>
+<p>© Copyright 2017, BSW GmbH, Bayreuth, Deutschland. Alle Rechte vorbehalten. Grafiken, Texte und Layout unterliegen dem Schutz des Urheberrechts. Der Inhalt der BSW App darf, auch auszugsweise, nicht kopiert, verbreitet, verändert oder Dritten zugänglich gemacht werden.
 </p>
+<h2>Tätigkeit als Versicherungsvermittler</h2>
+<p>Die BSW Verbraucher-Service Beamtenselbsthilfewerk GmbH ist tätig als Versicherungsvermittler mit Erlaubnis nach § 34 d Abs. 1 GewO, erteilt von der IHK für München und Oberbayern, Balanstr. 55-59, 81541 München, <a href="https://www.ihk-muenchen.de/de/" target="_blank">https://www.ihk-muenchen.de/de/</a>. Die Registernummer lautet D-HT47-3V7BB-99, das Vermittlerregister ist einsehbar bei: Deutscher Industrie- und Handelskammertag (DIHK) e.V. , Breite Straße 29, 10178 Berlin, Telefon: 0180 6 00 58 50 (Festnetzpreis 0,20 EUR/Anruf, Mobilfunkpreise max. 0,60 EUR pro Anruf) und unter <a href="https://www.vermittlerregister.info" target="_blank">www.vermittlerregister.info</a>. Weiter besteht eine Erlaubnis nach § 34 c Abs. 1 GewO, erteilt durch das Amt für öffentliche Ordnung der Stadt Bayreuth, Luitpoldplatz 13, 95444 Bayreuth.</p>
+<h2>Erlaubnis nach § 34 d Abs. 1 GewO</h2>
+<p>Die BSW Verbraucher-Service Beamtenselbsthilfewerk GmbH ist tätig als Versicherungsvermittler mit Erlaubnis nach § 34 d Abs. 1 GewO.<br>
+Zuständige Behörde für die Erlaubnis:<br>IHK für München und Oberbayern<br>Balanstr. 55-59<br>81541 München<br><a href="https://www.ihk-muenchen.de/de/" target="_blank">https://www.ihk-muenchen.de/de/</a></p>
+<h2>Die Eintragung im Vermittlerregister:</h2>
+<p>Als Versicherungsvermittler unter der Registernummer D-HT47-3V7BB-99.<br>Die Eintragung kann wie folgt überprüft werden:<br>Deutscher Industrie- und Handelskammertag (DIHK) e.V.<br>Breite Straße 29<br>10178 Berlin<br>Telefon: 0180 6 00 58 50 (Festnetzpreis 0,20 EUR/Anruf, Mobilfunkpreise max. 0,60 EUR pro Anruf)<br><a href="https://www.vermittlerregister.info" target="_blank">www.vermittlerregister.info</a></p>
+<h2>Nachfolgende Schlichtungsstellen können zur außergerichtlichen Streitbeilegung angerufen werden und wir sind bereit an Streitbeilegungsverfahren teilzunehmen:</h2>
+<p>Versicherungsombudsmann e.V.<br>Postfach 08 06 32<br>10006 Berlin<br><a href="https://www.versicherungsombudsmann.de" target="_blank">www.versicherungsombudsmann.de</a></p>
+<h2>Erlaubnis nach § 34 c Abs. 1 GewO</h2>
+<p>Die Erlaubnis wurde erteilt durch:<br>Amt für öffentliche Ordnung der Stadt Bayreuth<br>Luitpoldplatz 13<br>95444 Bayreuth</p>
+<h2>Offenlegung direkter oder indirekter Beteiligungen</h2>
+<p>Die BSW Verbraucher-Service Beamtenselbsthilfewerk GmbH besitzt weder direkte noch indirekte Beteiligungen von über zehn Prozent an den Stimmrechten oder am Kapital eines Versicherungsunternehmens noch besitzen Versicherungsunternehmen oder Mutterunternehmen von Versicherungsunternehmens eine direkte oder indirekte Beteiligung von über zehn Prozent an den Stimmrechten oder am Kapital der BSW Verbraucher-Service Beamtenselbsthilfewerk GmbH.</p>
+<h2>Online Streitbeilegung der EU</h2>
+<p>Nach der europäischen ODR-Verordnung (Verordnung über die außergerichtliche Online-Beilegung verbraucherrechtlicher Streitigkeiten) sind Unternehmer, die an Verbraucher verkaufen, ab dem 09.01.2016 verpflichtet, einen Link zur entsprechenden Plattform auf Ihrer Seite zu platzieren. Im folgendem finden Sie nun eine Verlinkung zur Online Streitbeilegungsplattform vor. Wir weisen darauf hin, dass die entsprechend verlinkte Website nicht von BSW betrieben wird. Link: <a href="http://ec.europa.eu/consumers/odr/" target="_blank">Online Dispute Resolution</a>.</p>
 
-<h3>Teilnahmebedingungen:</h3>
 
-<p><a href="/upload/waf/20160112-BSW-Benutzerordnung_7591.pdf" target="_blank">Benutzerordnung (PDF)</a></p>
-<p><a href="/upload/waf/20150714-Gebuehrenordnung-BSW-eV_5186.pdf" target="_blank">Gebührenordnung (PDF)</a></p>
-
-<h3>Vertragspartner</h3>
-<p>Der BSW Verbraucher-Service Beamten-Selbsthilfewerk e. V. bietet seinen Mitgliedern satzungsgemäß günstige Einkaufsmöglichkeiten und Informationen über interessante Produkte sowie die Teilnahme an leistungsstarken Vorteilssystemen. Mit der Organisation und der Abwicklung des unter der Bezeichnung „BSW. Der Vorteil für den Öffentlichen Dienst“ betriebenen Vorteilssystems hat der Verein die BSW Verbraucher-Service Beamten-Selbsthilfewerk GmbH im Rahmen eines Dienstleistungs- und Geschäftsbesorgungsvertrages beauftragt. Die BSW GmbH kann sich ihrerseits wieder Dritter zur Erbringung der Leistungen bedienen. Der Einzug der im Rahmen der Benutzerordnung festgelegten Gebühren erfolgt über den</p><br>
-<p>BSW Verbraucher-Service Beamten-Selbsthilfewerk e. V.<br>
-Josephsplatz 8<br>
-Postfach 10 01 54<br>
-95401 Bayreuth<br>
-Vorstand: Rainer Saalfrank (Vorsitzender), Bernhard Löffler, Martin Steinlein<br>
-Amtsgericht Bayreuth VR 473<br>
-USt.-IdNr. DE132364386</p>
-
-<h3>Informationsgehalt</h3>
-
-<p>Alle Informationen auf der Homepage von BSW werden mit Sorgfalt erhoben und bearbeitet. Gleichwohl stellen wir die Informationen ohne jede Gewähr für Vollständigkeit und Richtigkeit zur Verfügung. Alle Produkt- und Serviceangebote freibleibend, Zwischenverkauf und Preisänderungen vorbehalten.</p>
-
-<h3>Copyright</h3>
-
-<p>© Copyright 2017, BSW Verbraucher-Service GmbH, Bayreuth, Deutschland. Alle Rechte vorbehalten. Grafiken, Texte und Layout unterliegen dem Schutz des Urheberrechts. Der Inhalt der Homepage darf, auch auszugsweise, nicht kopiert, verbreitet, verändert oder Dritten zugänglich gemacht werden.</p>
-
-<h3>Verlinkungen</h3>
-
-<p>Es ist möglich, von der BSW Homepage zu anderen Web-Seiten per Link zu gelangen. Für den Inhalt dieser externen Seiten ist BSW nicht verantwortlich, da die Seiten von dritten Personen erstellt, aktualisiert und bearbeitet werden, die nicht unserer Aufsicht unterliegen.</p>
-
-<h3>Tätigkeit als Versicherungsvermittler</h3>
-
-<p><b>Erlaubnis nach § 34 d Abs. 1 GewO</b></p><br>
-
-<p>Die BSW Verbraucher-Service Beamtenselbsthilfewerk GmbH ist tätig als Versicherungsvermittler mit Erlaubnis nach § 34 d Abs. 1 GewO.</p><br>
-
-<p>Zuständige Behörde für die Erlaubnis:</p>
-<p>IHK für München und Oberbayern</p>
-<p>Balanstr. 55-59</p>
-<p>81541 München</p>
-<p><a href="https://www.ihk-muenchen.de/de/" title="weiter zur Webseite der IHK München" target="blank">www.ihk-muenchen.de</a></p><br>
-
-<p><b>Die Eintragung im Vermittlerregister:</b></p><br>
-<p>Als Versicherungsvermittler unter der Registernummer D-HT47-3V7BB-99.</p><br>
-<p>Die Eintragung kann wie folgt überprüft werden:</p>
-<p>Deutscher Industrie- und Handelskammertag (DIHK) e.V.</p>
-<p>Breite Straße 29</p>
-<p>10178 Berlin</p>
-<p>Telefon: 0180 6 00 58 50 (Festnetzpreis 0,20 EUR/Anruf, Mobilfunkpreise max. 0,60 EUR pro Anruf)</p>
-<p><a href="https://www.vermittlerregister.info" title="weiter zur Webseite des Vermittlerregisters" target="blank">www.vermittlerregister.info</a></p><br>
-
-<p><b>Nachfolgende Schlichtungsstellen können zur außergerichtlichen Streitbeilegung angerufen werden und wir sind bereit an Streitbeilegungsverfahren teilzunehmen:</b></p><br>
-<p>Versicherungsombudsmann e.V.</p>
-<p>Postfach 08 06 32</p>
-<p>10006 Berlin</p>
-<p><a href="https://www.versicherungsombudsmann.de/" title="weiter zur Webseite der Schlichtungsstellen" target="blank">www.versicherungsombudsmann.de</a></p><br>
-
-<p><b>Erlaubnis nach § 34 c Abs. 1 GewO</b></p><br>
-
-<p>Die Erlaubnis wurde erteilt durch:</p>
-<p>Amt für öffentliche Ordnung der Stadt Bayreuth</p>
-<p>Luitpoldplatz 13</p>
-<p>95444 Bayreuth</p><br>
-
-<p><b>Offenlegung direkter oder indirekter Beteiligungen</b></p><br>
-<p>Die BSW Verbraucher-Service Beamtenselbsthilfewerk GmbH besitzt weder direkte noch indirekte Beteiligungen von über zehn Prozent an den Stimmrechten oder am Kapital eines Versicherungsunternehmens, noch besitzen Versicherungsunternehmen oder Mutterunternehmen von Versicherungsunternehmens eine direkte oder indirekte Beteiligung von über zehn Prozent an den Stimmrechten oder am Kapital der BSW Verbraucher-Service Beamtenselbsthilfewerk GmbH.</p>
-
-<h3>Online Streitbeilegung der EU</h3>
-
-<p>Nach der europäischen ODR-Verordnung (Verordnung über die außergerichtliche Online-Beilegung verbraucherrechtlicher Streitigkeiten) sind Unternehmer, die an Verbraucher verkaufen, ab dem 09.01.2016 verpflichtet, einen Link zur entsprechenden Plattform auf Ihrer Seite zu platzieren. 
- 
-Im folgenden finden Sie nun eine Verlinkung zur Online Streitbeilegungsplattform vor (im folgenden "OS-Plattform" genannt). Wir weisen darauf hin, dass die entsprechend verlinkte Website nicht von BSW betrieben wird:
-
- <a href="http://ec.europa.eu/consumers/odr/" target="blank" title="Weiter zur Seite der Online Streitbeilegung der EU">Online Dispute Resolution</a>.</p>
-
-<h3>Technische Realisierung</h3>
-
-<p>AVS Allgemeine Verwaltungs- und Service GmbH<br>
-Josephsplatz 8<br>
-95444 Bayreuth<br></p>
-<p><a href="http://www.avs.de">www.avs.de</a></p>
-
-<h3>Beratung, Konzeption, Design</h3>
-
-<p>IDEENPLANET UG<br>
-Hauptplatz 36<br>
-85276 Pfaffenhofen<br></p>
-<p><a href="http://ideenpla.net/" titel="weiter zur Webseite von Ideenplanet" target="blank">www.ideenpla.net</a></p>
-    </div></section>`
+   </div>`
   public static DatenschutzWebviewUrl =
     `<div id="wvc-1" class="col s12 m8 offset-m2">
       <h1>Datenschutzerklärung</h1>

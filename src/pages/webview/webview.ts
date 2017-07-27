@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {NavController, NavParams} from "ionic-angular";
 import {Http} from "@angular/http";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
@@ -13,7 +13,7 @@ declare let cordova: any;
   selector: 'webview',
   templateUrl: 'webview.html'
 })
-export class WebviewComponent implements OnDestroy{
+export class WebviewComponent implements OnDestroy, AfterViewInit {
 
   title: string;
   url;
@@ -22,18 +22,23 @@ export class WebviewComponent implements OnDestroy{
   noWebViewUrlsAvailable = false;
   cachedContent = "";
 
+
+
+
+
+
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public http: Http,
               private ga: GoogleAnalytics,
-              private sanitizer: DomSanitizer) {
+              private elementRef: ElementRef) {
     this.noWebViewUrlsAvailable = (localStorage.getItem("noWebViewUrlsAvailable") === "true");
     this.title = navParams.get('title');
     let urlType = navParams.get('urlType');
     let urlRaw = localStorage.getItem(urlType);
     console.log(urlRaw);
     let mitgliedId = localStorage.getItem("mitgliedId");
-    let securityToken = encodeURIComponent(localStorage.getItem("securityToken"));
+    let securityToken = localStorage.getItem("securityToken");
     console.log(urlType);
     if (securityToken) {
       this.url = urlRaw.replace("[MITGLIEDID]", mitgliedId).replace("[SECURITYTOKEN]", securityToken);
@@ -42,19 +47,16 @@ export class WebviewComponent implements OnDestroy{
       this.url = urlRaw.replace("/[MITGLIEDID]", "").replace("/[SECURITYTOKEN]", "");
     }
     if (urlType === "ImpressumWebviewUrl" || urlType === "DatenschutzWebviewUrl") {
-      let content// = localStorage.getItem(urlType + "CachedContent");
+      let content = localStorage.getItem(urlType + "CachedContent");
       if (content) {
         this.cachedContent = content;
       }
       else {
         this.cachedContent = CachedContentService[urlType];
       }
-      this.getLinksToOpenInExternalBrowser();
       this.http.get(this.url).subscribe((result) => {
         let entirePageHTML = result["_body"];
-        console.log(entirePageHTML);
-        let bodyHtml = /<body.*?>([\s\S]*)<\/body>/.exec(entirePageHTML)[1].replace(/<script[\s\S]*?<\/script>/, "");
-        console.log(bodyHtml);
+        let bodyHtml = /<body.*?>([\s\S]*)<\/body>/.exec(entirePageHTML)[1].replace(/<script[\s\S]*?<\/script>/g, "");
         localStorage.setItem(urlType + "CachedContent", bodyHtml)
       }, (err) => {
       })
@@ -64,6 +66,15 @@ export class WebviewComponent implements OnDestroy{
     this.disallowUserTracking = (localStorage.getItem("disallowUserTracking") == "true");
   }
 
+  ngAfterViewInit() {
+    let links = this.elementRef.nativeElement.querySelectorAll('a');
+    links.forEach((link)=>{
+      link.onclick = (event)=>{
+        event.preventDefault();
+        cordova.InAppBrowser.open(link.href, '_system', 'location=yes');
+      }
+    })
+  }
 
   ngOnDestroy() {
     localStorage.setItem("disallowUserTracking", this.disallowUserTracking.toString());
@@ -75,22 +86,6 @@ export class WebviewComponent implements OnDestroy{
         this.ga.startTrackerWithId("UA-64402282-1");
       }
     }
-    else {
-
-    }
-  }
-
-
-
-
-  getLinksToOpenInExternalBrowser(){
-
-    // <a href="http://ideenpla.net/" titel="weiter zur Webseite von Ideenplanet" target="blank">www.ideenpla.net</a>
-
-  }
-
-  openLinksInExternalBrowser(url){
-    cordova.InAppBrowser.open(url, '_system', 'location=yes');
   }
 
 }

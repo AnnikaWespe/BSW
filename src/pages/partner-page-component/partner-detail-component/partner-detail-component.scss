@@ -102,14 +102,14 @@ page-partner-detail-component {
         border-radius: 10vw;
         max-width: 30vw;
         max-height: 10vw;
-        padding: 0!important;
+        padding: 0 !important;
         margin: 0 4vw;
-        &.online-partner{
+        &.online-partner {
           min-width: 80vw;
           max-width: 80vw !important;
           margin-left: 4vw;
         }
-        div.mapIcon{
+        div.mapIcon {
           max-height: 6vw;
           min-height: 6vw;
           min-width: 8vw;
@@ -131,35 +131,12 @@ page-partner-detail-component {
   }
   div.paymentIcons {
     margin-top: 2vh;
-    div.paymentIcon {
-      &.maestro {
-        background: url('../assets/icon/payment-icons/maestro.png') no-repeat;
-        background-size: contain;
-      }
-      &.girocard {
-        background: url('../assets/icon/payment-icons/girocard.png') no-repeat;
-        background-size: contain;
-      }
-      &.vorkasse {
-        background: url('../assets/icon/payment-icons/payment-in-advance.png') no-repeat;
-        background-size: contain;
-      }
-      &.klarna {
-        background: url('../assets/icon/payment-icons/klarna.png') no-repeat;
-        background-size: contain;
-      }
-      &.paypal {
-        background: url('../assets/icon/payment-icons/paypal.png') no-repeat;
-        background-size: contain;
-      }
-      &.masterCard {
-        background: url('../assets/icon/payment-icons/mastercard.png') no-repeat;
-        background-size: contain;
-      }
-      height: 5vh;
-      width: 7vh;
-      overflow: hidden;
-      display: inline-block;
+    display: inline-block;
+    div {
+      float: left;
+      width: 12vw;
+      max-width: 70px;
+      padding-right: 1vw;
     }
   }
 
@@ -180,7 +157,7 @@ page-partner-detail-component {
     padding: 0
   }
 
-  div.mapIcon{
+  div.mapIcon {
     max-height: 6vw;
     min-height: 6vw;
     min-width: 8vw;

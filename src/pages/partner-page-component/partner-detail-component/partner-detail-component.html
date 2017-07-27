@@ -36,10 +36,9 @@
 
         <ion-item color="light" tappable class="button-map" (click)='goToPartnerDetailMap()'
                   *ngIf="partnerDetails?.ort">
-          <div item-content class="goToMapText">Zur Karte </div>
+          <div item-content class="goToMapText">Zur Karte</div>
           <div item-end class="mapIcon"></div>
         </ion-item>
-
 
 
       </div>
@@ -48,7 +47,7 @@
 
 
     <div *ngIf="partnerDetails?.waEb">
-      <span class="blue" [innerHTML] = "partnerDetails?.waEb | formatTelephoneNumber"></span>
+      <span class="blue" [innerHTML]="partnerDetails?.waEb | formatTelephoneNumber"></span>
       <span class="grey">{{partnerDetails?.waBezeichnung}}</span>
     </div>
     <div *ngIf="partnerDetails?.wbEb" class="second-bonus">
@@ -61,6 +60,12 @@
     </div>
     <p *ngIf="partnerDetails?.ort"><b>Ort:</b> {{partnerDetails?.strasse}} {{partnerDetails?.hausnummer}},
       {{partnerDetails?.ort}}</p>
+    <p *ngIf="partnerDetails?.tel && partnerDetails?.ort"><b>Tel.:</b> {{partnerDetails?.tel}}</p>
+    <div class="paymentIcons">
+      <div *ngFor="let iconUrl of zmIcons">
+        <img src = "{{iconUrl}}">
+      </div>
+    </div>
     <div class="description">
       <div *ngIf="partnerDetails?.kurzBeschreibung"
            [innerHtml]="partnerDetails?.kurzBeschreibung">
@@ -92,6 +97,7 @@
     <img src="{{partnerDetails?.aktionen[0].bildUrl}}">
     <div class="partner-details aktion">
       {{partnerDetails?.aktionen[0].aktionstext}}
+      <div [innerHTML]="partnerDetails?.fussnote"></div>
     </div>
   </div>
 

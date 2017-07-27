@@ -42,6 +42,7 @@ export class InitService {
     this.getWebViewUrlsFromApi().subscribe((res) => {
       let result = res.json();
       if (result.errors[0].beschreibung === "Erfolg") {
+        console.log(result.response);
         let resultArray = result.response.bswAppWebviewUrl;
         for (let item of resultArray){
           localStorage.setItem(item.viewname + "WebviewUrl", item.webviewUrl)

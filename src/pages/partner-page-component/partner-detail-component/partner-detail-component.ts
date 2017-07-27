@@ -26,6 +26,7 @@ export class PartnerDetailComponent implements OnDestroy {
   favoritesByPfArray;
   partnerDetailsSubscription;
   showDetails = true;
+  zmIcons = [];
 
 
   constructor(public navCtrl: NavController,
@@ -38,8 +39,11 @@ export class PartnerDetailComponent implements OnDestroy {
               private mapMarkerService: MapMarkerService,
               private savePartnersService: SavePartnersService) {
     this.setParameters();
-    if(!this.partnerDetails){
+    if (!this.partnerDetails) {
       this.getPartnerDetails();
+    }
+    else{
+      this.getZmicons();
     }
     this.googleAnalyticsTrackingOpenDetailScreen();
   }
@@ -53,7 +57,7 @@ export class PartnerDetailComponent implements OnDestroy {
   setParameters() {
     this.partner = this.navParams.get("partner");
     this.partnerDetails = this.navParams.get("partnerDetails");
-    console.log("partner:", this.partner);
+    console.log(this.partnerDetails);
     this.pfNumber = this.partner.number;
     this.favoritesByPfArray = FavoritesData.favoritesByPfArray;
     if (this.favoritesByPfArray) {
@@ -65,6 +69,7 @@ export class PartnerDetailComponent implements OnDestroy {
     this.partnerDetailsSubscription = this.partnerDetailService.getDetails(this.pfNumber).subscribe((res) => {
       if (res.json().errors[0].beschreibung === "Erfolg") {
         this.partnerDetails = res.json().response;
+        this.getZmicons();
         console.log(this.partnerDetails);
         if (this.partnerDetails.aktionen) {
           this.showDetails = false;
@@ -75,6 +80,18 @@ export class PartnerDetailComponent implements OnDestroy {
         this.alertSomethingWentWrong();
       }
     });
+  }
+
+  getZmicons() {
+    let zmArray = this.partnerDetails.bezahlarten;
+    zmArray.forEach((zm) => {
+      console.log(zm);
+      let iconUrl = localStorage.getItem("zmicon_" + zm.bezahlartStyle + "WebviewUrl");
+      if(iconUrl){
+        this.zmIcons.push(iconUrl)
+      }
+    })
+    console.log(this.zmIcons);
   }
 
   alertSomethingWentWrong() {
@@ -207,7 +224,6 @@ export class PartnerDetailComponent implements OnDestroy {
     if (this.partnerDetails.aktionen && this.partnerDetails.aktionen[0].bildUrl) {
       this.mapMarkerService.getImageAsBase64("PartnerDetailComponent", this.partnerDetails.aktionen[0].bildUrl, (imageAsBase64, validImage) => {
         this.savePartnersService.saveCampaignImage(this.pfNumber, imageAsBase64);
-        console.log(imageAsBase64);
       })
     }
     this.mapMarkerService.getImageAsBase64("PartnerDetailComponent", this.partner.logoUrl, (imageAsBase64, validImage) => {
