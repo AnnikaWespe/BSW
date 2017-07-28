@@ -17,9 +17,9 @@
 </ion-header>
 <ion-content>
   <ion-item *ngIf="dataProtectionScreen">
-    <div item-content>User Tracking deaktivieren</div>
-    <ion-toggle item-right [(ngModel)]="disallowUserTracking" color="light-blue" mode="ios"
-                [class.checked]="disallowUserTracking"></ion-toggle>
+    <div item-content>Google Analytics erlauben?</div>
+    <ion-toggle item-right [(ngModel)]="allowUserTracking" color="light-blue" mode="ios"
+                [class.checked]="allowUserTracking"></ion-toggle>
   </ion-item>
   <iframe #iframe
           [src]="url | safe"

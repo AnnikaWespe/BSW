@@ -96,7 +96,7 @@
     </ion-row>
     <img src="{{partnerDetails?.aktionen[0].bildUrl}}">
     <div class="partner-details aktion">
-      {{partnerDetails?.aktionen[0].aktionstext}}
+      <div [innerHTML] = "partnerDetails?.aktionen[0].aktionstext"></div>
       <div [innerHTML]="partnerDetails?.fussnote"></div>
     </div>
   </div>

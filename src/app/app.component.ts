@@ -212,6 +212,10 @@ export class BSWBonusApp {
         localStorage.setItem("updatePushNotificationsNextTime", "false");
       });
     }
+    this.firebase.onNotificationOpen()
+      .subscribe((data)=>{
+      console.log(data);
+      })
   }
 
   updateToken(token) {

@@ -64,15 +64,12 @@ ion-menu {
       display: flex;
       justify-content: center;
       color: map_get($colors, font-color-for-filter-dropdown);
-      //margin-top: 1vh;
+      margin-bottom: 1vh;
       max-height: 4vh !important;
       ion-item{
         font-size: small;
         max-height: 4vh !important;
         background-color: white;
-        ion-label{
-          padding: 0 !important;
-        }
       }
     }
   }

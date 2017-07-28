@@ -18,6 +18,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
   title: string;
   url;
   disallowUserTracking;
+  allowUserTracking;
   dataProtectionScreen: boolean;
   noWebViewUrlsAvailable = false;
   cachedContent = "";
@@ -64,6 +65,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
     console.log(this.url);
     this.dataProtectionScreen = (urlType === "DatenschutzWebviewUrl");
     this.disallowUserTracking = (localStorage.getItem("disallowUserTracking") == "true");
+    this.allowUserTracking = !this.disallowUserTracking;
   }
 
   ngAfterViewInit() {
@@ -77,6 +79,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy() {
+    this.disallowUserTracking = !this.allowUserTracking;
     localStorage.setItem("disallowUserTracking", this.disallowUserTracking.toString());
     if (!this.disallowUserTracking) {
       if (DeviceService.isAndroid) {
