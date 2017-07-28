@@ -57,7 +57,6 @@ export class PartnerDetailComponent implements OnDestroy {
   setParameters() {
     this.partner = this.navParams.get("partner");
     this.partnerDetails = this.navParams.get("partnerDetails");
-    console.log(this.partnerDetails);
     this.pfNumber = this.partner.number;
     this.favoritesByPfArray = FavoritesData.favoritesByPfArray;
     if (this.favoritesByPfArray) {
@@ -84,14 +83,14 @@ export class PartnerDetailComponent implements OnDestroy {
 
   getZmicons() {
     let zmArray = this.partnerDetails.bezahlarten;
-    zmArray.forEach((zm) => {
-      console.log(zm);
-      let iconUrl = localStorage.getItem("zmicon_" + zm.bezahlartStyle + "WebviewUrl");
-      if(iconUrl){
-        this.zmIcons.push(iconUrl)
-      }
-    })
-    console.log(this.zmIcons);
+    if(zmArray && zmArray.length){
+      zmArray.forEach((zm) => {
+        let iconUrl = localStorage.getItem("zmicon_" + zm.bezahlartStyle + "WebviewUrl");
+        if(iconUrl){
+          this.zmIcons.push(iconUrl)
+        }
+      })
+    }
   }
 
   alertSomethingWentWrong() {

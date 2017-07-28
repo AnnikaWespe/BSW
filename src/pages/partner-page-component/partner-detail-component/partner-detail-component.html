@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar primary>
     <ion-title>
-      {{partner?.nameOrigin}}
+      {{partnerDetails?.nameInternet}}
     </ion-title>
     <ion-buttons end>
       <button (click)="toggleFavorites()" *ngIf="favoritesByPfArray">
@@ -18,7 +18,7 @@
 <ion-content>
   <div class="white-background">
     <div class="center-image">
-      <img src="{{partner?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
+      <img src="{{partnerDetails?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
     </div>
   </div>
 

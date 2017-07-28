@@ -16,6 +16,9 @@ import {InitService} from "./init-service";
 import {PushNotificationsService} from "../services/push-notifications-service";
 import {Firebase} from "@ionic-native/firebase";
 import {StatusBar} from "@ionic-native/status-bar";
+import {PartnerDetailComponent} from "../pages/partner-page-component/partner-detail-component/partner-detail-component";
+import {PartnerService} from "../services/partner-service";
+import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
 
 
 @Component({
@@ -33,6 +36,19 @@ export class BSWBonusApp {
   lastName;
   mitgliedId;
   securityToken;
+  jsonObject = {
+    'to': 'id',
+    'notification': {
+      'body': 'Zwei Ihrer Favoriten haben seit heute neue Aktionen',
+      'title': 'Neue Aktionen',
+      'icon': 'newpromotion'
+    },
+    'data': {
+      'typ': 'promotion',
+      'partnerfirmaId': ['69852'],
+      'pfNummer': ["asdf", "1234", "62750000", "35280000", "34880000", "30080000", "30010000", "61310001", "11015201", "68700000", "72010000", "77230051", "77990000", "72790000", "72800000", "72910000", "72970000", "73260000", "81700000", "30010374", "73620000", "73440031", "34150448", "77000060", "89420999", "11047828", "34730000", "35460128", "74000033", "74000038", "11051103", "11052211", "37182081", "11036374", "74000104", "74000105", "74000199", "74000433", "38192039", "74000752"]
+    }
+  }
 
   constructor(private platform: Platform,
               private splashScreen: SplashScreen,
@@ -41,12 +57,13 @@ export class BSWBonusApp {
               public events: Events,
               private firebase: Firebase,
               private pushNotificationsService: PushNotificationsService,
-              private statusBar: StatusBar) {
+              private statusBar: StatusBar,
+              private partnerService: PartnerService) {
     events.subscribe("userLoggedIn", (id, token) => {
       this.userLoggedIn = true;
       this.mitgliedId = id;
       this.securityToken = token;
-      this.getUserData( id, token);
+      this.getUserData(id, token);
       this.setWebViewsUrls();
     });
     this.mitgliedId = localStorage.getItem("mitgliedId");
@@ -54,7 +71,7 @@ export class BSWBonusApp {
     this.setMenu();
     this.initializeApp();
     localStorage.setItem("locationExact", "false");
-    if(this.securityToken){
+    if (this.securityToken) {
       let title = localStorage.getItem("userTitle");
       this.title = (title == "null") ? "" : title;
       this.salutation = localStorage.getItem("salutation");
@@ -100,7 +117,7 @@ export class BSWBonusApp {
           localStorage.setItem("firstName", data.VORNAME);
           localStorage.setItem("lastName", data.NAME);
         }
-        else{
+        else {
           console.log("in getUserData", result.errors[0].beschreibung);
         }
       },
@@ -192,8 +209,8 @@ export class BSWBonusApp {
 
 
   managePushes() {
-    let firebaseToken = localStorage.getItem("firebaseToken");
-    if (firebaseToken == null) {
+    let firebaseToken// = localStorage.getItem("firebaseToken");
+    if (firebaseToken == null || firebaseToken == undefined) {
       this.firebase.getToken()
         .then(token => {
           if (token) {
@@ -207,14 +224,37 @@ export class BSWBonusApp {
       });
     if (localStorage.getItem("updatePushNotificationsNextTime") == "true") {
       let token = localStorage.getItem("firebaseToken") || "";
-      this.pushNotificationsService.sendPushNotificationsRequest(token, "").subscribe((res) => {
-        console.log("result from Firebase API request", res.json().errors[0]);
-        localStorage.setItem("updatePushNotificationsNextTime", "false");
-      });
+      this.updateToken(token);
     }
     this.firebase.onNotificationOpen()
-      .subscribe((data)=>{
-      console.log(data);
+      .subscribe(() => {
+        let jsonObject = this.jsonObject;
+        if (jsonObject.data.typ == "promotion") {
+          let pfNummerArray = jsonObject.data.pfNummer;
+          let numberOfPartners = pfNummerArray.length;
+          if (numberOfPartners == 1) {
+            this.nav.push(PartnerDetailComponent, {partner: {number: pfNummerArray[0]}});
+          }
+          else {
+            let location = {latitude: localStorage.getItem("latitude"), longitude: localStorage.getItem("longitude")};
+            this.partnerService.getPartners(location, 0, "", false, "RELEVANCE", "DESC", 10000, pfNummerArray).subscribe((res) => {
+                let partnersArray = [];
+                res.json().contentEntities.forEach((partner) => {
+                  if (partner && partner.number) {
+                    partnersArray.push(partner);
+                  }
+                })
+                if (partnersArray) {
+                  this.nav.push(PushesListPageComponent, {partners: partnersArray})
+                }
+              },
+              error => {
+              })
+          }
+        }
+        else if (jsonObject.data.typ == "bonus") {
+          this.nav.push(WebviewComponent, {urlType: 'VorteilsuebersichtWebviewUrl', title: 'Vorteilsübersicht'})
+        }
       })
   }
 
@@ -225,6 +265,7 @@ export class BSWBonusApp {
       console.log("result from Firebase API request", res.json().errors[0])
     });
   }
+
 
 }
 

@@ -58,7 +58,8 @@ export class MapMarkerService {
 
 
   public getImageAsBase64(originPage, imageUrl, callback) {
-    if (imageUrl === "https://www.bsw.de/upload/bsw/partner-logo.png" && originPage === "StyledMapPartnersDirective") {
+    // uncomment for partner name instead of picture "BSW-Partner"
+    /*if (imageUrl === "https://www.bsw.de/upload/bsw/partner-logo.png" && originPage === "StyledMapPartnersDirective") {
       callback("", false)
     }
     else {
@@ -73,7 +74,19 @@ export class MapMarkerService {
       xhr.open('GET', imageUrl);
       xhr.responseType = 'blob';
       xhr.send();
-    }
+    }*/
+    // uncomment for picture "BSW-Partner" instead of partner name
+    let xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+      let reader = new FileReader();
+      reader.onloadend = () => {
+        callback(reader.result, true);
+      }
+      reader.readAsDataURL(xhr.response);
+    };
+    xhr.open('GET', imageUrl);
+    xhr.responseType = 'blob';
+    xhr.send();
   }
 
   bonusElement(bonusString): string {

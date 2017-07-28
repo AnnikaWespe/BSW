@@ -55,6 +55,7 @@ import {NativeGeocoder} from "@ionic-native/native-geocoder";
 import {PushNotificationsService} from "../services/push-notifications-service";
 import {Firebase} from "@ionic-native/firebase";
 import {FormatTelephoneNumberPipe} from "../pages/partner-page-component/partner-detail-component/format.pipe";
+import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
 
 
 @NgModule({
@@ -85,6 +86,7 @@ import {FormatTelephoneNumberPipe} from "../pages/partner-page-component/partner
     UserSpecificPartnersComponent,
     ChangePasswordModal,
     PartnerTableCachedComponent,
+    PushesListPageComponent,
   ],
   imports: [
     IonicModule.forRoot(BSWBonusApp),
@@ -118,6 +120,8 @@ import {FormatTelephoneNumberPipe} from "../pages/partner-page-component/partner
     UserSpecificPartnersComponent,
     PartnerTableCachedComponent,
     ChangePasswordModal,
+    PushesListPageComponent,
+
   ],
 
   providers: [
