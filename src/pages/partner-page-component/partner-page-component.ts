@@ -178,10 +178,9 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.location.latitude = localStorage.getItem("latitude");
     this.location.longitude = localStorage.getItem("longitude");
     this.cityName = localStorage.getItem("locationName");
-    if (this.cityName === "undefined") {
+    if (this.cityName === "undefined" || this.cityName == null) {
       this.cityName = "zuletzt verfügbarer Ort"
     }
-    ;
   }
 
   showPromptGPSDisabled() {
@@ -364,7 +363,8 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
 
   showPartner(partner = 0) {
-    this.navCtrl.push(PartnerDetailComponent, {partner: partner})
+    this.navCtrl.push(PartnerDetailComponent, {partner: partner});
+    this.showCustomBackButton = false;
   }
 
   askForValidCategories() {

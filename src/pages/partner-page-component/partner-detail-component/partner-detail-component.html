@@ -61,7 +61,7 @@
     <p *ngIf="partnerDetails?.ort"><b>Ort:</b> {{partnerDetails?.strasse}} {{partnerDetails?.hausnummer}},
       {{partnerDetails?.ort}}</p>
     <p *ngIf="partnerDetails?.tel && partnerDetails?.ort"><b>Tel.:</b> {{partnerDetails?.tel}}</p>
-    <div class="paymentIcons">
+    <div class="paymentIcons" *ngIf="zmIcons.length">
       <div *ngFor="let iconUrl of zmIcons">
         <img src = "{{iconUrl}}">
       </div>

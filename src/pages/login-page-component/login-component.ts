@@ -95,9 +95,11 @@ export class LoginPageComponent {
       this.loading.dismiss();
       let loginData = res.json();
       if (loginData.errors[0].beschreibung === "Erfolg") {
+        let mitgliedsnummer = loginData.response.mitgliedsnummer + loginData.response.pruefziffer;
         localStorage.setItem("securityToken", loginData.response.securityToken);
         localStorage.setItem("mitgliedId", loginData.response.mitgliedId);
-        localStorage.setItem("mitgliedsnummer", loginData.response.mitgliedsnummer);
+        localStorage.setItem("mitgliedsnummer", mitgliedsnummer);
+
         this.events.publish('userLoggedIn', loginData.response.mitgliedId, loginData.response.securityToken);
         console.log("Login: " + loginData.errors[0].beschreibung);
         if (localStorage.getItem("disallowUserTracking") === "false") {

@@ -63,12 +63,13 @@ export class PushNotificationsService {
   private createBodyNewSettings(favoritesPush, accountInfoPush, enablePushesInGeneral) {
     let securityToken = encodeURI(localStorage.getItem("securityToken"));
     let mitgliedId = localStorage.getItem("mitgliedId");
+    let token = localStorage.getItem("firebaseToken");
     let body = {
       "mandantId": "1",
       "mitglied": {
         "mitgliedId": mitgliedId,
-        "firebaseToken": securityToken,
-        "oldFirebaseToken": "",
+        "firebaseToken": token,
+        "oldFirebaseToken": token,
         "firebasePermission": {
           "PUSH_GENERELL": enablePushesInGeneral,
           "PUSH_BONUSWERT": accountInfoPush,

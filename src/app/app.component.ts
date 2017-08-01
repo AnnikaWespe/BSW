@@ -223,11 +223,12 @@ export class BSWBonusApp {
         this.updateToken(token)
       });
     if (localStorage.getItem("updatePushNotificationsNextTime") == "true") {
-      let token = localStorage.getItem("firebaseToken") || "";
+      let token = localStorage.getItem("firebaseToken");
       this.updateToken(token);
     }
     this.firebase.onNotificationOpen()
-      .subscribe(() => {
+      .subscribe((data) => {
+      console.log(data);
         let jsonObject = this.jsonObject;
         if (jsonObject.data.typ == "promotion") {
           let pfNummerArray = jsonObject.data.pfNummer;
@@ -265,7 +266,8 @@ export class BSWBonusApp {
       console.log("result from Firebase API request", res.json().errors[0])
     });
   }
-
-
 }
+
+
+
 

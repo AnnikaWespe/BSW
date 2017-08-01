@@ -10,6 +10,10 @@ button{
   font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !important;
 }
 
+.scroll-content {
+  overflow-y: auto !important;
+}
+
 [tappable]:active{
   outline-color: initial;
   outline-style: none;
@@ -38,7 +42,11 @@ ion-header .toolbar-title-md {
 }
 
 .back-button .disable-hover .bar-button .bar-button-md .back-button-md .bar-button-default .bar-button-default-md .show-back-button {
-  color: map-get($colors, secondary);
+  color: map-get($colors, grey);
+}
+
+.bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default{
+  color: map-get($colors, grey);
 }
 
 ion-navbar.toolbar.toolbar-md {

@@ -20,7 +20,7 @@ export class LocationService {
 
   getLocation(): Observable<any> {
     return Observable.fromPromise(
-      this.geolocation.getCurrentPosition().then((position) => {
+      this.geolocation.getCurrentPosition({timeout: 3000}).then((position) => {
         let latitude = position.coords.latitude.toFixed(4);
         let longitude = position.coords.longitude.toFixed(4);
         localStorage.setItem("latitude", latitude);
@@ -29,9 +29,12 @@ export class LocationService {
         localStorage.setItem("locationAvailable", "true");
         localStorage.setItem("cityName", "Zuletzt verfügbarer Standort");
         return {lat: latitude, lon: longitude, locationFound: true};
+      }, (err) => {
+        return {locationFound: false};
       })
     )
   }
+
 
   getLocationName(lat, lon): Observable<any> {
     return Observable.fromPromise(this.nativeGeocoder.reverseGeocode(lat, lon)
@@ -39,7 +42,10 @@ export class LocationService {
         let cityname = result.city;
         localStorage.setItem("cityName", cityname);
         return cityname;
+      }).catch(() => {
+        return "zuletzt verfügbarer Standort";
       }))
+
   }
 
   getLocationCoordinates(locationName): Observable<any> {
@@ -48,7 +54,9 @@ export class LocationService {
         let longitude = parseFloat(parseFloat(coordinates.longitude).toFixed(4));
         let latitude = parseFloat(parseFloat(coordinates.latitude).toFixed(4));
         return {latitude: latitude, longitude: longitude};
+      }).catch(() => {
       }))
+
   }
 }
 

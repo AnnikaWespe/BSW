@@ -1,6 +1,6 @@
 my-profile-page-component {
   .scroll-content{
-    overflow: hidden !important;
+    background-color: map_get($colors, light);
     div.ion-card-wrapper{
       background-color: white;
       padding: 3vh 3vw 3vh 3vw;

@@ -16,6 +16,8 @@ partner-page-component {
         background-size: contain;
         height: 8vw;
         width: 8vw;
+        max-height: 30px;
+        max-width: 30px;
         overflow: hidden;
         &.mapIcon {
           background: url('../assets/icon/map.svg') no-repeat;
@@ -139,8 +141,8 @@ partner-page-component {
           background: url('../assets/icon/mapmarker.svg') no-repeat;
           background-size: contain;
           text-align: right;
-          min-width: 8vh;
-          min-height: 8vh;
+          width: 8vh;
+          height: 8vh;
           float: right;
           &.manually {
             background: url('../assets/icon/mapmarker_crossed.svg') no-repeat;
