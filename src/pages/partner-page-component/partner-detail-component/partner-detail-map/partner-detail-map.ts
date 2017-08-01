@@ -27,7 +27,8 @@ export class PartnerDetailMap {
   partner: any;
   pfNumber: string;
   isInFavorites = true;
-
+  securityToken;
+  favoritesByPfArray;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -36,6 +37,8 @@ export class PartnerDetailMap {
               private savePartnersService: SavePartnersService) {
     this.partnerDetails = navParams.get("partnerDetails");
     this.partner = navParams.get("partner");
+    this.securityToken = localStorage.getItem("securityToken");
+    this.favoritesByPfArray = FavoritesData.favoritesByPfArray;
     console.log(this.partnerDetails);
     if (localStorage.getItem("locationExact") === "true") {
       this.currentLatitude = parseFloat(localStorage.getItem("latitude"));
@@ -44,6 +47,7 @@ export class PartnerDetailMap {
     }
     console.log("PartnerDetailMap: ", this.currentLatitude + " " + this.currentLongitude);
     this.pfNumber = this.partnerDetails.pfNummer;
+    console.log(this.pfNumber);
     this.isInFavorites = FavoritesData.isInFavorites(this.pfNumber);
   }
 

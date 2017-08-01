@@ -65,7 +65,7 @@ export class BSWBonusApp {
       this.securityToken = token;
       this.getUserData(id, token);
       this.setWebViewsUrls();
-      if (DeviceService.isInBrowser) {
+      if (!DeviceService.isInBrowser) {
         this.managePushes();
       }
     });

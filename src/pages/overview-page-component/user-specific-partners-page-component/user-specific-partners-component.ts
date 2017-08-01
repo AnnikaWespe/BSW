@@ -35,7 +35,7 @@ export class UserSpecificPartnersComponent {
               public partnerService: PartnerService) {
     this.title = navParams.get("title");
     this.partners = navParams.get("partners");
-    this.cached = (navParams.get("cached") == "true");
+    this.cached = (navParams.get("fromCache"));
     if (this.title === "Favoriten" || this.cached) {
       this.sortPartnersArray();
     }
@@ -82,6 +82,7 @@ export class UserSpecificPartnersComponent {
 
 
   showPartner(partner = 0) {
+    console.log("showing partner");
     this.navCtrl.push(PartnerDetailComponent, {partner: partner})
   }
 

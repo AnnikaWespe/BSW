@@ -186,6 +186,9 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         this.favoritePartners.push(partner);
       }
       this.firstFiveFavorites = this.favoritePartners.slice(0, 5);
+      if (this.favoritePartners.length > 5) {
+        this.moreThanFiveFavorites = true;
+      }
     }
   }
 
@@ -312,12 +315,13 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         title: "Favoriten",
         fromCache: this.favoritesFromCache,
         partners: this.favoritePartners
-      })
+      });
+      console.log()
     }
     else {
       this.navCtrl.push(UserSpecificPartnersComponent, {
         title: "Zuletzt besucht",
-        fromCache: false,
+        fromCache: true,
         partners: this.lastVisitedPartners
       })
     }

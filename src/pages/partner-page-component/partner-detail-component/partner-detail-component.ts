@@ -27,6 +27,7 @@ export class PartnerDetailComponent implements OnDestroy {
   partnerDetailsSubscription;
   showDetails = true;
   zmIcons = [];
+  securityToken;
 
 
   constructor(public navCtrl: NavController,
@@ -42,7 +43,7 @@ export class PartnerDetailComponent implements OnDestroy {
     if (!this.partnerDetails) {
       this.getPartnerDetails();
     }
-    else{
+    else {
       this.getZmicons();
     }
     this.googleAnalyticsTrackingOpenDetailScreen();
@@ -58,6 +59,7 @@ export class PartnerDetailComponent implements OnDestroy {
     this.partner = this.navParams.get("partner");
     this.partnerDetails = this.navParams.get("partnerDetails");
     this.pfNumber = this.partner.number;
+    this.securityToken = localStorage.getItem("securityToken");
     this.favoritesByPfArray = FavoritesData.favoritesByPfArray;
     if (this.favoritesByPfArray) {
       this.isInFavorites = FavoritesData.isInFavorites(this.pfNumber);
@@ -83,10 +85,10 @@ export class PartnerDetailComponent implements OnDestroy {
 
   getZmicons() {
     let zmArray = this.partnerDetails.bezahlarten;
-    if(zmArray && zmArray.length){
+    if (zmArray && zmArray.length) {
       zmArray.forEach((zm) => {
         let iconUrl = localStorage.getItem("zmicon_" + zm.bezahlartStyle + "WebviewUrl");
-        if(iconUrl){
+        if (iconUrl) {
           this.zmIcons.push(iconUrl)
         }
       })
@@ -129,6 +131,12 @@ export class PartnerDetailComponent implements OnDestroy {
   }
 
   goToPartnerDetailMap() {
+    /*try {
+      this.navCtrl.push(PartnerDetailMap, {partnerDetails: this.partnerDetails, partner: this.partner});
+    } catch(err){
+      console.log("an error occurred!")
+    }*/
+
     this.navCtrl.push(PartnerDetailMap, {partnerDetails: this.partnerDetails, partner: this.partner});
   }
 
@@ -152,7 +160,7 @@ export class PartnerDetailComponent implements OnDestroy {
   showPromptSomethingWentWrong() {
     let prompt = this.alertCtrl.create({
       title: 'Tut uns leid, etwas ist schiefgegangen',
-      message: "Bitte versuchen Sie es erneut.",
+      message: "Bitte überprüfen Sie gegebenenfalls Ihr Netzwerk, und versuchen Sie es dann erneut.",
       buttons: [
         {
           text: 'Ok',
@@ -201,6 +209,8 @@ export class PartnerDetailComponent implements OnDestroy {
         else {
           this.showPromptSomethingWentWrong();
         }
+      }, () => {
+        this.showPromptSomethingWentWrong();
       })
     }
     else {
@@ -214,6 +224,8 @@ export class PartnerDetailComponent implements OnDestroy {
         else {
           this.showPromptSomethingWentWrong();
         }
+      }, () => {
+        this.showPromptSomethingWentWrong();
       })
     }
   }

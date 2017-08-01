@@ -4,7 +4,7 @@
       {{partnerDetails?.nameInternet}}
     </ion-title>
     <ion-buttons end>
-      <button (click)="toggleFavorites()" *ngIf="favoritesByPfArray">
+      <button (click)="toggleFavorites()" *ngIf="favoritesByPfArray && securityToken">
         <ion-icon name="star-outline" color="grey" *ngIf="!isInFavorites" class="favorites-icon"></ion-icon>
         <ion-icon name="star" color='primary' *ngIf="isInFavorites" class="favorites-icon"></ion-icon>
       </button>
@@ -16,11 +16,16 @@
 </ion-header>
 
 <ion-content>
+
   <div class="white-background">
     <div class="center-image">
       <img src="{{partnerDetails?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
     </div>
+
   </div>
+
+  <div *ngIf="!partnerDetails" padding>Dieser Partner ist leider offline nicht verfügbar. Bitte verbinden Sie sich mit dem Internet.</div>
+
 
   <div class="partner-details">
     <div class="titleAndButton">

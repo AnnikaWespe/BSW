@@ -18,7 +18,7 @@ export class FavoritesData {
   }
 
   public static isInFavorites(nummer): boolean {
-    if (this.favoritesByPfArray.indexOf(nummer) > -1) {
+    if (this.favoritesByPfArray && this.favoritesByPfArray.indexOf(nummer) > -1) {
       return true
     }
     else {
