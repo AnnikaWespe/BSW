@@ -5,11 +5,13 @@ import {Http, Headers} from "@angular/http";
 export class FavoritesService {
 
   favoritesUrlSnippet = 'https://vorsystem.avs.de/integ6/securityToken/favorit/';
-  securityToken = encodeURIComponent(localStorage.getItem("securityToken"));
-  mitgliedId = localStorage.getItem("mitgliedId");
+  securityToken;
+  mitgliedId;
 
 
   constructor(private http: Http) {
+    this.securityToken = encodeURIComponent(localStorage.getItem("securityToken"));
+    this.mitgliedId = localStorage.getItem("mitgliedId");
   }
 
   createAuthorizationHeader(headers: Headers) {

@@ -65,6 +65,9 @@ export class BSWBonusApp {
       this.securityToken = token;
       this.getUserData(id, token);
       this.setWebViewsUrls();
+      if (DeviceService.isInBrowser) {
+        this.managePushes();
+      }
     });
     this.mitgliedId = localStorage.getItem("mitgliedId");
     this.securityToken = localStorage.getItem("securityToken");
@@ -158,7 +161,9 @@ export class BSWBonusApp {
       console.log("isInBrowser");
     }
     else {
-      this.managePushes();
+      if(this.securityToken){
+        this.managePushes();
+      }
       if (this.platform.is('ios')) {
         DeviceService.isIos = true;
         this.startGoogleAnalyticsTracker("UA-64402282-1");
@@ -209,7 +214,7 @@ export class BSWBonusApp {
 
 
   managePushes() {
-    let firebaseToken// = localStorage.getItem("firebaseToken");
+    let firebaseToken = localStorage.getItem("firebaseToken");
     if (firebaseToken == null || firebaseToken == undefined) {
       this.firebase.getToken()
         .then(token => {
@@ -228,7 +233,7 @@ export class BSWBonusApp {
     }
     this.firebase.onNotificationOpen()
       .subscribe((data) => {
-      console.log(data);
+        console.log(data);
         let jsonObject = this.jsonObject;
         if (jsonObject.data.typ == "promotion") {
           let pfNummerArray = jsonObject.data.pfNummer;

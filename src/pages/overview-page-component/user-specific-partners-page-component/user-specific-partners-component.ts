@@ -87,6 +87,7 @@ export class UserSpecificPartnersComponent {
 
   showCachedPartner(partner) {
     let partnerDetails = JSON.parse(localStorage.getItem(partner.number + "partnerDetails"));
+    console.log(partnerDetails);
     this.navCtrl.push(PartnerDetailComponent, {partner: partner, partnerDetails: partnerDetails})
   }
 

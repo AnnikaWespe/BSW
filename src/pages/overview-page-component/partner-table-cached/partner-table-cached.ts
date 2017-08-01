@@ -39,10 +39,6 @@ export class PartnerTableCachedComponent{
     return maxWidth;
   }
 
-  showPartner(partner){
-    this.showPartnerEventEmitter.emit(partner);
-  }
-
   showCachedPartner(partner){
     this.showCachedPartnerEventEmitter.emit(partner);
   }
