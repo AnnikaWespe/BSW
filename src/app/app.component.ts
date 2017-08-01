@@ -200,6 +200,8 @@ export class BSWBonusApp {
     localStorage.removeItem("salutation");
     localStorage.removeItem("firstName");
     localStorage.removeItem("lastName");
+    localStorage.removeItem("firebaseToken");
+    this.updateToken(null);
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackEvent('Login/Logout', 'logout');
     }
