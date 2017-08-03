@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "113786360881",
-    "firebase_url": "https://bsw-app-next-try.firebaseio.com",
-    "project_id": "bsw-app-next-try",
-    "storage_bucket": "bsw-app-next-try.appspot.com"
+    "project_number": "587732516268",
+    "firebase_url": "https://bsw-app-relaunch.firebaseio.com",
+    "project_id": "bsw-app-relaunch",
+    "storage_bucket": "bsw-app-relaunch.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:113786360881:android:c1d831602cf80b46",
+        "mobilesdk_app_id": "1:587732516268:android:c1d831602cf80b46",
         "android_client_info": {
           "package_name": "de.avs.bswapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "113786360881-0hph0tee0995muc2q5ge9fsufoqg3d9n.apps.googleusercontent.com",
+          "client_id": "587732516268-5h01pt6efns9burhh6n4fjlu06dfftsc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAQ9DirVp1Xiu-X_sneYboT7BQ9sTVbO1o"
+          "current_key": "AIzaSyAN2soahL5zB0UH7ltiA2AKaVgRyn7miQI"
         }
       ],
       "services": {

@@ -161,7 +161,7 @@ export class BSWBonusApp {
       console.log("isInBrowser");
     }
     else {
-      if(this.securityToken){
+      if (this.securityToken) {
         this.managePushes();
       }
       if (this.platform.is('ios')) {
@@ -216,53 +216,63 @@ export class BSWBonusApp {
 
 
   managePushes() {
-    let firebaseToken = localStorage.getItem("firebaseToken");
-    if (firebaseToken == null || firebaseToken == undefined) {
-      this.firebase.getToken()
-        .then(token => {
-          if (token) {
-            this.updateToken(token);
-          }
-        })
-    }
+    /*let firebaseToken = localStorage.getItem("firebaseToken");
+     if (firebaseToken == null || firebaseToken == undefined) {
+     this.firebase.getToken()
+     .then(token => {
+     if (token) {
+     this.updateToken(token);
+     }
+     })
+     }*/
+    this.firebase.getToken()
+      .then(token => {
+        if (token) {
+          this.updateToken(token);
+        }
+      })
     this.firebase.onTokenRefresh()
       .subscribe((token) => {
         this.updateToken(token)
       });
+
     if (localStorage.getItem("updatePushNotificationsNextTime") == "true") {
       let token = localStorage.getItem("firebaseToken");
       this.updateToken(token);
     }
     this.firebase.onNotificationOpen()
-      .subscribe((data) => {
-        console.log(data);
-        let jsonObject = this.jsonObject;
-        if (jsonObject.data.typ == "promotion") {
-          let pfNummerArray = jsonObject.data.pfNummer;
-          let numberOfPartners = pfNummerArray.length;
-          if (numberOfPartners == 1) {
-            this.nav.push(PartnerDetailComponent, {partner: {number: pfNummerArray[0]}});
-          }
-          else {
-            let location = {latitude: localStorage.getItem("latitude"), longitude: localStorage.getItem("longitude")};
-            this.partnerService.getPartners(location, 0, "", false, "RELEVANCE", "DESC", 10000, pfNummerArray).subscribe((res) => {
-                let partnersArray = [];
-                res.json().contentEntities.forEach((partner) => {
-                  if (partner && partner.number) {
-                    partnersArray.push(partner);
+      .subscribe((jsonObject) => {
+        console.log(jsonObject);
+        //let jsonObject = this.jsonObject;
+        if(jsonObject && jsonObject.data){
+          if (jsonObject.data.typ == "promotion") {
+            let pfNummerArray = jsonObject.data.pfNummer;
+            let numberOfPartners = pfNummerArray.length;
+            if (numberOfPartners == 1) {
+              this.nav.push(PartnerDetailComponent, {partner: {number: pfNummerArray[0]}});
+            }
+            else {
+              let location = {latitude: localStorage.getItem("latitude"), longitude: localStorage.getItem("longitude")};
+              this.partnerService.getPartners(location, 0, "", false, "RELEVANCE", "DESC", 10000, pfNummerArray).subscribe((res) => {
+                  let partnersArray = [];
+                  res.json().contentEntities.forEach((partner) => {
+                    if (partner && partner.number) {
+                      partnersArray.push(partner);
+                    }
+                  })
+                  if (partnersArray) {
+                    this.nav.push(PushesListPageComponent, {partners: partnersArray})
                   }
+                },
+                error => {
                 })
-                if (partnersArray) {
-                  this.nav.push(PushesListPageComponent, {partners: partnersArray})
-                }
-              },
-              error => {
-              })
+            }
+          }
+          else if (jsonObject.data.typ == "bonus") {
+            this.nav.push(WebviewComponent, {urlType: 'VorteilsuebersichtWebviewUrl', title: 'Vorteilsübersicht'})
           }
         }
-        else if (jsonObject.data.typ == "bonus") {
-          this.nav.push(WebviewComponent, {urlType: 'VorteilsuebersichtWebviewUrl', title: 'Vorteilsübersicht'})
-        }
+
       })
   }
 
