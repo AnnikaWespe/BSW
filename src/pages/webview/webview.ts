@@ -69,6 +69,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    if (this.title === "Impressum" || this.title === "Datenschutz")
     try{
       let links = this.elementRef.nativeElement.querySelectorAll('a');
       links.forEach((link)=>{
