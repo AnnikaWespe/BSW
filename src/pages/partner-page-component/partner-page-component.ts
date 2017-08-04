@@ -321,12 +321,12 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       return;
     }
     if (this.showOfflinePartners && !this.showOnlinePartners) {
-      this.title = this.searchTerm || "Vor Ort Partner";
+      this.title = this.searchTerm || "Vor-Ort-Partner";
       localStorage.setItem("title", "Vor Ort Partner");
       this.displayedPartners = this.offlinePartners;
     }
     else if (!this.showOfflinePartners && this.showOnlinePartners) {
-      this.title = this.searchTerm || "Online Partner";
+      this.title = this.searchTerm || "Online-Partner";
       localStorage.setItem("title", "Online Partner");
       this.displayedPartners = this.onlinePartners;
     }

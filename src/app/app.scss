@@ -6,6 +6,11 @@ button{
   text-transform: none !important;
 }
 
+  .back-button {
+    color: map_get($colors, grey) !important;
+  }
+
+
 * {
   font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !important;
 }
@@ -42,11 +47,11 @@ ion-header .toolbar-title-md {
 }
 
 .back-button .disable-hover .bar-button .bar-button-md .back-button-md .bar-button-default .bar-button-default-md .show-back-button {
-  color: map-get($colors, grey);
+  color: map-get($colors, grey) !important;
 }
 
 .bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default{
-  color: map-get($colors, grey);
+  color: map-get($colors, grey) !important;
 }
 
 ion-navbar.toolbar.toolbar-md {

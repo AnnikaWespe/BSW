@@ -69,13 +69,18 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    let links = this.elementRef.nativeElement.querySelectorAll('a');
-    links.forEach((link)=>{
-      link.onclick = (event)=>{
-        event.preventDefault();
-        cordova.InAppBrowser.open(link.href, '_system', 'location=yes');
-      }
-    })
+    try{
+      let links = this.elementRef.nativeElement.querySelectorAll('a');
+      links.forEach((link)=>{
+        link.onclick = (event)=>{
+          event.preventDefault();
+          cordova.InAppBrowser.open(link.href, '_system', 'location=yes');
+        }
+      })
+    }
+    catch(err){
+    }
+
   }
 
   ngOnDestroy() {

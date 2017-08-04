@@ -113,7 +113,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
           this.balance = Number(localStorage.getItem("balance"));
         }
       }
-    }, (err) => {
+    }, () => {
       console.log("error with bonus data");
       let date = new Date();
       let now = date.getTime();
@@ -257,7 +257,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
 
-  public
   ngAfterViewChecked() {
     this.setFocus();
   }

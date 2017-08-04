@@ -65,7 +65,7 @@ export class AddPurchasePageComponent implements OnDestroy{
 
   promptNoCameraAccess() {
     let alert = this.alertCtrl.create({
-      title: 'Etwas ist schiefgegangen',
+      title: 'Es wurde kein Bild zurückgegeben.',
       message: 'Eventuell darf die App nicht auf die Kamera zugreifen. Sie können dies in den Appeinstellungen ändern.',
       buttons: [
         {

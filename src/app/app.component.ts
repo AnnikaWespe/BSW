@@ -4,7 +4,7 @@ import {SplashScreen} from '@ionic-native/splash-screen';
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 
 
-import  {AddPurchasePageComponent} from '../pages/add-purchase-page-component/add-purchase-component';
+import {AddPurchasePageComponent} from '../pages/add-purchase-page-component/add-purchase-component';
 import {OverviewPageComponent} from "../pages/overview-page-component/overview-component";
 import {LoginPageComponent} from "../pages/login-page-component/login-component";
 import {MyProfilePageComponent} from "../pages/my-profile-page-component/my-profile-page-component";
@@ -201,6 +201,7 @@ export class BSWBonusApp {
     localStorage.removeItem("firstName");
     localStorage.removeItem("lastName");
     localStorage.removeItem("firebaseToken");
+    localStorage.removeItem("mitgliedsnummer");
     this.updateToken(null);
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackEvent('Login/Logout', 'logout');
@@ -216,26 +217,18 @@ export class BSWBonusApp {
 
 
   managePushes() {
-    /*let firebaseToken = localStorage.getItem("firebaseToken");
-     if (firebaseToken == null || firebaseToken == undefined) {
-     this.firebase.getToken()
-     .then(token => {
-     if (token) {
-     this.updateToken(token);
-     }
-     })
-     }*/
     this.firebase.getToken()
       .then(token => {
         if (token) {
           this.updateToken(token);
+          console.log(token);
         }
       })
     this.firebase.onTokenRefresh()
       .subscribe((token) => {
         this.updateToken(token)
       });
-
+    this.firebase.grantPermission();
     if (localStorage.getItem("updatePushNotificationsNextTime") == "true") {
       let token = localStorage.getItem("firebaseToken");
       this.updateToken(token);
@@ -244,7 +237,7 @@ export class BSWBonusApp {
       .subscribe((jsonObject) => {
         console.log(jsonObject);
         //let jsonObject = this.jsonObject;
-        if(jsonObject && jsonObject.data){
+        if (jsonObject && jsonObject.data) {
           if (jsonObject.data.typ == "promotion") {
             let pfNummerArray = jsonObject.data.pfNummer;
             let numberOfPartners = pfNummerArray.length;

@@ -38,14 +38,12 @@ export class PictureScreenComponent implements OnDestroy{
 
   sendEmail() {
     window.plugins.socialsharing.shareViaEmail(
-      'Sehr geehrte Damen und Herren, bitte tragen Sie meinen Einkauf nach. Meine Mitgliedsnummer lautet ' + localStorage.getItem("mitgliedId") + '.',
+      'Sehr geehrte Damen und Herren, bitte tragen Sie meinen Einkauf nach. Meine Mitgliedsnummer lautet ' + localStorage.getItem("mitgliedsnummer") + '.',
       'Vor-Ort Einkauf nacherfassen',
       ['dialog@bsw.de'],
       null,
       null,
       [this.base64Image]
-      //onSuccess, // called when sharing worked, but also when the user cancelled sharing via email. On iOS, the callbacks' boolean result parameter is true when sharing worked, false if cancelled. On Android, this parameter is always true so it can't be used). See section "Notes about the successCallback" below.
-      //onError // called when sh*t hits the fan
     );
   }
 

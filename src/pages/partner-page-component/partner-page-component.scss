@@ -3,6 +3,11 @@ partner-page-component {
     background-color: map_get($colors, light);
   }
 
+  ion-icon.custom-icon{
+    font-size: large !important;
+    color: green;
+  }
+
 
   .standard-header {
     ion-icon {

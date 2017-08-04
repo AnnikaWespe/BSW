@@ -89,7 +89,11 @@ import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
     PushesListPageComponent,
   ],
   imports: [
-    IonicModule.forRoot(BSWBonusApp),
+    IonicModule.forRoot(BSWBonusApp,{
+      backButtonText: '',
+      backButtonIcon: 'ios-arrow-round-back',
+      backButtonColor: 'grey'
+    }),
     BrowserModule,
     FormsModule,
     HttpModule,
@@ -98,6 +102,7 @@ import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBAHcgksDNzLfzvKC0ZjnoQZeivSQbE1Iw'
     }),
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [

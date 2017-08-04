@@ -7,21 +7,21 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>860620525720-ot2jf50cv2u8n0901dt81sb0mcdsh024.apps.googleusercontent.com</string>
+	<string>113786360881-hivl980q3i7pq5801f4aciv5pok49ovd.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.860620525720-ot2jf50cv2u8n0901dt81sb0mcdsh024</string>
+	<string>com.googleusercontent.apps.113786360881-hivl980q3i7pq5801f4aciv5pok49ovd</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAZWtsWDUCubR4QFe1qkYrQkAv4d7G5BIQ</string>
+	<string>AIzaSyAFQOHD9yiIpklSMl6uPe6TlrlPie0yNDM</string>
 	<key>GCM_SENDER_ID</key>
-	<string>860620525720</string>
+	<string>113786360881</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.ionicframework.app459066</string>
+	<string>de.avs.bswapp</string>
 	<key>PROJECT_ID</key>
-	<string>bsw-app-5fab1</string>
+	<string>bsw-app-next-try</string>
 	<key>STORAGE_BUCKET</key>
-	<string>bsw-app-5fab1.appspot.com</string>
+	<string>bsw-app-next-try.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<true/>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -33,8 +33,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:860620525720:ios:80fa7a9043c6af94</string>
+	<string>1:113786360881:ios:c1d831602cf80b46</string>
 	<key>DATABASE_URL</key>
-	<string>https://bsw-app-5fab1.firebaseio.com</string>
+	<string>https://bsw-app-next-try.firebaseio.com</string>
 </dict>
 </plist>
