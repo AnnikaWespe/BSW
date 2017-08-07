@@ -1,5 +1,5 @@
 import {Directive, Input, Output, EventEmitter, OnChanges, OnDestroy} from '@angular/core';
-import {GoogleMapsAPIWrapper} from 'angular2-google-maps/core';
+import { GoogleMapsAPIWrapper } from '@agm/core/services/google-maps-api-wrapper';
 import {generate} from "../../Observable";
 import {NavController, Platform} from 'ionic-angular';
 import {DeviceService} from "../../../services/device-data";

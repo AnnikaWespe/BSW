@@ -10,7 +10,6 @@ declare let google: any;
   templateUrl: 'choose-location-manually-component.html'
 })
 export class ChooseLocationManuallyComponent implements OnDestroy{
-
   latitude: number;
   longitude: number;
   cityName: string;

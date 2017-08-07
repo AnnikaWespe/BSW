@@ -1,5 +1,5 @@
 import {OnInit, Directive, Output, EventEmitter, Input} from '@angular/core';
-import {GoogleMapsAPIWrapper} from 'angular2-google-maps/core';
+import { GoogleMapsAPIWrapper } from '@agm/core/services/google-maps-api-wrapper';
 import {MapMarkerService} from "../../../../services/map-marker-service";
 declare let google: any;
 

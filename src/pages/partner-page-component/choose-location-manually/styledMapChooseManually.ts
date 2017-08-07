@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import { GoogleMapsAPIWrapper } from 'angular2-google-maps/core';
+import { GoogleMapsAPIWrapper } from '@agm/core/services/google-maps-api-wrapper';
 
 @Directive({
   selector: 'styled-map'

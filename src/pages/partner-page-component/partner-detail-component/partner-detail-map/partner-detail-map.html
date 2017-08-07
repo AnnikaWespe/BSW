@@ -13,25 +13,25 @@
 </ion-header>
 
 <ion-content>
-  <sebm-google-map
+  <agm-map
     [latitude]="49"
     [longitude]="11"
     [zoomControl] = "false">
-    <sebm-google-map-circle [latitude]="currentLatitude"
+    <agm-circle [latitude]="currentLatitude"
                             [longitude]="currentLongitude"
                             [fillColor]="'red'"
                             [circleDraggable]="false"
                             [editable]="true"
                             [strokeColor] = "'red'"
                             *ngIf="locationExact">
-    </sebm-google-map-circle>
+    </agm-circle>
 
     <styled-map-partner-details (travelTimePublicUpdated)="handleTravelTimePublicUpdated($event)"
                                 (travelTimeCarUpdated)="handleTravelTimeCarUpdated($event)"
                                 (travelTimePedestrianUpdated) ="handleTravelTimePedestrianUpdated($event)"
                                 [partner] = "partner"
     ></styled-map-partner-details>
-  </sebm-google-map>
+  </agm-map>
 
   <div class="goToRoute" *ngIf="travelTimeAvailable">
   <div class="icons">

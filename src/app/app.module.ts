@@ -10,7 +10,9 @@ import {Camera} from '@ionic-native/camera';
 import {BarcodeScanner} from '@ionic-native/barcode-scanner';
 import {Geolocation} from '@ionic-native/geolocation';
 
-import {AgmCoreModule} from 'angular2-google-maps/core';
+import { AgmCoreModule } from '@agm/core';
+//import { GoogleMapsAPIWrapper } from '@agm/core/services/google-maps-api-wrapper';
+
 
 import {BSWBonusApp} from './app.component';
 import {LoginPageComponent} from '../pages/login-page-component/login-component';
@@ -24,7 +26,6 @@ import {PartnerService} from '../services/partner-service';
 import {TruncatePipe, DynamicTruncatePipe} from '../pages/partner-page-component/truncate'
 import {ChooseLocationManuallyComponent} from "../pages/partner-page-component/choose-location-manually/choose-location-manually-component";
 import {SearchCompletionService} from "../components/searchHeader/search-completion/search-completion-service.ts";
-import {GoogleMapsAPIWrapper} from "angular2-google-maps/core";
 import {StyledMapChooseManually} from "../pages/partner-page-component/choose-location-manually/styledMapChooseManually";
 import {PartnerDetailComponent} from "../pages/partner-page-component/partner-detail-component/partner-detail-component";
 import {PartnerDetailMap} from "../pages/partner-page-component/partner-detail-component/partner-detail-map/partner-detail-map";
@@ -102,7 +103,6 @@ import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBAHcgksDNzLfzvKC0ZjnoQZeivSQbE1Iw'
     }),
-
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -126,9 +126,7 @@ import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
     PartnerTableCachedComponent,
     ChangePasswordModal,
     PushesListPageComponent,
-
   ],
-
   providers: [
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     SplashScreen,
@@ -148,7 +146,7 @@ import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
     BonusService,
     InitService,
     PushNotificationsService,
-    GoogleMapsAPIWrapper,
+    //GoogleMapsAPIWrapper,
     GoogleAnalytics,
     NativeGeocoder,
     Firebase

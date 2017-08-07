@@ -19,15 +19,15 @@
 
 
 <ion-content>
-  <sebm-google-map
+  <agm-map
     [latitude]="latitudeCenter"
     [longitude]="longitudeCenter"
     [zoom] = "zoom"
     (mapClick) = "mapClicked($event)"
     [zoomControl] = "false">
-    <sebm-google-map-marker [latitude] = "latitude" [longitude] = "longitude"></sebm-google-map-marker>
+    <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
     <styled-map></styled-map>
-  </sebm-google-map>
+  </agm-map>
 </ion-content>
 
 
