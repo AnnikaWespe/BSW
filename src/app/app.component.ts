@@ -29,7 +29,7 @@ export class BSWBonusApp {
 
   rootPage: any;
   pages: Array<{ title: string, component: any, parameters: {} }>;
-  userLoggedIn = localStorage.getItem("securityToken") !== null;
+  userLoggedIn;
   name;
   title;
   salutation;
@@ -66,9 +66,10 @@ export class BSWBonusApp {
       this.getUserData(id, token);
       this.setWebViewsUrls();
       if (!DeviceService.isInBrowser) {
-        this.managePushes();
+        this.managePushes(id, token);
       }
     });
+    this.userLoggedIn = localStorage.getItem("securityToken") !== null;
     this.mitgliedId = localStorage.getItem("mitgliedId");
     this.securityToken = localStorage.getItem("securityToken");
     this.setMenu();
@@ -162,7 +163,7 @@ export class BSWBonusApp {
     }
     else {
       if (this.securityToken) {
-        this.managePushes();
+        this.managePushes(this.mitgliedId, this.securityToken);
       }
       if (this.platform.is('ios')) {
         DeviceService.isIos = true;
@@ -194,6 +195,9 @@ export class BSWBonusApp {
   }
 
   logout() {
+    if(this.userLoggedIn){
+      this.updateToken(null);
+    }
     localStorage.removeItem("securityToken");
     localStorage.removeItem("mitgliedId");
     localStorage.removeItem("userTitle");
@@ -202,7 +206,6 @@ export class BSWBonusApp {
     localStorage.removeItem("lastName");
     localStorage.removeItem("firebaseToken");
     localStorage.removeItem("mitgliedsnummer");
-    this.updateToken(null);
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackEvent('Login/Logout', 'logout');
     }
@@ -216,7 +219,7 @@ export class BSWBonusApp {
   }
 
 
-  managePushes() {
+  managePushes(id, securityToken) {
     this.firebase.getToken()
       .then(token => {
         if (token) {
