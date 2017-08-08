@@ -27,8 +27,10 @@ export class FavoritesService {
     });
   }
 
-  getFavorites(){
-    let url = this.favoritesUrlSnippet + 'get?mandant_id=1&mitglied_id=' + this.mitgliedId + '&securityToken=' + this.securityToken;
+  getFavorites(id, token){
+    token = encodeURIComponent(token);
+    let url = this.favoritesUrlSnippet + 'get?mandant_id=1&mitglied_id=' + id + '&securityToken=' + token;
+    console.log("getting favorites with url", url);
     return(this.get(url));
   }
   deleteFavorite(pfNumber){

@@ -13,24 +13,23 @@ export class PushNotificationsService {
       btoa('BSW_App:ev1boio32fSrjSY9XwvcD9LkGr13J'));
   }
 
-  sendPushNotificationsRequest(newToken, oldToken) {
+  sendPushNotificationsRequest(mitgliedId, securityToken,newToken, oldToken) {
 
     let pushUrl = 'https://vorsystem.avs.de/integ6/securityToken/saveFirebaseToken';
     let headers = new Headers({'Content-Type': 'application/json'});
 
     this.createAuthorizationHeader(headers);
     let options = new RequestOptions({headers: headers});
-    let body = this.createBody(newToken, oldToken);
+    let body = this.createBody(mitgliedId, securityToken,newToken, oldToken);
     console.log(JSON.stringify(body));
     return this.http.post(pushUrl, body, options);
   }
 
-  private createBody(newToken, oldToken) {
-    let securityToken = encodeURI(localStorage.getItem("securityToken"));
+  private createBody(mitgliedId, securityToken,newToken, oldToken) {
+    securityToken = encodeURI(securityToken);
     let favoritesPush = (localStorage.getItem("favoritesPush") == "false") ? false : true;
     let accountInfoPush = (localStorage.getItem("accountInfoPush") == "false") ? false : true;
     let enablePushesInGeneral = (localStorage.getItem("enablePushesInGeneral") == "false") ? false : true;
-    let mitgliedId = localStorage.getItem("mitgliedId");
     let body = {
       "mandantId": "1",
       "mitglied": {

@@ -61,7 +61,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       let token = navParams.data.token || localStorage.getItem('securityToken');
       this.userLoggedIn = true;
       this.getBonusData(id, token);
-      this.getFavoritePartners();
+      this.getFavoritePartners(id, token);
     }
     this.checkIfGPSEnabled();
     this.getLastVisitedPartners();
@@ -127,9 +127,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     })
   }
 
-  getFavoritePartners() {
-    console.log("getting favorites");
-    this.favoritesService.getFavorites().subscribe((res) => {
+  getFavoritePartners(id, token) {
+    this.favoritesService.getFavorites(id, token).subscribe((res) => {
         this.getFavoritesByPfArray(res);
       },
       error => {
@@ -402,3 +401,4 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
 
 }
+
