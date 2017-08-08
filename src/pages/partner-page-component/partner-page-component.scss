@@ -3,8 +3,6 @@ partner-page-component {
     background-color: map_get($colors, light);
   }
 
-
-
   .standard-header {
     ion-icon {
       margin-left: 1vw;
@@ -74,7 +72,6 @@ partner-page-component {
 
   div.filter-wrapper {
     width: 100%;
-    height: 100%;
     z-index: 150;
     position: fixed;
 

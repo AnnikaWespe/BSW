@@ -38,7 +38,6 @@
       </button>
     </ion-buttons>
 
-
     <ion-buttons left *ngIf="showCustomBackButton" (click)="customBackButtonClicked()">
       <button>
         <ion-icon name="ios-arrow-round-back" color="grey" class="menu-button-header"></ion-icon>
@@ -87,17 +86,10 @@
       </ion-col>
     </ion-row>
   </ion-toolbar>
-
-
 </ion-header>
 
-
 <ion-content>
-
-
   <div class="filter-wrapper">
-
-
     <div class="filter-menu" [@show]="showDropdownForAnimation[0]">
       <ion-row class="currentLocation" *ngIf="(offlinePartnerPageComponent || searchPageComponent) && !showMap ">
         <ion-col class="currentPosition getLocationFromGPS" *ngIf="getLocationFromGPSEnabled" (click)="chooseLocationManually()">
@@ -154,22 +146,6 @@
     </div>
 
     <div class="filter-menu" [@show]="showDropdownForAnimation[1]">
-      <!--<ion-item tappable class="sort-by" (click)="sortBy(0, 'RELEVANCE', 'DESC')">
-        Relevanz
-        <ion-icon name="checkmark" item-end color="primary" item-end *ngIf="sortByArray[0]"></ion-icon>
-      </ion-item>
-      <ion-item tappable class="sort-by" (click)="sortBy(1, 'POPULARITY', 'DESC')">
-        Beliebtheit
-        <ion-icon name="checkmark" item-end color="primary" item-end *ngIf="sortByArray[1]"></ion-icon>
-      </ion-item>
-      <ion-item tappable class="sort-by" (click)="sortBy(2, 'PRICE', 'ASC')">
-        Preis (aufsteigend)
-        <ion-icon name="checkmark" item-end color="primary" item-end *ngIf="sortByArray[2]"></ion-icon>
-      </ion-item>
-      <ion-item tappable class="sort-by" (click)="sortBy(3, 'PRICE', 'DESC')">
-        Preis (absteigend)
-        <ion-icon name="checkmark" item-end color="primary" item-end *ngIf="sortByArray[3]"></ion-icon>
-      </ion-item>-->
       <ion-item tappable class="sort-by" (click)="sortBy(4, 'SHORTNAME', 'ASC')">
         Alphabet (A-Z)
         <ion-icon name="checkmark" item-end color="primary" item-end *ngIf="sortByArray[4]"></ion-icon>
@@ -183,14 +159,11 @@
         <ion-icon name="checkmark" item-end color="primary" item-end *ngIf="sortByArray[6]"></ion-icon>
       </ion-item>
     </div>
-
-
   </div>
 
   <div class="initialSpinner" *ngIf="waitingForResults && !showDropdown[2]">
     <ion-spinner tappable class="initialSpinner" (click)="hideDropdown()"></ion-spinner>
   </div>
-
 
   <ion-item *ngIf="noPartnersToDisplay && displayedPartners.length == 0" text-wrap>
     Wir können Ihnen leider derzeit keine Partner anzeigen. Überprüfen Sie Ihr Netzwerk.
@@ -207,7 +180,6 @@
       </button>
     </ion-item>
   </div>
-
 
   <div tappable class="partner-table-wrapper" (click)="hideDropdown()" *ngIf="!showMap">
     <partner-table [partners]="displayedPartners"
