@@ -16,7 +16,7 @@ import {GoogleAnalytics} from "@ionic-native/google-analytics";
     height: '0vh'
   })),
     state('true', style({
-      height: '84vh'
+      height: '100vh'
     })),
     transition('false <=> true', animate('200ms'))
   ])]
