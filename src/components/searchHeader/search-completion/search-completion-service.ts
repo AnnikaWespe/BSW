@@ -26,7 +26,7 @@ export class SearchCompletionService {
 
 
     /* removing all autocompletion results which have the URL property
-     * these values are exclusivly used by the bsw website
+     * these values are exclusively used by the bsw website
      * */
     for (var i = body.results.length - 1; i >= 0; i--) {
 
