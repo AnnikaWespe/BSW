@@ -11,7 +11,9 @@ import {GetPartnersPost} from './get-partners-post';
 
 @Injectable()
 export class PartnerService {
-  private partnersUrl = 'https://www.bsw.de/appsearch';
+
+  //private partnersUrl = 'https://www.bsw.de/appsearch';
+  private partnersUrl = 'http://localhost:8100/appsearch';
 
   constructor(private http: Http) {}
 

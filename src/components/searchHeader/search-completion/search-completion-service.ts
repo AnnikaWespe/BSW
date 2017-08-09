@@ -10,7 +10,8 @@ export class SearchCompletionService {
   constructor (private http: Http) {}
 
   getSuggestions (searchTerm, latitude = "0", longitude = "0"): Observable<any> {
-    let rootOfUrl = "https://www.bsw.de/autocomplete/completephrasep?prefix=";
+    //let rootOfUrl = "https://www.bsw.de/autocomplete/completephrasep?prefix=";
+    let rootOfUrl = "http://localhost:8100/autocomplete/completephrasep?prefix=";
     let requestUrl : string = rootOfUrl + searchTerm + "&hal&radius=50&latitude=" + latitude + "&longitude=" + longitude + "&callback=www.bsw.de";
     console.log(requestUrl);
     return this.http.get(requestUrl)
