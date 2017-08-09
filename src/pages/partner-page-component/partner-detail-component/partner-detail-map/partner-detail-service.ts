@@ -4,8 +4,8 @@ import {Http, Headers} from "@angular/http";
 @Injectable()
 export class PartnerDetailService {
 
-  partnerDetailUrl = 'https://vorsystem.avs.de/integ6/cms/partnerfirmaProfil/pfnummer?mandant_id=1&pfNummer=';
-
+  //partnerDetailUrl = 'https://vorsystem.avs.de/integ6/cms/partnerfirmaProfil/pfnummer?mandant_id=1&pfNummer=';
+  partnerDetailUrl = 'http://localhost:8100/cms/partnerfirmaProfil/pfnummer?mandant_id=1&pfNummer=';
 
   constructor(private http: Http) {
   }

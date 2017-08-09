@@ -31,7 +31,13 @@
     {
       "path": "/autocomplete/completephrasep",
       "proxyUrl": "https://www.bsw.de/autocomplete/completephrasep"
+    },
+    {
+      "path": "/cms/partnerfirmaProfil/pfnummer",
+      "proxyUrl": "https://vorsystem.avs.de/integ6/cms/partnerfirmaProfil/pfnummer"
     }
   ]
 
 }
+
+
