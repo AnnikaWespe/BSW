@@ -100,6 +100,8 @@
         </ion-row>
 
 
+        <!--
+         Currently we do not use the Settings page anymore, as we do not have any settings until geofences are back
         <ion-row menuClose class="page" (click)="openPage(this.pages[5])">
           <ion-item tappable>
             <div item-left class="icon-col">
@@ -110,7 +112,29 @@
             </ion-label>
           </ion-item>
         </ion-row>
+        -->
 
+        <ion-row menuClose class="page" (click)="getWebView('ImpressumWebviewUrl', 'Impressum', true)">
+          <ion-item tappable>
+            <div item-left class="icon-col">
+              <div class="icon settings"></div>
+            </div>
+            <ion-label class="page-title">
+              Impressum
+            </ion-label>
+          </ion-item>
+        </ion-row>
+
+        <ion-row menuClose class="page" (click)="getWebView('DatenschutzWebviewUrl', 'Datenschutz', true)">
+          <ion-item tappable>
+            <div item-left class="icon-col">
+              <div class="icon settings"></div>
+            </div>
+            <ion-label class="page-title">
+              Datenschutz
+            </ion-label>
+          </ion-item>
+        </ion-row>
 
         <ion-row menuClose class="page get-small-distance" (click) = "loadContactPage()">
           <ion-item tappable>
