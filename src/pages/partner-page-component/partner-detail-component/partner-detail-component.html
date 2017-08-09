@@ -24,7 +24,9 @@
 
   </div>
 
-  <div *ngIf="!partnerDetails" padding>Dieser Partner ist leider offline nicht verfügbar. Bitte verbinden Sie sich mit dem Internet.</div>
+  <div *ngIf="!partnerDetails" padding>Dieser Partner ist leider offline nicht verfügbar. Bitte verbinden Sie sich mit
+    dem Internet.
+  </div>
 
 
   <div class="partner-details">
@@ -33,17 +35,30 @@
 
       <div class="buttonsWrapper">
 
-        <ion-item class="online-Partner" color="light" tappable class="button-map btn-pill"
-                  (click)="goToPartnerShop(false)" *ngIf="partnerDetails?.trackingUrl">
-          <div item-content>Online einkaufen</div>
-        </ion-item>
+        <div class="buttonContainer">
 
+          <div class="buttonBlock">
 
-        <ion-item color="light" tappable class="button-map" (click)='goToPartnerDetailMap()'
-                  *ngIf="partnerDetails?.ort">
-          <div item-content class="goToMapText">Zur Karte</div>
-          <div item-end class="mapIcon"></div>
-        </ion-item>
+            <div class="buttonWrapper">
+
+              <ion-item color="light" tappable class="button-map" (click)='goToPartnerDetailMap()' *ngIf="partnerDetails?.ort">
+                <div class="goToMapText">Zur Karte</div>
+                <div class="mapIcon"></div>
+              </ion-item>
+
+            </div>
+
+            <div class="buttonWrapper">
+
+              <ion-item color="light" tappable (click)="goToPartnerShop(false)" *ngIf="partnerDetails?.trackingUrl">
+                <div>Online einkaufen</div>
+              </ion-item>
+
+            </div>
+
+          </div>
+
+        </div>
 
 
       </div>
@@ -68,7 +83,7 @@
     <p *ngIf="partnerDetails?.tel && partnerDetails?.ort"><b>Tel.:</b> {{partnerDetails?.tel}}</p>
     <div class="paymentIcons" *ngIf="zmIcons.length">
       <div *ngFor="let iconUrl of zmIcons">
-        <img src = "{{iconUrl}}">
+        <img src="{{iconUrl}}">
       </div>
     </div>
     <div class="description">
@@ -101,7 +116,7 @@
     </ion-row>
     <img src="{{partnerDetails?.aktionen[0].bildUrl}}">
     <div class="partner-details aktion">
-      <div [innerHTML] = "partnerDetails?.aktionen[0].aktionstext"></div>
+      <div [innerHTML]="partnerDetails?.aktionen[0].aktionstext"></div>
       <div [innerHTML]="partnerDetails?.fussnote"></div>
     </div>
   </div>
