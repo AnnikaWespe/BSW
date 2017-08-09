@@ -89,8 +89,8 @@
 </ion-header>
 
 <ion-content>
-  <div class="filter-wrapper">
-    <div class="filter-menu" [@show]="showDropdownForAnimation[0]">
+  <div class="filter-wrapper" [@show]="showDropdownForAnimation[2]">
+    <div class="filter-menu" [style.display]="showDropdown[0]?'block':'none'">
       <ion-row class="currentLocation" *ngIf="(offlinePartnerPageComponent || searchPageComponent) && !showMap ">
         <ion-col class="currentPosition getLocationFromGPS" *ngIf="getLocationFromGPSEnabled" (click)="chooseLocationManually()">
           <p class="cityName">Aktueller Standort</p>
@@ -145,7 +145,7 @@
       </div>
     </div>
 
-    <div class="filter-menu" [@show]="showDropdownForAnimation[1]">
+    <div class="filter-menu" [style.display]="showDropdown[1]?'block':'none'">
       <ion-item tappable class="sort-by" (click)="sortBy(4, 'SHORTNAME', 'ASC')">
         Alphabet (A-Z)
         <ion-icon name="checkmark" item-end color="primary" item-end *ngIf="sortByArray[4]"></ion-icon>

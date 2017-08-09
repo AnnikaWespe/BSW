@@ -73,15 +73,22 @@ partner-page-component {
   div.filter-wrapper {
     width: 100%;
     z-index: 150;
-    position: fixed;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    //display: none;
 
     div.filter-menu {
       color: map_get($colors, font-color-for-filter-dropdown);
       text-align: center;
       font-size: larger;
+      position: absolute;
       left: 0;
-      width: 100%;
-      height: 100%;
+      right: 0;
+      top: 0;
+      bottom: 0;
       background-color: map_get($colors, secondary-grey);
       z-index: 100;
       overflow: hidden;

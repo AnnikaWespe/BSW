@@ -12,13 +12,11 @@ import {GoogleAnalytics} from "@ionic-native/google-analytics";
 @Component({
   selector: 'partner-page-component',
   templateUrl: 'partner-page-component.html',
-  animations: [trigger('show', [state('false', style({
-    height: '0vh'
-  })),
-    state('true', style({
-      height: '100vh'
-    })),
-    transition('false <=> true', animate('200ms'))
+  animations: [
+    trigger('show', [
+      state('false', style({height: '0', display: 'none'})),
+      state('true', style({height: '100%', display: 'block'})),
+    transition('false <=> true', animate('500ms ease-in-out'))
   ])]
 })
 export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
@@ -35,7 +33,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   showCustomBackButton = false;
   showDropdown = [false, false, false];
-  showDropdownForAnimation = ["false", "false"];
+  showDropdownForAnimation = ["false", "false", "false"];
 
 
   waitingForResults: boolean = true;
@@ -220,7 +218,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.resetPartnersArrays();
     this.waitingForResults = true;
     this.showDropdown = [false, false, false];
-    this.showDropdownForAnimation = ["false", "false"];
+    this.showDropdownForAnimation = ["false", "false", "false"];
     this.content.scrollToTop(0);
     this.getPartners();
   }
@@ -303,7 +301,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.resetPartnersArrays();
       this.waitingForResults = true;
       this.showDropdown = [false, false, false];
-      this.showDropdownForAnimation = ["false", "false"];
+      this.showDropdownForAnimation = ["false", "false", "false"];
       this.justPartnersWithCampaign$.emit(this.showOnlyPartnersWithCampaign);
       if (this.showOfflinePartners) {
         this.checkIfGPSEnabled();
@@ -358,7 +356,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       }
     })
     this.showDropdown = [false, false, false];
-    this.showDropdownForAnimation = ["false", "false"];
+    this.showDropdownForAnimation = ["false", "false", "false"];
   }
 
 
@@ -380,7 +378,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     });
     prompt.present();
     this.showDropdown = [true, false, true];
-    this.showDropdownForAnimation = ["true", "false"];
+    this.showDropdownForAnimation = ["true", "false", "true"];
   }
 
   showPromptNoResultForSearch() {
@@ -400,7 +398,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   toggleMapAndList() {
     this.showMap = !this.showMap;
     this.showDropdown = [false, false, false];
-    this.showDropdownForAnimation = ["false", "false"];
+    this.showDropdownForAnimation = ["false", "false", "false"];
     this.globallyUnsubscribe();
   }
 
@@ -467,7 +465,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   hideDropdown() {
     this.showDropdown = [false, false, false];
-    this.showDropdownForAnimation = ["false", "false"];
+    this.showDropdownForAnimation = ["false", "false", "false"];
   }
 
 
@@ -477,7 +475,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.showDropdown = [false, false, false];
     this.showDropdown[position] = !isVisible;
     this.showDropdown[2] = this.showDropdown[0] || this.showDropdown[1];
-    this.showDropdownForAnimation = [this.showDropdown[0].toString(), this.showDropdown[1].toString()];
+    this.showDropdownForAnimation = [this.showDropdown[0].toString(), this.showDropdown[1].toString(), this.showDropdown[2].toString()];
   }
 
   closeSearchInterface() {
@@ -492,7 +490,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     }
     this.searchTerm = "";
     this.showDropdown = [false, false, false];
-    this.showDropdownForAnimation = ["false", "false"];
+    this.showDropdownForAnimation = ["false", "false", "false"];
     this.title = localStorage.getItem("title");
     if (this.navigatedFromOverview) {
       this.showCustomBackButton = true;
