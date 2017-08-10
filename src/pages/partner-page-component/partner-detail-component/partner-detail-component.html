@@ -41,9 +41,14 @@
 
             <div class="buttonWrapper">
 
-              <ion-item color="light" tappable class="button-map" (click)='goToPartnerDetailMap()' *ngIf="partnerDetails?.ort">
-                <div class="goToMapText">Zur Karte</div>
-                <div class="mapIcon"></div>
+              <ion-item color="light" tappable class="button-map" (click)='goToPartnerDetailMap()'
+                        *ngIf="partnerDetails?.ort">
+
+                <div class="content">
+                  <div>Zur Karte</div>
+                  <img src='../assets/icon/map-pink.svg'/>
+                </div>
+
               </ion-item>
 
             </div>
@@ -51,7 +56,9 @@
             <div class="buttonWrapper">
 
               <ion-item color="light" tappable (click)="goToPartnerShop(false)" *ngIf="partnerDetails?.trackingUrl">
-                <div>Online einkaufen</div>
+                <div class="content">
+                  <div>Online einkaufen</div>
+                </div>
               </ion-item>
 
             </div>
