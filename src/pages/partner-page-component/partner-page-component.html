@@ -30,7 +30,6 @@
 </ion-header>
 
 <ion-header *ngIf="!searchInterfaceOpen" class="standard-header">
-
   <ion-navbar primary>
     <ion-buttons left>
       <button menuToggle>
@@ -181,7 +180,7 @@
     </ion-item>
   </div>
 
-  <div tappable class="partner-table-wrapper" (click)="hideDropdown()" *ngIf="!showMap">
+  <div tappable [style.display]="showDropdown[2]?'none':'block'" class="partner-table-wrapper" (click)="hideDropdown()" *ngIf="!showMap">
     <partner-table [partners]="displayedPartners"
                    (showPartnerEventEmitter)="showPartner($event)"></partner-table>
   </div>
@@ -194,7 +193,7 @@
     </ion-infinite-scroll>
   </div>
 
-  <partner-map [justPartnersWithCampaign$]="justPartnersWithCampaign$"
+  <partner-map [style.display]="showDropdown[2]?'none':'block'" [justPartnersWithCampaign$]="justPartnersWithCampaign$"
                [justPartnersWithCampaign]="showOnlyPartnersWithCampaign"
                [searchTerm$]="searchTerm$"
                [searchTerm]="searchTerm"
