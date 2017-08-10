@@ -25,9 +25,6 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <div class="initialSpinner" *ngIf="waitingForResults">
-    <ion-spinner tappable class="initialSpinner"></ion-spinner>
-  </div>
   <div class="filter-menu" [@show]="dropDownOpenForAnimation">
     <ion-item tappable class = "sort-by" (click) = "sortBy('alphabet')">
       Alphabet (A-Z)
@@ -38,7 +35,20 @@
       <ion-icon name="checkmark" item-end  color="primary" item-end *ngIf="sortByArray[1]"></ion-icon>
     </ion-item>
   </div>
-  <partner-table [partners] = "partners" (showPartnerEventEmitter)="showPartner($event)" *ngIf="!cached"></partner-table>
-  <partner-table-cached [partners] = "partners" (showCachedPartnerEventEmitter)="showCachedPartner($event)" *ngIf="cached"></partner-table-cached>
+  <div class="initialSpinner" *ngIf="waitingForResults&&dropDownOpenForAnimation!=='true'">
+    <ion-spinner tappable class="initialSpinner"></ion-spinner>
+  </div>
+  <partner-table
+    [style.display]="dropDownOpenForAnimation==='true'?'none':'block'"
+    [partners]="partners"
+    (showPartnerEventEmitter)="showPartner($event)"
+    *ngIf="!cached">
+  </partner-table>
+  <partner-table-cached
+    [style.display]="dropDownOpenForAnimation==='true'?'none':'block'"
+    [partners]="partners"
+    (showCachedPartnerEventEmitter)="showCachedPartner($event)"
+    *ngIf="cached">
+  </partner-table-cached>
 
 </ion-content>
