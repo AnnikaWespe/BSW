@@ -31,9 +31,11 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
         this.map = map;
         this.setMapOptions(map);
         this.extendBounds(map);
-      });
 
-    this.initializeDirectionService();
+        console.log("initializeDirectionService()");
+        this.initializeDirectionService();
+
+      });
 
   }
 
