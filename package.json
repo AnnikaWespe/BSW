@@ -1,6 +1,6 @@
 {
-  "name": "ionic-hello-world",
-  "description": "app: An Ionic project",
+  "name": "bsw-app",
+  "description": "BSW App",
   "author": "Ionic Framework",
   "homepage": "http://ionicframework.com/",
   "private": true,
