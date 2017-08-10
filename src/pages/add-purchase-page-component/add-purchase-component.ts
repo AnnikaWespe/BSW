@@ -51,8 +51,12 @@ export class AddPurchasePageComponent implements OnDestroy{
         this.navCtrl.push(PictureScreenComponent, {"base64Image": this.base64Image});
       })
       .catch((error) => {
-        console.log("there was an error");
-        this.promptNoCameraAccess();
+        console.log("there was an error: " + error);
+
+        if(!(error.indexOf("cancelled") !== -1) && !(error.indexOf("no image selected") !== -1)){
+          this.promptNoCameraAccess();
+        }
+
       });
   }
 
