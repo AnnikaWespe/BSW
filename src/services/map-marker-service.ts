@@ -46,12 +46,16 @@ export class MapMarkerService {
       textIcon = 'data:image/svg+xml;utf8,' + svg + this.bonusElement(partner.pfBonus) + this.partnerElement(partner.nameOrigin) + '</svg>';
     }
     let icon = (validImage) ? imageIcon : textIcon;
-    let marker = new google.maps.Marker({
+    let markerParams = {
       position: new google.maps.LatLng(latitude, longitude),
-      map: map,
       icon: icon,
-      partner: partner
-    });
+      partner: partner,
+      map: map
+    };
+    if (!map) {
+      delete markerParams.map;
+    }
+    let marker = new google.maps.Marker(markerParams);
     bounds.extend({lat: latitude, lng: longitude});
     return marker;
   }
