@@ -69,12 +69,15 @@ page-overview {
     max-width: 20vw;
     padding-left: 0;
   }
-  ion-row.balance-row{
+
+  ion-row.balance-row {
     border-top: 0.5px solid grey;
-    ion-col.text-col, ion-col.bonus-col{
-      border-bottom: 1px solid grey;
-    }
   }
+
+  ion-row.summary-row ion-col.text-col, ion-row.summary-row ion-col.bonus-col{
+    border-top: 1px solid grey;
+  }
+
   div.initialSpinner{
     padding-top: 21vh;
     text-align: center;

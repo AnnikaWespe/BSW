@@ -91,41 +91,41 @@ page-partner-detail-component {
         margin-top: 1vh;
       }
     }
+
     div.titleAndButton {
+
       ion-item {
+
         text-decoration: none;
         color: map_get($colors, primary);
         text-align: center;
         border: solid 1px map_get($colors, primary);
-        float: right;
-        font-size: 4vw;
-        border-radius: 10vw;
-        max-width: 30vw;
+        font-size: medium;
+        margin: 0 2vw 0 2vw;
+        border-radius: 5vw;
+        height: 10vw;
         max-height: 10vw;
-        padding: 0 !important;
-        margin: 0 4vw;
-        &.online-partner {
-          min-width: 80vw;
-          max-width: 80vw !important;
-          margin-left: 4vw;
-        }
+        min-height: 10vw;
+
         div.mapIcon {
-          max-height: 6vw;
-          min-height: 6vw;
-          min-width: 8vw;
+          position: absolute;
           width: 8vw;
-          height: 6vw;
+          height: 8vw;
+          min-width: 8vw;
+          min-height: 8vw;
+          max-width: 8vw;
+          max-height: 8vw;
+          right: 1vw;
+          top: 1vw;
           background: url('../assets/icon/map-pink.svg') no-repeat;
           background-size: contain;
-          margin-right: 0;
         }
-        div.item-inner {
-          border-bottom: map_get($colors, light);
-          //max-height: 10vw;
-          div.input-wrapper {
-            //max-height: 10vw;
-          }
+
+        div.goToMapText {
+          margin-left: 4vw;
+          margin-right: 4vw;
         }
+
       }
     }
   }
@@ -153,20 +153,34 @@ page-partner-detail-component {
   p.title-paragraph {
     margin: 0 0 0 7vw;
   }
+
   ion-col.title.col {
     padding: 0
   }
 
-  div.mapIcon {
-    max-height: 6vw;
-    min-height: 6vw;
-    min-width: 8vw;
-    width: 8vw;
-    height: 6vw;
-    background: url('../assets/icon/map-pink.svg') no-repeat;
-    background-size: contain;
-    margin-right: 0;
+  .goToMapText {
+    font-size: medium;
   }
+
+  .shopOnlineText {
+    font-size: medium;
+  }
+
+  div.buttonContainer {
+    float: right;
+  }
+
+  div.buttonBlock {
+    display: inline-block;
+    padding: 2vw;
+  }
+
+  div.buttonWrapper {
+    display:inline-block;
+    padding-left: 1vw;
+    padding-right:1vw;
+  }
+
 }
 
 
