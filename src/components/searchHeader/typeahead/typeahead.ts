@@ -12,6 +12,7 @@ import 'rxjs/add/operator/map';
 import {SearchCompletionService} from "../search-completion/search-completion-service";
 import {SearchTermCompletion} from '../search-completion/search-term-completion';
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
+import {LocationService} from "../../../services/location-service";
 
 
 @Component({
@@ -61,7 +62,7 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
         .debounceTime(300)
         .distinctUntilChanged()
         .switchMap(term => term
-          ? this.searchCompletionService.getSuggestions(term)
+          ? this.searchCompletionService.getSuggestions(term, localStorage.getItem("latitude"), localStorage.getItem("longitude"))
           : Observable.of<SearchTermCompletion[]>([]))
         .catch(error => {
           console.log(error);

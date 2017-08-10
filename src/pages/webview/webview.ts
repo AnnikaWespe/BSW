@@ -38,6 +38,12 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
     let urlType = navParams.get('urlType');
     let urlRaw = localStorage.getItem(urlType);
     console.log(urlRaw);
+
+    if(!urlRaw){
+      this.url = "about:blank";
+      return;
+    }
+
     let mitgliedId = localStorage.getItem("mitgliedId");
     let securityToken = localStorage.getItem("securityToken");
     console.log(urlType);
