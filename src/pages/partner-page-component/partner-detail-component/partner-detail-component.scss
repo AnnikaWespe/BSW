@@ -92,93 +92,54 @@ page-partner-detail-component {
       }
     }
 
-    div.titleAndButton {
-
-      ion-item {
-
-        text-decoration: none;
-        color: map_get($colors, primary);
-        text-align: center;
-        border: solid 1px map_get($colors, primary);
-        font-size: medium;
-        margin: 0 2vw 0 2vw;
-        border-radius: 5vw;
-        height: 10vw;
-        max-height: 10vw;
-        min-height: 10vw;
-
-        div.mapIcon {
-          position: absolute;
-          width: 8vw;
-          height: 8vw;
-          min-width: 8vw;
-          min-height: 8vw;
-          max-width: 8vw;
-          max-height: 8vw;
-          right: 1vw;
-          top: 1vw;
-          background: url('../assets/icon/map-pink.svg') no-repeat;
-          background-size: contain;
-        }
-
-        div.goToMapText {
-          margin-left: 4vw;
-          margin-right: 4vw;
-        }
-
+    div.paymentIcons {
+      margin-top: 2vh;
+      display: inline-block;
+      div {
+        float: left;
+        width: 12vw;
+        max-width: 70px;
+        padding-right: 1vw;
       }
     }
-  }
-  div.paymentIcons {
-    margin-top: 2vh;
-    display: inline-block;
-    div {
-      float: left;
-      width: 12vw;
-      max-width: 70px;
+
+    ion-row.title-row {
+      background-color: map-get($colors, light-grey);
+      height: 8vh;
+    }
+    ion-col.title {
+      color: map-get($colors, font-grey-dark);
+      font-size: large;
+      line-height: 8vh;
+      text-align: left;
+    }
+    p.title-paragraph {
+      margin: 0 0 0 7vw;
+    }
+
+    ion-col.title.col {
+      padding: 0
+    }
+
+    .shopOnlineText {
+      font-size: medium;
+    }
+
+    div.buttonContainer {
+      float: right;
+    }
+
+    div.buttonBlock {
+      display: inline-block;
+      padding: 2vw;
+    }
+
+    div.buttonWrapper {
+      display: inline-block;
+      padding-left: 1vw;
       padding-right: 1vw;
     }
-  }
 
-  ion-row.title-row {
-    background-color: map-get($colors, light-grey);
-    height: 8vh;
-  }
-  ion-col.title {
-    color: map-get($colors, font-grey-dark);
-    font-size: large;
-    line-height: 8vh;
-    text-align: left;
-  }
-  p.title-paragraph {
-    margin: 0 0 0 7vw;
-  }
-
-  ion-col.title.col {
-    padding: 0
-  }
-
-  .goToMapText {
-    font-size: medium;
-  }
-
-  .shopOnlineText {
-    font-size: medium;
-  }
-
-  div.buttonContainer {
-    float: right;
-  }
-
-  div.buttonBlock {
-    display: inline-block;
-    padding: 2vw;
-  }
-
-  div.buttonWrapper {
-    display:inline-block;
-    padding-left: 1vw;
-    padding-right:1vw;
   }
 
 }

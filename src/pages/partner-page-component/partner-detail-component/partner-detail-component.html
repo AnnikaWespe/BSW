@@ -16,56 +16,33 @@
 </ion-header>
 
 <ion-content>
-
   <div class="white-background">
     <div class="center-image">
       <img src="{{partnerDetails?.logoUrl}}" onError="this.src='http://www.bsw.de/upload/bsw/partner-logo.png'">
     </div>
-
   </div>
-
-  <div *ngIf="!partnerDetails" padding>Dieser Partner ist leider offline nicht verfügbar. Bitte verbinden Sie sich mit
-    dem Internet.
-  </div>
-
 
   <div class="partner-details">
-    <div class="titleAndButton">
 
 
-      <div class="buttonsWrapper">
+    <div class="buttonsWrapper">
 
-        <div class="buttonContainer">
+      <ion-row float-right>
 
-          <div class="buttonBlock">
+        <ion-button outline color="red" round tappable (click)='goToPartnerDetailMap()' class="button-map"
+                    *ngIf="partnerDetails?.ort">
+          Zur Karte
+          <ion-icon name="map" padding-left="4px"></ion-icon>
 
-            <div class="buttonWrapper">
+        </ion-button>
 
-              <ion-item color="light" tappable class="button-map" (click)='goToPartnerDetailMap()' *ngIf="partnerDetails?.ort">
-                <div class="goToMapText">Zur Karte</div>
-                <div class="mapIcon"></div>
-              </ion-item>
+        <ion-button outline color="red" round tappable (click)="goToPartnerShop(false)" padding-left="2px"
+                    *ngIf="partnerDetails?.trackingUrl">
+          Online einkaufen
+        </ion-button>
 
-            </div>
-
-            <div class="buttonWrapper">
-
-              <ion-item color="light" tappable (click)="goToPartnerShop(false)" *ngIf="partnerDetails?.trackingUrl">
-                <div>Online einkaufen</div>
-              </ion-item>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-      </div>
-
+      </ion-row>
     </div>
-
-
     <div *ngIf="partnerDetails?.waEb">
       <span class="blue" [innerHTML]="partnerDetails?.waEb | formatTelephoneNumber"></span>
       <span class="grey">{{partnerDetails?.waBezeichnung}}</span>

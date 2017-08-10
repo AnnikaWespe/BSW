@@ -11,6 +11,11 @@ button{
   }
 
 
+ion-icon.back-button-icon:before {
+  font-size: 3rem;
+  font-weight: 900;
+}
+
 * {
   font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !important;
 }

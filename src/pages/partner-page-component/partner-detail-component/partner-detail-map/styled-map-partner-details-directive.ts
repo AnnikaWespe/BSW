@@ -15,7 +15,6 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
   @Input() partner;
 
 
-
   map;
 
 
@@ -24,34 +23,51 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
   }
 
   ngOnInit() {
+
     console.log(this.partner);
+
     this.googleMapsWrapper.getNativeMap()
       .then((map) => {
         this.map = map;
         this.setMapOptions(map);
         this.extendBounds(map);
+
+        console.log("initializeDirectionService()");
+        this.initializeDirectionService();
+
       });
+
   }
 
   private extendBounds(map) {
+
     let bounds = new google.maps.LatLngBounds();
     bounds.extend({lat: this.partner.location.latitude, lng: this.partner.location.longitude});
+
+    /* if we have an exact position, zoom the map to bounds of my position and target */
     if (localStorage.getItem("locationExact") === "true") {
       console.log("location Exact is so true");
       bounds.extend({lat: Number(localStorage.getItem("latitude")), lng: Number(localStorage.getItem("longitude"))});
+      map.fitBounds(bounds);
+
+    } else {
+
+      map.setZoom(14);
+      map.setCenter({lat: this.partner.location.latitude, lng: this.partner.location.longitude})
+
     }
-    map.fitBounds(bounds);
+
     this.mapMarkerService.getImageAsBase64("StyledMapPartnersDirective", this.partner.logoUrlForGMap, (imageAsBase64, validImage) => {
-      let marker = this.mapMarkerService.getMarker(this.partner, imageAsBase64, validImage, map, bounds);
-      this.initializeDirectionService();
-    })
+        this.mapMarkerService.getMarker(this.partner, imageAsBase64, validImage, map, bounds);
+    });
+
     map.setOptions({
       streetViewControl: false
     });
+
   }
 
-  private
-  initializeDirectionService() {
+  private initializeDirectionService() {
 
     let directionsService = new google.maps.DirectionsService();
     let origin = new google.maps.LatLng(Number(localStorage.getItem("latitude")), Number(localStorage.getItem("longitude")));
@@ -67,8 +83,14 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
         .replace("Minuten", "Min")
         .replace("Minute", "Min")
         .replace(",", "");
-      return (string);
-    }
+
+      if(string && string.length > 0){
+        return string
+      } else {
+        return "-";
+      }
+
+    };
 
     directionsService.route(requestPublic, (response, status) => {
       if (status == 'OK') {
@@ -78,6 +100,7 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
       }
       else(console.log(response));
     });
+
     directionsService.route(requestCar, (response, status) => {
       if (status == 'OK') {
         let point = response.routes[0].legs[0];
@@ -85,6 +108,7 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
         this.travelTimeCarUpdated.emit(travelTimeCar);
       }
     });
+
     directionsService.route(requestPedestrian, (response, status) => {
       if (status == 'OK') {
         let point = response.routes[0].legs[0];
@@ -92,9 +116,11 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
         this.travelTimePedestrianUpdated.emit(travelTimePedestrian);
       }
     });
+
   }
 
   private setMapOptions(map: any) {
     map.setOptions({clickableIcons: false});
   }
+
 }
