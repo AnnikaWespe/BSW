@@ -42,7 +42,7 @@ export class StyledMapPartnersDirective implements OnDestroy{
   map: any;
   pathToGmapsClusterIcons: string;
   markers = [];
-  previousMarkers;
+  markerCache = {};
   markerClusterer;
   bucket = 0;
   center;
@@ -63,9 +63,20 @@ export class StyledMapPartnersDirective implements OnDestroy{
       .then((map) => {
         this.map = map;
         this.setMapOptions(map);
+        this.markerClusterer = new MarkerClusterer(
+          map,
+          [],
+          {imagePath: this.pathToGmapsClusterIcons}
+        );
+        google.maps.event.addListener(this.markerClusterer, 'clusterclick', (cluster) => {
+          this.fillList.emit(cluster.getMarkers());
+          google.maps.event.trigger(map, 'resize');
+        });
         const idle$ = Observable.create((observer) => {
           let timer;
           let firstTimeOut = true;
+          // JS: warum timeout?
+          // JS: warum nicht fromEvent
           map.addListener('idle', () => {
             if(firstTimeOut){
               firstTimeOut = false;
@@ -87,7 +98,10 @@ export class StyledMapPartnersDirective implements OnDestroy{
           return {center: center, radius: radius};
         })
         const partners$ = center$
-          .combineLatest(this.justPartnersWithCampaign$.startWith(this.justPartnersWithCampaign), this.searchTerm$.startWith(this.searchTerm))
+          .combineLatest(
+            this.justPartnersWithCampaign$.startWith(this.justPartnersWithCampaign),
+            this.searchTerm$.startWith(this.searchTerm)
+          )
           .switchMap((params) => {
             this.center = params[0].center;
             this.radius = params[0].radius;
@@ -95,10 +109,13 @@ export class StyledMapPartnersDirective implements OnDestroy{
             let searchTerm = params[2];
             console.log(this.center, this.radius, showOnlyPartnersWithCampaign);
             return this.partnerService.getPartners(this.center, this.bucket, searchTerm, showOnlyPartnersWithCampaign, "RELEVANCE", "DESC", this.radius)
-          }).map(body => {
+          })
+          .map(body => {
             let returnedObject = body.json();
             let offlinePartners = returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities;
-            this.clearMarkers();
+            
+            // JS: ist das Auskommentieren ein Problem?
+            // this.clearMarkers();
             return offlinePartners;
           })
         const markers$ = partners$.switchMap((offlinePartners) => {
@@ -107,20 +124,22 @@ export class StyledMapPartnersDirective implements OnDestroy{
             return [];
           }
           offlinePartners.forEach((partner, index) => {
+            let marker = this.markerCache[partner.id];
+            if(marker){
+              return;
+            }
             let observable = Observable.create(observer => {
-              let marker = this.previousMarkers.find(marker => marker.partner.id == partner.id);
+              // JS: was wird hier geprüft?
+              let marker = this.markerCache[partner.id];
               if(marker){
-                let bounds = new google.maps.LatLngBounds();
-                this.markers.push(marker);
                 observer.next(marker);
                 observer.complete();
               }
-              else{
+              else {
                 this.mapMarkerService.getImageAsBase64("StyledMapPartnersDirective", partner.logoUrlForGMap,
                   (imageAsBase64, validImage) => {
                     let bounds = new google.maps.LatLngBounds();
                     marker = this.mapMarkerService.getMarker(partner, imageAsBase64, validImage, map, bounds);
-                    this.markers.push(marker);
                     google.maps.event.addListener(marker, 'click', ((marker) => {
                       return () => {
                         this.navCtrl.push(PartnerDetailComponent, {partner: partner});
@@ -128,7 +147,7 @@ export class StyledMapPartnersDirective implements OnDestroy{
                     })(marker));
                     observer.next(marker);
                     observer.complete();
-                  });
+                });
               }
             });
             observables.push(observable);
@@ -136,20 +155,20 @@ export class StyledMapPartnersDirective implements OnDestroy{
           return Observable.forkJoin(observables)
         })
         this.getPartnersSubscription = markers$.subscribe((markers) => {
+          markers.map(marker => this.markerCache[marker.partner.id] = marker);
           this.markers = markers;
-          this.markerClusterer = new MarkerClusterer(map, markers,
-            {imagePath: this.pathToGmapsClusterIcons});
-          google.maps.event.addListener(this.markerClusterer, 'clusterclick', (cluster) => {
-            this.fillList.emit(cluster.getMarkers());
-            google.maps.event.trigger(map, 'resize');
-          });
+          this.markerClusterer.addMarkers(markers);
+
         })
       });
   }
 
   clearMarkers() {
-    this.previousMarkers = this.markers.slice(0);
-    while (this.markers.length > 0) {
+    if (this.markerClusterer) {
+      this.markerClusterer.clearMarkers();
+    }
+    this.markers = [];
+    /* while (this.markers.length > 0) {
       let markerObj = this.markers.pop();
       markerObj.setMap(null);
       markerObj = null;
@@ -157,7 +176,7 @@ export class StyledMapPartnersDirective implements OnDestroy{
     this.markers = [];
     if (this.markerClusterer) {
       this.markerClusterer.clearMarkers();
-    }
+    } */
   }
 
 
