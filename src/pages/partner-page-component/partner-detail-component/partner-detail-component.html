@@ -30,45 +30,21 @@
 
 
   <div class="partner-details">
-    <div class="titleAndButton">
 
+    <div class="buttonsWrapper">
 
-      <div class="buttonsWrapper">
+      <ion-row float-right>
 
-        <div class="buttonContainer">
+        <button ion-button outline color="red" round tappable (click)='goToPartnerDetailMap()' class="button-map">
+          Zur Karte
+          <ion-icon name="map" padding-left="4px"></ion-icon>
+        </button>
 
-          <div class="buttonBlock">
+        <button ion-button outline color="red" round tappable (click)="goToPartnerShop(false)"
+                *ngIf="partnerDetails?.trackingUrl">Online einkaufen
+        </button>
 
-            <div class="buttonWrapper">
-
-              <ion-item color="light" tappable class="button-map" (click)='goToPartnerDetailMap()'
-                        *ngIf="partnerDetails?.ort">
-
-                <div class="content">
-                  <div>Zur Karte</div>
-                  <img src='../assets/icon/map-pink.svg'/>
-                </div>
-
-              </ion-item>
-
-            </div>
-
-            <div class="buttonWrapper">
-
-              <ion-item color="light" tappable (click)="goToPartnerShop(false)" *ngIf="partnerDetails?.trackingUrl">
-                <div class="content">
-                  <div>Online einkaufen</div>
-                </div>
-              </ion-item>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-      </div>
+      </ion-row>
 
     </div>
 

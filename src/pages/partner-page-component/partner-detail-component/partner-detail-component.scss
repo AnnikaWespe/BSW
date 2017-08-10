@@ -92,45 +92,6 @@ page-partner-detail-component {
       }
     }
 
-    div.titleAndButton ion-item div.content {
-      display: inline-block;
-    }
-
-    div.titleAndButton ion-item div.content img {
-
-      float: left;
-      width: 8vw;
-      height: 8vw;
-      min-width: 8vw;
-      min-height: 8vw;
-      max-width: 8vw;
-      max-height: 8vw;
-      margin-left: 1vw;
-
-    }
-
-    div.titleAndButton ion-item div.content div {
-      font-size: medium;
-      float: left;
-      height: 8vw;
-      line-height: 8vw
-    }
-
-    div.titleAndButton ion-item {
-
-      text-decoration: none;
-      color: map_get($colors, primary);
-      text-align: center;
-      border: solid 1px map_get($colors, primary);
-      font-size: medium;
-      margin: 0.5vw 1vw 0.5vw 1vw;
-      border-radius: 5vw;
-      height: 10vw;
-      max-height: 10vw;
-      min-height: 10vw;
-
-    }
-
     div.paymentIcons {
       margin-top: 2vh;
       display: inline-block;
