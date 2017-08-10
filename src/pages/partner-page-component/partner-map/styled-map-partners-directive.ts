@@ -67,7 +67,7 @@ export class StyledMapPartnersDirective implements OnDestroy{
         this.markerClusterer = new MarkerClusterer(
           map,
           [],
-          {imagePath: this.pathToGmapsClusterIcons}
+          {imagePath: this.pathToGmapsClusterIcons, gridSize: 120}
         );
         google.maps.event.addListener(this.markerClusterer, 'clusterclick', (cluster) => {
           this.fillList.emit(cluster.getMarkers());
