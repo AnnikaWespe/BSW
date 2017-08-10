@@ -62,6 +62,7 @@ export class StyledMapPartnersDirective implements OnDestroy{
     this.googleMapsWrapper.getNativeMap()
       .then((map) => {
         this.map = map;
+        let bounds = new google.maps.LatLngBounds();
         this.setMapOptions(map);
         this.markerClusterer = new MarkerClusterer(
           map,
@@ -129,17 +130,9 @@ export class StyledMapPartnersDirective implements OnDestroy{
               return;
             }
             let observable = Observable.create(observer => {
-              // JS: was wird hier geprüft?
-              let marker = this.markerCache[partner.id];
-              if(marker){
-                observer.next(marker);
-                observer.complete();
-              }
-              else {
                 this.mapMarkerService.getImageAsBase64("StyledMapPartnersDirective", partner.logoUrlForGMap,
                   (imageAsBase64, validImage) => {
-                    let bounds = new google.maps.LatLngBounds();
-                    marker = this.mapMarkerService.getMarker(partner, imageAsBase64, validImage, map, bounds);
+                    marker = this.mapMarkerService.getMarker(partner, imageAsBase64, validImage, null, bounds);
                     google.maps.event.addListener(marker, 'click', ((marker) => {
                       return () => {
                         this.navCtrl.push(PartnerDetailComponent, {partner: partner});
@@ -149,7 +142,7 @@ export class StyledMapPartnersDirective implements OnDestroy{
                     observer.complete();
                 });
               }
-            });
+            );
             observables.push(observable);
           });
           return Observable.forkJoin(observables)
