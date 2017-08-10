@@ -231,7 +231,10 @@ export class BSWBonusApp {
       .subscribe((token) => {
         this.updateToken(id, securityToken, token)
       });
-    this.firebase.grantPermission();
+
+    // Currently removed as firebase pushes will be implemented in the near future
+    //this.firebase.grantPermission();
+
     if (localStorage.getItem("updatePushNotificationsNextTime") == "true") {
       let token = localStorage.getItem("firebaseToken");
       this.updateToken(id, securityToken, token);
