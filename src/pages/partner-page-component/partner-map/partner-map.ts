@@ -31,14 +31,8 @@ export class PartnerMapComponent implements AfterViewChecked{
   @Output() mapWaitingForResultsChange = new EventEmitter();
   @Output() onListUpdated = new EventEmitter();
 
-
-
-
   @ViewChild(StyledMapPartnersDirective) map;
   @ViewChild('partnerList') partnerList;
-
-
-
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -76,6 +70,7 @@ export class PartnerMapComponent implements AfterViewChecked{
   }
 
   getMapHeight() {
+    // JS: was passiert hier genau? was ist die logik?
     if (this.partnerListOpen) return "53vh"
     else return "100vh";
   }

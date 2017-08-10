@@ -3,8 +3,6 @@ partner-page-component {
     background-color: map_get($colors, light);
   }
 
-
-
   .standard-header {
     ion-icon {
       margin-left: 1vw;
@@ -74,17 +72,23 @@ partner-page-component {
 
   div.filter-wrapper {
     width: 100%;
-    height: 100%;
     z-index: 150;
-    position: fixed;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    //display: none;
 
     div.filter-menu {
       color: map_get($colors, font-color-for-filter-dropdown);
       text-align: center;
       font-size: larger;
+      position: absolute;
       left: 0;
-      width: 100%;
-      height: 100%;
+      right: 0;
+      top: 0;
+      bottom: 0;
       background-color: map_get($colors, secondary-grey);
       z-index: 100;
       overflow: hidden;
@@ -151,22 +155,23 @@ partner-page-component {
           }
         }
       }
-      button.showSelection {
-        font-size: larger;
-        width: 80vw;
-        height: 7vh;
-        text-transform: none;
-        border-radius: 2px;
-        margin: 5.5vh 0 5.5vh 0;
-        padding: 0;
-        margin-top: 52vh;
-        &.searchPageComponent{
-          margin-top: 35vh;
-        }
-        &.onlinePartnerPageComponent{
-          margin-top: 62vh;
+      .showSelectionWrapper {
+        position: absolute;
+        left: 0;
+        right:0;
+        bottom: 0;
+
+        button.showSelection {
+          font-size: larger;
+          width: 80vw;
+          height: 7vh;
+          text-transform: none;
+          border-radius: 2px;
+          margin: 5.5vh 0 5.5vh 0;
+          padding: 0;
         }
       }
+
       ion-item.toggle {
         font-weight: bolder;
         background-color: map_get($colors, light) !important;
