@@ -33,12 +33,13 @@ my-profile-page-component {
     div.profile-header-wrapper{
       background-color: map_get($colors, light);
       padding-top: 1vh;
+      padding-bottom: 1vh;
       ion-col{
         margin: 0;
         padding: 0;
         text-align: center;
-        p{
-          margin: 0 2vw 1vh 0 ;
+        p {
+          margin: 0 0 0 0 ;
         }
       }
     }

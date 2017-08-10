@@ -195,7 +195,7 @@ export class BSWBonusApp {
   }
 
   logout() {
-    if(this.userLoggedIn){
+    if (this.userLoggedIn) {
       this.updateToken(localStorage.getItem("mitgliedId"), localStorage.getItem("securityToken"), null);
     }
     localStorage.removeItem("securityToken");
@@ -223,18 +223,18 @@ export class BSWBonusApp {
     this.firebase.getToken()
       .then(token => {
         if (token) {
-          this.updateToken(id, securityToken,token);
+          this.updateToken(id, securityToken, token);
           console.log(token);
         }
       })
     this.firebase.onTokenRefresh()
       .subscribe((token) => {
-        this.updateToken(id, securityToken,token)
+        this.updateToken(id, securityToken, token)
       });
     this.firebase.grantPermission();
     if (localStorage.getItem("updatePushNotificationsNextTime") == "true") {
       let token = localStorage.getItem("firebaseToken");
-      this.updateToken(id, securityToken,token);
+      this.updateToken(id, securityToken, token);
     }
     this.firebase.onNotificationOpen()
       .subscribe((jsonObject) => {
@@ -275,10 +275,16 @@ export class BSWBonusApp {
   updateToken(mitgliedId, securityToken, fireBaseToken) {
     let oldToken = localStorage.getItem("firebaseToken") || "";
     localStorage.setItem("firebaseToken", fireBaseToken);
-    this.pushNotificationsService.sendPushNotificationsRequest(mitgliedId, securityToken,fireBaseToken, oldToken).subscribe((res) => {
+    this.pushNotificationsService.sendPushNotificationsRequest(mitgliedId, securityToken, fireBaseToken, oldToken).subscribe((res) => {
       console.log("result from Firebase API request", res.json().errors[0])
     });
   }
+
+  /* copied from settings page */
+  getWebView(urlType, title, dataProtectionScreen, cacheContent) {
+    this.nav.push(WebviewComponent, {urlType: urlType, title: title, cacheContent: cacheContent})
+  }
+
 }
 
 

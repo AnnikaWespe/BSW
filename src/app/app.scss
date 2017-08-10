@@ -139,6 +139,14 @@ ion-menu {
         background: url('../assets/icon/einstellungen.svg')no-repeat;
         background-size: contain;
       }
+      &.imprint{
+        background: url('../assets/icon/impressum.svg')no-repeat;
+        background-size: contain;
+      }
+      &.dataprivacy{
+        background: url('../assets/icon/datenschutz.svg')no-repeat;
+        background-size: contain;
+      }
       &.contact{
         background: url('../assets/icon/kontakt.svg')no-repeat;
         background-size: contain;
