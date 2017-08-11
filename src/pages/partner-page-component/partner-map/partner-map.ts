@@ -43,6 +43,7 @@ export class PartnerMapComponent implements AfterViewChecked, OnDestroy{
     this.locationSubscription = this.locationService.getLocation().subscribe(
       (location) => {
         this.location = location;
+        console.error(location);
       }
     )
   }
