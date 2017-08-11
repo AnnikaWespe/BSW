@@ -131,12 +131,6 @@ export class PartnerDetailComponent implements OnDestroy {
   }
 
   goToPartnerDetailMap() {
-    /*try {
-      this.navCtrl.push(PartnerDetailMap, {partnerDetails: this.partnerDetails, partner: this.partner});
-    } catch(err){
-      console.log("an error occurred!")
-    }*/
-
     this.navCtrl.push(PartnerDetailMap, {partnerDetails: this.partnerDetails, partner: this.partner});
   }
 
@@ -149,7 +143,14 @@ export class PartnerDetailComponent implements OnDestroy {
           .replace("#MGNUMMER#", mitgliedsnummer)
           .replace("AVS9StAVS1St", mitgliedsnummer)
       }
-      cordova.InAppBrowser.open(url, '_system', 'location=yes');
+      let openUrl: any;
+      try {
+        openUrl = cordova.InAppBrowser.open;
+      } catch (error){
+        openUrl = open;
+      }
+      console.log(url)
+      openUrl(url, '_system', 'location=yes');
       this.googleAnalyticsTrackingGoToShop();
     }
     else {
