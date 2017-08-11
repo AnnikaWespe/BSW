@@ -6,13 +6,13 @@ import {NavController, Platform} from 'ionic-angular';
 import {DeviceService} from "../../../services/device-data";
 import {PartnerService} from "../../../services/partner-service";
 import {PartnerDetailComponent} from "../partner-detail-component/partner-detail-component";
+
 import {Observable} from 'rxjs/Observable'
-
-
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
+// import 'rxjs/add/observable/of';
+// import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/Skip';
+// import 'rxjs/add/operator/debounceTime';
+// import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
@@ -73,23 +73,11 @@ export class StyledMapPartnersDirective implements OnDestroy{
           this.fillList.emit(cluster.getMarkers());
           google.maps.event.trigger(map, 'resize');
         });
-        const idle$ = Observable.create((observer) => {
-          let timer;
-          let firstTimeOut = true;
-          // JS: warum timeout?
-          // JS: warum nicht fromEvent
+        const idle$ = Observable.create(observer => {
           map.addListener('idle', () => {
-            if(firstTimeOut){
-              firstTimeOut = false;
-              observer.next();
-              return;
-            }
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-              observer.next();
-            }, 1000)
-          })
-        })
+            observer.next();
+          });
+        }).skip(1);
         const center$ = idle$.map(() => {
           let newCenter = this.map.getCenter();
           let newLat = this.map.getCenter().lat().toFixed(4);

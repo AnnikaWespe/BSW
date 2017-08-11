@@ -117,6 +117,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.getLocationSubscription = this.locationService.getLocation().subscribe(
       (location) => {
         this.location = location;
+        this.resetPartnersArrays();
         this.getPartners();
       }
     )
@@ -276,13 +277,8 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.showDropdown = [false, false, false];
       this.showDropdownForAnimation = ["false", "false", "false"];
       this.justPartnersWithCampaign$.emit(this.showOnlyPartnersWithCampaign);
-      if (this.showOfflinePartners) {
-        // JS: check what happend here!!!
-        // this.checkIfGPSEnabled();
-      }
-      else {
-        this.getPartners();
-      }
+      this.content.scrollToTop(0);
+      this.getPartners();
     }, () => {
     })
   }
@@ -329,8 +325,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
         }
         this.locationService.setLocation(location);
         //this.getLocationFromGPSEnabled = location.fromGPS;
-        this.resetPartnersArrays();
-        this.getPartners();
       }
     })
     this.showDropdown = [false, false, false];
@@ -384,27 +378,22 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     let newValueGetLocationFromGPSEnabled = !this.location.fromGPS;
     if (newValueGetLocationFromGPSEnabled) {
       this.waitingForGPSSignal = true;      
-      let subscription = this.locationService.getLocation().subscribe(
-        (object) => {
-          if (!object.locationFound || !object.fromGPS) {
+      this.locationService.updateLocation().then(
+        (currentLocation) => {
+          if (!currentLocation.locationFound || !currentLocation.fromGPS) {
             this.showPromptGPSDisabled();
           }
           this.waitingForGPSSignal = false;
-          // JS: why no unsubscribe returned 
-          if (subscription) {
-            subscription.unsubscribe();
-          }
+          this.showDropdown = [false, false, false];
+          this.showDropdownForAnimation = ["false", "false", "false"];          
         },
-        (err) => {
+        (currentLocation) => {
           this.showPromptGPSDisabled();
           this.waitingForGPSSignal = false;
-          // JS: why no unsubscribe returned 
-          if (subscription) {
-            subscription.unsubscribe();
-          }
+          this.showDropdown = [false, false, false];
+          this.showDropdownForAnimation = ["false", "false", "false"];          
         }
-      )
-      this.locationService.updateLocation();
+      );
     }
   }
 
@@ -437,7 +426,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.showDropdown = [false, false, false];
     this.showDropdownForAnimation = ["false", "false", "false"];
   }
-
 
   toggleVisibilityDropdowns(position) {
     let isVisible = this.showDropdown[position];
