@@ -289,9 +289,14 @@ export class LoginPageComponent {
 
   gotToExternalSiteForJoiningBsw() {
     let url = localStorage.getItem('beitretenWebviewUrl');
-    console.log(url);
-    cordova.InAppBrowser.open(url, '_system', 'location=yes');
-
+    let openUrl: any;
+    try {
+      openUrl = cordova.InAppBrowser.open;
+    } catch (error){
+      openUrl = open;
+    }
+    console.log(url)
+    openUrl(url, '_system', 'location=yes');
   }
 
 }
