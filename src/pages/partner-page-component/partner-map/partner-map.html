@@ -1,15 +1,15 @@
 <div class="map-container" [style.height]="getMapHeight()" style="overflow: hidden">
   <agm-map
-    [latitude]="stringToNumber(currentLatitude)"
-    [longitude]="stringToNumber(currentLongitude)"
+    [latitude]="location.latitude"
+    [longitude]="location.longitude"
     [zoomControl]="false"
     [zoom]="15">
-    <agm-circle [latitude]="stringToNumber(currentLatitude)"
-                            [longitude]="stringToNumber(currentLongitude)"
-                            [fillColor]="'red'"
-                            [circleDraggable]="false"
-                            [editable]="true"
-                            *ngIf="locationExact">
+    <agm-circle [latitude]="location.latitude"
+                [longitude]="location.longitude"
+                [fillColor]="'red'"
+                [circleDraggable]="false"
+                [editable]="true"
+                *ngIf="location.locationExact">
     </agm-circle>
     <styled-map-partners
       (fillList)="showList($event)"

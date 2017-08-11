@@ -6,6 +6,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/fromPromise';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {NativeGeocoder, NativeGeocoderForwardResult, NativeGeocoderReverseResult} from "@ionic-native/native-geocoder";
 
 
@@ -13,34 +14,77 @@ import {NativeGeocoder, NativeGeocoderForwardResult, NativeGeocoderReverseResult
 export class LocationService {
   private latitude;
   private longitude;
+  private location: BehaviorSubject<any>;
 
   constructor(private http: Http, private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder) {
-  }
-
-
-  getLocation(): Observable<any> {
-    return Observable.fromPromise(
-      this.geolocation.getCurrentPosition({timeout: 3000}).then((position) => {
-        let latitude = position.coords.latitude.toFixed(4);
-        let longitude = position.coords.longitude.toFixed(4);
-        localStorage.setItem("latitude", latitude);
-        localStorage.setItem("longitude", longitude);
-        localStorage.setItem("locationExact", "true");
-        localStorage.setItem("locationAvailable", "true");
-        localStorage.setItem("cityName", "Zuletzt verfügbarer Standort");
-        return {lat: latitude, lon: longitude, locationFound: true};
-      }, (err) => {
-        return {locationFound: false};
-      })
+    let currentLocation = JSON.parse(localStorage.getItem('location'));
+    if (!currentLocation) {
+      currentLocation = {
+        latitude: "52.5219",
+        longitude: "13.4132",
+        locationExact: false,
+        locationAvailable: false,
+        locationfound: true,
+        locationName: 'Berlin',
+        cityName: 'Zuletzt verfügbarer Standort',
+        fromGPS: false
+      };
+    }
+    this.location = new BehaviorSubject(currentLocation);
+    this.geolocation.getCurrentPosition({timeout: 3000}).then(
+      (position) => {
+        currentLocation = {
+          latitude: position.coords.latitude.toFixed(4),
+          longitude: position.coords.longitude.toFixed(4),
+          locationExact: true,
+          locationAvailable: true,
+          locationfound: true,
+          fromGPS: true,
+          locationName: '',
+          cityName: ''
+        };
+        this.getLocationName(location).subscribe((cityName) => {
+          currentLocation.cityName = cityName;
+          currentLocation.locationName = cityName;
+          localStorage.setItem('location', JSON.stringify(currentLocation));
+          this.location.next(currentLocation);
+        })
+      },
+      (error) => {
+        console.error(error);
+      }
     )
   }
 
 
-  getLocationName(lat, lon): Observable<any> {
-    return Observable.fromPromise(this.nativeGeocoder.reverseGeocode(lat, lon)
+  getLocation(): Observable<any> {
+    return this.location;
+  }
+
+  setLocation(currentLocation: any) {
+    if (!currentLocation.longitude || !currentLocation.latitude) {
+      return;
+    }
+    currentLocation.locationFound = true;
+    currentLocation.locationAvailable = currentLocation.locationAvailable || true;
+    currentLocation.locationExact = currentLocation.locationExact || true;
+    currentLocation.fromGPS = false;
+    this.getLocationName(currentLocation).subscribe((cityName) => {
+      currentLocation.cityName = cityName;
+      currentLocation.locationName = cityName;
+      localStorage.setItem('location', JSON.stringify(currentLocation));
+      this.location.next(currentLocation);
+    })
+  }
+
+  updateLocation() {
+
+  }
+
+  getLocationName(location: any): Observable<any> {
+    return Observable.fromPromise(this.nativeGeocoder.reverseGeocode(location.latitude, location.longitude)
       .then((result: NativeGeocoderReverseResult) => {
         let cityname = result.city;
-        localStorage.setItem("cityName", cityname);
         return cityname;
       }).catch(() => {
         return "zuletzt verfügbarer Standort";

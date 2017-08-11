@@ -26,10 +26,10 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   title = "Partner";
   mode = "Observable";
   getPartnersSubscription: any;
-  getLocationNameSubscription: any;
+  //getLocationNameSubscription: any;
   getLocationSubscription: any;
 
-  location = {latitude: "0", longitude: "0"};
+  location: any;
 
   showCustomBackButton = false;
   showDropdown = [false, false, false];
@@ -66,7 +66,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   offlinePartnerPageComponent = false;
   searchPageComponent = false;
 
-  getLocationFromGPSEnabled = false;
+  //getLocationFromGPSEnabled = false;
   cityName = "manuell gewählter Ort";
 
   searchInterfaceOpen = false;
@@ -107,12 +107,20 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this[pageType] = true;
     this.pageType = pageType;
     this.searchTerm = navParams.get("searchTerm") || "";
-    this.getLocationFromGPSEnabled = (localStorage.getItem("getLocationFromGPSEnabled") === "true");
+    // this.getLocationFromGPSEnabled = (localStorage.getItem("getLocationFromGPSEnabled") === "true");
     this.cityName = localStorage.getItem("cityName");
     this.setParameters();
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.gaTrackPageView();
     }
+
+    this.getLocationSubscription = this.locationService.getLocation().subscribe(
+      (location) => {
+        this.location = location;
+        this.getPartners();
+      }
+    )
+
   }
 
   setParameters() {
@@ -121,7 +129,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.showOfflinePartners = true;
       this.displayedPartners = this.offlinePartners;
       this.title = "Vor-Ort-Partner";
-      this.checkIfGPSEnabled();
+      // this.checkIfGPSEnabled();
       this.sortByArray = [false, false, false, false, false, false, true]
       this.sortByCriterion = "DISTANCE";
       this.sortOrder = "ASC";
@@ -137,49 +145,14 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.showOfflinePartners = this.navParams.get("showOfflinePartners") || true;
       this.displayedPartners = this.allPartners;
       this.title = this.searchTerm;
-      this.checkIfGPSEnabled();
+      // this.checkIfGPSEnabled();
     }
   }
 
 
-  checkIfGPSEnabled() {
-    if (this.getLocationFromGPSEnabled) {
-      this.getLocationSubscription = this.locationService.getLocation().subscribe(
-        (object) => {
-          if (object.locationFound == true) {
-            this.location.latitude = object.lat;
-            this.location.longitude = object.lon;
-            this.getPartners();
-          }
-          else {
-            localStorage.setItem("getLocationFromGPSEnabled", "false");
-            this.getLocationFromGPSEnabled = false;
-            this.getStoredLocationData();
-            this.getPartners();
-          }
-        },
-        (err) => {
-          localStorage.setItem("getLocationFromGPSEnabled", "false");
-          this.getLocationFromGPSEnabled = false;
-          this.getStoredLocationData();
-          this.getPartners();
-        }
-      )
-    }
-    else {
-      this.getStoredLocationData();
-      this.getPartners();
-    }
-  }
-
-  getStoredLocationData() {
-    this.location.latitude = localStorage.getItem("latitude");
-    this.location.longitude = localStorage.getItem("longitude");
-    this.cityName = localStorage.getItem("locationName");
-    if (this.cityName === "undefined" || this.cityName == null) {
-      this.cityName = "zuletzt verfügbarer Ort"
-    }
-  }
+  //checkIfGPSEnabled() {
+    // wird eigentlich nicht mehr gebraucht, weil alles im Subsribe gehandelt wird.
+  //}
 
   showPromptGPSDisabled() {
     let prompt = this.alertCtrl.create({
@@ -304,7 +277,8 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.showDropdownForAnimation = ["false", "false", "false"];
       this.justPartnersWithCampaign$.emit(this.showOnlyPartnersWithCampaign);
       if (this.showOfflinePartners) {
-        this.checkIfGPSEnabled();
+        // JS: check what happend here!!!
+        // this.checkIfGPSEnabled();
       }
       else {
         this.getPartners();
@@ -345,12 +319,16 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     let chooseLocationManuallyModal = this.modalCtrl.create(ChooseLocationManuallyComponent);
     chooseLocationManuallyModal.present();
     chooseLocationManuallyModal.onDidDismiss((data) => {
+
       if (data) {
-        this.location.latitude = data.latitude;
-        this.location.longitude = data.longitude;
-        this.cityName = data.name;
-        this.getLocationFromGPSEnabled = false;
-        localStorage.setItem("getLocationFromGPSEnabled", "false");
+        let location = {
+          latitude: data.latitude,
+          longitude: data.longitude,
+          cityName: data.name,
+          fromGPS: false
+        }
+        this.locationService.setLocation(location);
+        //this.getLocationFromGPSEnabled = location.fromGPS;
         this.resetPartnersArrays();
         this.getPartners();
       }
@@ -403,38 +381,30 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   }
 
   toggleGetLocationFromGPSEnabled() {
-    let newValueGetLocationFromGPSEnabled = !this.getLocationFromGPSEnabled;
+    let newValueGetLocationFromGPSEnabled = !this.location.fromGPS;
     if (newValueGetLocationFromGPSEnabled) {
-      this.waitingForGPSSignal = true;
-      this.getLocationSubscription = this.locationService.getLocation().subscribe(
+      this.waitingForGPSSignal = true;      
+      let subscription = this.locationService.getLocation().subscribe(
         (object) => {
-          if (object.locationFound == true) {
-            this.waitingForGPSSignal = false;
-            this.location.latitude = object.lat;
-            this.location.longitude = object.lon;
-            this.getLocationFromGPSEnabled = true;
-            localStorage.setItem("getLocationFromGPSEnabled", "true");
-            localStorage.setItem("locationExact", "true");
-            this.getLocationNameSubscription = this.locationService.getLocationName(this.location.latitude, this.location.longitude).subscribe((cityName) => {
-              this.cityName = cityName;
-              //localStorage.setItem()
-            })
-          }
-          else {
+          if (!object.locationFound || !object.fromGPS) {
             this.showPromptGPSDisabled();
-            this.waitingForGPSSignal = false;
           }
-        }, ((err) => {
+          this.waitingForGPSSignal = false;
+          // JS: why no unsubscribe returned 
+          if (subscription) {
+            subscription.unsubscribe();
+          }
+        },
+        (err) => {
           this.showPromptGPSDisabled();
           this.waitingForGPSSignal = false;
-        })
+          // JS: why no unsubscribe returned 
+          if (subscription) {
+            subscription.unsubscribe();
+          }
+        }
       )
-    }
-    else {
-      localStorage.setItem("getLocationFromGPSEnabled", "false");
-      localStorage.setItem("locationExact", "false");
-      this.getLocationFromGPSEnabled = false;
-      this.getStoredLocationData();
+      this.locationService.updateLocation();
     }
   }
 
