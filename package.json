@@ -48,8 +48,8 @@
         "cordova-plugin-crosswalk-webview": "~2.3.0",
         "cordova-plugin-device": "1.1.4",
         "cordova-plugin-firebase": "~0.1.21",
-        "cordova-plugin-geolocation": "^2.4.3",
         "cordova-plugin-google-analytics": "^1.8.3",
+        "cordova-plugin-inappbrowser": "^1.7.1",
         "cordova-plugin-nativegeocoder": "~1.0.2",
         "cordova-plugin-splashscreen": "~4.0.1",
         "cordova-plugin-statusbar": "2.2.1",
@@ -151,9 +151,7 @@
             "phonegap-plugin-barcodescanner": {
                 "CAMERA_USAGE_DESCRIPTION": " "
             },
-            "cordova-plugin-geolocation": {
-                "GEOLOCATION_USAGE_DESCRIPTION": " "
-            }
+            "cordova-plugin-inappbrowser": {}
         },
         "platforms": [
             "android",
