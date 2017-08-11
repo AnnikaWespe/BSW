@@ -18,6 +18,7 @@ export class LocationService {
 
   constructor(private http: Http, private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder) {
     let currentLocation = JSON.parse(localStorage.getItem('location'));
+    let updateLocation = false;
     if (!currentLocation) {
       currentLocation = {
         latitude: "52.5219",
@@ -29,33 +30,17 @@ export class LocationService {
         cityName: 'Zuletzt verfügbarer Standort',
         fromGPS: false
       };
+      updateLocation = true;
+    } else {
+      if (currentLocation.fromGPS) {
+        updateLocation = true;
+      }
     }
     this.location = new BehaviorSubject(currentLocation);
-    this.geolocation.getCurrentPosition({timeout: 3000}).then(
-      (position) => {
-        currentLocation = {
-          latitude: position.coords.latitude.toFixed(4),
-          longitude: position.coords.longitude.toFixed(4),
-          locationExact: true,
-          locationAvailable: true,
-          locationfound: true,
-          fromGPS: true,
-          locationName: '',
-          cityName: ''
-        };
-        this.getLocationName(location).subscribe((cityName) => {
-          currentLocation.cityName = cityName;
-          currentLocation.locationName = cityName;
-          localStorage.setItem('location', JSON.stringify(currentLocation));
-          this.location.next(currentLocation);
-        })
-      },
-      (error) => {
-        console.error(error);
-      }
-    )
+    if (updateLocation) {
+      this.updateLocation();
+    }
   }
-
 
   getLocation(): Observable<any> {
     return this.location;
@@ -78,7 +63,29 @@ export class LocationService {
   }
 
   updateLocation() {
-
+    this.geolocation.getCurrentPosition({timeout: 3000}).then(
+      (position) => {
+        let currentLocation = {
+          latitude: position.coords.latitude.toFixed(4),
+          longitude: position.coords.longitude.toFixed(4),
+          locationExact: true,
+          locationAvailable: true,
+          locationfound: true,
+          fromGPS: true,
+          locationName: '',
+          cityName: ''
+        };
+        this.getLocationName(location).subscribe((cityName) => {
+          currentLocation.cityName = cityName;
+          currentLocation.locationName = cityName;
+          localStorage.setItem('location', JSON.stringify(currentLocation));
+          this.location.next(currentLocation);
+        })
+      },
+      (error) => {
+        console.error(error);
+      }
+    )
   }
 
   getLocationName(location: any): Observable<any> {
