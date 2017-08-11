@@ -70,12 +70,12 @@ export class LocationService {
           longitude: position.coords.longitude.toFixed(4),
           locationExact: true,
           locationAvailable: true,
-          locationfound: true,
+          locationFound: true,
           fromGPS: true,
           locationName: '',
           cityName: ''
         };
-        this.getLocationName(location).subscribe((cityName) => {
+        this.getLocationName(currentLocation).subscribe((cityName) => {
           currentLocation.cityName = cityName;
           currentLocation.locationName = cityName;
           localStorage.setItem('location', JSON.stringify(currentLocation));
