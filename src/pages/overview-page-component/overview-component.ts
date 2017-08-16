@@ -217,19 +217,17 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   checkIfGPSEnabled() {
     if (localStorage.getItem("getLocationFromGPSEnabled") !== "false") {
       this.getLocationSubscription = this.locationService.getLocation().subscribe(
-        (object) => {
-          if (object.locationFound == true) {
+        (location) => {
+          this.location = location;
+          if (location.locationFound == true) {
             localStorage.setItem("getLocationFromGPSEnabled", "true");
-            this.location.latitude = object.lat;
-            this.location.longitude = object.lon;
             this.getPartners();
           }
           else {
-            this.getStoredLocationData();
+            localStorage.setItem("getLocationFromGPSEnabled", "false");
           }
         }, (error) => {
           localStorage.setItem("getLocationFromGPSEnabled", "false");
-          this.getStoredLocationData();
         }
       )
     }

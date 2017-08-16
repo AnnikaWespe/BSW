@@ -81,7 +81,14 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
       links.forEach((link)=>{
         link.onclick = (event)=>{
           event.preventDefault();
-          cordova.InAppBrowser.open(link.href, '_system', 'location=yes');
+          let openUrl: any;
+          try {
+            openUrl = cordova.InAppBrowser.open;
+          } catch (error){
+            openUrl = open;
+          }
+          console.log(link)
+          openUrl(link, '_system', 'location=yes');
         }
       })
     }

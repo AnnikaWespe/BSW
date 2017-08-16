@@ -16,50 +16,57 @@
   <agm-map
     [latitude]="49"
     [longitude]="11"
-    [zoomControl] = "false">
+    [zoomControl]="false">
     <agm-circle [latitude]="currentLatitude"
-                            [longitude]="currentLongitude"
-                            [fillColor]="'red'"
-                            [circleDraggable]="false"
-                            [editable]="true"
-                            [strokeColor] = "'red'"
-                            *ngIf="locationExact">
+                [longitude]="currentLongitude"
+                [fillColor]="'red'"
+                [circleDraggable]="false"
+                [editable]="true"
+                [strokeColor]="'red'"
+                *ngIf="locationExact">
     </agm-circle>
 
     <styled-map-partner-details (travelTimePublicUpdated)="handleTravelTimePublicUpdated($event)"
                                 (travelTimeCarUpdated)="handleTravelTimeCarUpdated($event)"
-                                (travelTimePedestrianUpdated) ="handleTravelTimePedestrianUpdated($event)"
-                                [partner] = "partner"
+                                (travelTimePedestrianUpdated)="handleTravelTimePedestrianUpdated($event)"
+                                [partner]="partner"
     ></styled-map-partner-details>
   </agm-map>
 
-  <div class="goToRoute" *ngIf="travelTimeAvailable">
-  <div class="icons">
-    <div class="public-transport transport">
-      <ion-icon name = "bus" color = "primary"></ion-icon>
-      <p>{{travelTimePublic}}</p>
-    </div>
-    <div class="car transport">
-      <ion-icon name = "car" color = "primary"></ion-icon>
-      <p>{{travelTimeCar}}</p>
-    </div>
-    <div class="pedestrian transport">
-      <ion-icon name = "walk" color = "primary"></ion-icon>
-      <p>{{travelTimePedestrian}}</p>
-    </div>
-  </div>
-  <div tappable class="route" (click)="openExternalMapApp()">
-    <p  class="btn-pill">Route</p>
-  </div>
-</div>
+  <ion-grid class="route">
 
-  <div class="goToRoute center" *ngIf="!travelTimeAvailable">
-    <div tappable class="route" (click)="openExternalMapApp()">
-      <p class="btn-pill center">Route</p>
-    </div>
-  </div>
+    <ion-row align-items-center justify-content-center>
 
-  <div class="adress-div">
+      <ion-col>
+        <div class="public-transport transport" *ngIf="travelTimeAvailable">
+          <ion-icon name="bus" color="primary"></ion-icon>
+          <p>{{travelTimePublic}}</p>
+        </div>
+      </ion-col>
+
+      <ion-col>
+        <div class="car transport" *ngIf="travelTimeAvailable">
+          <ion-icon name="car" color="primary"></ion-icon>
+          <p>{{travelTimeCar}}</p>
+        </div>
+      </ion-col>
+
+      <ion-col>
+        <div class="pedestrian transport" *ngIf="travelTimeAvailable">
+          <ion-icon name="walk" color="primary"></ion-icon>
+          <p color="primary">{{travelTimePedestrian}}</p>
+        </div>
+      </ion-col>
+
+      <ion-col>
+        <button ion-button outline color="red" round tappable (click)="openExternalMapApp()">Route</button>
+      </ion-col>
+
+    </ion-row>
+
+  </ion-grid>
+
+  <div class="address">
     <h3>{{partnerDetails?.nameInternet}}</h3>
     <p>{{partnerDetails?.kurzBeschreibung}}</p>
     <p>{{partnerDetails?.strasse}} {{partnerDetails?.hausnummer}}, {{partnerDetails?.ort}}</p>
