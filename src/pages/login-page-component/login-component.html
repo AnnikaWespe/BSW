@@ -1,34 +1,37 @@
-<ion-content padding>
+<ion-content>
 
-  <div class="img-div">
-  </div>
+  <ion-scroll style="height:100vh;">
 
-  <div class="full-height"></div>
-
-  <div class="input-fields-wrapper">
-
-    <div class="card-number-wrapper">
-      <ion-input type="text" placeholder="Mitgliedsnummer / E-Mail" [(ngModel)]="inputNumberOrEmail" (keypress) = "checkForEnterButtonPressed($event)">
-      </ion-input>
-      <button ion-button icon-only class="camera" (click)="loadCameraPage()">
-        <ion-icon tappable color="primary" name="camera"></ion-icon>
-      </button>
+    <div class="logo-container" *ngIf="isKeyBoardHidden">
+      <div class="logo"></div>
     </div>
 
-    <div class="password-wrapper">
-      <ion-input [(ngModel)]="password" type="password" placeholder="Passwort" (keypress) = "checkForEnterButtonPressed($event)"></ion-input>
-    </div>
-    <div class="center-text">
-      <p class="no-password" (click)="showPasswordForgottenDialogue()">Passwort vergessen oder keines vergeben?<br>Neues
-        anfordern!</p>
-      <p class="no-member" (click)="gotToExternalSiteForJoiningBsw()">Noch kein Mitglied? Jetzt
-        Mitglied werden!</p>
-    </div>
-    <button ion-button block color="primary" (click)="checkForValidInput()" class="login">Login</button>
-    <div class="center-text">
-      <p class="no-login" tappable (click)="loadNextPageWithoutLogin()">Ohne Login fortfahren</p>
-    </div>
-  </div>
+    <div class="input-fields-wrapper">
 
+      <div class="card-number-wrapper">
+        <ion-input type="text" placeholder="Mitgliedsnummer / E-Mail" [(ngModel)]="inputNumberOrEmail"
+                   (keypress)="checkForEnterButtonPressed($event)" (focus)="onEmailClicked()">
+        </ion-input>
+        <button ion-button icon-only class="camera" (click)="loadCameraPage()">
+          <ion-icon tappable color="primary" name="camera"></ion-icon>
+        </button>
+      </div>
 
+      <div class="password-wrapper">
+        <ion-input [(ngModel)]="password" type="password" placeholder="Passwort" (focus)="onPasswordInputClicked()"
+                   (keypress)="checkForEnterButtonPressed($event)"></ion-input>
+      </div>
+      <div class="center-text">
+        <p class="no-password" (click)="showPasswordForgottenDialogue()">Passwort vergessen oder keines vergeben?<br>Neues
+          anfordern!</p>
+        <p class="no-member" (click)="gotToExternalSiteForJoiningBsw()">Noch kein Mitglied? Jetzt
+          Mitglied werden!</p>
+      </div>
+      <button ion-button block color="primary" (click)="checkForValidInput()" class="login">Login</button>
+      <div class="center-text">
+        <p class="no-login" tappable (click)="loadNextPageWithoutLogin()">Ohne Login fortfahren</p>
+      </div>
+    </div>
+
+  </ion-scroll>
 </ion-content>

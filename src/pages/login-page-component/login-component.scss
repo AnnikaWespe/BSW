@@ -1,18 +1,24 @@
 page-login-component {
 
+  div.logo-container {
 
-  .img-div{
+    height:250px;
+    width:100%;
+    vertical-align:top;
+    text-align:center;
+
+  }
+
+  div.logo {
+
+    height: 100%;
     background: url('../assets/icon/bsw-logo.png')no-repeat;
-    height: 30vh;
-    width: 60vw;
-    overflow: hidden;
     background-size: contain;
-    left:50%;
-    margin: 10vh auto;
+    background-position: center center;
+    margin: 40px 40px;
+
   }
-  div.full-height{
-    background-color: green;
-  }
+
   .scroll-content{
     background-color: map-get($colors, light);
   }
