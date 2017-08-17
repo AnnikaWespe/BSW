@@ -24,6 +24,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
   cachedContent = "";
   loading;
 
+  @ViewChild('iframe') iframe: ElementRef;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -42,9 +43,14 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
       return;
     }
 
+
     let mitgliedId = localStorage.getItem("mitgliedId");
     let securityToken = localStorage.getItem("securityToken");
     console.log(urlType);
+
+
+    this.showLoadingIndicator();
+
     if (securityToken) {
       this.url = urlRaw.replace("[MITGLIEDID]", mitgliedId).replace("[SECURITYTOKEN]", securityToken);
     }
@@ -52,15 +58,17 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
       this.url = urlRaw.replace("/[MITGLIEDID]", "").replace("/[SECURITYTOKEN]", "");
     }
     if (urlType === "ImpressumWebviewUrl" || urlType === "DatenschutzWebviewUrl") {
+
       let content = localStorage.getItem(urlType + "CachedContent");
       if (content) {
         this.cachedContent = content;
+        this.dismissLoadingIndicator();
       }
       else {
         this.cachedContent = CachedContentService[urlType];
+        this.dismissLoadingIndicator();
       }
 
-      this.showLoadingIndicator();
       this.http.get(this.url).subscribe((result) => {
         let entirePageHTML = result["_body"];
         let bodyHtml = /<body.*?>([\s\S]*)<\/body>/.exec(entirePageHTML)[1].replace(/<script[\s\S]*?<\/script>/g, "");
@@ -74,20 +82,6 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
     this.dataProtectionScreen = (urlType === "DatenschutzWebviewUrl");
     this.disallowUserTracking = (localStorage.getItem("disallowUserTracking") == "true");
     this.allowUserTracking = !this.disallowUserTracking;
-  }
-
-  showLoadingIndicator() {
-
-    this.loading = this.loadingCtrl.create({
-      content: 'Lädt Daten, bitte warten...'
-    });
-
-    this.loading.present();
-
-  }
-
-  dismissLoadingIndicator() {
-    this.loading.dismiss();
   }
 
   ngAfterViewInit() {
@@ -111,6 +105,12 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
       catch (err) {
       }
 
+    if (this.iframe) {
+      this.iframe.nativeElement.onload = () => {
+        this.dismissLoadingIndicator();
+      }
+    }
+
   }
 
   ngOnDestroy() {
@@ -124,6 +124,21 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
         this.ga.startTrackerWithId("UA-64402282-1");
       }
     }
+    this.dismissLoadingIndicator();
+  }
+
+  showLoadingIndicator() {
+
+    this.loading = this.loadingCtrl.create({
+      content: 'Lädt Daten, bitte warten...'
+    });
+
+    this.loading.present();
+
+  }
+
+  dismissLoadingIndicator() {
+    this.loading.dismiss();
   }
 
 }
