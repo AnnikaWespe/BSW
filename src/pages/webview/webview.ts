@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {NavController, NavParams, LoadingController} from "ionic-angular";
+import {NavController, NavParams, LoadingController, AlertController, Nav} from "ionic-angular";
 import {Http} from "@angular/http";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {DeviceService} from "../../services/device-data";
@@ -24,6 +24,8 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
   cachedContent = "";
   loading;
 
+  timeoutHandle: any;
+
   @ViewChild('iframe') iframe: ElementRef;
 
   constructor(public navCtrl: NavController,
@@ -31,6 +33,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
               public http: Http,
               private ga: GoogleAnalytics,
               private elementRef: ElementRef,
+              private alertCtrl: AlertController,
               public loadingCtrl: LoadingController) {
     this.noWebViewUrlsAvailable = (localStorage.getItem("noWebViewUrlsAvailable") === "true");
     this.title = navParams.get('title');
@@ -57,6 +60,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
     else {
       this.url = urlRaw.replace("/[MITGLIEDID]", "").replace("/[SECURITYTOKEN]", "");
     }
+
     if (urlType === "ImpressumWebviewUrl" || urlType === "DatenschutzWebviewUrl") {
 
       let content = localStorage.getItem(urlType + "CachedContent");
@@ -77,7 +81,24 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
       }, (err) => {
         this.dismissLoadingIndicator();
       })
+
+    } else {
+
+      /* try to get page which will be loaded in iframe */
+      this.http.get(this.url).subscribe((result) => {
+
+        /* everything is cool */
+
+      }, (err) => {
+
+        /* if we get an error here, show error message and hide iframe */
+        this.errorLoad();
+        this.cachedContent  = "<html><head></head><body></body></html>";
+
+      });
+
     }
+
     console.log(this.url);
     this.dataProtectionScreen = (urlType === "DatenschutzWebviewUrl");
     this.disallowUserTracking = (localStorage.getItem("disallowUserTracking") == "true");
@@ -106,10 +127,34 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
       }
 
     if (this.iframe) {
+
+      this.timeoutHandle = setTimeout(this.errorLoad, 10000);
       this.iframe.nativeElement.onload = () => {
+        clearTimeout(this.timeoutHandle);
         this.dismissLoadingIndicator();
       }
+
     }
+
+  }
+
+  errorLoad() {
+
+    this.dismissLoadingIndicator();
+    let alert = this.alertCtrl.create({
+      title: 'Fehler',
+      message: 'Leider konnte die Seite nicht geladen werden.',
+      buttons: [
+        {
+          text: 'OK',
+          role: 'cancel',
+          handler: () => {
+            this.navCtrl.pop();
+          }
+        }
+      ]
+    });
+    alert.present();
 
   }
 
