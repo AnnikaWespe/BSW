@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {NavController, NavParams} from "ionic-angular";
+import {NavController, NavParams, LoadingController} from "ionic-angular";
 import {Http} from "@angular/http";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {DeviceService} from "../../services/device-data";
@@ -22,24 +22,22 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
   dataProtectionScreen: boolean;
   noWebViewUrlsAvailable = false;
   cachedContent = "";
-
-
-
-
+  loading;
 
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public http: Http,
               private ga: GoogleAnalytics,
-              private elementRef: ElementRef) {
+              private elementRef: ElementRef,
+              public loadingCtrl: LoadingController) {
     this.noWebViewUrlsAvailable = (localStorage.getItem("noWebViewUrlsAvailable") === "true");
     this.title = navParams.get('title');
     let urlType = navParams.get('urlType');
     let urlRaw = localStorage.getItem(urlType);
     console.log(urlRaw);
 
-    if(!urlRaw){
+    if (!urlRaw) {
       this.url = "about:blank";
       return;
     }
@@ -61,11 +59,15 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
       else {
         this.cachedContent = CachedContentService[urlType];
       }
+
+      this.showLoadingIndicator();
       this.http.get(this.url).subscribe((result) => {
         let entirePageHTML = result["_body"];
         let bodyHtml = /<body.*?>([\s\S]*)<\/body>/.exec(entirePageHTML)[1].replace(/<script[\s\S]*?<\/script>/g, "");
         localStorage.setItem(urlType + "CachedContent", bodyHtml)
+        this.dismissLoadingIndicator();
       }, (err) => {
+        this.dismissLoadingIndicator();
       })
     }
     console.log(this.url);
@@ -74,26 +76,40 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
     this.allowUserTracking = !this.disallowUserTracking;
   }
 
+  showLoadingIndicator() {
+
+    this.loading = this.loadingCtrl.create({
+      content: 'Lädt Daten, bitte warten...'
+    });
+
+    this.loading.present();
+
+  }
+
+  dismissLoadingIndicator() {
+    this.loading.dismiss();
+  }
+
   ngAfterViewInit() {
     if (this.title === "Impressum" || this.title === "Datenschutz")
-    try{
-      let links = this.elementRef.nativeElement.querySelectorAll('a');
-      links.forEach((link)=>{
-        link.onclick = (event)=>{
-          event.preventDefault();
-          let openUrl: any;
-          try {
-            openUrl = cordova.InAppBrowser.open;
-          } catch (error){
-            openUrl = open;
+      try {
+        let links = this.elementRef.nativeElement.querySelectorAll('a');
+        links.forEach((link) => {
+          link.onclick = (event) => {
+            event.preventDefault();
+            let openUrl: any;
+            try {
+              openUrl = cordova.InAppBrowser.open;
+            } catch (error) {
+              openUrl = open;
+            }
+            console.log(link)
+            openUrl(link, '_system', 'location=yes');
           }
-          console.log(link)
-          openUrl(link, '_system', 'location=yes');
-        }
-      })
-    }
-    catch(err){
-    }
+        })
+      }
+      catch (err) {
+      }
 
   }
 
