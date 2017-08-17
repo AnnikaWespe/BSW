@@ -76,12 +76,12 @@
     Wir können Ihnen leider derzeit keine Daten anzeigen. Bitte verbinden Sie sich mit dem Internet.
   </ion-item>
 
-  <ion-row class="title-row" *ngIf="favoritePartners.length">
+  <ion-row class="title-row" *ngIf="favoritePartners.length" (click)="loadUserSpecificPartnerTable('favorites')" tappable>
     <ion-col class="title">
       <p class="title-paragraph">Favoriten</p>
     </ion-col>
     <ion-col class="more" *ngIf="moreThanFiveFavorites">
-      <button ion-button icon-only tappable class="more" (click)="loadUserSpecificPartnerTable('favorites')">...
+      <button ion-button icon-only tappable class="more">...
       </button>
     </ion-col>
   </ion-row>
@@ -94,12 +94,12 @@
                         *ngIf="favoritePartners && favoritesFromCache">
   </partner-table-cached>
 
-  <ion-row class="title-row" *ngIf="lastVisitedPartners.length">
+  <ion-row class="title-row" *ngIf="lastVisitedPartners.length" (click)="loadUserSpecificPartnerTable('lastvisitedPartners')" tappable>
     <ion-col col-auto class="title">
       <p class="title-paragraph">Zuletzt besuchte Partner</p>
     </ion-col>
     <ion-col class="more" *ngIf="moreThanFiveLastVisitedPartners">
-      <button ion-button icon-only tappable class="more" (click)="loadUserSpecificPartnerTable('lastvisitedPartners')">
+      <button ion-button icon-only tappable class="more">
         ...
       </button>
     </ion-col>
@@ -108,24 +108,24 @@
                  (showCachedPartnerEventEmitter)="showCachedPartner($event)"
                  *ngIf="lastVisitedPartners"></partner-table-cached>
 
-  <ion-row class="title-row" *ngIf="offlinePartners">
+  <ion-row class="title-row" *ngIf="offlinePartners" (click)="showOfflinePartners()" tappable>
     <ion-col class="title">
       <p class="title-paragraph">Vor-Ort-Partner</p>
     </ion-col>
     <ion-col class="more">
-      <button ion-button icon-only tappable class="more" (click)="showOfflinePartners()">...</button>
+      <button ion-button icon-only tappable class="more">...</button>
     </ion-col>
   </ion-row>
   <partner-table [partners]="offlinePartners"
                  (showPartnerEventEmitter)="showPartner($event)"
                  *ngIf="offlinePartners"></partner-table>
 
-  <ion-row class="title-row" *ngIf="onlinePartners">
+  <ion-row class="title-row" *ngIf="onlinePartners" (click)="showOnlinePartners()" tappable>
     <ion-col class="title">
       <p class="title-paragraph">Online Partner</p>
     </ion-col>
     <ion-col class="more">
-      <button ion-button icon-only tappable class="more" (click)="showOnlinePartners()">...</button>
+      <button ion-button icon-only tappable class="more">...</button>
     </ion-col>
   </ion-row>
   <partner-table [partners]="onlinePartners"
