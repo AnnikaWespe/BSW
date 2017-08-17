@@ -79,9 +79,6 @@
       {{partnerDetails?.plz}} {{partnerDetails?.ort}}</p>
     <p *ngIf="partnerDetails?.tel && partnerDetails?.ort"><b>Tel.:</b> {{partnerDetails?.tel}}</p>
 
-    <p *ngIf="partnerDetails?.bemerkung"><b>Bemerkung:</b> {{partnerDetails?.bemerkung}}</p>
-    <p *ngIf="partnerDetails?.tel && partnerDetails?.ort"><b>Tel.:</b> {{partnerDetails?.tel}}</p>
-
     <div class="paymentIcons" *ngIf="zmIcons.length">
       <div *ngFor="let iconUrl of zmIcons">
         <img src="{{iconUrl}}">
