@@ -33,4 +33,12 @@ webview {
     margin: auto;
   }
 
+  ion-content, iframe {
+    background: #f7f7f7;
+  }
+
+  .displayCachedContent, .scroll-content {
+    background: #f7f7f7;
+  }
+
 }

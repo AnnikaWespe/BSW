@@ -24,10 +24,9 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
   cachedContent = "";
 
   /* loading properties */
-  loadingDialog;
   isLoading;
-
   timeoutHandle: any;
+  alert: any;
 
   @ViewChild('iframe') iframe: ElementRef;
 
@@ -143,8 +142,12 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
 
   errorLoad() {
 
+    if(this.alert){
+      return;
+    }
+
     this.dismissLoadingIndicator();
-    let alert = this.alertCtrl.create({
+    this.alert = this.alertCtrl.create({
       title: 'Fehler',
       message: 'Leider konnte die Seite nicht geladen werden.',
       buttons: [
@@ -157,7 +160,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
         }
       ]
     });
-    alert.present();
+    this.alert.present();
 
   }
 
@@ -176,26 +179,11 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
   }
 
   showLoadingIndicator() {
-
     this.isLoading = true;
-
-    /*
-    this.loadingDialog = this.loadingCtrl.create({
-      content: 'Lädt Daten, bitte warten...'
-    });
-
-    this.loadingDialog.present();
-    */
-
   }
 
   dismissLoadingIndicator() {
     this.isLoading = false;
-
-    /*
-    this.loadingDialog.dismiss();
-    */
-
   }
 
 }
