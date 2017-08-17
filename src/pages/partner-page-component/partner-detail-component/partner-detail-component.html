@@ -76,8 +76,12 @@
       <span class="grey">Aktionsbonus</span>
     </div>
     <p *ngIf="partnerDetails?.ort"><b>Ort:</b> {{partnerDetails?.strasse}} {{partnerDetails?.hausnummer}},
-      {{partnerDetails?.ort}}</p>
+      {{partnerDetails?.plz}} {{partnerDetails?.ort}}</p>
     <p *ngIf="partnerDetails?.tel && partnerDetails?.ort"><b>Tel.:</b> {{partnerDetails?.tel}}</p>
+
+    <p *ngIf="partnerDetails?.bemerkung"><b>Bemerkung:</b> {{partnerDetails?.bemerkung}}</p>
+    <p *ngIf="partnerDetails?.tel && partnerDetails?.ort"><b>Tel.:</b> {{partnerDetails?.tel}}</p>
+
     <div class="paymentIcons" *ngIf="zmIcons.length">
       <div *ngFor="let iconUrl of zmIcons">
         <img src="{{iconUrl}}">
@@ -114,9 +118,10 @@
     <img class="aktionImage" src="{{partnerDetails?.aktionen[0].bildUrl}}">
     <div class="partner-details aktion">
       <div [innerHTML]="partnerDetails?.aktionen[0].aktionstext"></div>
-      <div [innerHTML]="partnerDetails?.fussnote"></div>
     </div>
   </div>
+
+  <div class="footer" *ngIf="partnerDetails?.fussnote" [innerHTML]="partnerDetails?.fussnote"></div>
 
 </ion-content>
 
