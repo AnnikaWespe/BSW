@@ -23,6 +23,14 @@
                 [class.checked]="allowUserTracking"></ion-toggle>
   </ion-item>
 
+  <div class="superfill" *ngIf="isLoading">
+    <div class="middle">
+      <div class="center">
+        <ion-spinner class="loadingSpinner"></ion-spinner>
+      </div>
+    </div>
+  </div>
+
   <iframe #iframe
           [src]="url | safe"
           webkitallowfullscreen

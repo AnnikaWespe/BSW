@@ -22,7 +22,10 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
   dataProtectionScreen: boolean;
   noWebViewUrlsAvailable = false;
   cachedContent = "";
-  loading;
+
+  /* loading properties */
+  loadingDialog;
+  isLoading;
 
   timeoutHandle: any;
 
@@ -174,16 +177,25 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
 
   showLoadingIndicator() {
 
-    this.loading = this.loadingCtrl.create({
+    this.isLoading = true;
+
+    /*
+    this.loadingDialog = this.loadingCtrl.create({
       content: 'Lädt Daten, bitte warten...'
     });
 
-    this.loading.present();
+    this.loadingDialog.present();
+    */
 
   }
 
   dismissLoadingIndicator() {
-    this.loading.dismiss();
+    this.isLoading = false;
+
+    /*
+    this.loadingDialog.dismiss();
+    */
+
   }
 
 }
