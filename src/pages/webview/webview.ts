@@ -13,7 +13,7 @@ declare let cordova: any;
   selector: 'webview',
   templateUrl: 'webview.html'
 })
-export class WebviewComponent implements OnDestroy, AfterViewInit {
+export class WebviewComponent implements OnDestroy {
 
   title: string;
   url;
