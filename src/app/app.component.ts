@@ -276,11 +276,17 @@ export class BSWBonusApp {
   }
 
   updateToken(mitgliedId, securityToken, fireBaseToken) {
+
+    /*
     let oldToken = localStorage.getItem("firebaseToken") || "";
     localStorage.setItem("firebaseToken", fireBaseToken);
     this.pushNotificationsService.sendPushNotificationsRequest(mitgliedId, securityToken, fireBaseToken, oldToken).subscribe((res) => {
       console.log("result from Firebase API request", res.json().errors[0])
     });
+    */
+
+    console.log("push notification service currently disabled!");
+
   }
 
   /* copied from settings page */
