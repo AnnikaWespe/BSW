@@ -10,12 +10,14 @@ import {PartnerDetailComponent} from "../../partner-page-component/partner-detai
   selector: 'page-user-specific-partners-component',
   templateUrl: 'user-specific-partners-component.html',
   animations: [trigger('show', [state('false', style({
-    height: '0vh'
+    display: 'none',
+    height: '0'
   })),
     state('true', style({
-      height: '84vh'
+      display: 'block',
+      height: '100%'
     })),
-    transition('false <=> true', animate('200ms'))
+    transition('false <=> true', animate('500ms ease-in-out'))
   ])]
 })
 export class UserSpecificPartnersComponent {

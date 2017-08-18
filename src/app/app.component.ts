@@ -206,6 +206,10 @@ export class BSWBonusApp {
     localStorage.removeItem("lastName");
     localStorage.removeItem("firebaseToken");
     localStorage.removeItem("mitgliedsnummer");
+
+    /* reset salutation field, therefore UI gets updated */
+    this.salutation = null;
+
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackEvent('Login/Logout', 'logout');
     }
@@ -231,7 +235,10 @@ export class BSWBonusApp {
       .subscribe((token) => {
         this.updateToken(id, securityToken, token)
       });
-    this.firebase.grantPermission();
+
+    // Currently removed as firebase pushes will be implemented in the near future
+    //this.firebase.grantPermission();
+
     if (localStorage.getItem("updatePushNotificationsNextTime") == "true") {
       let token = localStorage.getItem("firebaseToken");
       this.updateToken(id, securityToken, token);
@@ -273,11 +280,17 @@ export class BSWBonusApp {
   }
 
   updateToken(mitgliedId, securityToken, fireBaseToken) {
+
+    /*
     let oldToken = localStorage.getItem("firebaseToken") || "";
     localStorage.setItem("firebaseToken", fireBaseToken);
     this.pushNotificationsService.sendPushNotificationsRequest(mitgliedId, securityToken, fireBaseToken, oldToken).subscribe((res) => {
       console.log("result from Firebase API request", res.json().errors[0])
     });
+    */
+
+    console.log("push notification service currently disabled!");
+
   }
 
   /* copied from settings page */

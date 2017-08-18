@@ -16,11 +16,21 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
+
   <ion-item *ngIf="dataProtectionScreen">
     <div item-content>Google Analytics erlauben?</div>
     <ion-toggle item-right [(ngModel)]="allowUserTracking" color="light-blue" mode="ios"
                 [class.checked]="allowUserTracking"></ion-toggle>
   </ion-item>
+
+  <div class="superfill" *ngIf="isLoading">
+    <div class="middle">
+      <div class="center">
+        <ion-spinner class="loadingSpinner"></ion-spinner>
+      </div>
+    </div>
+  </div>
+
   <iframe #iframe
           [src]="url | safe"
           webkitallowfullscreen
@@ -29,10 +39,12 @@
           frameBorder="0"
           *ngIf="!noWebViewUrlsAvailable && !cachedContent"></iframe>
   <div class="displayCachedContent" [innerHTML]="cachedContent"></div>
+
   <ion-row *ngIf="noWebViewUrlsAvailable">
     <ion-item text-wrap>
       Wir können Ihnen derzeit keinen Screen anzeigen. Bitte loggen Sie sich aus und erneut wieder ein.
     </ion-item>
   </ion-row>
+
 </ion-content>
 

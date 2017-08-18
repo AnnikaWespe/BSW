@@ -15,6 +15,11 @@ export class PushNotificationsService {
 
   sendPushNotificationsRequest(mitgliedId, securityToken,newToken, oldToken) {
 
+    /* note: on first start, all settings should be disabled by default */
+
+    /*
+     * disabled until firebase and pushes getting reimplemented
+     *
     let pushUrl = 'https://vorsystem.avs.de/integ6/securityToken/saveFirebaseToken';
     let headers = new Headers({'Content-Type': 'application/json'});
 
@@ -23,6 +28,8 @@ export class PushNotificationsService {
     let body = this.createBody(mitgliedId, securityToken,newToken, oldToken);
     console.log(JSON.stringify(body));
     return this.http.post(pushUrl, body, options);
+    */
+
   }
 
   private createBody(mitgliedId, securityToken,newToken, oldToken) {
@@ -49,6 +56,9 @@ export class PushNotificationsService {
 
   sendPushNotificationsRequestWithNewSettings(favoritesPush, accountInfoPush, enablePushesInGeneral) {
 
+    /*
+     * disabled until firebase and pushes getting reimplemented
+     *
     let pushUrl = 'https://vorsystem.avs.de/integ6/securityToken/saveFirebaseToken';
     let headers = new Headers({'Content-Type': 'application/json'});
 
@@ -57,6 +67,8 @@ export class PushNotificationsService {
     let body = this.createBodyNewSettings(favoritesPush, accountInfoPush, enablePushesInGeneral);
     console.log(JSON.stringify(body));
     return this.http.post(pushUrl, body, options);
+    */
+
   }
 
   private createBodyNewSettings(favoritesPush, accountInfoPush, enablePushesInGeneral) {

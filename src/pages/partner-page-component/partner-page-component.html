@@ -91,12 +91,12 @@
   <div class="filter-wrapper" [@show]="showDropdownForAnimation[2]">
     <div class="filter-menu" [style.display]="showDropdown[0]?'block':'none'">
       <ion-row class="currentLocation" *ngIf="(offlinePartnerPageComponent || searchPageComponent) && !showMap ">
-        <ion-col class="currentPosition getLocationFromGPS" *ngIf="getLocationFromGPSEnabled" (click)="chooseLocationManually()">
+        <ion-col class="currentPosition getLocationFromGPS" *ngIf="location.fromGPS" (click)="chooseLocationManually()">
           <p class="cityName">Aktueller Standort</p>
           <p class="changeLocation">Ort ändern</p>
         </ion-col>
 
-        <ion-col class="currentPosition chooseLocationManually" *ngIf="!getLocationFromGPSEnabled"
+        <ion-col class="currentPosition chooseLocationManually" *ngIf="!location.fromGPS"
                  (click)="chooseLocationManually()">
           <p class="cityName" *ngIf="cityName">{{cityName}}</p>
           <p class="cityName" *ngIf="!cityName">zuletzt verfügbarer Standort</p>
@@ -112,24 +112,34 @@
         </ion-col>
       </ion-row>
 
-      <ion-item color="secondary-grey" tappable (click)="showOfflinePartners = !showOfflinePartners"
+      <ion-item color="secondary-grey"
+                tappable
                 *ngIf="searchPageComponent">
-        <div item-content class="toggle-text">Vor-Ort-Partner</div>
-        <ion-toggle item-right [(ngModel)]="showOfflinePartners" color="light-blue" mode="ios"
-                    [class.checked]="showOfflinePartners"></ion-toggle>
+        <ion-label item-content class="toggle-text">Vor-Ort-Partner</ion-label>
+        <ion-toggle item-right
+                    [(ngModel)]="showOfflinePartners"
+                    color="light-blue"
+                    mode="ios"></ion-toggle>
       </ion-item>
-
-      <ion-item color="secondary-grey" tappable (click)="showOnlinePartners = !showOnlinePartners"
+      <ion-item color="secondary-grey"
+                tappable
                 *ngIf="searchPageComponent">
-        <div item-content class="toggle-text">Online-Partner</div>
-        <ion-toggle item-right color="light-blue" [(ngModel)]="showOnlinePartners" mode="ios"
-                    [class.checked]="showOnlinePartners"></ion-toggle>
+        <ion-label item-content class="toggle-text">Online-Partner</ion-label>
+        <ion-toggle item-right
+                    color="light-blue"
+                    mode="ios"
+                    [(ngModel)]="showOnlinePartners">
+        </ion-toggle>
       </ion-item>
-
-      <ion-item color="secondary-grey" tappable (click)="showOnlyPartnersWithCampaign = !showOnlyPartnersWithCampaign"
+      <ion-item color="secondary-grey"
+                tappable
                 [class.biggerMarginTop]="onlinePartnerPageComponent || showMap">
-        <div item-content class="toggle-text">Nur Partner mit Aktionen</div>
-        <ion-toggle item-right color="light-blue" mode="ios" [(ngModel)]="showOnlyPartnersWithCampaign"></ion-toggle>
+        <ion-label item-content class="toggle-text">Nur Partner mit Aktionen</ion-label>
+        <ion-toggle item-right
+                    color="light-blue"
+                    mode="ios"
+                    [(ngModel)]="showOnlyPartnersWithCampaign">
+        </ion-toggle>
       </ion-item>
 
       <div class="showSelectionWrapper">

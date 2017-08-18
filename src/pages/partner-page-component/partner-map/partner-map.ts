@@ -1,24 +1,23 @@
-import {Component, Input, ViewChild, Output, EventEmitter, AfterViewChecked, OnChanges, OnInit} from '@angular/core';
+import {Component, Input, ViewChild, Output, EventEmitter, AfterViewChecked, OnChanges, OnInit, OnDestroy} from '@angular/core';
 import {NavParams, NavController} from "ionic-angular";
 import {StyledMapPartnersDirective} from "./styled-map-partners-directive";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {PartnerDetailComponent} from "../partner-detail-component/partner-detail-component";
-
+import {LocationService} from "../../../services/location-service";
 
 @Component({
   selector: 'partner-map',
   templateUrl: 'partner-map.html'
 })
-export class PartnerMapComponent implements AfterViewChecked{
+export class PartnerMapComponent implements AfterViewChecked, OnDestroy{
 
   text: string;
-  currentLatitude = localStorage.getItem("latitude");
-  currentLongitude = localStorage.getItem("longitude");
   partnersInList = [];
   partnerListOpen = false;
   partners: any[];
   scrollTop = 0;
-  locationExact = false;
+  location: any;
+  locationSubscription: any;
 
   @Input() partnersLong: any[];
   @Input() justPartnersWithCampaign$: EventEmitter<boolean>;
@@ -36,19 +35,17 @@ export class PartnerMapComponent implements AfterViewChecked{
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              private ga: GoogleAnalytics) {
+              private ga: GoogleAnalytics,
+              private locationService: LocationService) {
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView('Kartenansicht Partner Screen')
     }
-    if (localStorage.getItem("locationExact") === "true") {
-      this.currentLatitude = localStorage.getItem("latitude");
-      this.currentLongitude = localStorage.getItem("longitude");
-      this.locationExact = true;
-    }
-    else {
-      this.currentLatitude = "52.5219";
-      this.currentLongitude = "13.4132";
-    }
+    this.locationSubscription = this.locationService.getLocation().subscribe(
+      (location) => {
+        this.location = location;
+        console.error(location);
+      }
+    )
   }
 
   ngAfterViewChecked(){
@@ -56,6 +53,12 @@ export class PartnerMapComponent implements AfterViewChecked{
     try {
       this.partnerList.nativeElement.scrollTop = 0;
     } catch(err) { }
+  }
+
+  ngOnDestroy() {
+    if (this.locationSubscription) {
+      this.locationSubscription.unsubscribe();
+    }
   }
 
   stringToNumber(string) {

@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {
   Nav, NavController, NavParams, AlertController, LoadingController, ViewController, Events,
   Keyboard
@@ -16,12 +16,14 @@ declare let cordova: any;
   selector: 'page-login-component',
   templateUrl: 'login-component.html',
 })
-export class LoginPageComponent {
+export class LoginPageComponent implements AfterViewInit {
 
   @ViewChild(Nav) nav: Nav;
   inputNumberOrEmail: any;
   password = "";
   loading;
+
+  isKeyBoardHidden: any;
 
   navigatedFromPartnerDetail;
 
@@ -38,6 +40,9 @@ export class LoginPageComponent {
     this.inputNumberOrEmail = loginNumberFromBarCode || "";
     this.ga.trackView('Login Screen');
     this.navigatedFromPartnerDetail = navParams.get("navigatedFromPartnerDetail");
+
+    this.isKeyBoardHidden = true;
+
   }
 
   loadCameraPage() {
@@ -61,24 +66,24 @@ export class LoginPageComponent {
     //this.presentLoading();
     //this.login();
     this.presentLoading();
-     if (isNaN(this.inputNumberOrEmail)) {
-     if (this.emailAdressProperlyFormatted()) {
-     this.login();
-     }
-     else {
-     this.showPromptNoValidEmail();
-     this.loading.dismiss();
-     }
-     }
-     else {
-     if (this.inputNumberOrEmail.length == 10) {
-     this.login();
-     }
-     else {
-     this.showPromptNoValidNumber();
-     this.loading.dismiss();
-     }
-     }
+    if (isNaN(this.inputNumberOrEmail)) {
+      if (this.emailAdressProperlyFormatted()) {
+        this.login();
+      }
+      else {
+        this.showPromptNoValidEmail();
+        this.loading.dismiss();
+      }
+    }
+    else {
+      if (this.inputNumberOrEmail.length == 10) {
+        this.login();
+      }
+      else {
+        this.showPromptNoValidNumber();
+        this.loading.dismiss();
+      }
+    }
   }
 
   emailAdressProperlyFormatted() {
@@ -91,7 +96,7 @@ export class LoginPageComponent {
     //let username = "0016744807"
     //let password = "muster01$$";
     this.loginService.login(this.inputNumberOrEmail, this.password).subscribe((res) => {
-    //this.loginService.login(username, password).subscribe((res) => {
+      //this.loginService.login(username, password).subscribe((res) => {
       this.loading.dismiss();
       let loginData = res.json();
       if (loginData.errors[0].beschreibung === "Erfolg") {
@@ -131,6 +136,14 @@ export class LoginPageComponent {
     }
   }
 
+
+  onPasswordInputClicked(){
+    this.isKeyBoardHidden = false;
+  }
+
+  onEmailClicked(){
+    this.isKeyBoardHidden = false;
+  }
 
   showPromptNoValidEmail() {
     let prompt = this.alertCtrl.create({
@@ -289,8 +302,26 @@ export class LoginPageComponent {
 
   gotToExternalSiteForJoiningBsw() {
     let url = localStorage.getItem('beitretenWebviewUrl');
-    console.log(url);
-    cordova.InAppBrowser.open(url, '_system', 'location=yes');
+    let openUrl: any;
+    try {
+      openUrl = cordova.InAppBrowser.open;
+    } catch (error) {
+      openUrl = open;
+    }
+    console.log(url)
+    openUrl(url, '_system', 'location=yes');
+  }
+
+
+  ngAfterViewInit() {
+
+    window.addEventListener("native.showkeyboard", () => {
+        //this.isKeyBoardHidden = false;
+    });
+
+    window.addEventListener("native.hidekeyboard", () => {
+      this.isKeyBoardHidden = true;
+    });
 
   }
 
