@@ -176,7 +176,7 @@ export class PartnerDetailComponent implements OnDestroy {
   showPromptUserNotLoggedIn() {
     let alert = this.alertCtrl.create({
       title: 'Sie sind nicht eingeloggt.',
-      message: 'Der BSW Bonus kann Ihnen nur angerechnet werden, wenn Sie eingeloggt sind.',
+      message: 'Der BSW Vorteil kann Ihnen nur gewährt werden, wenn Sie eingeloggt sind.',
       buttons: [
         {
           text: 'Abbrechen',
