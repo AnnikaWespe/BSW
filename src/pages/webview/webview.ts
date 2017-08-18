@@ -74,29 +74,6 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
     this.allowUserTracking = !this.disallowUserTracking;
   }
 
-  ngAfterViewInit() {
-    if (this.title === "Impressum" || this.title === "Datenschutz")
-    try{
-      let links = this.elementRef.nativeElement.querySelectorAll('a');
-      links.forEach((link)=>{
-        link.onclick = (event)=>{
-          event.preventDefault();
-          let openUrl: any;
-          try {
-            openUrl = cordova.InAppBrowser.open;
-          } catch (error){
-            openUrl = open;
-          }
-          console.log(link)
-          openUrl(link, '_system', 'location=yes');
-        }
-      })
-    }
-    catch(err){
-    }
-
-  }
-
   ngOnDestroy() {
     this.disallowUserTracking = !this.allowUserTracking;
     localStorage.setItem("disallowUserTracking", this.disallowUserTracking.toString());
