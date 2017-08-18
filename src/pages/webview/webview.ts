@@ -13,7 +13,7 @@ declare let cordova: any;
   selector: 'webview',
   templateUrl: 'webview.html'
 })
-export class WebviewComponent implements OnDestroy {
+export class WebviewComponent implements OnDestroy, AfterViewInit {
 
   title: string;
   url;
@@ -105,6 +105,20 @@ export class WebviewComponent implements OnDestroy {
     this.dataProtectionScreen = (urlType === "DatenschutzWebviewUrl");
     this.disallowUserTracking = (localStorage.getItem("disallowUserTracking") == "true");
     this.allowUserTracking = !this.disallowUserTracking;
+  }
+
+  ngAfterViewInit() {
+
+    if (this.iframe) {
+
+      this.timeoutHandle = setTimeout(this.errorLoad, 10000);
+      this.iframe.nativeElement.onload = () => {
+        clearTimeout(this.timeoutHandle);
+        this.dismissLoadingIndicator();
+      }
+
+    }
+
   }
 
   ngOnDestroy() {
