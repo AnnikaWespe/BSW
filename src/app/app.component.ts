@@ -206,6 +206,10 @@ export class BSWBonusApp {
     localStorage.removeItem("lastName");
     localStorage.removeItem("firebaseToken");
     localStorage.removeItem("mitgliedsnummer");
+
+    /* reset salutation field, therefore UI gets updated */
+    this.salutation = null;
+
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackEvent('Login/Logout', 'logout');
     }
