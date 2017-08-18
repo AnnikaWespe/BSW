@@ -89,8 +89,15 @@ export class BSWBonusApp {
       .then(() => {
           this.splashScreen.hide();
           this.setRootPage();
-          this.statusBar.overlaysWebView(false);
-          this.statusBar.backgroundColorByHexString('#929395');
+
+          if(this.platform.is("android")) {
+            this.statusBar.overlaysWebView(false);
+            this.statusBar.backgroundColorByHexString('#929395');
+          } else {
+            this.statusBar.overlaysWebView(true);
+            this.statusBar.styleDefault();
+          }
+
           this.getDevice();
         },
         (err) => {

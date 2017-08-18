@@ -68,6 +68,11 @@ ion-content.side-menu {
   background-color: map-get($colors, light) !important;
 }
 
+/* little bit ugly, but it works */
+.menu-inner > ion-content.statusbar-padding:first-child .scroll-content, .ios ion-menu > .menu-inner > ion-header > ion-content.statusbar-padding:first-child .scroll-content {
+  padding-top: 0 !important;
+}
+
 ion-menu {
 
   div.logo {
