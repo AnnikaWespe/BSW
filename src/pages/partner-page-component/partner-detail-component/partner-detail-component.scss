@@ -47,6 +47,17 @@ page-partner-detail-component {
   ion-content {
     background-color: map-get($colors, light) !important;
   }
+
+  .aktion ion-col.title {
+    padding: 0 4vw 0 4vw;
+    color: map_get($colors, secondary);
+    font-size: xx-large;
+  }
+
+  .aktion img.aktionImage {
+    padding: 0 4vw 0 4vw;
+  }
+
   div.partner-details {
     padding: 0 4vw 0.5vh 4vw;
     background-color: map-get($colors, light);
@@ -140,6 +151,20 @@ page-partner-detail-component {
       padding-right: 1vw;
     }
 
+  }
+
+  div.footer {
+    font-size: x-small;
+    padding: 0 4vw 4vw 4vw;
+  }
+
+  .button-icon {
+    height: 3.0rem;
+    padding-left: 0.5rem;
+  }
+
+  .button-round-md {
+    padding: 0 1.6rem;
   }
 
 }

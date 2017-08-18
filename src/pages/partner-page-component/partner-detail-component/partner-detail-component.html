@@ -32,11 +32,11 @@
         <button ion-button outline color="red" round tappable (click)='goToPartnerDetailMap()' class="button-map"
                     *ngIf="partnerDetails?.ort">
           Zur Karte
-          <ion-icon name="map" padding-left="4px"></ion-icon>
+          <img class="button-icon" src="assets/icon/map-pink.svg"/>
 
         </button>
 
-        <button ion-button outline color="red" round tappable (click)="goToPartnerShop(false)" margin-left="2px"
+        <button ion-button outline color="red" round tappable (click)="goToPartnerShop(false)"
                     *ngIf="partnerDetails?.trackingUrl">
           Online einkaufen
         </button>
@@ -51,13 +51,34 @@
       <span class="blue">{{partnerDetails?.wbEb}}</span>
       <span class="grey">{{partnerDetails?.wbBezeichnung}}</span>
     </div>
+    <div *ngIf="partnerDetails?.wcEb" class="second-bonus">
+      <span class="blue">{{partnerDetails?.wcEb}}</span>
+      <span class="grey">{{partnerDetails?.wcBezeichnung}}</span>
+    </div>
+    <div *ngIf="partnerDetails?.wdEb" class="second-bonus">
+      <span class="blue">{{partnerDetails?.wdEb}}</span>
+      <span class="grey">{{partnerDetails?.wdBezeichnung}}</span>
+    </div>
+    <div *ngIf="partnerDetails?.weEb" class="second-bonus">
+      <span class="blue">{{partnerDetails?.weEb}}</span>
+      <span class="grey">{{partnerDetails?.weBezeichnung}}</span>
+    </div>
+    <div *ngIf="partnerDetails?.wfEb" class="second-bonus">
+      <span class="blue">{{partnerDetails?.wfEb}}</span>
+      <span class="grey">{{partnerDetails?.wfBezeichnung}}</span>
+    </div>
+    <div *ngIf="partnerDetails?.wgEb" class="second-bonus">
+      <span class="blue">{{partnerDetails?.wgEb}}</span>
+      <span class="grey">{{partnerDetails?.wgBezeichnung}}</span>
+    </div>
     <div *ngIf="partnerDetails?.aktionsbonus">
       <span class="blue">{{partnerDetails?.aktionsbonus}}</span>
       <span class="grey">Aktionsbonus</span>
     </div>
     <p *ngIf="partnerDetails?.ort"><b>Ort:</b> {{partnerDetails?.strasse}} {{partnerDetails?.hausnummer}},
-      {{partnerDetails?.ort}}</p>
+      {{partnerDetails?.plz}} {{partnerDetails?.ort}}</p>
     <p *ngIf="partnerDetails?.tel && partnerDetails?.ort"><b>Tel.:</b> {{partnerDetails?.tel}}</p>
+
     <div class="paymentIcons" *ngIf="zmIcons.length">
       <div *ngFor="let iconUrl of zmIcons">
         <img src="{{iconUrl}}">
@@ -85,18 +106,19 @@
   </div>
 
 
-  <div *ngIf="partnerDetails?.aktionen">
+  <div class="aktion" *ngIf="partnerDetails?.aktionen">
     <ion-row class="title-row">
       <ion-col class="title">
         <p class="title-paragraph">Aktuelles Angebot</p>
       </ion-col>
     </ion-row>
-    <img src="{{partnerDetails?.aktionen[0].bildUrl}}">
+    <img class="aktionImage" src="{{partnerDetails?.aktionen[0].bildUrl}}">
     <div class="partner-details aktion">
       <div [innerHTML]="partnerDetails?.aktionen[0].aktionstext"></div>
-      <div [innerHTML]="partnerDetails?.fussnote"></div>
     </div>
   </div>
+
+  <div class="footer" *ngIf="partnerDetails?.fussnote" [innerHTML]="partnerDetails?.fussnote"></div>
 
 </ion-content>
 
