@@ -1,24 +1,61 @@
 <ion-header>
+
   <ion-navbar primary>
-    <ion-buttons left (click)="backButtonClicked()">
-      <button>
-        <ion-icon class="back-button-icon icon icon-md back-button-icon-md ion-md-arrow-back" color="grey"></ion-icon>
-      </button>
-    </ion-buttons>
+
+    <!--
     <input id="searchLocation"
            placeholder="Ort eingeben oder auf Karte tippen"
            (keyup) = "somethingTypedInInputField($event)"
            [(ngModel)]="locationNameInInputField">
+           -->
+
+    <ion-title>
+      Ort wählen
+    </ion-title>
+
     <ion-buttons end>
-      <button (click) = "saveLocation()">
-        <ion-icon name="checkmark" color="primary" class="search-button-header"  *ngIf="checkButtonVisible"></ion-icon>
+      <button ion-button icon-only (click) = "saveLocation()">
+        <ion-icon name="checkmark" color="grey" class="search-button-header"  ></ion-icon>
       </button>
     </ion-buttons>
+
   </ion-navbar>
+
 </ion-header>
 
 
 <ion-content>
+
+  <ion-grid>
+
+    <ion-row>
+
+      <ion-col>
+
+        <p>Klicken Sie auf die Karte oder geben Sie unten einen Ort ein, um Ihren Suchort zu definieren.</p>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row class="input-row">
+
+      <ion-col col-1>
+        <ion-icon name="flag" color="grey"></ion-icon>
+      </ion-col>
+
+      <ion-col>
+
+        <input id="searchLocation"
+               (keyup) = "somethingTypedInInputField($event)"
+               [(ngModel)]="locationNameInInputField">
+
+      </ion-col>
+
+    </ion-row>
+
+  </ion-grid>
+
   <agm-map
     [latitude]="latitudeCenter"
     [longitude]="longitudeCenter"
@@ -28,7 +65,11 @@
     <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
     <styled-map></styled-map>
   </agm-map>
+
 </ion-content>
+
+
+
 
 
 

@@ -198,7 +198,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   }
 
   loadPartnerPage(searchTerm) {
-    
+
     this.searchInterfaceOpen = false;
     this.navCtrl.push(PartnerPageComponent, {
       type: "searchPageComponent",
@@ -322,6 +322,11 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   chooseLocationManually() {
     event.stopPropagation();
+
+    this.navCtrl.push(ChooseLocationManuallyComponent);
+
+    /*
+     * TODO: reimplement reload
     let chooseLocationManuallyModal = this.modalCtrl.create(ChooseLocationManuallyComponent);
     chooseLocationManuallyModal.present();
     chooseLocationManuallyModal.onDidDismiss((data) => {
@@ -337,6 +342,8 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
         //this.getLocationFromGPSEnabled = location.fromGPS;
       }
     })
+    */
+
     this.showDropdown = [false, false, false];
     this.showDropdownForAnimation = ["false", "false", "false"];
   }

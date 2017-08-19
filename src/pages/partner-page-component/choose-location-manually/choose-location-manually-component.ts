@@ -31,7 +31,7 @@ export class ChooseLocationManuallyComponent implements OnDestroy{
               private nativeGeocoder: NativeGeocoder,
               private alertCtrl: AlertController,
               private keyboard: Keyboard) {
-    
+
     this.locationService.getLocation().subscribe((location) => {
       this.latitude = location.latitude;
       this.longitude = location.longitude;
@@ -105,10 +105,6 @@ export class ChooseLocationManuallyComponent implements OnDestroy{
   saveLocation() {
     this.setLocationData();
     this.viewCtrl.dismiss({latitude: this.latitude, longitude: this.longitude, name: this.locationNameInInputField});
-  }
-
-  backButtonClicked() {
-    this.viewCtrl.dismiss();
   }
 
 }
