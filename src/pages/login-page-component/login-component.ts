@@ -16,14 +16,12 @@ declare let cordova: any;
   selector: 'page-login-component',
   templateUrl: 'login-component.html',
 })
-export class LoginPageComponent implements AfterViewInit {
+export class LoginPageComponent {
 
   @ViewChild(Nav) nav: Nav;
   inputNumberOrEmail: any;
   password = "";
   loading;
-
-  isKeyBoardHidden: any;
 
   navigatedFromPartnerDetail;
 
@@ -40,8 +38,6 @@ export class LoginPageComponent implements AfterViewInit {
     this.inputNumberOrEmail = loginNumberFromBarCode || "";
     this.ga.trackView('Login Screen');
     this.navigatedFromPartnerDetail = navParams.get("navigatedFromPartnerDetail");
-
-    this.isKeyBoardHidden = true;
 
   }
 
@@ -134,15 +130,6 @@ export class LoginPageComponent implements AfterViewInit {
     if (event.keyCode == 13) {
       this.checkForValidInput();
     }
-  }
-
-
-  onPasswordInputClicked(){
-    this.isKeyBoardHidden = false;
-  }
-
-  onEmailClicked(){
-    this.isKeyBoardHidden = false;
   }
 
   showPromptNoValidEmail() {
@@ -310,19 +297,6 @@ export class LoginPageComponent implements AfterViewInit {
     }
     console.log(url)
     openUrl(url, '_system', 'location=yes');
-  }
-
-
-  ngAfterViewInit() {
-
-    window.addEventListener("native.showkeyboard", () => {
-        //this.isKeyBoardHidden = false;
-    });
-
-    window.addEventListener("native.hidekeyboard", () => {
-      this.isKeyBoardHidden = true;
-    });
-
   }
 
 }

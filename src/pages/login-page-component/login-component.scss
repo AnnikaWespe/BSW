@@ -1,88 +1,71 @@
 page-login-component {
 
-  div.logo-container {
-
-    height:250px;
-    width:100%;
-    vertical-align:top;
-    text-align:center;
-
-  }
-
-  div.logo {
-
-    height: 100%;
-    background: url('../assets/icon/bsw-logo.png')no-repeat;
-    background-size: contain;
-    background-position: center center;
-    margin: 40px 40px;
-
-  }
-
-  .scroll-content{
+  .content, .footer {
     background-color: map-get($colors, light);
   }
-  ion-item.item.item-block.item-md{
-    background-color: map-get($colors, light);
+
+  ion-grid ion-row {
+    padding: 10px 10px 10px 10px;
+    width: 100%
   }
-  div.center-text{
+
+  ion-row.number-row.row {
+    padding: 40px 10px 0 10px;
+  }
+
+  ion-row.password-row.row,
+  ion-row.without-login-row.row {
+    padding: 0 10px 10px 10px;
+  }
+
+  ion-row .center {
     text-align: center;
-    p.no-login{
-      color: map_get($colors, font-grey);
-      text-decoration: underline;
-      font-size: 85%;
-    }
-    p.no-password{
-      color: map_get($colors, font-grey);
-      font-size: 85%;
-      margin: 4vh 0;
-      text-decoration: underline;
-    }
-    p.no-member{
-      margin-bottom: 4vh;
-      color: map_get($colors, font-grey);
-      font-size: 85%;
-      text-decoration: underline;
-    }
   }
 
-  div.input-fields-wrapper{
-    margin: auto;
-    left: 0; right: 0;bottom: 4vh;
+  .logo-row {
+    height: 140px;
+    line-height: 140px;
+  }
+
+  #imageHolder {
+    width: 70%;
+    height: 140px;
+    line-height: 140px;
+    margin: auto auto auto auto;
+  }
+
+  #imageHolder img {
+    max-width: 100%;
+    max-height: 100%;
+    display: inline-block;
+    margin: 0 auto;
+    vertical-align: middle;
+  }
+
+  ion-row .light-text {
+    color: map_get($colors, font-grey);
+    text-decoration: underline;
+    font-size: 85%;
+  }
+
+  ion-row ion-input {
     font-size: larger;
-    position: absolute;
-    padding: 0 8vw;
-    background-color: map-get($colors, light);
-    ion-input{
-      border-bottom: dotted grey 0.5px;
-    }
-    input.text-input.text-input-md.ng-pristine.ng-valid{
-      margin : 1vh;
-    }
+    padding: 0 0;
+    border-bottom: dotted grey 0.5px;
   }
-  div.card-number-wrapper{
-    position: relative;
 
+  .number-input {
+    padding-right: 3.4rem;
   }
-  button.camera{
+
+  .number-row .camera-icon {
+    font-size: 3.2rem;
+
     position: absolute;
-    bottom: 0;
-    right: 0;
-    background: transparent;
-    box-shadow: none;
-    margin: 0;
+    top: 1.0rem;
+    right: 1.0rem;
+
+    z-index: 1;
   }
-  div.password-wrapper{
-    margin-top: 2vh;
-    position: relative;
-  }
-  div.forgot-hyperlink{
-    position: absolute; top: 1vh; right: 0;
-    color:#E61B5A;
-  }
-  button.login{
-    margin-top: 4vh;
-  }
+
 }
-
-

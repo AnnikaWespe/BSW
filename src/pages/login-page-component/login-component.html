@@ -1,37 +1,80 @@
 <ion-content>
 
-  <ion-scroll style="height:100vh;">
+  <ion-grid>
 
-    <div class="logo-container" *ngIf="isKeyBoardHidden">
-      <div class="logo"></div>
-    </div>
+    <ion-row class="logo-row">
+      <ion-col class="logo-col">
 
-    <div class="input-fields-wrapper">
+        <div id="imageHolder">
+          <img src='assets/icon/bsw-logo.png' class="logo" />
+        </div>
 
-      <div class="card-number-wrapper">
-        <ion-input type="text" placeholder="Mitgliedsnummer / E-Mail" [(ngModel)]="inputNumberOrEmail"
-                   (keypress)="checkForEnterButtonPressed($event)" (focus)="onEmailClicked()">
-        </ion-input>
-        <button ion-button icon-only class="camera" (click)="loadCameraPage()">
-          <ion-icon tappable color="primary" name="camera"></ion-icon>
-        </button>
-      </div>
+      </ion-col>
 
-      <div class="password-wrapper">
-        <ion-input [(ngModel)]="password" type="password" placeholder="Passwort" (focus)="onPasswordInputClicked()"
-                   (keypress)="checkForEnterButtonPressed($event)"></ion-input>
-      </div>
-      <div class="center-text">
-        <p class="no-password" (click)="showPasswordForgottenDialogue()">Passwort vergessen oder keines vergeben?<br>Neues
-          anfordern!</p>
-        <p class="no-member" (click)="gotToExternalSiteForJoiningBsw()">Noch kein Mitglied? Jetzt
-          Mitglied werden!</p>
-      </div>
-      <button ion-button block color="primary" (click)="checkForValidInput()" class="login">Login</button>
-      <div class="center-text">
-        <p class="no-login" tappable (click)="loadNextPageWithoutLogin()">Ohne Login fortfahren</p>
-      </div>
-    </div>
+    </ion-row>
 
-  </ion-scroll>
+    <ion-row class="number-row">
+
+      <ion-col>
+
+        <div class="number-input-wrapper">
+
+          <ion-input class="number-input" type="text" placeholder="Mitgliedsnummer / E-Mail" [(ngModel)]="inputNumberOrEmail"
+                     (keypress)="checkForEnterButtonPressed($event)">
+          </ion-input>
+
+          <ion-icon name="camera" tappable (click)="loadCameraPage()" color="primary" class="camera-icon"></ion-icon>
+
+        </div>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row class="password-row">
+      <ion-col>
+
+          <ion-input [(ngModel)]="password" type="password" placeholder="Passwort"
+                     (keypress)="checkForEnterButtonPressed($event)"></ion-input>
+
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="center light-text">
+
+        <div>
+          <p (click)="showPasswordForgottenDialogue()">Passwort vergessen oder keines vergeben?<br>Neues
+            anfordern!</p>
+          <p (click)="gotToExternalSiteForJoiningBsw()">Noch kein Mitglied? Jetzt Mitglied werden!</p>
+        </div>
+
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar transparent>
+
+    <ion-grid>
+
+      <ion-row>
+        <ion-col>
+          <button ion-button block color="primary" (click)="checkForValidInput()" class="login">Login</button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="without-login-row">
+        <ion-col class="center light-text" tappable (click)="loadNextPageWithoutLogin()">
+          Ohne Login fortfahren
+        </ion-col>
+      </ion-row>
+
+    </ion-grid>
+
+
+  </ion-toolbar>
+</ion-footer>
