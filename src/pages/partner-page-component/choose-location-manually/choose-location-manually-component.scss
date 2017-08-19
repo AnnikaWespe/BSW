@@ -30,12 +30,21 @@ choose-location-manually {
     display: none !important;
   }
 
-  .back-button {
-    color: map_get($colors, grey);
-  }
   input#searchLocation{
     background-color: transparent;
     width: 100%;
-    border: none;
+    border: 0;
+    border-bottom: dotted grey 0.5px;
+    padding: 4px
   }
+
+  .input-row {
+    padding: 6px;
+  }
+
+  ion-grid {
+    background-color: map_get($colors, light);
+    text-align: center;
+  }
+
 }
