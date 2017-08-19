@@ -45,6 +45,7 @@ choose-location-manually {
   ion-grid {
     background-color: map_get($colors, light);
     text-align: center;
+    z-index: 2;
   }
 
 }
