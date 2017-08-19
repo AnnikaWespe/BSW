@@ -91,8 +91,7 @@ import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
   ],
   imports: [
     IonicModule.forRoot(BSWBonusApp,{
-      backButtonText: '',
-      backButtonIcon: 'ios-arrow-round-back',
+      backButtonText: 'Zurück',
       backButtonColor: 'grey'
     }),
     BrowserModule,
