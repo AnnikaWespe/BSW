@@ -1,9 +1,11 @@
-  <ion-navbar primary>
+<ion-navbar class="searchbar">
 
     <ion-buttons left>
-      <button (click)="closeSearchInterface()">
-        <ion-icon name="ios-arrow-round-back" color="grey" class="menu-button-header"></ion-icon>
+
+      <button ion-button icon-only (click)="closeSearchInterface()" color="grey">
+        <ion-icon name="arrow-back"></ion-icon>
       </button>
+
     </ion-buttons>
 
     <input id="mySearchInputField"
@@ -13,8 +15,8 @@
            (keyup)= "search(mySearchInputField.value, $event)">
 
     <ion-buttons end *ngIf="searchTerm">
-      <button (click)="deleteSearchTerm()">
-        <ion-icon name="close-circle" color="grey" class="search-button-header"></ion-icon>
+      <button ion-button small icon-only (click)="deleteSearchTerm()" color="grey" class="small-button">
+        <ion-icon name="close-circle"></ion-icon>
       </button>
     </ion-buttons>
 
