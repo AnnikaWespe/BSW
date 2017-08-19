@@ -1,9 +1,12 @@
 typeahead {
+
   input#mySearchInputField{
     background-color: transparent;
     width: 100%;
     border: none;
+    font-size: medium;
   }
+
   div.suggestions-wrapper{
     position: absolute;
     left: 0;
@@ -19,12 +22,17 @@ typeahead {
   }
 
   div.suggestion{
-    padding: 1.5vh 0 1.5vh 4vw;
+
+    font-size: medium;
+    padding: 1.5rem 2rem 1.5rem 2rem;
+
     &:first-child{
-      padding-top: 3vh;
+      padding-top: 2rem;
     };
     &:last-child{
-      padding-bottom: 3vh;
+      padding-bottom: 2rem;
     }
+
+
   }
 }

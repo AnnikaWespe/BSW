@@ -1,28 +1,35 @@
   <ion-navbar primary>
+
     <ion-buttons left>
       <button (click)="closeSearchInterface()">
         <ion-icon name="ios-arrow-round-back" color="grey" class="menu-button-header"></ion-icon>
       </button>
     </ion-buttons>
+
     <input id="mySearchInputField"
            #mySearchInputField
            placeholder="Geben Sie einen Suchbegriff ein"
            [(ngModel)]="searchTerm"
            (keyup)= "search(mySearchInputField.value, $event)">
-    <ion-buttons end>
+
+    <ion-buttons end *ngIf="searchTerm">
       <button (click)="deleteSearchTerm()">
         <ion-icon name="close-circle" color="grey" class="search-button-header"></ion-icon>
       </button>
     </ion-buttons>
+
+    <!--
       <ion-buttons end *ngIf='mapIcon'>
         <button (click)="toggleMapAndList()" class="mapIcon">
           <div class="mapIcon"></div>
         </button>
       </ion-buttons>
+      -->
+
   </ion-navbar>
+
   <div class = "suggestions-wrapper" *ngIf="searchTermCompletion">
     <div tappable class = "suggestion" (click)="completeSearchTerm(item.displayText)" *ngFor="let item of searchTermCompletion | async">
       {{item.displayText}}
     </div>
   </div>
-
