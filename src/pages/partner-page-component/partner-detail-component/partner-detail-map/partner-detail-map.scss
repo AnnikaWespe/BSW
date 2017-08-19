@@ -21,7 +21,7 @@ page-partner-detail-map {
   }
 
   div.transport ion-icon {
-    font-size: 6vw;
+    font-size: 2em;
     margin: 2px;
   }
 
@@ -42,6 +42,14 @@ page-partner-detail-map {
 
   div.address h3 {
     color: map_get($colors, secondary);
+  }
+
+  .button-round-md {
+    padding: 0 1.6rem;
+  }
+
+  .route ion-col {
+    text-align: center;
   }
 
 }

@@ -129,7 +129,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     if (this.offlinePartnerPageComponent) {
       this.showOfflinePartners = true;
       this.displayedPartners = this.offlinePartners;
-      this.title = "Vor-Ort-Partner";
+      this.title = "Vor Ort Partner";
       // this.checkIfGPSEnabled();
       this.sortByArray = [false, false, false, false, false, false, true]
       this.sortByCriterion = "DISTANCE";
@@ -195,6 +195,16 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.showDropdownForAnimation = ["false", "false", "false"];
     this.content.scrollToTop(0);
     this.getPartners();
+  }
+
+  loadPartnerPage(searchTerm) {
+    
+    this.searchInterfaceOpen = false;
+    this.navCtrl.push(PartnerPageComponent, {
+      type: "searchPageComponent",
+      searchTerm: searchTerm
+    })
+
   }
 
 
@@ -289,7 +299,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       return;
     }
     if (this.showOfflinePartners && !this.showOnlinePartners) {
-      this.title = this.searchTerm || "Vor-Ort-Partner";
+      this.title = this.searchTerm || "Vor Ort Partner";
       localStorage.setItem("title", "Vor Ort Partner");
       this.displayedPartners = this.offlinePartners;
     }
@@ -339,7 +349,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   askForValidCategories() {
     let prompt = this.alertCtrl.create({
-      title: 'Bitte wählen Sie entweder "Vor-Ort-Partner" oder "Online Partner" aus.',
+      title: 'Bitte wählen Sie entweder "Vor Ort Partner" oder "Online Partner" aus.',
       buttons: [
         {
           text: 'OK',
@@ -377,7 +387,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   toggleGetLocationFromGPSEnabled() {
     let newValueGetLocationFromGPSEnabled = !this.location.fromGPS;
     if (newValueGetLocationFromGPSEnabled) {
-      this.waitingForGPSSignal = true;      
+      this.waitingForGPSSignal = true;
       this.locationService.updateLocation().then(
         (currentLocation) => {
           if (!currentLocation.locationFound || !currentLocation.fromGPS) {
@@ -385,13 +395,13 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
           }
           this.waitingForGPSSignal = false;
           this.showDropdown = [false, false, false];
-          this.showDropdownForAnimation = ["false", "false", "false"];          
+          this.showDropdownForAnimation = ["false", "false", "false"];
         },
         (currentLocation) => {
           this.showPromptGPSDisabled();
           this.waitingForGPSSignal = false;
           this.showDropdown = [false, false, false];
-          this.showDropdownForAnimation = ["false", "false", "false"];          
+          this.showDropdownForAnimation = ["false", "false", "false"];
         }
       );
     }

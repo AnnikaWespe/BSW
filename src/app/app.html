@@ -1,15 +1,13 @@
 <ion-menu [content]="content">
 
+  <ion-content class="side-menu">
 
-  <ion-content>
-
-
-      <ion-scroll scrollY="true" class="list-wrapper">
+      <div class="list-wrapper">
 
         <div class="logo-wrapper">
           <div class="logo"></div>
           <ion-row class="page salutation" *ngIf="salutation">
-            <ion-item  class="salutation">
+            <ion-item class="salutation">
               <div item-left class="icon-col">
                 <div class="icon salutation"></div>
               </div>
@@ -54,7 +52,7 @@
           </ion-item>
         </ion-row>
 
-        <ion-row menuClose class="page" (click)="openPage(this.pages[3])"  *ngIf="userLoggedIn">
+        <ion-row menuClose class="page" (click)="openPage(this.pages[3])" *ngIf="userLoggedIn">
           <ion-item tappable>
             <div item-left class="icon-col">
               <div class="icon add-purchase"></div>
@@ -76,9 +74,8 @@
           </ion-item>
         </ion-row>
 
-
         <ion-row menuClose class="page get-large-distance" (click)="openPage(this.pages[4])" *ngIf="userLoggedIn">
-          <ion-item tappable [class.inactive] = "!userLoggedIn">
+          <ion-item tappable [class.inactive]="!userLoggedIn">
             <div item-left class="icon-col">
               <div class="icon my-profile"></div>
             </div>
@@ -98,7 +95,6 @@
             </ion-label>
           </ion-item>
         </ion-row>
-
 
         <!--
          Currently we do not use the Settings page anymore, as we do not have any settings until geofences are back
@@ -136,7 +132,7 @@
           </ion-item>
         </ion-row>
 
-        <ion-row menuClose class="page get-small-distance" (click) = "loadContactPage()">
+        <ion-row menuClose class="page get-small-distance" (click)="loadContactPage()">
           <ion-item tappable>
             <div item-left class="icon-col">
               <div class="icon contact"></div>
@@ -146,7 +142,6 @@
             </ion-label>
           </ion-item>
         </ion-row>
-
 
         <ion-row menuClose class="page" (click)="logout()" *ngIf="userLoggedIn">
           <ion-item tappable>
@@ -170,9 +165,11 @@
           </ion-item>
         </ion-row>
 
+      </div>
 
-      </ion-scroll>
+
   </ion-content>
+
 </ion-menu>
 
 <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
