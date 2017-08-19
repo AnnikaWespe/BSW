@@ -10,14 +10,14 @@ import {Camera} from '@ionic-native/camera';
 import {BarcodeScanner} from '@ionic-native/barcode-scanner';
 import {Geolocation} from '@ionic-native/geolocation';
 
-import { AgmCoreModule } from '@agm/core';
+import {AgmCoreModule} from '@agm/core';
 //import { GoogleMapsAPIWrapper } from '@agm/core/services/google-maps-api-wrapper';
 
 
 import {BSWBonusApp} from './app.component';
 import {LoginPageComponent} from '../pages/login-page-component/login-component';
 import {OverviewPageComponent} from '../pages/overview-page-component/overview-component';
-import  {AddPurchasePageComponent} from '../pages/add-purchase-page-component/add-purchase-component';
+import {AddPurchasePageComponent} from '../pages/add-purchase-page-component/add-purchase-component';
 import {ConfirmScanPageComponent} from '../pages/login-page-component/confirm-scan-page-component/confirm-scan-page-component';
 import {MyProfilePageComponent} from "../pages/my-profile-page-component/my-profile-page-component";
 import {PartnerPageComponent} from "../pages/partner-page-component/partner-page-component";
@@ -90,9 +90,17 @@ import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
     PushesListPageComponent,
   ],
   imports: [
-    IonicModule.forRoot(BSWBonusApp,{
-      backButtonText: 'Zurück',
-      backButtonColor: 'grey'
+    IonicModule.forRoot(BSWBonusApp, {
+      "platforms": {
+        "ios": {
+          "backButtonText": "Zurück",
+          "backButtonColor": "grey"
+        },
+        "android": {
+          "backButtonText": "",
+          "backButtonColor": "grey"
+        }
+      }
     }),
     BrowserModule,
     FormsModule,
