@@ -1,5 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Http, Headers, RequestOptions} from "@angular/http";
+import { environment, urls } from '../../app/environment';
 
 @Injectable()
 export class LoginService {
@@ -14,7 +15,7 @@ export class LoginService {
   }
 
   login(username, password) {
-    let loginUrl = 'https://vorsystem.avs.de/integ6/login';
+    let loginUrl = environment.BASE_URL + urls.LOGIN;
     let headers = new Headers({'Content-Type': 'application/json'});
     this.createAuthorizationHeader(headers);
     let options = new RequestOptions({headers: headers});
@@ -26,7 +27,7 @@ export class LoginService {
   }
 
   forgotPassword(loginString) {
-    let forgotPasswordUrl = 'https://vorsystem.avs.de/integ6/passwortAnfordern?mandant_id=1&login=';
+    let forgotPasswordUrl = environment.BASE_URL + urls.REQUEST_PASSWORD + '?mandant_id=1&login=';
     let securityToken = encodeURIComponent(localStorage.getItem("securityToken"));
     let headers = new Headers({'Accept': 'application/json'});
     this.createAuthorizationHeader(headers);

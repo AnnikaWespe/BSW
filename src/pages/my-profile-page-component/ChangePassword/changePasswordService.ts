@@ -1,5 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Http, Headers, RequestOptions} from "@angular/http";
+import { environment, urls } from '../../../app/environment';
 
 @Injectable()
 export class ChangePasswordService {
@@ -18,7 +19,7 @@ export class ChangePasswordService {
 
   changePassword(oldPassword, newPassword) {
     console.log(this.mitgliedId, this.securityToken);
-    let loginUrl = 'https://vorsystem.avs.de/integ6/securityToken/passwortAendern';
+    let loginUrl = environment.BASE_URL + urls.CHANGE_PASSWORD;
     let headers = new Headers({'Content-Type': 'application/json'});
     this.createAuthorizationHeader(headers);
     let options = new RequestOptions({headers: headers});

@@ -1,5 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Http, Headers, RequestOptions} from "@angular/http";
+import { environment, urls } from './environment';
 
 @Injectable()
 export class InitService {
@@ -21,7 +22,7 @@ export class InitService {
 
   getWebViewUrlsFromApi() {
     let headers = new Headers({'Accept': 'application/json'});
-    let url = 'https://vorsystem.avs.de/integ6/cms/bswAppWebviewUrls?mandant_id=1'
+    let url = environment.BASE_URL + urls.WEBVIEW_SERVICE + '?mandant_id=1'
     this.createAuthorizationHeader(headers);
     return this.http.get(url, {
       headers: headers
@@ -30,7 +31,7 @@ export class InitService {
 
   getUserData(mitgliedId, securityToken) {
     securityToken = encodeURIComponent(securityToken);
-    let url = 'https://vorsystem.avs.de/integ6/securityToken/getList/getMitgliedData?mitglied_id=' + mitgliedId + '&mandant_id=1&securityToken=' + securityToken;
+    let url = environment.BASE_URL + urls.MEMBER_DATA + '?mitglied_id=' + mitgliedId + '&mandant_id=1&securityToken=' + securityToken;
     let headers = new Headers({ 'Accept': 'application/json' });
     this.createAuthorizationHeader(headers);
     return this.http.get(url, {

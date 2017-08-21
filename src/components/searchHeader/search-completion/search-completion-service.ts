@@ -3,6 +3,7 @@ import {Http, Response} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
+import { environment, urls } from '../../../app/environment';
 
 @Injectable()
 export class SearchCompletionService {
@@ -10,7 +11,7 @@ export class SearchCompletionService {
   }
 
   getSuggestions(searchTerm, latitude = "0", longitude = "0"): Observable<any> {
-    let rootOfUrl = "https://www.bsw.de/autocomplete/completephrasep?prefix=";
+    let rootOfUrl = environment.BASE_URL_APP_SEARCH + urls.AUTO_COMPLETION + "?prefix=";
     let requestUrl: string = rootOfUrl + searchTerm + "&hal&radius=50&latitude=" + latitude + "&longitude=" + longitude + "&callback=www.bsw.de";
     console.log(requestUrl);
     return this.http.get(requestUrl)

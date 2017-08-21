@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers, RequestOptions} from "@angular/http";
-
+import { environment, urls } from '../app/environment';
 
 @Injectable()
 export class PushNotificationsService {
@@ -20,7 +20,7 @@ export class PushNotificationsService {
     /*
      * disabled until firebase and pushes getting reimplemented
      *
-    let pushUrl = 'https://vorsystem.avs.de/integ6/securityToken/saveFirebaseToken';
+    let pushUrl = environment.BASE_URL + urls.SAVE_FIREBASE_TOKEN;
     let headers = new Headers({'Content-Type': 'application/json'});
 
     this.createAuthorizationHeader(headers);
@@ -59,7 +59,7 @@ export class PushNotificationsService {
     /*
      * disabled until firebase and pushes getting reimplemented
      *
-    let pushUrl = 'https://vorsystem.avs.de/integ6/securityToken/saveFirebaseToken';
+    let pushUrl = environment.BASE_URL + urls.SAVE_FIREBASE_TOKEN;
     let headers = new Headers({'Content-Type': 'application/json'});
 
     this.createAuthorizationHeader(headers);

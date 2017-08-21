@@ -1,10 +1,11 @@
 import {Injectable} from "@angular/core";
 import {Http, Headers} from "@angular/http";
+import { environment, urls } from '../app/environment';
 
 @Injectable()
 export class FavoritesService {
 
-  favoritesUrlSnippet = 'https://vorsystem.avs.de/integ6/securityToken/favorit/';
+  favoritesUrlSnippet = environment.BASE_URL + urls.GET_FAVORITES;
   securityToken;
   mitgliedId;
 

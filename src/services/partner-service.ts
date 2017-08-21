@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
+import { environment, urls } from '../app/environment';
 
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
@@ -11,7 +12,7 @@ import {GetPartnersPost} from './get-partners-post';
 
 @Injectable()
 export class PartnerService {
-  private partnersUrl = 'https://www.bsw.de/appsearch';
+  private partnersUrl = environment.BASE_URL_APP_SEARCH + urls.APP_SEARCH;
 
   constructor(private http: Http) {}
 

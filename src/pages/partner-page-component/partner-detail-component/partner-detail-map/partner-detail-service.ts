@@ -1,10 +1,11 @@
 import {Injectable} from "@angular/core";
 import {Http, Headers} from "@angular/http";
+import { environment, urls } from '../../../../app/environment';
 
 @Injectable()
 export class PartnerDetailService {
 
-  partnerDetailUrl = 'https://vorsystem.avs.de/integ6/cms/partnerfirmaProfil/pfnummer?mandant_id=1&pfNummer=';
+  partnerDetailUrl = environment.BASE_URL + urls.PARTNER_DETAIL + '?mandant_id=1&pfNummer=';
 
 
   constructor(private http: Http) {
