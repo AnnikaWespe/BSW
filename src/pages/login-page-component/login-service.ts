@@ -14,8 +14,8 @@ export class LoginService {
   }
 
   login(username, password) {
-    //let loginUrl = 'https://vorsystem.avs.de/integ6/login';
-    let loginUrl = 'http://localhost:8100/login';
+    let loginUrl = 'https://vorsystem.avs.de/integ6/login';
+    //let loginUrl = 'http://localhost:8100/login';
     let headers = new Headers({'Content-Type': 'application/json'});
     this.createAuthorizationHeader(headers);
     let options = new RequestOptions({headers: headers});
