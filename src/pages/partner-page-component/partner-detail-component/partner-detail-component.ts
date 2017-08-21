@@ -126,7 +126,7 @@ export class PartnerDetailComponent implements OnDestroy {
 
   googleAnalyticsTrackingGoToShop() {
     if (localStorage.getItem("disallowUserTracking") === "false") {
-      this.ga.trackEvent("Online Shop geöffnet", "pf-Nummer: " + this.pfNumber + ", Name: " + this.partner.nameOrigin)
+      this.ga.trackEvent("Online Shop geöffnet", "pf-Nummer: " + this.pfNumber + ", Name: " + this.partner.nameOrigin, localStorage.getItem("mitgliedId"))
     }
   }
 
