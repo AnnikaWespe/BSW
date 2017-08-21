@@ -99,8 +99,7 @@ import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
         },
         "android": {
           "backButtonText": "",
-          "backButtonColor": "grey",
-          "backButtonIcon": "arrow-back"
+          "backButtonColor": "grey"
         }
       }
     }),

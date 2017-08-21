@@ -66,14 +66,16 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       this.getBonusData(this.id, this.token);
     }
     this.checkIfGPSEnabled();
+
+    if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
+      this.checkForPromptRateAppInStore()
+    }
+
   }
 
   ionViewWillEnter() {
     this.getFavoritePartners(this.id, this.token);
     this.getLastVisitedPartners();
-    if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
-      this.checkForPromptRateAppInStore()
-    }
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView('Übersicht Screen')
     }
@@ -218,7 +220,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
   checkIfGPSEnabled() {
-    if (localStorage.getItem("getLocationFromGPSEnabled") !== "false") {
+
       this.getLocationSubscription = this.locationService.getLocation().subscribe(
         (location) => {
           this.location = location;
@@ -233,29 +235,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
           localStorage.setItem("getLocationFromGPSEnabled", "false");
         }
       )
-    }
-    else {
-      this.getStoredLocationData()
-    }
-  }
 
-  getStoredLocationData() {
-    if (localStorage.getItem("locationAvailable") === "true") {
-      this.location.latitude = localStorage.getItem("latitude");
-      this.location.longitude = localStorage.getItem("longitude");
-    }
-    else {
-      this.location.latitude = "52.5219";
-      this.location.longitude = "13.4132";
-      localStorage.setItem("latitude", "52.5219");
-      localStorage.setItem("longitude", "13.4132");
-      localStorage.setItem("locationAvailable", "false");
-      localStorage.setItem("locationExact", "false");
-      localStorage.setItem("locationName", "Berlin");
-    }
-    this.getPartners();
   }
-
 
   ngAfterViewChecked() {
     this.setFocus();
