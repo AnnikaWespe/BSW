@@ -90,7 +90,7 @@ ion-menu {
   div.logo-wrapper {
 
     background-color: white;
-    padding: 24px;
+    padding: 24px 24px 0 24px;
 
     ion-row.salutation {
 
@@ -109,6 +109,11 @@ ion-menu {
     }
 
   }
+
+  div.logo-wrapper-bottom-padding {
+    padding-bottom: 24px;
+  }
+
   .item-md {
     background-color: inherit;
     padding-left: 3vw !important;
@@ -205,6 +210,23 @@ ion-menu {
       background-color: map-get($colors, light);
     }
   }
+
+  .salutation {
+
+    color: map-get($colors, font-grey-dark);
+    font-size: medium;
+    background-color: white;
+    padding: 10px 14px 20px 14px;
+
+    p {
+      width: 100%;
+      padding: 0;
+      margin: 0;
+      text-align: center;
+    }
+
+  }
+
 
 }
 
