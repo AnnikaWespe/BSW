@@ -12,15 +12,15 @@ declare let google: any;
 export class ChooseLocationManuallyComponent implements OnDestroy{
   latitude: number;
   longitude: number;
-  cityName: string;
+  locationName: string;
+  locationExact: boolean;
+  locationNameInInputField;
   latitudeCenter = 51.1656;
   longitudeCenter = 10.4515;
   markerVisible = true;
   checkButtonVisible = false;
   zoom: number = 6;
   title = 'Standort auswählen';
-  locationExact: string;
-  locationNameInInputField;
   mapClickedSubscription;
   nameEnteredSubscription;
 
@@ -37,6 +37,7 @@ export class ChooseLocationManuallyComponent implements OnDestroy{
       this.longitude = location.longitude;
       this.locationExact = location.locationExact;
       this.locationNameInInputField = location.locationName;
+      this.locationName = location.locationName;
     }).unsubscribe();
   }
 
@@ -54,35 +55,37 @@ export class ChooseLocationManuallyComponent implements OnDestroy{
     this.markerVisible = true;
     this.longitude = parseFloat($event.coords.lng.toFixed(4));
     this.latitude = parseFloat($event.coords.lat.toFixed(4));
-    this.locationExact = "true";
+    this.locationExact = true;
     this.mapClickedSubscription = this.locationService.getLocationName({
       latitude: this.latitude,
-      longitude: this.longitude}
-    ).subscribe(
+      longitude: this.longitude
+    }).subscribe(
       (name) => {
-        this.locationNameInInputField = name;
-      },
-      (err) => {
-        this.locationNameInInputField = "manuell gewählter Ort"
-      });
-    this.locationExact = "true";
+        this.locationName = name;
+      }
+    );
+
   }
 
   setLocationData() {
     this.locationService.setLocation({
       longitude: this.longitude,
       latitude: this.latitude,
-      locationName: this.locationNameInInputField,
-      cityName: this.locationNameInInputField
+      locationName: this.locationName
     })
   }
 
   somethingTypedInInputField(event) {
     this.checkButtonVisible = false;
     if (event.keyCode == 13) {
-      this.locationExact = "false";
+      this.locationExact = false;
       this.keyboard.close();
-      this.nameEnteredSubscription = this.locationService.getLocationCoordinates(this.locationNameInInputField).subscribe((data) => {
+      this.nameEnteredSubscription = this.locationService.getLocationCoordinates(this.locationName)
+      .subscribe((data) => {
+        if (!data) {
+          this.alertSomethingWrentWrong();
+          return;
+        }
         console.log("data", data);
         this.longitude = data.longitude;
         this.latitude = data.latitude;
@@ -104,7 +107,7 @@ export class ChooseLocationManuallyComponent implements OnDestroy{
 
   saveLocation() {
     this.setLocationData();
-    this.viewCtrl.dismiss({latitude: this.latitude, longitude: this.longitude, name: this.locationNameInInputField});
+    this.navCtrl.pop();
   }
 
 }

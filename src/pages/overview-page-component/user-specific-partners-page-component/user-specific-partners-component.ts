@@ -36,14 +36,17 @@ export class UserSpecificPartnersComponent {
               public navParams: NavParams,
               public partnerService: PartnerService) {
     this.title = navParams.get("title");
-    this.partners = navParams.get("partners");
-    this.cached = (navParams.get("fromCache"));
+  }
+
+  ionViewWillEnter() {
+    this.partners = this.navParams.get("partners");
+    this.cached = (this.navParams.get("fromCache"));
     if (this.title === "Favoriten" || this.cached) {
       this.sortPartnersArray();
     }
     else {
       this.getAllLastVisitedPartners();
-    }
+    }    
   }
 
   sortPartnersArray(){
