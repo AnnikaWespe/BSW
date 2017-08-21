@@ -32,7 +32,7 @@
         <button ion-button outline color="red" round tappable (click)='goToPartnerDetailMap()' class="button-map"
                     *ngIf="partnerDetails?.ort">
           Zur Karte
-          <img class="button-icon" src="../assets/icon/map-pink.svg"/>
+          <img class="button-icon" src="assets/icon/map-pink.svg"/>
 
         </button>
 
@@ -77,9 +77,6 @@
     </div>
     <p *ngIf="partnerDetails?.ort"><b>Ort:</b> {{partnerDetails?.strasse}} {{partnerDetails?.hausnummer}},
       {{partnerDetails?.plz}} {{partnerDetails?.ort}}</p>
-    <p *ngIf="partnerDetails?.tel && partnerDetails?.ort"><b>Tel.:</b> {{partnerDetails?.tel}}</p>
-
-    <p *ngIf="partnerDetails?.bemerkung"><b>Bemerkung:</b> {{partnerDetails?.bemerkung}}</p>
     <p *ngIf="partnerDetails?.tel && partnerDetails?.ort"><b>Tel.:</b> {{partnerDetails?.tel}}</p>
 
     <div class="paymentIcons" *ngIf="zmIcons.length">

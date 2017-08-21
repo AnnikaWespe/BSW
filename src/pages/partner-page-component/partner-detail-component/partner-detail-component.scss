@@ -155,16 +155,17 @@ page-partner-detail-component {
 
   div.footer {
     font-size: x-small;
-    padding: 0 4vw 0 4vw;
+    padding: 0 4vw 4vw 4vw;
   }
 
-  .button-icon {
+  .buttonsWrapper .button-icon {
     height: 3.0rem;
     padding-left: 0.5rem;
   }
 
-  .button-round-md {
-    padding: 0 1.6rem;
+  .buttonsWrapper button {
+    max-width: 40vw;
+    padding: 0 1.6rem !important;
   }
 
 }

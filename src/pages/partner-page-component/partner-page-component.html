@@ -1,7 +1,7 @@
 <ion-header *ngIf="searchInterfaceOpen">
   <typeahead
     (closeSearchInterfaceEmitter)="closeSearchInterface($event)"
-    (getPartnersWithSearchTermEmitter)="getPartnersWithSearchTerm($event)"
+    (getPartnersWithSearchTermEmitter)="loadPartnerPage($event)"
     (toggleMapAndListEmitter)="toggleMapAndList()"
     [mapIcon]='activeFilterFromMenu == "OFFLINEPARTNER"  && !showTryAgainToGetPartnersButton'>
   </typeahead>
@@ -115,7 +115,7 @@
       <ion-item color="secondary-grey"
                 tappable
                 *ngIf="searchPageComponent">
-        <ion-label item-content class="toggle-text">Vor-Ort-Partner</ion-label>
+        <ion-label item-content class="toggle-text">Vor Ort Partner</ion-label>
         <ion-toggle item-right
                     [(ngModel)]="showOfflinePartners"
                     color="light-blue"

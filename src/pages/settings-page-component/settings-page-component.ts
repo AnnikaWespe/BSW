@@ -56,10 +56,16 @@ export class SettingsPageComponent implements OnDestroy {
   }
 
   updatePushRequests() {
+
+    /*
     this.pushNotificationsService.sendPushNotificationsRequestWithNewSettings(this.favoritesPush, this.accountInfoPush, this.enablePushesInGeneral).subscribe((res) => {
       console.log("result from Firebase API request", res.json().errors[0]);
     }, (err) => {
       localStorage.setItem("updatePushNotificationsNextTime", "true");
     });
+    */
+
+    console.log("push notification service currently disabled!");
+
   }
 }

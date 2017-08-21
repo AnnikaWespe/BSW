@@ -26,6 +26,21 @@
 
   <link href="build/main.css" rel="stylesheet">
 
+  <script>
+
+    document.onclick = function (e) {
+      e = e ||  window.event;
+      var element = e.target || e.srcElement;
+
+      if (element.tagName == 'A' && window.cordova) {
+        window.cordova.InAppBrowser.open(element.href, "_system"); // does not workin in browser
+        return false; // prevent default action and stop event propagation
+      }
+
+    };
+
+  </script>
+
 </head>
 <body>
   <ion-app></ion-app>

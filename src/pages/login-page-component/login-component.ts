@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {
   Nav, NavController, NavParams, AlertController, LoadingController, ViewController, Events,
   Keyboard
@@ -38,6 +38,7 @@ export class LoginPageComponent {
     this.inputNumberOrEmail = loginNumberFromBarCode || "";
     this.ga.trackView('Login Screen');
     this.navigatedFromPartnerDetail = navParams.get("navigatedFromPartnerDetail");
+
   }
 
   loadCameraPage() {
@@ -61,24 +62,24 @@ export class LoginPageComponent {
     //this.presentLoading();
     //this.login();
     this.presentLoading();
-     if (isNaN(this.inputNumberOrEmail)) {
-     if (this.emailAdressProperlyFormatted()) {
-     this.login();
-     }
-     else {
-     this.showPromptNoValidEmail();
-     this.loading.dismiss();
-     }
-     }
-     else {
-     if (this.inputNumberOrEmail.length == 10) {
-     this.login();
-     }
-     else {
-     this.showPromptNoValidNumber();
-     this.loading.dismiss();
-     }
-     }
+    if (isNaN(this.inputNumberOrEmail)) {
+      if (this.emailAdressProperlyFormatted()) {
+        this.login();
+      }
+      else {
+        this.showPromptNoValidEmail();
+        this.loading.dismiss();
+      }
+    }
+    else {
+      if (this.inputNumberOrEmail.length == 10) {
+        this.login();
+      }
+      else {
+        this.showPromptNoValidNumber();
+        this.loading.dismiss();
+      }
+    }
   }
 
   emailAdressProperlyFormatted() {
@@ -91,7 +92,7 @@ export class LoginPageComponent {
     //let username = "0016744807"
     //let password = "muster01$$";
     this.loginService.login(this.inputNumberOrEmail, this.password).subscribe((res) => {
-    //this.loginService.login(username, password).subscribe((res) => {
+      //this.loginService.login(username, password).subscribe((res) => {
       this.loading.dismiss();
       let loginData = res.json();
       if (loginData.errors[0].beschreibung === "Erfolg") {
@@ -130,7 +131,6 @@ export class LoginPageComponent {
       this.checkForValidInput();
     }
   }
-
 
   showPromptNoValidEmail() {
     let prompt = this.alertCtrl.create({
@@ -292,7 +292,7 @@ export class LoginPageComponent {
     let openUrl: any;
     try {
       openUrl = cordova.InAppBrowser.open;
-    } catch (error){
+    } catch (error) {
       openUrl = open;
     }
     console.log(url)

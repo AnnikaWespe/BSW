@@ -89,8 +89,15 @@ export class BSWBonusApp {
       .then(() => {
           this.splashScreen.hide();
           this.setRootPage();
-          this.statusBar.overlaysWebView(false);
-          this.statusBar.backgroundColorByHexString('#929395');
+
+          if(this.platform.is("android")) {
+            this.statusBar.overlaysWebView(false);
+            this.statusBar.backgroundColorByHexString('#929395');
+          } else {
+            this.statusBar.overlaysWebView(true);
+            this.statusBar.styleDefault();
+          }
+
           this.getDevice();
         },
         (err) => {
@@ -206,6 +213,10 @@ export class BSWBonusApp {
     localStorage.removeItem("lastName");
     localStorage.removeItem("firebaseToken");
     localStorage.removeItem("mitgliedsnummer");
+
+    /* reset salutation field, therefore UI gets updated */
+    this.salutation = null;
+
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackEvent('Login/Logout', 'logout');
     }
@@ -276,11 +287,17 @@ export class BSWBonusApp {
   }
 
   updateToken(mitgliedId, securityToken, fireBaseToken) {
+
+    /*
     let oldToken = localStorage.getItem("firebaseToken") || "";
     localStorage.setItem("firebaseToken", fireBaseToken);
     this.pushNotificationsService.sendPushNotificationsRequest(mitgliedId, securityToken, fireBaseToken, oldToken).subscribe((res) => {
       console.log("result from Firebase API request", res.json().errors[0])
     });
+    */
+
+    console.log("push notification service currently disabled!");
+
   }
 
   /* copied from settings page */
