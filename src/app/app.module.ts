@@ -42,6 +42,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {WebviewComponent} from "../pages/webview/webview";
 import {LoginService} from "../pages/login-page-component/login-service";
 import {FavoritesService} from "../services/favorites-service";
+import {EnvironmentService} from "../services/environment-service";
 import {UserSpecificPartnersComponent} from "../pages/overview-page-component/user-specific-partners-page-component/user-specific-partners-component";
 import {MapMarkerService} from "../services/map-marker-service";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
@@ -143,6 +144,7 @@ import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
     BarcodeScanner,
     Geolocation,
     LocationService,
+    EnvironmentService,
     PartnerService,
     SearchCompletionService,
     LoginService,

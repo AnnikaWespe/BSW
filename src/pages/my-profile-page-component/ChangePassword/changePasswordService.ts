@@ -1,5 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Http, Headers, RequestOptions} from "@angular/http";
+import {EnvironmentService} from "../../../services/environment-service";
 
 @Injectable()
 export class ChangePasswordService {
@@ -8,7 +9,7 @@ export class ChangePasswordService {
   securityToken = encodeURI(localStorage.getItem("securityToken"));
 
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private envService: EnvironmentService) {
   }
 
   createAuthorizationHeader(headers: Headers) {
@@ -18,7 +19,7 @@ export class ChangePasswordService {
 
   changePassword(oldPassword, newPassword) {
     console.log(this.mitgliedId, this.securityToken);
-    let loginUrl = 'https://vorsystem.avs.de/integ6/securityToken/passwortAendern';
+    let loginUrl = this.envService.environment.BASE_URL + this.envService.environment.CHANGE_PASSWORD;
     let headers = new Headers({'Content-Type': 'application/json'});
     this.createAuthorizationHeader(headers);
     let options = new RequestOptions({headers: headers});

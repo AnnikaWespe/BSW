@@ -1,5 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Http, Headers, RequestOptions} from "@angular/http";
+import { environment, urls } from '../../app/environment';
+import {EnvironmentService} from "../../services/environment-service";
 
 @Injectable()
 export class BonusService {
@@ -10,7 +12,7 @@ export class BonusService {
   year = this.date.getFullYear();
 
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private envService: EnvironmentService) {
   }
 
   createAuthorizationHeader(headers: Headers) {
@@ -21,7 +23,7 @@ export class BonusService {
   getBonusData(id, token) {
     token = encodeURIComponent(token);
     let headers = new Headers({'Accept': 'application/json'});
-    let url = "https://vorsystem.avs.de/integ6/securityToken/bonus/summen?mandant_id=1&mitglied_id="
+    let url = this.envService.environment.BASE_URL + this.envService.environment.BONUS_SUM + "?mandant_id=1&mitglied_id="
       + id + "&securityToken=" + token + "&fromDate=" + this.year + "-01-01&toDate=" + this.year + "-12-31&kontoauszugsArtId=73";
 
     //let url = "http://localhost:8100/securityToken/bonus/summen?mandant_id=1&mitglied_id="
