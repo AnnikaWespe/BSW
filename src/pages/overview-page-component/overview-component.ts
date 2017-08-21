@@ -23,6 +23,8 @@ import {WebviewComponent} from "../webview/webview";
 export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   title: string = "Übersicht";
+  id: string;
+  token: string;
   userLoggedIn = null;
   balance: number;
   bonusThisYear: number;
@@ -56,14 +58,18 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               private alertCtrl: AlertController,
               private ga: GoogleAnalytics,
               private bonusService: BonusService) {
+
     if (navParams.data.login == true || localStorage.getItem('securityToken')) {
-      let id = navParams.data.id || localStorage.getItem('mitgliedId');
-      let token = navParams.data.token || localStorage.getItem('securityToken');
+      this.id = navParams.data.id || localStorage.getItem('mitgliedId');
+      this.token = navParams.data.token || localStorage.getItem('securityToken');
       this.userLoggedIn = true;
-      this.getBonusData(id, token);
-      this.getFavoritePartners(id, token);
+      this.getBonusData(this.id, this.token);
     }
     this.checkIfGPSEnabled();
+  }
+
+  ionViewWillEnter() {
+    this.getFavoritePartners(this.id, this.token);
     this.getLastVisitedPartners();
     if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
       this.checkForPromptRateAppInStore()
@@ -71,11 +77,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView('Übersicht Screen')
     }
-    setTimeout(() => {
-      if (this.lastVisitedPartners.length == 0) {
-        this.noDataToDisplay = true
-      }
-    }, 5000);
   }
 
   ngOnDestroy() {
@@ -193,7 +194,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   getLastVisitedPartners() {
     let lastVisitedPartnersArray = JSON.parse(localStorage.getItem("savedLastVisitedPartners")) || [];
-    if (lastVisitedPartnersArray.length) {
+    if (lastVisitedPartnersArray.length && lastVisitedPartnersArray.length > 0) {
       let maxIndex = lastVisitedPartnersArray.length - 1;
       for (let i = maxIndex; i > -1; i--) {
         let pfNumber = lastVisitedPartnersArray[i];
@@ -202,6 +203,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         this.lastVisitedPartners.push(partner);
       }
       this.lastVisitedFive = this.lastVisitedPartners.slice(0, 5);
+    } else {
+        this.noDataToDisplay = true
     }
     if (lastVisitedPartnersArray.length > 5) {
       this.moreThanFiveLastVisitedPartners = true;
