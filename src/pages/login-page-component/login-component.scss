@@ -22,15 +22,17 @@ page-login-component {
     text-align: center;
   }
 
+  /* height is now dynamically assigned */
   .logo-row {
-    height: 140px;
-    line-height: 140px;
+    //height: 140px;
+    //line-height: 140px;
   }
 
+  /* height is now dynamically assigned */
   #imageHolder {
     width: 70%;
-    height: 140px;
-    line-height: 140px;
+    //height: 140px;
+    //line-height: 140px;
     margin: auto auto auto auto;
   }
 
