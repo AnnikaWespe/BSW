@@ -45,6 +45,10 @@
     {
       "path": "/securityToken/favorit/loeschen.json",
       "proxyUrl": "https://vorsystem.avs.de/integ6/securityToken/favorit/loeschen.json"
+    },
+    {
+      "path": "/securityToken/favorit/get",
+      "proxyUrl": "https://vorsystem.avs.de/integ6/securityToken/favorit/get"
     }
   ]
 }
