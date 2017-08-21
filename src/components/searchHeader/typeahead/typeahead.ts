@@ -28,15 +28,22 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
   @Output() toggleMapAndListEmitter = new EventEmitter();
 
   searchTerm;
-  subscription: any;
-
+  locationSubscription: any;
+  searchTermSubscription: any;
   private searchTerms = new Subject<string>();
   searchTermCompletion: Observable<SearchTermCompletion[]>;
+  location: any;
 
 
-  constructor(private searchCompletionService: SearchCompletionService,
-              private ga: GoogleAnalytics) {
-    this.subscription = this.searchTerms.subscribe(term => console.log(term))
+  constructor(
+    private searchCompletionService: SearchCompletionService,
+    private ga: GoogleAnalytics,
+    locationService: LocationService
+  ) {
+    this.searchTermSubscription = this.searchTerms.subscribe(term => console.log(term))
+    this.locationSubscription = locationService.getLocation().subscribe((location) => {
+      this.location = location;
+    })
   }
 
   search(term: string, $event): void {
@@ -63,7 +70,7 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
         .debounceTime(300)
         .distinctUntilChanged()
         .switchMap(term => term
-          ? this.searchCompletionService.getSuggestions(term, localStorage.getItem("latitude"), localStorage.getItem("longitude"))
+          ? this.searchCompletionService.getSuggestions(term, this.location.latitude, this.location.longitude)
           : Observable.of<SearchTermCompletion[]>([]))
         .catch(error => {
           console.log(error);
@@ -74,7 +81,8 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
   };
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.locationSubscription.unsubscribe();
+    this.searchTermSubscription.unsubscribe();
   }
 
 
