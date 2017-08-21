@@ -12,6 +12,8 @@
            #mySearchInputField
            placeholder="Geben Sie einen Suchbegriff ein"
            [(ngModel)]="searchTerm"
+           autocomplete="false"
+           spellcheck="false"
            (keyup)= "search(mySearchInputField.value, $event)">
 
     <ion-buttons end *ngIf="searchTerm">
