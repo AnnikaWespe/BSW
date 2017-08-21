@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers, RequestOptions} from "@angular/http";
-import { environment, urls } from '../app/environment';
 
 @Injectable()
 export class PushNotificationsService {

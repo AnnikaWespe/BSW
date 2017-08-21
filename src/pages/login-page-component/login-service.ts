@@ -1,12 +1,12 @@
 import {Injectable} from "@angular/core";
 import {Http, Headers, RequestOptions} from "@angular/http";
-import { environment, urls } from '../../app/environment';
+import {EnvironmentService} from "../../services/environment-service";
 
 @Injectable()
 export class LoginService {
 
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private envService: EnvironmentService) {
   }
 
   createAuthorizationHeader(headers: Headers) {
@@ -15,7 +15,7 @@ export class LoginService {
   }
 
   login(username, password) {
-    let loginUrl = environment.BASE_URL + urls.LOGIN;
+    let loginUrl = this.envService.environment.BASE_URL + this.envService.environment.LOGIN;
     let headers = new Headers({'Content-Type': 'application/json'});
     this.createAuthorizationHeader(headers);
     let options = new RequestOptions({headers: headers});
@@ -27,7 +27,7 @@ export class LoginService {
   }
 
   forgotPassword(loginString) {
-    let forgotPasswordUrl = environment.BASE_URL + urls.REQUEST_PASSWORD + '?mandant_id=1&login=';
+    let forgotPasswordUrl = this.envService.environment.BASE_URL + this.envService.environment.REQUEST_PASSWORD + '?mandant_id=1&login=';
     let securityToken = encodeURIComponent(localStorage.getItem("securityToken"));
     let headers = new Headers({'Accept': 'application/json'});
     this.createAuthorizationHeader(headers);

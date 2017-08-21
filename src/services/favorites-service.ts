@@ -1,16 +1,17 @@
 import {Injectable} from "@angular/core";
 import {Http, Headers} from "@angular/http";
-import { environment, urls } from '../app/environment';
+import {EnvironmentService} from "../services/environment-service";
 
 @Injectable()
 export class FavoritesService {
 
-  favoritesUrlSnippet = environment.BASE_URL + urls.GET_FAVORITES;
+  favoritesUrlSnippet: string;
   securityToken;
   mitgliedId;
 
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private envService: EnvironmentService) {
+    this.favoritesUrlSnippet = this.envService.environment.BASE_URL + this.envService.environment.GET_FAVORITES;
     this.securityToken = encodeURIComponent(localStorage.getItem("securityToken"));
     this.mitgliedId = localStorage.getItem("mitgliedId");
   }

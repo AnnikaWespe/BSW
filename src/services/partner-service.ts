@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
-import { environment, urls } from '../app/environment';
-
+import {EnvironmentService} from "../services/environment-service";
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
@@ -12,9 +11,11 @@ import {GetPartnersPost} from './get-partners-post';
 
 @Injectable()
 export class PartnerService {
-  private partnersUrl = environment.BASE_URL_APP_SEARCH + urls.APP_SEARCH;
-
-  constructor(private http: Http) {}
+  private partnersUrl: string;
+  
+  constructor(private http: Http, private envService: EnvironmentService) {
+  this.partnersUrl = this.envService.environment.BASE_URL_APP_SEARCH + this.envService.environment.APP_SEARCH;
+  }
 
 
   getPartners(location, bucket, searchTerm, showOnlyPartnersWithCampaign, sortByCriterion, sortOrder, radius = 50, pfNummerArray = []): Observable <any> {
