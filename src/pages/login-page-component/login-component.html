@@ -2,10 +2,10 @@
 
   <ion-grid>
 
-    <ion-row class="logo-row">
+    <ion-row class="logo-row" [style.height.px]="imageHolderHeight" [style.line-height.px]="imageHolderHeight">
       <ion-col class="logo-col">
 
-        <div id="imageHolder">
+        <div id="imageHolder" [style.height.px]="imageHolderHeight" [style.line-height.px]="imageHolderHeight">
           <img src='assets/icon/bsw-logo.png' class="logo" />
         </div>
 

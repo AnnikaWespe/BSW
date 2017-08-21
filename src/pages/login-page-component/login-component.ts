@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {
   Nav, NavController, NavParams, AlertController, LoadingController, ViewController, Events,
   Keyboard
@@ -19,9 +19,13 @@ declare let cordova: any;
 export class LoginPageComponent {
 
   @ViewChild(Nav) nav: Nav;
+
   inputNumberOrEmail: any;
   password = "";
   loading;
+
+  /* default image height */
+  imageHolderHeight = 140;
 
   navigatedFromPartnerDetail;
 
@@ -38,6 +42,8 @@ export class LoginPageComponent {
     this.inputNumberOrEmail = loginNumberFromBarCode || "";
     this.ga.trackView('Login Screen');
     this.navigatedFromPartnerDetail = navParams.get("navigatedFromPartnerDetail");
+
+    this.imageHolderHeight = (window.screen.height / 3);
 
   }
 
