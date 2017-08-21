@@ -27,7 +27,6 @@ export class LocationService {
         locationAvailable: false,
         locationfound: true,
         locationName: 'Berlin',
-        cityName: 'Zuletzt verfügbarer Standort',
         fromGPS: false
       };
       updateLocation = true;
@@ -54,9 +53,8 @@ export class LocationService {
     currentLocation.locationAvailable = currentLocation.locationAvailable || true;
     currentLocation.locationExact = currentLocation.locationExact || true;
     currentLocation.fromGPS = false;
-    this.getLocationName(currentLocation).subscribe((cityName) => {
-      currentLocation.cityName = cityName;
-      currentLocation.locationName = cityName;
+    this.getLocationName(currentLocation).subscribe((locationName) => {
+      currentLocation.locationName = locationName;
       localStorage.setItem('location', JSON.stringify(currentLocation));
       this.location.next(currentLocation);
     })
@@ -74,11 +72,9 @@ export class LocationService {
             locationFound: true,
             fromGPS: true,
             locationName: '',
-            cityName: ''
           };
-          this.getLocationName(currentLocation).subscribe((cityName) => {
-            currentLocation.cityName = cityName;
-            currentLocation.locationName = cityName;
+          this.getLocationName(currentLocation).subscribe((locationName) => {
+            currentLocation.locationName = locationName;
             localStorage.setItem('location', JSON.stringify(currentLocation));
             this.location.next(currentLocation);
             resolve(currentLocation);
@@ -96,10 +92,10 @@ export class LocationService {
   getLocationName(location: any): Observable<any> {
     return Observable.fromPromise(this.nativeGeocoder.reverseGeocode(location.latitude, location.longitude)
       .then((result: NativeGeocoderReverseResult) => {
-        let cityname = result.city;
-        return cityname;
+        let locationName = result.city;
+        return locationName;
       }).catch(() => {
-        return "zuletzt verfügbarer Standort";
+        return location.latitude+ " / " + location.longitude;
       }))
 
   }
