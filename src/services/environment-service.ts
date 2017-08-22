@@ -36,10 +36,11 @@ const environments = {
 export class EnvironmentService {
   environment: any;
   constructor() {
+    console.log('Your are running in environment ' + process.env.ENV);
     this.environment = {
       ...environments['base'],
-      ...environments[process.env.IONIC_ENV],
-      'ENV': process.env.IONIC_ENV
+      ...environments[process.env.ENV],
+      'ENV': process.env.ENV
     };
   }
 };
