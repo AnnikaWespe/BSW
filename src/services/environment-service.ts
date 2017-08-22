@@ -9,7 +9,7 @@ const environments = {
     BASE_URL_APP_SEARCH: "https://www.bsw.de",
   },
   prod: {
-    BASE_URL: "https://vorsystem.avs.de/integ6",
+    BASE_URL: "https://vorsystem.avs.de/prod",
     BASE_URL_APP_SEARCH: "https://www.bsw.de"
   },
   dev: {
