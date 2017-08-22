@@ -43,9 +43,34 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
     let urlRaw = localStorage.getItem(urlType);
     console.log(urlRaw);
 
+
+    /* No urls available */
     if (!urlRaw) {
-      this.url = "about:blank";
-      return;
+
+      /* show cached content, if it is impressum or datanschutz */
+      if (urlType === "ImpressumWebviewUrl" || urlType === "DatenschutzWebviewUrl") {
+
+        let content = localStorage.getItem(urlType + "CachedContent");
+        if (content) {
+          this.cachedContent = content;
+        } else {
+
+          /* no content cached yet, store it and load it */
+          content = CachedContentService[urlType];
+          localStorage.setItem(urlType + "CachedContent", content);
+          this.cachedContent = content;
+
+        }
+        return;
+
+      } else {
+
+        this.url = "about:blank";
+        this.errorLoad();
+        return;
+
+      }
+
     }
 
 
@@ -95,7 +120,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
 
         /* if we get an error here, show error message and hide iframe */
         this.errorLoad();
-        this.cachedContent  = "<html><head></head><body></body></html>";
+        this.cachedContent = "<html><head></head><body></body></html>";
 
       });
 
@@ -105,6 +130,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
     this.dataProtectionScreen = (urlType === "DatenschutzWebviewUrl");
     this.disallowUserTracking = (localStorage.getItem("disallowUserTracking") == "true");
     this.allowUserTracking = !this.disallowUserTracking;
+
   }
 
   ngAfterViewInit() {
@@ -137,7 +163,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
 
   errorLoad() {
 
-    if(this.alert){
+    if (this.alert) {
       return;
     }
 
