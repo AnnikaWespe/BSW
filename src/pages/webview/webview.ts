@@ -37,6 +37,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
               private elementRef: ElementRef,
               private alertCtrl: AlertController,
               public loadingCtrl: LoadingController) {
+    console.error(localStorage.getItem("noWebViewUrlsAvailable"));
     this.noWebViewUrlsAvailable = (localStorage.getItem("noWebViewUrlsAvailable") === "true");
     this.title = navParams.get('title');
     let urlType = navParams.get('urlType');
