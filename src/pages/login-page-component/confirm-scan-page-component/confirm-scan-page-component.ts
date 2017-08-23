@@ -23,7 +23,7 @@ export class ConfirmScanPageComponent {
   }
 
   loadScanPage() {
-    this.barcodeScanner.scan()
+    this.barcodeScanner.scan({'resultDisplayDuration': 0, 'orientation': 'portrait'})
       .then((result) => {
         if (!result.cancelled) {
           let numberFromCard = result.text;
