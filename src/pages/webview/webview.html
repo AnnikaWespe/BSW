@@ -40,7 +40,7 @@
           *ngIf="!noWebViewUrlsAvailable && !cachedContent"></iframe>
   <div class="displayCachedContent" [innerHTML]="cachedContent"></div>
 
-  <ion-row *ngIf="noWebViewUrlsAvailable">
+  <ion-row *ngIf="noWebViewUrlsAvailable && !cachedContent">
     <ion-item text-wrap>
       Wir können Ihnen derzeit keinen Screen anzeigen. Bitte loggen Sie sich aus und erneut wieder ein.
     </ion-item>
