@@ -58,6 +58,7 @@ import {PushNotificationsService} from "../services/push-notifications-service";
 import {Firebase} from "@ionic-native/firebase";
 import {FormatTelephoneNumberPipe} from "../pages/partner-page-component/partner-detail-component/format.pipe";
 import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
+import {ZBar} from "@ionic-native/zbar";
 
 
 @NgModule({
@@ -140,7 +141,7 @@ import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
     SplashScreen,
     StatusBar,
     Camera,
-    BarcodeScanner,
+    ZBar,
     Geolocation,
     LocationService,
     EnvironmentService,
