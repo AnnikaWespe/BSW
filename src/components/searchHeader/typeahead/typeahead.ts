@@ -33,7 +33,7 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
   private searchTerms = new Subject<string>();
   searchTermCompletion: Observable<SearchTermCompletion[]>;
   location: any;
-
+  windowHeight: any;
 
   constructor(
     private searchCompletionService: SearchCompletionService,
@@ -44,6 +44,9 @@ export class TypeaheadComponent implements OnInit, OnDestroy {
     this.locationSubscription = locationService.getLocation().subscribe((location) => {
       this.location = location;
     })
+
+    this.windowHeight = window.screen.height;
+
   }
 
   search(term: string, $event): void {

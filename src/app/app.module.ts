@@ -7,7 +7,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {StatusBar} from '@ionic-native/status-bar';
 import {Camera} from '@ionic-native/camera';
-import {BarcodeScanner} from '@ionic-native/barcode-scanner';
 import {Geolocation} from '@ionic-native/geolocation';
 
 import {AgmCoreModule} from '@agm/core';
@@ -58,6 +57,7 @@ import {PushNotificationsService} from "../services/push-notifications-service";
 import {Firebase} from "@ionic-native/firebase";
 import {FormatTelephoneNumberPipe} from "../pages/partner-page-component/partner-detail-component/format.pipe";
 import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
+import {ZBar} from "@ionic-native/zbar";
 
 
 @NgModule({
@@ -140,7 +140,7 @@ import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
     SplashScreen,
     StatusBar,
     Camera,
-    BarcodeScanner,
+    ZBar,
     Geolocation,
     LocationService,
     EnvironmentService,

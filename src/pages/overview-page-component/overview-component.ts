@@ -145,15 +145,13 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
   getFavoritePartners(id, token) {
-    this.favoritesService.getFavorites(id, token).subscribe((res) => {
+if(id && token) {    this.favoritesService.getFavorites(id, token).subscribe((res) => {
         this.getFavoritesByPfArray(res);
-        this.waitingForResults.favorites = false;
-      },
+      this.waitingForResults.favorites = false;},
       error => {
         console.log(error);
         this.displayFavoritesFromCache();
-        this.waitingForResults.favorites = false;
-      });
+      this.waitingForResults.favorites = false;});}
 
   }
 

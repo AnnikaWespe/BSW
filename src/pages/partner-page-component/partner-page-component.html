@@ -90,7 +90,7 @@
 <ion-content>
   <div class="filter-wrapper" [@show]="showDropdownForAnimation[2]">
     <div class="filter-menu" [style.display]="showDropdown[0]?'block':'none'">
-      <ion-row class="currentLocation" *ngIf="(offlinePartnerPageComponent || searchPageComponent) && !showMap ">
+      <ion-row class="currentLocation" *ngIf="(offlinePartnerPageComponent || searchPageComponent)">
         <ion-col class="currentPosition getLocationFromGPS" *ngIf="location.fromGPS" (click)="chooseLocationManually()">
           <p class="locationName">Aktueller Standort</p>
           <p class="changeLocation">Ort ändern</p>

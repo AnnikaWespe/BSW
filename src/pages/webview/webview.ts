@@ -138,7 +138,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
 
     if (this.iframe) {
 
-      this.timeoutHandle = setTimeout(this.errorLoad, 10000);
+      this.timeoutHandle = setTimeout(this.errorLoad, 5000);
       this.iframe.nativeElement.onload = () => {
         clearTimeout(this.timeoutHandle);
         this.dismissLoadingIndicator();

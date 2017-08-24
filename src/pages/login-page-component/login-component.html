@@ -23,7 +23,9 @@
                      (keypress)="checkForEnterButtonPressed($event)">
           </ion-input>
 
-          <ion-icon name="camera" tappable (click)="loadCameraPage()" color="primary" class="camera-icon"></ion-icon>
+          <button ion-button icon-only tappable (click)="loadCameraPage()" class="camera-icon" clear>
+            <ion-icon name="camera" color="primary" ></ion-icon>
+          </button>
 
         </div>
 

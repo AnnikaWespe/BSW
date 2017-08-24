@@ -32,6 +32,14 @@ typeahead {
     background-color: white;
   }
 
+  div.backdrop {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    background-color: rgba(9, 9, 9, .2);
+  }
+
   div.suggestion{
 
     font-size: medium;
