@@ -67,7 +67,7 @@ export class StyledMapPartnersDirective implements OnDestroy{
         this.markerClusterer = new MarkerClusterer(
           map,
           [],
-          {imagePath: this.pathToGmapsClusterIcons, gridSize: 120, minimumClusterSize: 3}
+          {imagePath: this.pathToGmapsClusterIcons, gridSize: 120, minimumClusterSize: 5}
         );
         google.maps.event.addListener(this.markerClusterer, 'clusterclick', (cluster) => {
           this.fillList.emit(cluster.getMarkers());
@@ -102,7 +102,7 @@ export class StyledMapPartnersDirective implements OnDestroy{
           .map(body => {
             let returnedObject = body.json();
             let offlinePartners = returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities;
-            
+
             // JS: ist das Auskommentieren ein Problem?
             // this.clearMarkers();
             return offlinePartners;
