@@ -1,5 +1,5 @@
 import {Component, OnDestroy, AfterViewChecked} from '@angular/core';
-import {AlertController, NavController, NavParams} from 'ionic-angular';
+import {AlertController, NavController, NavParams, Platform} from 'ionic-angular';
 
 
 import {PartnerService} from "../../services/partner-service";
@@ -13,7 +13,6 @@ import {LoginPageComponent} from "../login-page-component/login-component";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {BonusService} from "./bonus-service";
 import {WebviewComponent} from "../webview/webview";
-
 
 @Component({
   providers: [],
@@ -54,8 +53,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   getLocationSubscription: any;
   favoritesFromCache = false;
 
-
-  constructor(public navCtrl: NavController,
+  constructor(private platform: Platform,
+              public navCtrl: NavController,
               public navParams: NavParams,
               private partnerService: PartnerService,
               private locationService: LocationService,
@@ -348,8 +347,11 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
           text: 'Ja',
           role: 'cancel',
           handler: () => {
-            //TODO real link to app store
-            window.open('http://example.com/login/{{user._id}}', '_system', 'location=yes');
+            if (this.platform.is('android')) {
+              window.open('https://play.google.com/store/apps/details?id=de.avs.bswapp', '_system', 'location=yes');
+            } else {
+              window.open('itms://itunes.apple.com/de/app/apple-store/id597383984?mt=8', '_system', 'location=yes');
+            }
             localStorage.setItem("showPromptForRatingAppDisabled", "true");
           }
         },
