@@ -77,7 +77,7 @@ export class StyledMapPartnersDirective implements OnDestroy{
           map.addListener('idle', () => {
             observer.next();
           });
-        }).skip(1);
+        }).skip(0).startWith();
         const center$ = idle$.map(() => {
           let newCenter = this.map.getCenter();
           let newLat = this.map.getCenter().lat().toFixed(4);
