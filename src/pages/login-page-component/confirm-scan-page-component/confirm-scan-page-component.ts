@@ -28,8 +28,8 @@ export class ConfirmScanPageComponent {
       flash: 'off',
       drawSight: true,
       camera: 'back',
-      text_title: "Karten Scan",
-      text_instructions: "Bitte scannen Sie die Rückseite Ihrer BSW Karte"
+      text_title: "",
+      text_instructions: ""
     };
 
     this.zbar.scan(options)
