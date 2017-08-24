@@ -7,7 +7,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {StatusBar} from '@ionic-native/status-bar';
 import {Camera} from '@ionic-native/camera';
-import {BarcodeScanner} from '@ionic-native/barcode-scanner';
 import {Geolocation} from '@ionic-native/geolocation';
 
 import {AgmCoreModule} from '@agm/core';
