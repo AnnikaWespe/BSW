@@ -195,6 +195,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
   getLastVisitedPartners() {
+    this.lastVisitedPartners.length = 0;
     let lastVisitedPartnersArray = JSON.parse(localStorage.getItem("savedLastVisitedPartners")) || [];
     if (lastVisitedPartnersArray.length && lastVisitedPartnersArray.length > 0) {
       let maxIndex = lastVisitedPartnersArray.length - 1;
