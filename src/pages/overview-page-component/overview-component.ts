@@ -33,12 +33,17 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   maxHeightBarInVh = 14;
   location = {latitude: "0", longitude: "0"};
   errorMessage: string;
-  waitingForResults = true;
-  noDataToDisplay = false;
+  waitingForResults = {
+    online: true,
+    offline: true,
+    lastVisited: true,
+    favorites: true
+  };
   onlinePartners: any[];
   offlinePartners: any[];
   favoritePartners = [];
   lastVisitedPartners = [];
+
   searchInterfaceOpen = false;
   moreThanFiveFavorites = false;
   moreThanFiveLastVisitedPartners = false;
@@ -90,6 +95,16 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     }
   }
 
+  getLoadingState(): string {
+    if (this.waitingForResults.online || this.waitingForResults.offline || this.waitingForResults.lastVisited || this.waitingForResults.favorites) {
+      return 'waiting';
+    } else if (this.onlinePartners.length + this.offlinePartners.length + this.lastVisitedPartners.length + this.favoritePartners.length == 0) {
+      return 'empty';
+    } else {
+      return 'ready';
+    }
+  }
+
   getBonusData(id, token) {
     this.bonusService.getBonusData(id, token).subscribe((res) => {
       if (res.json().errors[0].beschreibung === "Erfolg") {
@@ -133,10 +148,12 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   getFavoritePartners(id, token) {
     this.favoritesService.getFavorites(id, token).subscribe((res) => {
         this.getFavoritesByPfArray(res);
+        this.waitingForResults.favorites = false;
       },
       error => {
         console.log(error);
         this.displayFavoritesFromCache();
+        this.waitingForResults.favorites = false;
       });
 
   }
@@ -164,13 +181,13 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
             if (this.favoritePartners.length > 5) {
               this.moreThanFiveFavorites = true;
             }
-            this.waitingForResults = false;
           }
 
         },
         error => {
           console.log(error);
           this.displayFavoritesFromCache();
+          this.waitingForResults.favorites = false;
         })
     }
     else if (errorMessage === "Login fehlgeschlagen") {
@@ -206,12 +223,11 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         this.lastVisitedPartners.push(partner);
       }
       this.lastVisitedFive = this.lastVisitedPartners.slice(0, 5);
-    } else {
-        this.noDataToDisplay = true
     }
     if (lastVisitedPartnersArray.length > 5) {
       this.moreThanFiveLastVisitedPartners = true;
     }
+    this.waitingForResults.lastVisited = false;
   }
 
   getUserToLogIn(errorMessage) {
@@ -250,7 +266,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         body => {
           let returnedObject = body.json();
           this.getOnlineAndOfflinePartners(returnedObject);
-          this.waitingForResults = false;
+          this.waitingForResults.online = false;
+          this.waitingForResults.offline = false;
         },
         error => this.errorMessage = <any>error);
   }

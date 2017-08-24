@@ -69,14 +69,14 @@
 
   </div>
 
-  <div class="initialSpinner" *ngIf="waitingForResults && favoritePartners.length == 0 && lastVisitedPartners.length == 0 && !noDataToDisplay">
+  <div class="initialSpinner" *ngIf="getLoadingState()=='waiting'">
     <ion-spinner class="initialSpinner"></ion-spinner>
   </div>
-  <ion-item *ngIf="waitingForResults && noDataToDisplay" text-wrap>
+  <ion-item *ngIf="getLoadingState()=='empty'" text-wrap>
     Wir können Ihnen leider derzeit keine Daten anzeigen. Bitte verbinden Sie sich mit dem Internet.
   </ion-item>
 
-  <ion-row class="title-row" *ngIf="favoritePartners.length" (click)="loadUserSpecificPartnerTable('favorites')" tappable>
+  <ion-row class="title-row" *ngIf="favoritePartners.length && getLoadingState()=='ready'" (click)="loadUserSpecificPartnerTable('favorites')" tappable>
     <ion-col class="title">
       <p class="title-paragraph">Favoriten</p>
     </ion-col>
@@ -88,13 +88,13 @@
 
   <partner-table [partners]="firstFiveFavorites"
                  (showPartnerEventEmitter)="showPartner($event)"
-                 *ngIf="favoritePartners && !favoritesFromCache"></partner-table>
+                 *ngIf="favoritePartners && !favoritesFromCache && getLoadingState()=='ready'"></partner-table>
   <partner-table-cached [partners]="firstFiveFavorites"
                         (showCachedPartnerEventEmitter)="showCachedPartner($event)"
-                        *ngIf="favoritePartners && favoritesFromCache">
+                        *ngIf="favoritePartners && favoritesFromCache && getLoadingState()=='ready'">
   </partner-table-cached>
 
-  <ion-row class="title-row" *ngIf="lastVisitedPartners.length" (click)="loadUserSpecificPartnerTable('lastvisitedPartners')" tappable>
+  <ion-row class="title-row" *ngIf="lastVisitedPartners.length && getLoadingState()=='ready'" (click)="loadUserSpecificPartnerTable('lastvisitedPartners')" tappable>
     <ion-col col-auto class="title">
       <p class="title-paragraph">Zuletzt besuchte Partner</p>
     </ion-col>
@@ -106,9 +106,9 @@
   </ion-row>
   <partner-table-cached [partners]="lastVisitedFive"
                  (showCachedPartnerEventEmitter)="showCachedPartner($event)"
-                 *ngIf="lastVisitedPartners"></partner-table-cached>
+                 *ngIf="lastVisitedPartners && getLoadingState()=='ready'"></partner-table-cached>
 
-  <ion-row class="title-row" *ngIf="offlinePartners" (click)="showOfflinePartners()" tappable>
+  <ion-row class="title-row" *ngIf="offlinePartners && getLoadingState()=='ready'" (click)="showOfflinePartners()" tappable>
     <ion-col class="title">
       <p class="title-paragraph">Vor Ort Partner</p>
     </ion-col>
@@ -118,9 +118,9 @@
   </ion-row>
   <partner-table [partners]="offlinePartners"
                  (showPartnerEventEmitter)="showPartner($event)"
-                 *ngIf="offlinePartners"></partner-table>
+                 *ngIf="offlinePartners && getLoadingState()=='ready'"></partner-table>
 
-  <ion-row class="title-row" *ngIf="onlinePartners" (click)="showOnlinePartners()" tappable>
+  <ion-row class="title-row" *ngIf="onlinePartners && getLoadingState()=='ready'" (click)="showOnlinePartners()" tappable>
     <ion-col class="title">
       <p class="title-paragraph">Online Partner</p>
     </ion-col>
@@ -130,7 +130,7 @@
   </ion-row>
   <partner-table [partners]="onlinePartners"
                  (showPartnerEventEmitter)="showPartner($event)"
-                 *ngIf="onlinePartners"></partner-table>
+                 *ngIf="onlinePartners && getLoadingState()=='ready'"></partner-table>
 
 </ion-content>
 
