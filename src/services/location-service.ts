@@ -59,6 +59,10 @@ export class LocationService {
       currentLocation.locationName = locationName;
       localStorage.setItem('location', JSON.stringify(currentLocation));
       this.location.next(currentLocation);
+      if (this.geoLocationSubscription) {
+        this.geoLocationSubscription.unsubscribe();
+        this.geoLocationSubscription = undefined;
+      }
     })
   }
 
