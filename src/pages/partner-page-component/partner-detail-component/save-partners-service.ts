@@ -33,6 +33,19 @@ export class SavePartnersService {
   }
 
   savePartnerAndPartnerDetails(pfNumber, partner, partnerDetails, partnerType) {
+
+    let now = Date.now();
+
+    if(partner) {
+      partner.offline = true;
+      partner.fetchTime = now;
+    }
+
+    if(partnerDetails) {
+      partnerDetails.offline = true;
+      partnerDetails.fetchTime = now;
+    }
+
     let index = this[partnerType].indexOf(pfNumber);
     if (index > -1) {
       this[partnerType].splice(index, 1);
@@ -46,11 +59,21 @@ export class SavePartnersService {
       }
       this.lastVisitedPartnersComplete.push(pfNumber);
     }
+
     localStorage.setItem("savedLastVisitedPartners", JSON.stringify(this.lastVisitedPartners));
     localStorage.setItem("savedFavorites", JSON.stringify(this.favorites));
     localStorage.setItem("savedLastVisitedPartnersComplete", JSON.stringify(this.lastVisitedPartnersComplete));
     localStorage.setItem(pfNumber + "partner", JSON.stringify(partner));
     localStorage.setItem(pfNumber + "partnerDetails", JSON.stringify(partnerDetails));
+
+    if(partner) {
+      partner.offline = false;
+    }
+
+    if(partnerDetails) {
+      partnerDetails.offline = false;
+    }
+
   }
 
   deleteFromStorage(pfNumber, partnerType) {
