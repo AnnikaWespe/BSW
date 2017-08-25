@@ -28,6 +28,7 @@ export class PartnerDetailComponent implements OnDestroy {
   showDetails = true;
   zmIcons = [];
   securityToken;
+  isLoading = true;
 
 
   constructor(public navCtrl: NavController,
@@ -45,6 +46,7 @@ export class PartnerDetailComponent implements OnDestroy {
     }
     else {
       this.getZmicons();
+      this.isLoading = false;
     }
     this.googleAnalyticsTrackingOpenDetailScreen();
   }
@@ -67,6 +69,7 @@ export class PartnerDetailComponent implements OnDestroy {
   }
 
   getPartnerDetails() {
+
     this.partnerDetailsSubscription = this.partnerDetailService.getDetails(this.pfNumber).subscribe((res) => {
       if (res.json().errors[0].beschreibung === "Erfolg") {
         this.partnerDetails = res.json().response;
@@ -76,11 +79,17 @@ export class PartnerDetailComponent implements OnDestroy {
           this.showDetails = false;
         }
         this.saveForOffline();
+        this.isLoading = false;
       }
       else {
+        this.isLoading = false;
         this.alertSomethingWentWrong();
       }
+    }, (error) => {
+      this.isLoading = false;
+      this.alertSomethingWentWrong();
     });
+
   }
 
   getZmicons() {
@@ -146,7 +155,7 @@ export class PartnerDetailComponent implements OnDestroy {
       let openUrl: any;
       try {
         openUrl = cordova.InAppBrowser.open;
-      } catch (error){
+      } catch (error) {
         openUrl = open;
       }
       console.log(url)
