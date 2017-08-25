@@ -19,6 +19,7 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/combineLatest';
+import 'rxjs/add/operator/do';
 import {MapMarkerService} from "../../../services/map-marker-service";
 
 
@@ -63,6 +64,7 @@ export class StyledMapPartnersDirective implements OnDestroy{
       .then((map) => {
         this.map = map;
         let bounds = new google.maps.LatLngBounds();
+        let cleanUpMap = false;
         this.setMapOptions(map);
         this.markerClusterer = new MarkerClusterer(
           map,
@@ -88,8 +90,8 @@ export class StyledMapPartnersDirective implements OnDestroy{
         })
         const partners$ = center$
           .combineLatest(
-            this.justPartnersWithCampaign$.startWith(this.justPartnersWithCampaign),
-            this.searchTerm$.startWith(this.searchTerm)
+            this.justPartnersWithCampaign$.startWith(this.justPartnersWithCampaign).do(() => cleanUpMap = true),
+            this.searchTerm$.startWith(this.searchTerm).do(() => cleanUpMap = true)
           )
           .switchMap((params) => {
             this.center = params[0].center;
@@ -138,6 +140,10 @@ export class StyledMapPartnersDirective implements OnDestroy{
         this.getPartnersSubscription = markers$.subscribe((markers) => {
           markers.map(marker => this.markerCache[marker.partner.id] = marker);
           this.markers = markers;
+          if (cleanUpMap) {
+            cleanUpMap = false;
+            this.markerClusterer.clearMarkers();
+          }
           this.markerClusterer.addMarkers(markers);
 
         })
