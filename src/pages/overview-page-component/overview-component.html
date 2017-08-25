@@ -110,9 +110,14 @@
       </button>
     </ion-col>
   </ion-row>
+
+  <partner-table [partners]="lastVisitedFive"
+                 (showPartnerEventEmitter)="showPartner($event)"
+                 *ngIf="lastVisitedPartners && !lastVisitedFromCache"></partner-table>
+
   <partner-table-cached [partners]="lastVisitedFive"
                  (showCachedPartnerEventEmitter)="showCachedPartner($event)"
-                 *ngIf="lastVisitedPartners"></partner-table-cached>
+                 *ngIf="lastVisitedPartners && lastVisitedFromCache"></partner-table-cached>
 
   <ion-row class="title-row" *ngIf="offlinePartners" (click)="showOfflinePartners()" tappable>
     <ion-col class="title">

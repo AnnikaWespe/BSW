@@ -40,6 +40,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   offlinePartners: any[];
   favoritePartners = [];
   lastVisitedPartners = [];
+  lastVisitedFromCache = false;
+
   searchInterfaceOpen = false;
   moreThanFiveFavorites = false;
   moreThanFiveLastVisitedPartners = false;
@@ -247,7 +249,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
           }
 
           this.waitingForResults = false;
-
+          this.lastVisitedFromCache = false;
         }
 
       },
@@ -276,6 +278,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         this.lastVisitedPartners.push(partner);
       }
       this.lastVisitedFive = this.lastVisitedPartners.slice(0, 5);
+      this.lastVisitedFromCache = true;
     } else {
       this.noDataToDisplay = true
     }
