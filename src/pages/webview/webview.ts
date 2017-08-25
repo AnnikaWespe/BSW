@@ -105,6 +105,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
         let entirePageHTML = result["_body"];
         let bodyHtml = /<body.*?>([\s\S]*)<\/body>/.exec(entirePageHTML)[1].replace(/<script[\s\S]*?<\/script>/g, "");
         localStorage.setItem(urlType + "CachedContent", bodyHtml)
+        this.cachedContent = bodyHtml;
         this.dismissLoadingIndicator();
       }, (err) => {
         this.dismissLoadingIndicator();
