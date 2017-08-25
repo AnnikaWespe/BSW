@@ -76,8 +76,12 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
   ionViewWillEnter() {
+
+    this.cleanup();
+
     this.getFavoritePartners(this.id, this.token);
     this.getLastVisitedPartners();
+
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView('Übersicht Screen')
     }
@@ -97,55 +101,73 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   getBonusData(id, token) {
 
-    if(!id || !token){
+    this.bonusDataAvailable = false;
+
+    if (!id || !token) {
       return;
     }
 
     this.bonusService.getBonusData(id, token).subscribe((res) => {
       if (res.json().errors[0].beschreibung === "Erfolg") {
-        let response = res.json().response;
-        let date = new Date();
-        let timeStamp = date.getTime().toString();
+
         console.log("success with bonus data");
-        this.bonusDataAvailable = true;
-        this.bonusThisYear = response.bonusGesamtJahr;
-        this.balance = response.bonuskontostand;
-        this.bonusDataFromCache = false;
-        localStorage.setItem("bonusThisYear", response.bonusGesamtJahr);
-        localStorage.setItem("balance", response.bonuskontostand);
-        localStorage.setItem("bonusDataTimeStamp", timeStamp)
-      }
-      else {
-        console.log("error with bonus data");
-        let date = new Date();
-        let now = date.getTime();
-        let timeStamp = Number(localStorage.getItem("bonusDataTimeStamp"));
-        let timeDiff = now - timeStamp;
-        if (timeDiff < 86400000) {
-          this.bonusDataAvailable = true;
-          this.bonusDataFromCache = true;
-          this.bonusThisYear = Number(localStorage.getItem("bonusThisYear"));
-          this.balance = Number(localStorage.getItem("balance"));
-        }
+        this.showBonusData(res.json().response);
+
+      } else {
+
+        console.error("error with bonus data");
+        this.showBonusDataFromCache();
+
       }
     }, () => {
-      console.log("error with bonus data");
-      let date = new Date();
-      let now = date.getTime();
-      let timeStamp = Number(localStorage.getItem("bonusDataTimeStamp"));
-      let timeDiff = now - timeStamp;
-      if (timeDiff < 86400000) {
-        this.bonusDataAvailable = true;
-        this.bonusDataFromCache = true;
-        this.bonusThisYear = Number(localStorage.getItem("bonusThisYear"));
-        this.balance = Number(localStorage.getItem("balance"));
-      }
+
+      console.error("error with bonus data");
+      this.showBonusDataFromCache();
+
     })
+
+  }
+
+  showBonusData(response){
+
+    if(response) {
+
+      this.bonusDataAvailable = true;
+      this.bonusThisYear = response.bonusGesamtJahr;
+      this.balance = response.bonuskontostand;
+      this.bonusDataFromCache = false;
+      localStorage.setItem("bonusThisYear", response.bonusGesamtJahr);
+      localStorage.setItem("balance", response.bonuskontostand);
+      localStorage.setItem("bonusDataTimeStamp", Date.now().toString());
+
+      this.waitingForResults = false;
+      this.checkForDataOnHomeScreen();
+
+    } else {
+
+      this.showBonusDataFromCache();
+
+    }
+
+  }
+
+  showBonusDataFromCache() {
+
+    if(localStorage.getItem("bonusThisYear")) {
+      this.bonusDataAvailable = true;
+      this.bonusDataFromCache = true;
+      this.bonusThisYear = Number(localStorage.getItem("bonusThisYear"));
+      this.balance = Number(localStorage.getItem("balance"));
+    }
+
+    this.waitingForResults = false;
+    this.checkForDataOnHomeScreen();
+
   }
 
   getFavoritePartners(id, token) {
 
-    if(id && token) {
+    if (id && token) {
       this.favoritesService.getFavorites(id, token).subscribe((res) => {
           this.getFavoritesByPfArray(res);
         },
@@ -183,6 +205,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
             this.waitingForResults = false;
           }
 
+          this.checkForDataOnHomeScreen();
+
         },
         error => {
           console.log(error);
@@ -205,15 +229,22 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     if (cachedFavoritesArray.length) {
       this.favoritesFromCache = true;
       for (let pfNumber of cachedFavoritesArray) {
+
         let partner = JSON.parse(localStorage.getItem(pfNumber + "partner"));
-        partner.logoUrl = localStorage.getItem(pfNumber + "logo");
-        this.favoritePartners.push(partner);
+        if (partner) {
+          partner.logoUrl = localStorage.getItem(pfNumber + "logo");
+          this.favoritePartners.push(partner);
+        }
+
       }
+
       this.firstFiveFavorites = this.favoritePartners.slice(0, 5);
       if (this.favoritePartners.length > 5) {
         this.moreThanFiveFavorites = true;
       }
     }
+
+    this.checkForDataOnHomeScreen();
 
   }
 
@@ -252,6 +283,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
           this.lastVisitedFromCache = false;
         }
 
+        this.checkForDataOnHomeScreen();
+
       },
       error => {
         console.log(error);
@@ -274,23 +307,44 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       for (let i = maxIndex; i > -1; i--) {
         let pfNumber = lastVisitedPartnersArray[i];
         let partner = JSON.parse(localStorage.getItem(pfNumber + "partner"));
-        partner.logoString = localStorage.getItem(pfNumber + "logo")
-        this.lastVisitedPartners.push(partner);
+
+        if (partner) {
+          partner.logoString = localStorage.getItem(pfNumber + "logo")
+          this.lastVisitedPartners.push(partner);
+        }
+
       }
       this.lastVisitedFive = this.lastVisitedPartners.slice(0, 5);
       this.lastVisitedFromCache = true;
-    } else {
-      this.noDataToDisplay = true
     }
+
     if (lastVisitedPartnersArray.length > 5) {
       this.moreThanFiveLastVisitedPartners = true;
     }
+
+    this.checkForDataOnHomeScreen();
+
   }
 
   getUserToLogIn(errorMessage) {
     localStorage.removeItem("securityToken");
     this.navCtrl.setRoot(LoginPageComponent);
     console.log(errorMessage);
+  }
+
+  /* show message if no data was loaded and we are not waiting for a result */
+  checkForDataOnHomeScreen() {
+
+    let isDataAvailable = false;
+
+    isDataAvailable = isDataAvailable || (this.lastVisitedPartners && this.lastVisitedPartners.length > 0);
+    isDataAvailable = isDataAvailable || (this.favoritePartners && this.favoritePartners.length > 0);
+    isDataAvailable = isDataAvailable || (this.onlinePartners && this.onlinePartners.length > 0);
+    isDataAvailable = isDataAvailable || (this.offlinePartners && this.offlinePartners.length > 0);
+    isDataAvailable = isDataAvailable || this.bonusDataAvailable;
+
+    this.noDataToDisplay = !this.waitingForResults && !isDataAvailable;
+
   }
 
   checkIfGPSEnabled() {
@@ -334,6 +388,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     if (offlinePartnerArray) {
       this.offlinePartners = offlinePartnerArray.slice(0, 5)
     }
+    this.checkForDataOnHomeScreen();
   }
 
   showOfflinePartners() {
@@ -455,6 +510,52 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     }
   }
 
+  private cleanup() {
+    console.log("cleanup()");
+
+    let now = Date.now();
+    let cacheTime = 1000 * 60; //1000 * 60 * 60 * 24;
+
+    /* bonusdata - delete if older than 24 hours */
+    let bonusTime = Number(localStorage.getItem("bonusDataTimeStamp"));
+    if (bonusTime && bonusTime < (now - cacheTime)) {
+
+      localStorage.removeItem("bonusThisYear");
+      localStorage.removeItem("balance");
+      localStorage.removeItem("bonusDataTimeStamp");
+      console.log("Clearing cached bonus data");
+
+    }
+
+    /* partners - delete if older than 24 hours */
+    let lastVisited = JSON.parse(localStorage.getItem("savedLastVisitedPartners")) || [];
+    let lastVisitedComplete = JSON.parse(localStorage.getItem("savedLastVisitedPartnersComplete")) || [];
+    let favorites = JSON.parse(localStorage.getItem("savedFavorites")) || [];
+
+    let partnersToDelete = [];
+    let allPartners = lastVisited.concat(lastVisitedComplete, favorites);
+
+    for (let p in allPartners) {
+
+      let loadedPartner = JSON.parse(localStorage.getItem(allPartners[p] + "partnerDetails"));
+
+      if (loadedPartner && (!loadedPartner.fetchTime || loadedPartner.fetchTime < (now - cacheTime))) {
+        partnersToDelete.push(allPartners[p]);
+      }
+
+    }
+
+    for (let p in partnersToDelete) {
+
+      console.log("Deleting cache of: " + partnersToDelete[p]);
+
+      localStorage.removeItem(partnersToDelete[p] + "partnerDetails");
+      localStorage.removeItem(partnersToDelete[p] + "partner");
+      localStorage.removeItem(partnersToDelete[p] + "logo");
+
+    }
+
+  }
 
 }
 
