@@ -29,6 +29,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   balance: number;
   bonusThisYear: number;
   bonusDataAvailable = false;
+  bonusDataFromCache = false;
   heightBalanceBarBonusBarBuffer = ["0vh", "0vh", "0vh", "0vh"];
   maxHeightBarInVh = 14;
   location = {latitude: "0", longitude: "0"};
@@ -63,7 +64,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       this.id = navParams.data.id || localStorage.getItem('mitgliedId');
       this.token = navParams.data.token || localStorage.getItem('securityToken');
       this.userLoggedIn = true;
-      this.getBonusData(this.id, this.token);
     }
     this.checkIfGPSEnabled();
 
@@ -79,6 +79,9 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView('Übersicht Screen')
     }
+
+    this.getPartners();
+    this.getBonusData(this.id, this.token);
   }
 
   ngOnDestroy() {
@@ -91,6 +94,11 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
   getBonusData(id, token) {
+
+    if(!id || !token){
+      return;
+    }
+
     this.bonusService.getBonusData(id, token).subscribe((res) => {
       if (res.json().errors[0].beschreibung === "Erfolg") {
         let response = res.json().response;
@@ -100,6 +108,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         this.bonusDataAvailable = true;
         this.bonusThisYear = response.bonusGesamtJahr;
         this.balance = response.bonuskontostand;
+        this.bonusDataFromCache = false;
         localStorage.setItem("bonusThisYear", response.bonusGesamtJahr);
         localStorage.setItem("balance", response.bonuskontostand);
         localStorage.setItem("bonusDataTimeStamp", timeStamp)
@@ -112,6 +121,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         let timeDiff = now - timeStamp;
         if (timeDiff < 86400000) {
           this.bonusDataAvailable = true;
+          this.bonusDataFromCache = true;
           this.bonusThisYear = Number(localStorage.getItem("bonusThisYear"));
           this.balance = Number(localStorage.getItem("balance"));
         }
@@ -124,6 +134,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       let timeDiff = now - timeStamp;
       if (timeDiff < 86400000) {
         this.bonusDataAvailable = true;
+        this.bonusDataFromCache = true;
         this.bonusThisYear = Number(localStorage.getItem("bonusThisYear"));
         this.balance = Number(localStorage.getItem("balance"));
       }
@@ -182,6 +193,12 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
   displayFavoritesFromCache() {
+
+    this.favoritePartners = [];
+    this.firstFiveFavorites = [];
+    this.moreThanFiveFavorites = false;
+    this.waitingForResults = false;
+
     let cachedFavoritesArray = JSON.parse(localStorage.getItem("savedFavorites")) || [];
     if (cachedFavoritesArray.length) {
       this.favoritesFromCache = true;
@@ -195,11 +212,62 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         this.moreThanFiveFavorites = true;
       }
     }
+
   }
 
   getLastVisitedPartners() {
+
+    let lastVisitedPartnersArray = JSON.parse(localStorage.getItem("savedLastVisitedPartners")) || [];
+
+    if (!lastVisitedPartnersArray || lastVisitedPartnersArray.length == 0) {
+      this.lastVisitedPartners = [];
+      this.lastVisitedFive = [];
+      this.moreThanFiveLastVisitedPartners = false;
+      this.waitingForResults = false;
+      return;
+    }
+
+    this.partnerService.getPartners(this.location, 0, "", false, "RELEVANCE", "DESC", 10000, lastVisitedPartnersArray).subscribe((res) => {
+        let partnersArray = res.json().contentEntities;
+        if (partnersArray) {
+
+          for (let pfNumber of lastVisitedPartnersArray) {
+            for (let partner of partnersArray) {
+              if (partner.number == pfNumber) {
+                this.lastVisitedPartners.push(partner);
+                break;
+              }
+            }
+          }
+
+          this.lastVisitedPartners = partnersArray;
+          this.lastVisitedFive = this.lastVisitedPartners.slice(0, 5);
+          if (this.lastVisitedPartners.length > 5) {
+            this.moreThanFiveLastVisitedPartners = true;
+          }
+
+          this.waitingForResults = false;
+
+        }
+
+      },
+      error => {
+        console.log(error);
+        this.displayLastVisitedPartnersFromCache();
+      })
+
+  }
+
+  displayLastVisitedPartnersFromCache() {
+
+    this.lastVisitedPartners = [];
+    this.lastVisitedFive = [];
+    this.moreThanFiveLastVisitedPartners = false;
+    this.waitingForResults = false;
+
     let lastVisitedPartnersArray = JSON.parse(localStorage.getItem("savedLastVisitedPartners")) || [];
     if (lastVisitedPartnersArray.length && lastVisitedPartnersArray.length > 0) {
+
       let maxIndex = lastVisitedPartnersArray.length - 1;
       for (let i = maxIndex; i > -1; i--) {
         let pfNumber = lastVisitedPartnersArray[i];
@@ -209,7 +277,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       }
       this.lastVisitedFive = this.lastVisitedPartners.slice(0, 5);
     } else {
-        this.noDataToDisplay = true
+      this.noDataToDisplay = true
     }
     if (lastVisitedPartnersArray.length > 5) {
       this.moreThanFiveLastVisitedPartners = true;
@@ -224,20 +292,20 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   checkIfGPSEnabled() {
 
-      this.getLocationSubscription = this.locationService.getLocation().subscribe(
-        (location) => {
-          this.location = location;
-          if (location.locationFound == true) {
-            localStorage.setItem("getLocationFromGPSEnabled", "true");
-            this.getPartners();
-          }
-          else {
-            localStorage.setItem("getLocationFromGPSEnabled", "false");
-          }
-        }, (error) => {
+    this.getLocationSubscription = this.locationService.getLocation().subscribe(
+      (location) => {
+        this.location = location;
+        if (location.locationFound == true) {
+          localStorage.setItem("getLocationFromGPSEnabled", "true");
+          this.getPartners();
+        }
+        else {
           localStorage.setItem("getLocationFromGPSEnabled", "false");
         }
-      )
+      }, (error) => {
+        localStorage.setItem("getLocationFromGPSEnabled", "false");
+      }
+    )
 
   }
 

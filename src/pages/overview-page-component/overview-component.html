@@ -67,6 +67,12 @@
       </ion-col>
     </ion-row>
 
+    <ion-row>
+      <ion-col class="footer-col" *ngIf="bonusDataFromCache">
+        Die verwendeten Daten stammen aus einer früheren Sitzung und sind möglicherweise veraltet. Stellen Sie eine Internetverbindung her um die Daten zu aktualisieren.
+      </ion-col>
+    </ion-row>
+
   </div>
 
   <div class="initialSpinner" *ngIf="waitingForResults && favoritePartners.length == 0 && lastVisitedPartners.length == 0 && !noDataToDisplay">
