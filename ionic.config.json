@@ -39,16 +39,8 @@
       "proxyUrl": "https://vorsystem.avs.de/integ6/cms/partnerfirmaProfil/pfnummer"
     },
     {
-      "path": "/securityToken/favorit/merken.json",
-      "proxyUrl": "https://vorsystem.avs.de/integ6/securityToken/favorit/merken.json"
-    },
-    {
-      "path": "/securityToken/favorit/loeschen.json",
-      "proxyUrl": "https://vorsystem.avs.de/integ6/securityToken/favorit/loeschen.json"
-    },
-    {
-      "path": "/securityToken/favorit/get",
-      "proxyUrl": "https://vorsystem.avs.de/integ6/securityToken/favorit/get"
+      "path": "/securityToken/favorit",
+      "proxyUrl": "https://vorsystem.avs.de/integ6/securityToken/favorit"
     }
   ]
 }
