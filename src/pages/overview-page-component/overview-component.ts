@@ -588,6 +588,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       localStorage.removeItem(partnersToDelete[p] + "partnerDetails");
       localStorage.removeItem(partnersToDelete[p] + "partner");
       localStorage.removeItem(partnersToDelete[p] + "logo");
+      localStorage.removeItem(partnersToDelete[p] + "campaignImage");
+
 
     }
 

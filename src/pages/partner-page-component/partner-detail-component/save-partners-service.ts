@@ -16,14 +16,14 @@ export class SavePartnersService {
     if (savedLastVisitedPartners && savedLastVisitedPartners != "undefined") {
       this.lastVisitedPartners = JSON.parse(savedLastVisitedPartners);
     }
+    
     if (savedFavorites && savedFavorites != "undefined") {
       this.favorites = JSON.parse(savedFavorites);
     }
+
     if (savedLastVisitedPartnersComplete && savedLastVisitedPartnersComplete != "undefined") {
       this.lastVisitedPartnersComplete = JSON.parse(savedLastVisitedPartnersComplete);
     }
-
-    this.removeOldCachedPartners()
 
   }
 
@@ -128,30 +128,6 @@ export class SavePartnersService {
     if (this.lastVisitedPartnersComplete.length > maxNumberOfSavedLastVisitedPartnersComplete) {
       this.lastVisitedPartnersComplete.splice(0, 1);
     }
-  }
-
-  public removeOldCachedPartners() {
-
-    /*
-    let partnerToDelete = [];
-
-    // one day
-    let cacheTime = 1000 * 60 * 60 * 24;
-    let now = Date.now();
-
-    for(let number in this.lastVisitedPartnersComplete){
-
-      let cached = JSON.parse(localStorage.getItem(number + "partnerDetails"));
-      if(cached.fetchTime < now - cacheTime){
-        partnerToDelete.push(number);
-      }
-
-    }
-
-    console.log("removeOldCachedPartners()");
-    console.log(partnerToDelete);
-    */
-
   }
 
 }
