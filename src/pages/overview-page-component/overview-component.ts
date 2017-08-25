@@ -297,6 +297,11 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
             }
           }
 
+          /* sort response based on stored partner order */
+          partnersArray.sort((a, b) => {
+            return lastVisitedPartnersArray.indexOf(b.number) - lastVisitedPartnersArray.indexOf(a.number);
+          });
+
           this.recentPartners = partnersArray;
           this.recentPartnersPeek = this.recentPartners.slice(0, 5);
           if (this.recentPartners.length > 5) {
@@ -337,6 +342,12 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         }
 
       }
+
+      /* sort response based on stored partner order */
+      this.recentPartners.sort((a, b) => {
+        return lastVisitedPartnersArray.indexOf(b.number) - lastVisitedPartnersArray.indexOf(a.number);
+      });
+
       this.recentPartnersPeek = this.recentPartners.slice(0, 5);
       this.recentPartnersFromCache = true;
     }
