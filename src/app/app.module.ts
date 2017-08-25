@@ -54,7 +54,6 @@ import {SavePartnersService} from "../pages/partner-page-component/partner-detai
 import {PartnerTableCachedComponent} from "../pages/overview-page-component/partner-table-cached/partner-table-cached";
 import {NativeGeocoder} from "@ionic-native/native-geocoder";
 import {PushNotificationsService} from "../services/push-notifications-service";
-import {Firebase} from "@ionic-native/firebase";
 import {FormatTelephoneNumberPipe} from "../pages/partner-page-component/partner-detail-component/format.pipe";
 import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
 import {ZBar} from "@ionic-native/zbar";
@@ -157,8 +156,7 @@ import {ZBar} from "@ionic-native/zbar";
     PushNotificationsService,
     //GoogleMapsAPIWrapper,
     GoogleAnalytics,
-    NativeGeocoder,
-    Firebase
+    NativeGeocoder
   ]
 })
 export class AppModule {

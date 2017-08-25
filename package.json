@@ -35,7 +35,6 @@
         "@angular/router": "4.1.0",
         "@ionic-native/camera": "^3.4.4",
         "@ionic-native/core": "3.6.1",
-        "@ionic-native/firebase": "^3.12.1",
         "@ionic-native/geolocation": "^3.4.4",
         "@ionic-native/google-analytics": "^3.10.3",
         "@ionic-native/native-geocoder": "^3.12.1",
