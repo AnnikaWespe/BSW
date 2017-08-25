@@ -1,5 +1,5 @@
 <ion-header *ngIf="searchInterfaceOpen">
-  <typeahead (getPartnersWithSearchTermEmitter)="loadPartnerPage($event)"
+  <typeahead (getPartnersWithSearchTermEmitter)="navigateToPartnersWithSearchTerm($event)"
              (closeSearchInterfaceEmitter)="searchInterfaceOpen = false"></typeahead>
 </ion-header>
 
@@ -22,11 +22,11 @@
 </ion-header>
 
 <ion-content>
-  <div class="bars" *ngIf="userLoggedIn && balance && bonusThisYear" tappable (click) = "navigateToBonusOverview()">
+  <div class="bars" *ngIf="userLoggedIn && bonusBalance && bonusThisYear" tappable (click) = "navigateToBonusOverview()">
     <ion-row>
       <ion-col>
         <div class="buffer" [style.height]="heightBlueBarRedBar()[2]"></div>
-        <p>{{balance| currency:'EUR':true:'1.2-2'}}</p>
+        <p>{{bonusBalance| currency:'EUR':true:'1.2-2'}}</p>
         <div class="blue bar" [style.height]="heightBlueBarRedBar()[0]"></div>
       </ion-col>
       <ion-col>
@@ -37,7 +37,7 @@
     </ion-row>
   </div>
 
-  <div class="moneyDetailsAccount" *ngIf="userLoggedIn && balance && bonusThisYear" tappable (click) = "navigateToBonusOverview()">
+  <div class="moneyDetailsAccount" *ngIf="userLoggedIn && bonusBalance && bonusThisYear" tappable (click) = "navigateToBonusOverview()">
 
     <ion-row class="money-detail-row balance-row">
       <ion-col class="icon-col">
@@ -49,7 +49,7 @@
         </div>
       </ion-col>
       <ion-col class="bonus-col">
-        <p>{{balance| currency:'EUR':true:'1.2-2'}}</p>
+        <p>{{bonusBalance| currency:'EUR':true:'1.2-2'}}</p>
       </ion-col>
     </ion-row>
 
@@ -67,15 +67,9 @@
       </ion-col>
     </ion-row>
 
-    <ion-row>
-      <ion-col class="footer-col" *ngIf="bonusDataFromCache">
-        Die verwendeten Daten stammen aus einer früheren Sitzung und sind möglicherweise veraltet. Stellen Sie eine Internetverbindung her um die Daten zu aktualisieren.
-      </ion-col>
-    </ion-row>
-
   </div>
 
-  <div class="initialSpinner" *ngIf="waitingForResults && favoritePartners.length == 0 && lastVisitedPartners.length == 0 && !noDataToDisplay">
+  <div class="initialSpinner" *ngIf="waitingForResults && favoritePartners.length == 0 && recentPartners.length == 0 && !noDataToDisplay">
     <ion-spinner class="initialSpinner"></ion-spinner>
   </div>
   <ion-item *ngIf="noDataToDisplay" text-wrap>
@@ -86,40 +80,40 @@
     <ion-col class="title">
       <p class="title-paragraph">Favoriten</p>
     </ion-col>
-    <ion-col class="more" *ngIf="moreThanFiveFavorites">
+    <ion-col class="more" *ngIf="hasMoreFavoritePartners">
       <button ion-button icon-only tappable class="more">...
       </button>
     </ion-col>
   </ion-row>
 
-  <partner-table [partners]="firstFiveFavorites"
-                 (showPartnerEventEmitter)="showPartner($event)"
+  <partner-table [partners]="favoritePartnersPeek"
+                 (showPartnerEventEmitter)="navigateToPartnerDetail($event)"
                  *ngIf="favoritePartners && !favoritesFromCache"></partner-table>
-  <partner-table-cached [partners]="firstFiveFavorites"
-                        (showCachedPartnerEventEmitter)="showCachedPartner($event)"
+  <partner-table-cached [partners]="favoritePartnersPeek"
+                        (showCachedPartnerEventEmitter)="navigateToCachedPartnerDetail($event)"
                         *ngIf="favoritePartners && favoritesFromCache">
   </partner-table-cached>
 
-  <ion-row class="title-row" *ngIf="lastVisitedPartners.length" (click)="loadUserSpecificPartnerTable('lastvisitedPartners')" tappable>
+  <ion-row class="title-row" *ngIf="recentPartners.length" (click)="loadUserSpecificPartnerTable('lastvisitedPartners')" tappable>
     <ion-col col-auto class="title">
       <p class="title-paragraph">Zuletzt besuchte Partner</p>
     </ion-col>
-    <ion-col class="more" *ngIf="moreThanFiveLastVisitedPartners">
+    <ion-col class="more" *ngIf="hasMoreRecentPartners">
       <button ion-button icon-only tappable class="more">
         ...
       </button>
     </ion-col>
   </ion-row>
 
-  <partner-table [partners]="lastVisitedFive"
-                 (showPartnerEventEmitter)="showPartner($event)"
-                 *ngIf="lastVisitedPartners && !lastVisitedFromCache"></partner-table>
+  <partner-table [partners]="recentPartnersPeek"
+                 (showPartnerEventEmitter)="navigateToPartnerDetail($event)"
+                 *ngIf="recentPartners && !recentPartnersFromCache"></partner-table>
 
-  <partner-table-cached [partners]="lastVisitedFive"
-                 (showCachedPartnerEventEmitter)="showCachedPartner($event)"
-                 *ngIf="lastVisitedPartners && lastVisitedFromCache"></partner-table-cached>
+  <partner-table-cached [partners]="recentPartnersPeek"
+                 (showCachedPartnerEventEmitter)="navigateToCachedPartnerDetail($event)"
+                 *ngIf="recentPartners && recentPartnersFromCache"></partner-table-cached>
 
-  <ion-row class="title-row" *ngIf="offlinePartners" (click)="showOfflinePartners()" tappable>
+  <ion-row class="title-row" *ngIf="offlinePartners" (click)="navigateToOfflinePartners()" tappable>
     <ion-col class="title">
       <p class="title-paragraph">Vor Ort Partner</p>
     </ion-col>
@@ -128,10 +122,10 @@
     </ion-col>
   </ion-row>
   <partner-table [partners]="offlinePartners"
-                 (showPartnerEventEmitter)="showPartner($event)"
+                 (showPartnerEventEmitter)="navigateToPartnerDetail($event)"
                  *ngIf="offlinePartners"></partner-table>
 
-  <ion-row class="title-row" *ngIf="onlinePartners" (click)="showOnlinePartners()" tappable>
+  <ion-row class="title-row" *ngIf="onlinePartners" (click)="navigateToOnlinePartners()" tappable>
     <ion-col class="title">
       <p class="title-paragraph">Online Partner</p>
     </ion-col>
@@ -140,8 +134,15 @@
     </ion-col>
   </ion-row>
   <partner-table [partners]="onlinePartners"
-                 (showPartnerEventEmitter)="showPartner($event)"
+                 (showPartnerEventEmitter)="navigateToPartnerDetail($event)"
                  *ngIf="onlinePartners"></partner-table>
+
+  <ion-row>
+    <ion-col class="footer-col" *ngIf="dataFromCache">
+      Die verwendeten Daten stammen aus einer früheren Sitzung und sind möglicherweise veraltet. Stellen Sie eine Internetverbindung her um die Daten zu aktualisieren.
+    </ion-col>
+  </ion-row>
+
 
 </ion-content>
 

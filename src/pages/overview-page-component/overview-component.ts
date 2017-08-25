@@ -23,35 +23,46 @@ import {WebviewComponent} from "../webview/webview";
 export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   title: string = "Übersicht";
+
+  /* user information */
   id: string;
   token: string;
   userLoggedIn = null;
-  balance: number;
-  bonusThisYear: number;
-  bonusDataAvailable = false;
-  bonusDataFromCache = false;
+  location = {latitude: "0", longitude: "0"};
+
   heightBalanceBarBonusBarBuffer = ["0vh", "0vh", "0vh", "0vh"];
   maxHeightBarInVh = 14;
-  location = {latitude: "0", longitude: "0"};
   errorMessage: string;
+
   waitingForResults = true;
   noDataToDisplay = false;
+  dataFromCache = false;
+
   onlinePartners: any[];
   offlinePartners: any[];
+
+  /* favorite partners */
   favoritePartners = [];
-  lastVisitedPartners = [];
-  lastVisitedFromCache = false;
+  favoritePartnersPeek = [];
+  hasMoreFavoritePartners = false;
+  favoritesFromCache = false;
+
+  /* recent partners */
+  recentPartners = [];
+  recentPartnersPeek = [];
+  hasMoreRecentPartners = false;
+  recentPartnersFromCache = false;
+
+  /* bonus view */
+  bonusBalance: number;
+  bonusThisYear: number;
+  bonusHasData = false;
+  bonusFromCache = false;
 
   searchInterfaceOpen = false;
-  moreThanFiveFavorites = false;
-  moreThanFiveLastVisitedPartners = false;
-  firstFiveFavorites;
-  lastVisitedFive = [];
 
   getPartnersSubscription: any;
   getLocationSubscription: any;
-  favoritesFromCache = false;
-
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -67,7 +78,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       this.token = navParams.data.token || localStorage.getItem('securityToken');
       this.userLoggedIn = true;
     }
-    this.checkIfGPSEnabled();
+
+    this.subscribeForLocation();
 
     if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
       this.checkForPromptRateAppInStore()
@@ -79,15 +91,16 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
     this.cleanup();
 
-    this.getFavoritePartners(this.id, this.token);
-    this.getLastVisitedPartners();
+    this.loadFavorites(this.id, this.token);
+    this.loadRecentPartners();
 
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView('Übersicht Screen')
     }
 
-    this.getPartners();
-    this.getBonusData(this.id, this.token);
+    this.loadPartners();
+    this.loadBonusData(this.id, this.token);
+
   }
 
   ngOnDestroy() {
@@ -99,9 +112,10 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     }
   }
 
-  getBonusData(id, token) {
+  loadBonusData(id, token) {
 
-    this.bonusDataAvailable = false;
+    this.bonusHasData = false;
+    this.bonusFromCache = false;
 
     if (!id || !token) {
       return;
@@ -128,16 +142,15 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   }
 
-  showBonusData(response){
+  showBonusData(response) {
 
-    if(response) {
+    if (response) {
 
-      this.bonusDataAvailable = true;
+      this.bonusHasData = true;
       this.bonusThisYear = response.bonusGesamtJahr;
-      this.balance = response.bonuskontostand;
-      this.bonusDataFromCache = false;
+      this.bonusBalance = response.bonuskontostand;
       localStorage.setItem("bonusThisYear", response.bonusGesamtJahr);
-      localStorage.setItem("balance", response.bonuskontostand);
+      localStorage.setItem("bonusBalance", response.bonuskontostand);
       localStorage.setItem("bonusDataTimeStamp", Date.now().toString());
 
       this.waitingForResults = false;
@@ -153,11 +166,11 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   showBonusDataFromCache() {
 
-    if(localStorage.getItem("bonusThisYear")) {
-      this.bonusDataAvailable = true;
-      this.bonusDataFromCache = true;
+    if (localStorage.getItem("bonusThisYear")) {
+      this.bonusHasData = true;
       this.bonusThisYear = Number(localStorage.getItem("bonusThisYear"));
-      this.balance = Number(localStorage.getItem("balance"));
+      this.bonusBalance = Number(localStorage.getItem("bonusBalance"));
+      this.bonusFromCache = true;
     }
 
     this.waitingForResults = false;
@@ -165,21 +178,26 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   }
 
-  getFavoritePartners(id, token) {
+  loadFavorites(id, token) {
+
+    this.favoritesFromCache = false;
 
     if (id && token) {
+
       this.favoritesService.getFavorites(id, token).subscribe((res) => {
-          this.getFavoritesByPfArray(res);
+          this.loadFavoritesByPfArray(res);
         },
         error => {
           console.log(error);
           this.displayFavoritesFromCache();
         });
+
     }
 
   }
 
-  getFavoritesByPfArray(res) {
+  loadFavoritesByPfArray(res) {
+
     let errorMessage = res.json().errors[0].beschreibung;
     if (errorMessage === "Erfolg") {
       let favoritesByPf = res.json().response.favoriten.map((obj) => {
@@ -198,9 +216,9 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               }
             }
             this.favoritePartners = partnersArray;
-            this.firstFiveFavorites = this.favoritePartners.slice(0, 5);
+            this.favoritePartnersPeek = this.favoritePartners.slice(0, 5);
             if (this.favoritePartners.length > 5) {
-              this.moreThanFiveFavorites = true;
+              this.hasMoreFavoritePartners = true;
             }
             this.waitingForResults = false;
           }
@@ -214,15 +232,15 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         })
     }
     else if (errorMessage === "Login fehlgeschlagen") {
-      this.getUserToLogIn(errorMessage);
+      this.navigateToLogin(errorMessage);
     }
   }
 
   displayFavoritesFromCache() {
 
     this.favoritePartners = [];
-    this.firstFiveFavorites = [];
-    this.moreThanFiveFavorites = false;
+    this.favoritePartnersPeek = [];
+    this.hasMoreFavoritePartners = false;
     this.waitingForResults = false;
 
     let cachedFavoritesArray = JSON.parse(localStorage.getItem("savedFavorites")) || [];
@@ -238,24 +256,30 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
       }
 
-      this.firstFiveFavorites = this.favoritePartners.slice(0, 5);
+      this.favoritePartnersPeek = this.favoritePartners.slice(0, 5);
       if (this.favoritePartners.length > 5) {
-        this.moreThanFiveFavorites = true;
+        this.hasMoreFavoritePartners = true;
       }
+    }
+
+    if (this.favoritePartners.length > 0) {
+      this.favoritesFromCache = true;
     }
 
     this.checkForDataOnHomeScreen();
 
   }
 
-  getLastVisitedPartners() {
+  loadRecentPartners() {
+
+    this.recentPartnersFromCache = false;
 
     let lastVisitedPartnersArray = JSON.parse(localStorage.getItem("savedLastVisitedPartners")) || [];
 
     if (!lastVisitedPartnersArray || lastVisitedPartnersArray.length == 0) {
-      this.lastVisitedPartners = [];
-      this.lastVisitedFive = [];
-      this.moreThanFiveLastVisitedPartners = false;
+      this.recentPartners = [];
+      this.recentPartnersPeek = [];
+      this.hasMoreRecentPartners = false;
       this.waitingForResults = false;
       return;
     }
@@ -267,20 +291,19 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
           for (let pfNumber of lastVisitedPartnersArray) {
             for (let partner of partnersArray) {
               if (partner.number == pfNumber) {
-                this.lastVisitedPartners.push(partner);
+                this.recentPartners.push(partner);
                 break;
               }
             }
           }
 
-          this.lastVisitedPartners = partnersArray;
-          this.lastVisitedFive = this.lastVisitedPartners.slice(0, 5);
-          if (this.lastVisitedPartners.length > 5) {
-            this.moreThanFiveLastVisitedPartners = true;
+          this.recentPartners = partnersArray;
+          this.recentPartnersPeek = this.recentPartners.slice(0, 5);
+          if (this.recentPartners.length > 5) {
+            this.hasMoreRecentPartners = true;
           }
 
           this.waitingForResults = false;
-          this.lastVisitedFromCache = false;
         }
 
         this.checkForDataOnHomeScreen();
@@ -288,16 +311,16 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       },
       error => {
         console.log(error);
-        this.displayLastVisitedPartnersFromCache();
+        this.showRecentPartnersFromCache();
       })
 
   }
 
-  displayLastVisitedPartnersFromCache() {
+  showRecentPartnersFromCache() {
 
-    this.lastVisitedPartners = [];
-    this.lastVisitedFive = [];
-    this.moreThanFiveLastVisitedPartners = false;
+    this.recentPartners = [];
+    this.recentPartnersPeek = [];
+    this.hasMoreRecentPartners = false;
     this.waitingForResults = false;
 
     let lastVisitedPartnersArray = JSON.parse(localStorage.getItem("savedLastVisitedPartners")) || [];
@@ -310,51 +333,62 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
         if (partner) {
           partner.logoString = localStorage.getItem(pfNumber + "logo")
-          this.lastVisitedPartners.push(partner);
+          this.recentPartners.push(partner);
         }
 
       }
-      this.lastVisitedFive = this.lastVisitedPartners.slice(0, 5);
-      this.lastVisitedFromCache = true;
+      this.recentPartnersPeek = this.recentPartners.slice(0, 5);
+      this.recentPartnersFromCache = true;
+    }
+
+    if (this.recentPartners.length > 0) {
+      this.recentPartnersFromCache = true;
     }
 
     if (lastVisitedPartnersArray.length > 5) {
-      this.moreThanFiveLastVisitedPartners = true;
+      this.hasMoreRecentPartners = true;
     }
 
     this.checkForDataOnHomeScreen();
 
   }
 
-  getUserToLogIn(errorMessage) {
+  navigateToLogin(errorMessage) {
     localStorage.removeItem("securityToken");
     this.navCtrl.setRoot(LoginPageComponent);
     console.log(errorMessage);
   }
 
-  /* show message if no data was loaded and we are not waiting for a result */
   checkForDataOnHomeScreen() {
 
+    /* show message if no data was loaded and we are not waiting for a result */
     let isDataAvailable = false;
-
-    isDataAvailable = isDataAvailable || (this.lastVisitedPartners && this.lastVisitedPartners.length > 0);
+    isDataAvailable = isDataAvailable || (this.recentPartners && this.recentPartners.length > 0);
     isDataAvailable = isDataAvailable || (this.favoritePartners && this.favoritePartners.length > 0);
     isDataAvailable = isDataAvailable || (this.onlinePartners && this.onlinePartners.length > 0);
     isDataAvailable = isDataAvailable || (this.offlinePartners && this.offlinePartners.length > 0);
-    isDataAvailable = isDataAvailable || this.bonusDataAvailable;
+    isDataAvailable = isDataAvailable || this.bonusHasData;
 
     this.noDataToDisplay = !this.waitingForResults && !isDataAvailable;
 
+    /* show cache message if any data is loaded from cache */
+    let isDataFromCache = false;
+    isDataFromCache = isDataFromCache || this.favoritesFromCache;
+    isDataFromCache = isDataFromCache || this.recentPartnersFromCache;
+    isDataFromCache = isDataFromCache || this.bonusFromCache;
+
+    this.dataFromCache = !this.waitingForResults && isDataAvailable && isDataFromCache;
+
   }
 
-  checkIfGPSEnabled() {
+  subscribeForLocation() {
 
     this.getLocationSubscription = this.locationService.getLocation().subscribe(
       (location) => {
         this.location = location;
         if (location.locationFound == true) {
           localStorage.setItem("getLocationFromGPSEnabled", "true");
-          this.getPartners();
+          this.loadPartners();
         }
         else {
           localStorage.setItem("getLocationFromGPSEnabled", "false");
@@ -371,18 +405,18 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
 
-  getPartners() {
+  loadPartners() {
     this.getPartnersSubscription = this.partnerService.getPartners(this.location, 0, "", false, "RELEVANCE", "DESC")
       .subscribe(
         body => {
           let returnedObject = body.json();
-          this.getOnlineAndOfflinePartners(returnedObject);
+          this.extractOnlineAndOfflinePartners(returnedObject);
           this.waitingForResults = false;
         },
         error => this.errorMessage = <any>error);
   }
 
-  getOnlineAndOfflinePartners(returnedObject) {
+  extractOnlineAndOfflinePartners(returnedObject) {
     this.onlinePartners = returnedObject.originalSearchResults.bucketToSearchResult["ONLINEPARTNER"].contentEntities.slice(0, 5);
     let offlinePartnerArray = returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities;
     if (offlinePartnerArray) {
@@ -391,29 +425,30 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     this.checkForDataOnHomeScreen();
   }
 
-  showOfflinePartners() {
+  navigateToOfflinePartners() {
     this.navCtrl.push(PartnerPageComponent, {type: "offlinePartnerPageComponent", navigatedFromOverview: true});
   }
 
-
-  showOnlinePartners() {
+  navigateToOnlinePartners() {
     this.navCtrl.push(PartnerPageComponent, {type: "onlinePartnerPageComponent", navigatedFromOverview: true});
   }
 
-  loadPartnerPage(searchTerm) {
+  navigateToPartnersWithSearchTerm(searchTerm) {
+
     this.searchInterfaceOpen = false;
     this.navCtrl.push(PartnerPageComponent, {
       type: "searchPageComponent",
       searchTerm: searchTerm,
       navigatedFromOverview: true
     })
+
   }
 
-  showPartner(partner = 0) {
+  navigateToPartnerDetail(partner = 0) {
     this.navCtrl.push(PartnerDetailComponent, {partner: partner})
   }
 
-  showCachedPartner(partner) {
+  navigateToCachedPartnerDetail(partner) {
     let partnerDetails = JSON.parse(localStorage.getItem(partner.number + "partnerDetails"));
     this.navCtrl.push(PartnerDetailComponent, {partner: partner, partnerDetails: partnerDetails})
   }
@@ -431,7 +466,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       this.navCtrl.push(UserSpecificPartnersComponent, {
         title: "Zuletzt besucht",
         fromCache: true,
-        partners: this.lastVisitedPartners
+        partners: this.recentPartners
       })
     }
   }
@@ -488,15 +523,15 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   heightBlueBarRedBar() {
     let heightOtherDiv;
-    if (this.balance > this.bonusThisYear) {
+    if (this.bonusBalance > this.bonusThisYear) {
       this.heightBalanceBarBonusBarBuffer[0] = this.maxHeightBarInVh + "vh";
-      heightOtherDiv = Math.max(Math.round((this.bonusThisYear / this.balance) * this.maxHeightBarInVh), 1);
+      heightOtherDiv = Math.max(Math.round((this.bonusThisYear / this.bonusBalance) * this.maxHeightBarInVh), 1);
       this.heightBalanceBarBonusBarBuffer[1] = heightOtherDiv + "vh";
       this.heightBalanceBarBonusBarBuffer[3] = this.maxHeightBarInVh - heightOtherDiv + "vh";
     }
     else {
       this.heightBalanceBarBonusBarBuffer[1] = this.maxHeightBarInVh + "vh";
-      heightOtherDiv = Math.max(Math.round((this.balance / this.bonusThisYear) * this.maxHeightBarInVh), 1);
+      heightOtherDiv = Math.max(Math.round((this.bonusBalance / this.bonusThisYear) * this.maxHeightBarInVh), 1);
       this.heightBalanceBarBonusBarBuffer[0] = heightOtherDiv + "vh";
       this.heightBalanceBarBonusBarBuffer[2] = this.maxHeightBarInVh - heightOtherDiv + "vh";
     }
@@ -510,18 +545,19 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     }
   }
 
+  /* ensures that no old data is displayed on the homescreen */
   private cleanup() {
     console.log("cleanup()");
 
     let now = Date.now();
-    let cacheTime = 1000 * 60; //1000 * 60 * 60 * 24;
+    let cacheTime = 1000 * 60 * 60 * 24;
 
     /* bonusdata - delete if older than 24 hours */
     let bonusTime = Number(localStorage.getItem("bonusDataTimeStamp"));
     if (bonusTime && bonusTime < (now - cacheTime)) {
 
       localStorage.removeItem("bonusThisYear");
-      localStorage.removeItem("balance");
+      localStorage.removeItem("bonusBalance");
       localStorage.removeItem("bonusDataTimeStamp");
       console.log("Clearing cached bonus data");
 

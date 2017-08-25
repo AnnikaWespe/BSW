@@ -41,12 +41,12 @@ export class SavePartnersService {
 
     let now = Date.now();
 
-    if(partner) {
+    if (partner) {
       partner.offline = true;
       partner.fetchTime = now;
     }
 
-    if(partnerDetails) {
+    if (partnerDetails) {
       partnerDetails.offline = true;
       partnerDetails.fetchTime = now;
     }
@@ -71,11 +71,11 @@ export class SavePartnersService {
     localStorage.setItem(pfNumber + "partner", JSON.stringify(partner));
     localStorage.setItem(pfNumber + "partnerDetails", JSON.stringify(partnerDetails));
 
-    if(partner) {
+    if (partner) {
       partner.offline = false;
     }
 
-    if(partnerDetails) {
+    if (partnerDetails) {
       partnerDetails.offline = false;
     }
 
@@ -130,7 +130,7 @@ export class SavePartnersService {
     }
   }
 
-  public removeOldCachedPartners(){
+  public removeOldCachedPartners() {
 
     /*
     let partnerToDelete = [];
