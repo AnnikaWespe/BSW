@@ -1,105 +1,245 @@
 import {Injectable} from "@angular/core";
 
+const config = {
+
+  storageKeyRecent: "partners_recent",
+  storageKeyFavorites: "partners_favorites",
+  storageKeyBonusBenefit: "bonus_benefit",
+  storageKeyBonusBalance: "bonus_balance",
+  storageKeyBonusTime: "bonus_time",
+  storageKeyPartnerPrefix: "partner_",
+  storageKeyPartnerGeneral: "_general",
+  storageKeyPartnerDetail: "_detail",
+  storageKeyPartnerLogo: "_logo",
+  storageKeyPartnerCampaignImage: "_campaign_image",
+  maxRecentCount: 20,
+  cacheTime: 1000 * 60 * 60 * 24
+
+};
+
 @Injectable()
 export class SavePartnersService {
 
-  lastVisitedPartners = [];
-  lastVisitedPartnersComplete = [];
+  recentPartners = [];
   favorites = [];
 
   constructor() {
-    let savedLastVisitedPartners = localStorage.getItem("savedLastVisitedPartners");
-    let savedFavorites = localStorage.getItem("savedFavorites");
-    let savedLastVisitedPartnersComplete = localStorage.getItem("savedLastVisitedPartnersComplete");
-    if (savedLastVisitedPartners && savedLastVisitedPartners != "undefined") {
-      this.lastVisitedPartners = JSON.parse(savedLastVisitedPartners);
+
+    let recent = localStorage.getItem(config.storageKeyRecent);
+    if (recent && recent != "undefined") {
+      this.recentPartners = JSON.parse(recent);
     }
-    if (savedFavorites && savedFavorites != "undefined") {
-      this.favorites = JSON.parse(savedFavorites);
+
+    let favorites = localStorage.getItem(config.storageKeyFavorites);
+    if (favorites && favorites != "undefined") {
+      this.favorites = JSON.parse(favorites);
     }
-    if (savedLastVisitedPartnersComplete && savedLastVisitedPartnersComplete != "undefined") {
-      this.lastVisitedPartnersComplete = JSON.parse(savedLastVisitedPartnersComplete);
-    }
+
+    this.cleanup();
+
   }
 
-  saveLogo(pfNumber, imageString) {
-    let localStorageKey = pfNumber + "logo";
-    localStorage.setItem(localStorageKey, imageString);
-  }
+  static saveLogo(pfNumber, imageString) {
 
-  saveCampaignImage(pfNumber, imageString) {
-    let localStorageKey = pfNumber + "campaignImage";
-    localStorage.setItem(localStorageKey, imageString);
-  }
+    let localStorageKey = config.storageKeyPartnerPrefix + pfNumber + config.storageKeyPartnerLogo;
 
-  savePartnerAndPartnerDetails(pfNumber, partner, partnerDetails, partnerType) {
-    let index = this[partnerType].indexOf(pfNumber);
-    if (index > -1) {
-      this[partnerType].splice(index, 1);
+    if(imageString) {
+      localStorage.setItem(localStorageKey, imageString);
+    } else {
+      localStorage.removeItem(localStorageKey);
     }
-    this[partnerType].push(pfNumber);
-    if (partnerType == "lastVisitedPartners") {
-      this.deleteLastVisitedPartnersIfTooMany();
-      let indexInLastVisitedPartnersByPf = this.lastVisitedPartnersComplete.indexOf(pfNumber);
-      if (indexInLastVisitedPartnersByPf > -1) {
-        this.lastVisitedPartnersComplete.splice(index, 1);
+
+  }
+
+  static saveCampaignImage(pfNumber, imageString) {
+
+    let localStorageKey = config.storageKeyPartnerPrefix + pfNumber + config.storageKeyPartnerCampaignImage;
+
+    if(imageString) {
+      localStorage.setItem(localStorageKey, imageString);
+    } else {
+      localStorage.removeItem(localStorageKey);
+    }
+
+  }
+
+  private addToRecentPartners(pfNumber){
+
+    let index;
+    while((index = this.recentPartners.indexOf(pfNumber)) >= 0){
+      this.recentPartners.splice(index, 1);
+    }
+
+    this.recentPartners.push(pfNumber);
+    localStorage.setItem(config.storageKeyRecent, JSON.stringify(this.recentPartners));
+
+  }
+
+  private removeRecentPartners(){
+
+    let count = this.recentPartners.length - config.maxRecentCount;
+    if(count > 0){
+      this.recentPartners.splice(0, count);
+      localStorage.setItem(config.storageKeyRecent, JSON.stringify(this.recentPartners));
+    }
+
+  }
+
+  public clearRecentPartners(){
+
+    for(let p in this.recentPartners){
+      SavePartnersService.clearPartner(this.recentPartners[p]);
+    }
+
+    this.recentPartners = [];
+    localStorage.setItem(config.storageKeyRecent, JSON.stringify(this.recentPartners));
+
+  }
+
+  public clearFavoritePartners(){
+
+    for(let p in this.favorites){
+      SavePartnersService.clearPartner(this.favorites[p]);
+    }
+
+    this.favorites = [];
+    localStorage.setItem(config.storageKeyFavorites, JSON.stringify(this.favorites));
+
+  }
+
+  public storePartnerAndPartnerDetails(pfNumber, partner, partnerDetails) {
+
+    let now = Date.now();
+
+    if (partner) {
+      partner.fetchTime = now;
+    }
+
+    if (partnerDetails) {
+      partnerDetails.fetchTime = now;
+    }
+
+    this.addToRecentPartners(pfNumber);
+    this.removeRecentPartners();
+
+    localStorage.setItem(config.storageKeyPartnerPrefix + pfNumber + config.storageKeyPartnerGeneral, JSON.stringify(partner));
+    localStorage.setItem(config.storageKeyPartnerPrefix + pfNumber + config.storageKeyPartnerDetail, JSON.stringify(partnerDetails));
+
+  }
+
+  private static clearPartner(pfNumber) {
+    localStorage.removeItem(config.storageKeyPartnerPrefix + pfNumber + config.storageKeyPartnerGeneral);
+    localStorage.removeItem(config.storageKeyPartnerPrefix + pfNumber + config.storageKeyPartnerDetail);
+    localStorage.removeItem(config.storageKeyPartnerPrefix + pfNumber + config.storageKeyPartnerLogo);
+    localStorage.removeItem(config.storageKeyPartnerPrefix + pfNumber + config.storageKeyPartnerCampaignImage);
+  }
+
+  public saveFavoriteList(favorites){
+      this.favorites = favorites;
+      localStorage.setItem(config.storageKeyFavorites, JSON.stringify(this.favorites));
+  }
+
+  public addToFavorites(pfNumber){
+
+    if(this.favorites.indexOf(pfNumber) == -1){
+      this.favorites.push(pfNumber);
+      localStorage.setItem(config.storageKeyFavorites, JSON.stringify(this.favorites));
+    }
+
+  }
+
+  public removeFromFavorites(pfNumber){
+
+    let index = this.favorites.indexOf(pfNumber);
+    if(index >= 0){
+      this.favorites.slice(index, 1);
+      localStorage.setItem(config.storageKeyFavorites, JSON.stringify(this.favorites));
+    }
+
+  }
+
+  public static storeBonus(benefit, balance){
+    localStorage.setItem(config.storageKeyBonusBenefit, benefit);
+    localStorage.setItem(config.storageKeyBonusBalance, balance);
+    localStorage.setItem(config.storageKeyBonusTime, Date.now().toString());
+  }
+
+  public static clearBonus(){
+    localStorage.removeItem(config.storageKeyBonusBenefit);
+    localStorage.removeItem(config.storageKeyBonusBenefit);
+    localStorage.removeItem(config.storageKeyBonusTime);
+  }
+
+  public static loadBonus(){
+
+    if (localStorage.getItem(config.storageKeyBonusBenefit)) {
+
+      let bonus :any;
+      bonus = {};
+      bonus.benefit = Number(localStorage.getItem(config.storageKeyBonusBenefit));
+      bonus.balance = Number(localStorage.getItem(config.storageKeyBonusBenefit));
+      return bonus;
+
+    }
+
+    return null;
+
+  }
+
+  public static loadPartner(pfNumber){
+
+    if (localStorage.getItem(config.storageKeyPartnerPrefix + pfNumber + config.storageKeyPartnerDetail)) {
+
+      let partner :any;
+      partner = {};
+      partner.logo = localStorage.getItem(config.storageKeyPartnerPrefix + pfNumber + config.storageKeyPartnerLogo);
+      partner.campaignImage = localStorage.getItem(config.storageKeyPartnerPrefix + pfNumber + config.storageKeyPartnerCampaignImage);
+      partner.general = localStorage.getItem(config.storageKeyPartnerPrefix + pfNumber + config.storageKeyPartnerGeneral);
+      partner.detail = localStorage.getItem(config.storageKeyPartnerPrefix + pfNumber + config.storageKeyPartnerDetail);
+      return partner;
+
+    }
+
+    return null;
+
+  }
+
+  public static loadRecentPartners(){
+    return JSON.parse(localStorage.getItem(config.storageKeyRecent)) || [];
+  }
+
+  public static loadFavoritePartners(){
+    return JSON.parse(localStorage.getItem(config.storageKeyFavorites)) || [];
+  }
+
+  /* ensures that no data older than 24 hour is kept stored */
+  public cleanup() {
+
+    let now = Date.now();
+
+    /* bonusdata - delete if older than 24 hours */
+    let bonusTime = Number(localStorage.getItem(config.storageKeyBonusTime));
+    if (bonusTime && bonusTime < (now - config.cacheTime)) {
+      SavePartnersService.clearBonus();
+    }
+
+    /* partners - delete if older than 24 hours */
+    let partnersToDelete = [];
+    let allPartners = this.favorites.concat(this.recentPartners);
+
+    for (let p in allPartners) {
+
+      let loadedPartner = JSON.parse(localStorage.getItem(config.storageKeyPartnerPrefix + allPartners[p] + config.storageKeyPartnerDetail));
+      if (loadedPartner && (!loadedPartner.fetchTime || loadedPartner.fetchTime < (now - config.cacheTime))) {
+        partnersToDelete.push(allPartners[p]);
       }
-      this.lastVisitedPartnersComplete.push(pfNumber);
-    }
-    localStorage.setItem("savedLastVisitedPartners", JSON.stringify(this.lastVisitedPartners));
-    localStorage.setItem("savedFavorites", JSON.stringify(this.favorites));
-    localStorage.setItem("savedLastVisitedPartnersComplete", JSON.stringify(this.lastVisitedPartnersComplete));
-    localStorage.setItem(pfNumber + "partner", JSON.stringify(partner));
-    localStorage.setItem(pfNumber + "partnerDetails", JSON.stringify(partnerDetails));
-  }
 
-  deleteFromStorage(pfNumber, partnerType) {
-    let index = this[partnerType].indexOf(pfNumber);
-    if (index > -1) {
-      this[partnerType].splice(index, 1);
     }
-    localStorage.removeItem(pfNumber + "logo");
-    localStorage.removeItem(pfNumber + "campaignImage");
-    localStorage.removeItem(pfNumber + "partner");
-    localStorage.removeItem(pfNumber + "partnerDetails");
-  }
 
-  togglePartnerType(pfNumber, newPartnerType) {
-    if (newPartnerType == "favorites") {
-      let index = this.lastVisitedPartners.indexOf(pfNumber);
-      let indexInLastVisitedPartnersByPf = this.lastVisitedPartnersComplete.indexOf(pfNumber);
-      if (index > -1) {
-        this.lastVisitedPartners.splice(index, 1);
-      }
-      if (indexInLastVisitedPartnersByPf > -1) {
-        this.lastVisitedPartnersComplete.splice(index, 1);
-      }
-      this.favorites.push(pfNumber)
+    for (let p in partnersToDelete) {
+      SavePartnersService.clearPartner(partnersToDelete[p]);
     }
-    else {
-      let index = this.favorites.indexOf(pfNumber);
-      if (index > -1) {
-        this.favorites.splice(index, 1);
-      }
-      this.lastVisitedPartners.push(pfNumber);
-      this.lastVisitedPartnersComplete.push(pfNumber);
-      this.deleteLastVisitedPartnersIfTooMany();
-    }
-    localStorage.setItem("savedLastVisitedPartners", JSON.stringify(this.lastVisitedPartners));
-    localStorage.setItem("savedFavorites", JSON.stringify(this.favorites));
-    localStorage.setItem("savedLastVisitedPartnersComplete", JSON.stringify(this.lastVisitedPartnersComplete));
 
-  }
-
-  private deleteLastVisitedPartnersIfTooMany() {
-    const maxNumberOfSavedLastVisitedPartners = 15;
-    const maxNumberOfSavedLastVisitedPartnersComplete = 100;
-    if (this.lastVisitedPartners.length > maxNumberOfSavedLastVisitedPartners) {
-      this.deleteFromStorage(this.lastVisitedPartners[0], "lastVisitedPartners");
-    }
-    if (this.lastVisitedPartnersComplete.length > maxNumberOfSavedLastVisitedPartnersComplete) {
-      this.lastVisitedPartnersComplete.splice(0, 1);
-    }
   }
 
 }

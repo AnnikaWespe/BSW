@@ -123,7 +123,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.showOfflinePartners = true;
       this.displayedPartners = this.offlinePartners;
       this.title = "Vor Ort Partner";
-      // this.checkIfGPSEnabled();
+      // this.subscribeForLocation();
       this.sortByArray = [false, false, false, false, false, false, true]
       this.sortByCriterion = "DISTANCE";
       this.sortOrder = "ASC";
@@ -139,12 +139,12 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.showOfflinePartners = this.navParams.get("showOfflinePartners") || true;
       this.displayedPartners = this.allPartners;
       this.title = this.searchTerm;
-      // this.checkIfGPSEnabled();
+      // this.subscribeForLocation();
     }
   }
 
 
-  //checkIfGPSEnabled() {
+  //subscribeForLocation() {
     // wird eigentlich nicht mehr gebraucht, weil alles im Subsribe gehandelt wird.
   //}
 

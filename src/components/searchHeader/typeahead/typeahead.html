@@ -32,6 +32,8 @@
 
   </ion-navbar>
 
+  <div class="backdrop" (click)="closeSearchInterface()" [style.height.px]="windowHeight"></div>
+
   <div class = "suggestions-wrapper" *ngIf="searchTermCompletion">
     <div tappable class = "suggestion" (click)="completeSearchTerm(item.displayText)" *ngFor="let item of searchTermCompletion | async">
       {{item.displayText}}

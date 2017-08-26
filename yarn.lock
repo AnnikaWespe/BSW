@@ -51,10 +51,6 @@
   dependencies:
     tsickle "^0.21.0"
 
-"@ionic-native/barcode-scanner@^3.4.4":
-  version "3.4.4"
-  resolved "https://registry.yarnpkg.com/@ionic-native/barcode-scanner/-/barcode-scanner-3.4.4.tgz#0833d6205e89f65f285e379583609970d9724048"
-
 "@ionic-native/camera@^3.4.4":
   version "3.4.4"
   resolved "https://registry.yarnpkg.com/@ionic-native/camera/-/camera-3.4.4.tgz#62d5ce69bafd87fdca67aac7499646c189a6ed6e"

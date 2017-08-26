@@ -43,7 +43,39 @@ export class LoginPageComponent {
     this.ga.trackView('Login Screen');
     this.navigatedFromPartnerDetail = navParams.get("navigatedFromPartnerDetail");
 
-    this.imageHolderHeight = (window.screen.height / 3);
+  }
+
+  ionViewWillEnter(){
+    this.dynamicallyAdaptHeaderImage();
+  }
+
+  /*
+   * Adapt the header height so that the content
+   * completely fills the screen, ensures:
+   * - bottom based layout on larger devices
+   * - no cropped content on smaller devices
+   */
+  private dynamicallyAdaptHeaderImage(){
+
+    /* default - set it to 140px */
+    this.imageHolderHeight = 140;
+
+    /* if there is a screen height, set it to a third of it */
+    let screenHeight = window.screen.height;
+    if(screenHeight > 0) {
+      this.imageHolderHeight = (screenHeight / 3);
+    }
+
+    let footerHeight = document.getElementById('login-footer').clientHeight || 0;
+    let numberHeight = document.getElementById('number-row').clientHeight || 0;
+    let passwordHeight = document.getElementById('password-row').clientHeight || 0;
+    let informationHeight = document.getElementById('information-row').clientHeight || 0;
+
+    /* if the sizes of the children can be determined, calculate the size precise */
+    let totalHeight = footerHeight + numberHeight + passwordHeight + informationHeight;
+    if(totalHeight > 0 && screenHeight > 0 && totalHeight < screenHeight){
+      this.imageHolderHeight = screenHeight - totalHeight;
+    }
 
   }
 

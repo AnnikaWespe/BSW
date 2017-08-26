@@ -1,7 +1,6 @@
 import {Component, OnDestroy} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {WebviewComponent} from "../webview/webview";
-import {Firebase} from "@ionic-native/firebase";
 import {PushNotificationsService} from "../../services/push-notifications-service";
 
 @Component({
