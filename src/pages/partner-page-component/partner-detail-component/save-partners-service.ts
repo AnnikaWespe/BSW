@@ -85,6 +85,28 @@ export class SavePartnersService {
 
   }
 
+  public clearRecentPartners(){
+
+    for(let p in this.recentPartners){
+      SavePartnersService.clearPartner(this.recentPartners[p]);
+    }
+
+    this.recentPartners = [];
+    localStorage.setItem(config.storageKeyRecent, JSON.stringify(this.recentPartners));
+
+  }
+
+  public clearFavoritePartners(){
+
+    for(let p in this.favorites){
+      SavePartnersService.clearPartner(this.favorites[p]);
+    }
+
+    this.favorites = [];
+    localStorage.setItem(config.storageKeyFavorites, JSON.stringify(this.favorites));
+
+  }
+
   public storePartnerAndPartnerDetails(pfNumber, partner, partnerDetails) {
 
     let now = Date.now();
