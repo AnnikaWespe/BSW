@@ -22,15 +22,17 @@ page-login-component {
     text-align: center;
   }
 
+  /* height is now dynamically assigned */
   .logo-row {
-    height: 140px;
-    line-height: 140px;
+    //height: 140px;
+    //line-height: 140px;
   }
 
+  /* height is now dynamically assigned */
   #imageHolder {
     width: 70%;
-    height: 140px;
-    line-height: 140px;
+    //height: 140px;
+    //line-height: 140px;
     margin: auto auto auto auto;
   }
 
@@ -55,16 +57,15 @@ page-login-component {
   }
 
   .number-input {
-    padding-right: 3.4rem;
+    padding-right: 4rem;
   }
 
   .number-row .camera-icon {
-    font-size: 3.2rem;
-
     position: absolute;
-    top: 1.0rem;
-    right: 1.0rem;
+    top: 0.0rem;
+    right: 0.5rem;
 
+    font-size: 1.1em;
     z-index: 1;
   }
 

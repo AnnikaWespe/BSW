@@ -11,8 +11,9 @@ import {GetPartnersPost} from './get-partners-post';
 
 @Injectable()
 export class PartnerService {
+
   private partnersUrl: string;
-  
+
   constructor(private http: Http, private envService: EnvironmentService) {
   this.partnersUrl = this.envService.environment.BASE_URL_APP_SEARCH + this.envService.environment.APP_SEARCH;
   }

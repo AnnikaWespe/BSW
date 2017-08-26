@@ -65,12 +65,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   onlinePartnerPageComponent = false;
   offlinePartnerPageComponent = false;
   searchPageComponent = false;
-
-  //getLocationFromGPSEnabled = false;
-  cityName = "manuell gewählter Ort";
-
   searchInterfaceOpen = false;
-
   sortByCriterion = "RELEVANCE";
   sortOrder = "DESC";
   sortByArray = [true, false, false, false, false, false, false]
@@ -107,8 +102,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this[pageType] = true;
     this.pageType = pageType;
     this.searchTerm = navParams.get("searchTerm") || "";
-    // this.getLocationFromGPSEnabled = (localStorage.getItem("getLocationFromGPSEnabled") === "true");
-    this.cityName = localStorage.getItem("cityName");
     this.setParameters();
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.gaTrackPageView();
@@ -130,7 +123,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.showOfflinePartners = true;
       this.displayedPartners = this.offlinePartners;
       this.title = "Vor Ort Partner";
-      // this.checkIfGPSEnabled();
+      // this.subscribeForLocation();
       this.sortByArray = [false, false, false, false, false, false, true]
       this.sortByCriterion = "DISTANCE";
       this.sortOrder = "ASC";
@@ -146,12 +139,12 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.showOfflinePartners = this.navParams.get("showOfflinePartners") || true;
       this.displayedPartners = this.allPartners;
       this.title = this.searchTerm;
-      // this.checkIfGPSEnabled();
+      // this.subscribeForLocation();
     }
   }
 
 
-  //checkIfGPSEnabled() {
+  //subscribeForLocation() {
     // wird eigentlich nicht mehr gebraucht, weil alles im Subsribe gehandelt wird.
   //}
 
@@ -322,28 +315,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   chooseLocationManually() {
     event.stopPropagation();
-
     this.navCtrl.push(ChooseLocationManuallyComponent);
-
-    /*
-     * TODO: reimplement reload
-    let chooseLocationManuallyModal = this.modalCtrl.create(ChooseLocationManuallyComponent);
-    chooseLocationManuallyModal.present();
-    chooseLocationManuallyModal.onDidDismiss((data) => {
-
-      if (data) {
-        let location = {
-          latitude: data.latitude,
-          longitude: data.longitude,
-          cityName: data.name,
-          fromGPS: false
-        }
-        this.locationService.setLocation(location);
-        //this.getLocationFromGPSEnabled = location.fromGPS;
-      }
-    })
-    */
-
     this.showDropdown = [false, false, false];
     this.showDropdownForAnimation = ["false", "false", "false"];
   }

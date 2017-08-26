@@ -6,7 +6,7 @@ import {EnvironmentService} from "../../../../services/environment-service";
 export class PartnerDetailService {
 
   partnerDetailUrl: string;
-
+  //partnerDetailUrl = 'http://localhost:8100/cms/partnerfirmaProfil/pfnummer?mandant_id=1&pfNummer=';
 
   constructor(private http: Http, private envService: EnvironmentService) {
     this.partnerDetailUrl = this.envService.environment.BASE_URL + this.envService.environment.PARTNER_DETAIL + '?mandant_id=1&pfNummer=';

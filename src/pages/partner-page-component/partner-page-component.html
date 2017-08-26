@@ -90,22 +90,21 @@
 <ion-content>
   <div class="filter-wrapper" [@show]="showDropdownForAnimation[2]">
     <div class="filter-menu" [style.display]="showDropdown[0]?'block':'none'">
-      <ion-row class="currentLocation" *ngIf="(offlinePartnerPageComponent || searchPageComponent) && !showMap ">
+      <ion-row class="currentLocation" *ngIf="(offlinePartnerPageComponent || searchPageComponent)">
         <ion-col class="currentPosition getLocationFromGPS" *ngIf="location.fromGPS" (click)="chooseLocationManually()">
-          <p class="cityName">Aktueller Standort</p>
+          <p class="locationName">Aktueller Standort</p>
           <p class="changeLocation">Ort ändern</p>
         </ion-col>
 
         <ion-col class="currentPosition chooseLocationManually" *ngIf="!location.fromGPS"
                  (click)="chooseLocationManually()">
-          <p class="cityName" *ngIf="cityName">{{cityName}}</p>
-          <p class="cityName" *ngIf="!cityName">zuletzt verfügbarer Standort</p>
+          <p class="locationName">{{location.locationName}}</p>
           <p class="changeLocation">Ort ändern</p>
         </ion-col>
 
         <ion-col tappable class="getLocationFromGPS map-icon icon-column" (click)="toggleGetLocationFromGPSEnabled()"
                  *ngIf="!waitingForGPSSignal">
-          <div [class.manually]="!getLocationFromGPSEnabled"></div>
+          <div [class.manually]="!location.fromGPS"></div>
         </ion-col>
         <ion-col>
           <ion-spinner *ngIf="waitingForGPSSignal" class="waitingForGPSSignalSpinner"></ion-spinner>
@@ -178,7 +177,7 @@
     Wir können Ihnen leider derzeit keine Partner anzeigen. Überprüfen Sie Ihr Netzwerk.
   </ion-item>
 
-  <ion-item *ngIf="noPartnersToDisplayBecauseOfParameters" text-wrap>
+  <ion-item *ngIf="noPartnersToDisplayBecauseOfParameters && !showMap" text-wrap>
     Wir können Ihnen leider derzeit keine Partner anzeigen. Versuchen Sie gegebenenfalls andere Suchparameter.
   </ion-item>
 

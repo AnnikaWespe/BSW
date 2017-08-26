@@ -12,6 +12,8 @@
            #mySearchInputField
            placeholder="Geben Sie einen Suchbegriff ein"
            [(ngModel)]="searchTerm"
+           autocomplete="false"
+           spellcheck="false"
            (keyup)= "search(mySearchInputField.value, $event)">
 
     <ion-buttons end *ngIf="searchTerm">
@@ -29,6 +31,8 @@
       -->
 
   </ion-navbar>
+
+  <div class="backdrop" (click)="closeSearchInterface()" [style.height.px]="windowHeight"></div>
 
   <div class = "suggestions-wrapper" *ngIf="searchTermCompletion">
     <div tappable class = "suggestion" (click)="completeSearchTerm(item.displayText)" *ngFor="let item of searchTermCompletion | async">

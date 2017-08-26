@@ -14,11 +14,11 @@ import {DeviceService} from "../services/device-data";
 import {WebviewComponent} from "../pages/webview/webview";
 import {InitService} from "./init-service";
 import {PushNotificationsService} from "../services/push-notifications-service";
-import {Firebase} from "@ionic-native/firebase";
 import {StatusBar} from "@ionic-native/status-bar";
 import {PartnerDetailComponent} from "../pages/partner-page-component/partner-detail-component/partner-detail-component";
 import {PartnerService} from "../services/partner-service";
 import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
+import {SavePartnersService} from "../pages/partner-page-component/partner-detail-component/save-partners-service";
 
 
 @Component({
@@ -55,10 +55,10 @@ export class BSWBonusApp {
               private ga: GoogleAnalytics,
               private initService: InitService,
               public events: Events,
-              private firebase: Firebase,
               private pushNotificationsService: PushNotificationsService,
               private statusBar: StatusBar,
-              private partnerService: PartnerService) {
+              private partnerService: PartnerService,
+              private savePartnerService: SavePartnersService) {
     events.subscribe("userLoggedIn", (id, token) => {
       this.userLoggedIn = true;
       this.mitgliedId = id;
@@ -66,7 +66,7 @@ export class BSWBonusApp {
       this.getUserData(id, token);
       this.setWebViewsUrls();
       if (!DeviceService.isInBrowser) {
-        this.managePushes(id, token);
+        //this.managePushes(id, token);
       }
     });
     this.userLoggedIn = localStorage.getItem("securityToken") !== null;
@@ -170,7 +170,7 @@ export class BSWBonusApp {
     }
     else {
       if (this.securityToken) {
-        this.managePushes(this.mitgliedId, this.securityToken);
+        //this.managePushes(this.mitgliedId, this.securityToken);
       }
       if (this.platform.is('ios')) {
         DeviceService.isIos = true;
@@ -202,9 +202,12 @@ export class BSWBonusApp {
   }
 
   logout() {
+
     if (this.userLoggedIn) {
-      this.updateToken(localStorage.getItem("mitgliedId"), localStorage.getItem("securityToken"), null);
+      this.savePartnerService.clearRecentPartners();
+      this.savePartnerService.clearFavoritePartners();
     }
+
     localStorage.removeItem("securityToken");
     localStorage.removeItem("mitgliedId");
     localStorage.removeItem("userTitle");
@@ -213,7 +216,7 @@ export class BSWBonusApp {
     localStorage.removeItem("lastName");
     localStorage.removeItem("firebaseToken");
     localStorage.removeItem("mitgliedsnummer");
-
+    
     /* reset salutation field, therefore UI gets updated */
     this.salutation = null;
 
@@ -230,6 +233,7 @@ export class BSWBonusApp {
   }
 
 
+  /*
   managePushes(id, securityToken) {
     this.firebase.getToken()
       .then(token => {
@@ -288,17 +292,17 @@ export class BSWBonusApp {
 
   updateToken(mitgliedId, securityToken, fireBaseToken) {
 
-    /*
+
     let oldToken = localStorage.getItem("firebaseToken") || "";
     localStorage.setItem("firebaseToken", fireBaseToken);
     this.pushNotificationsService.sendPushNotificationsRequest(mitgliedId, securityToken, fireBaseToken, oldToken).subscribe((res) => {
       console.log("result from Firebase API request", res.json().errors[0])
     });
-    */
 
     console.log("push notification service currently disabled!");
 
   }
+  */
 
   /* copied from settings page */
   getWebView(urlType, title, dataProtectionScreen, cacheContent) {

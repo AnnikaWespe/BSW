@@ -13,6 +13,7 @@ import {LoginPageComponent} from "../login-page-component/login-component";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {BonusService} from "./bonus-service";
 import {WebviewComponent} from "../webview/webview";
+import {SavePartnersService} from "../partner-page-component/partner-detail-component/save-partners-service";
 
 
 @Component({
@@ -23,30 +24,46 @@ import {WebviewComponent} from "../webview/webview";
 export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   title: string = "Übersicht";
+
+  /* user information */
+  id: string;
+  token: string;
   userLoggedIn = null;
-  balance: number;
-  bonusThisYear: number;
-  bonusDataAvailable = false;
+  location = {latitude: "0", longitude: "0"};
+
   heightBalanceBarBonusBarBuffer = ["0vh", "0vh", "0vh", "0vh"];
   maxHeightBarInVh = 14;
-  location = {latitude: "0", longitude: "0"};
   errorMessage: string;
+
   waitingForResults = true;
   noDataToDisplay = false;
+  dataFromCache = false;
+
   onlinePartners: any[];
   offlinePartners: any[];
+
+  /* favorite partners */
   favoritePartners = [];
-  lastVisitedPartners = [];
+  favoritePartnersPeek = [];
+  hasMoreFavoritePartners = false;
+  favoritesFromCache = false;
+
+  /* recent partners */
+  recentPartners = [];
+  recentPartnersPeek = [];
+  hasMoreRecentPartners = false;
+  recentPartnersFromCache = false;
+
+  /* bonus view */
+  bonusBalance: number;
+  bonusThisYear: number;
+  bonusHasData = false;
+  bonusFromCache = false;
+
   searchInterfaceOpen = false;
-  moreThanFiveFavorites = false;
-  moreThanFiveLastVisitedPartners = false;
-  firstFiveFavorites;
-  lastVisitedFive = [];
 
   getPartnersSubscription: any;
   getLocationSubscription: any;
-  favoritesFromCache = false;
-
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -55,27 +72,37 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               private favoritesService: FavoritesService,
               private alertCtrl: AlertController,
               private ga: GoogleAnalytics,
-              private bonusService: BonusService) {
+              private bonusService: BonusService,
+              private savePartnersService: SavePartnersService) {
+
     if (navParams.data.login == true || localStorage.getItem('securityToken')) {
-      let id = navParams.data.id || localStorage.getItem('mitgliedId');
-      let token = navParams.data.token || localStorage.getItem('securityToken');
+      this.id = navParams.data.id || localStorage.getItem('mitgliedId');
+      this.token = navParams.data.token || localStorage.getItem('securityToken');
       this.userLoggedIn = true;
-      this.getBonusData(id, token);
-      this.getFavoritePartners(id, token);
     }
-    this.checkIfGPSEnabled();
-    this.getLastVisitedPartners();
+
+    this.subscribeForLocation();
+
     if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
       this.checkForPromptRateAppInStore()
     }
+
+  }
+
+  ionViewWillEnter() {
+
+    this.savePartnersService.cleanup();
+
+    this.loadFavorites(this.id, this.token);
+    this.loadRecentPartners();
+
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView('Übersicht Screen')
     }
-    setTimeout(() => {
-      if (this.lastVisitedPartners.length == 0) {
-        this.noDataToDisplay = true
-      }
-    }, 5000);
+
+    this.loadPartners();
+    this.loadBonusData(this.id, this.token);
+
   }
 
   ngOnDestroy() {
@@ -87,63 +114,99 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     }
   }
 
-  getBonusData(id, token) {
+  loadBonusData(id, token) {
+
+    this.bonusHasData = false;
+    this.bonusFromCache = false;
+
+    if (!id || !token) {
+      return;
+    }
+
     this.bonusService.getBonusData(id, token).subscribe((res) => {
       if (res.json().errors[0].beschreibung === "Erfolg") {
-        let response = res.json().response;
-        let date = new Date();
-        let timeStamp = date.getTime().toString();
+
         console.log("success with bonus data");
-        this.bonusDataAvailable = true;
-        this.bonusThisYear = response.bonusGesamtJahr;
-        this.balance = response.bonuskontostand;
-        localStorage.setItem("bonusThisYear", response.bonusGesamtJahr);
-        localStorage.setItem("balance", response.bonuskontostand);
-        localStorage.setItem("bonusDataTimeStamp", timeStamp)
-      }
-      else {
-        console.log("error with bonus data");
-        let date = new Date();
-        let now = date.getTime();
-        let timeStamp = Number(localStorage.getItem("bonusDataTimeStamp"));
-        let timeDiff = now - timeStamp;
-        if (timeDiff < 86400000) {
-          this.bonusDataAvailable = true;
-          this.bonusThisYear = Number(localStorage.getItem("bonusThisYear"));
-          this.balance = Number(localStorage.getItem("balance"));
-        }
+        this.showBonusData(res.json().response);
+
+      } else {
+
+        console.error("error with bonus data");
+        this.showBonusDataFromCache();
+
       }
     }, () => {
-      console.log("error with bonus data");
-      let date = new Date();
-      let now = date.getTime();
-      let timeStamp = Number(localStorage.getItem("bonusDataTimeStamp"));
-      let timeDiff = now - timeStamp;
-      if (timeDiff < 86400000) {
-        this.bonusDataAvailable = true;
-        this.bonusThisYear = Number(localStorage.getItem("bonusThisYear"));
-        this.balance = Number(localStorage.getItem("balance"));
-      }
+
+      console.error("error with bonus data");
+      this.showBonusDataFromCache();
+
     })
-  }
-
-  getFavoritePartners(id, token) {
-    this.favoritesService.getFavorites(id, token).subscribe((res) => {
-        this.getFavoritesByPfArray(res);
-      },
-      error => {
-        console.log(error);
-        this.displayFavoritesFromCache();
-      });
 
   }
 
-  getFavoritesByPfArray(res) {
+  showBonusData(response) {
+
+    if (response) {
+
+      this.bonusHasData = true;
+      this.bonusThisYear = response.bonusGesamtJahr;
+      this.bonusBalance = response.bonuskontostand;
+
+      SavePartnersService.storeBonus(this.bonusThisYear, this.bonusBalance);
+
+      this.waitingForResults = false;
+      this.checkForDataOnHomeScreen();
+
+    } else {
+
+      this.showBonusDataFromCache();
+
+    }
+
+  }
+
+  showBonusDataFromCache() {
+
+    let bonus = SavePartnersService.loadBonus();
+
+    if (bonus) {
+      this.bonusHasData = true;
+      this.bonusThisYear = bonus.benefit;
+      this.bonusBalance = bonus.balance;
+      this.bonusFromCache = true;
+    }
+
+    this.waitingForResults = false;
+    this.checkForDataOnHomeScreen();
+
+  }
+
+  loadFavorites(id, token) {
+
+    this.favoritesFromCache = false;
+
+    if (id && token) {
+
+      this.favoritesService.getFavorites(id, token).subscribe((res) => {
+          this.loadFavoritesByPfArray(res);
+        },
+        error => {
+          console.log(error);
+          this.displayFavoritesFromCache();
+        });
+
+    }
+
+  }
+
+  loadFavoritesByPfArray(res) {
+
     let errorMessage = res.json().errors[0].beschreibung;
     if (errorMessage === "Erfolg") {
       let favoritesByPf = res.json().response.favoriten.map((obj) => {
         return obj.pfNummer;
       });
+      this.savePartnersService.saveFavoriteList(favoritesByPf);
       FavoritesData.favoritesByPfArray = favoritesByPf;
       this.partnerService.getPartners(this.location, 0, "", false, "RELEVANCE", "DESC", 10000, favoritesByPf).subscribe((res) => {
           let partnersArray = res.json().contentEntities;
@@ -157,12 +220,14 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               }
             }
             this.favoritePartners = partnersArray;
-            this.firstFiveFavorites = this.favoritePartners.slice(0, 5);
+            this.favoritePartnersPeek = this.favoritePartners.slice(0, 5);
             if (this.favoritePartners.length > 5) {
-              this.moreThanFiveFavorites = true;
+              this.hasMoreFavoritePartners = true;
             }
             this.waitingForResults = false;
           }
+
+          this.checkForDataOnHomeScreen();
 
         },
         error => {
@@ -171,138 +236,244 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         })
     }
     else if (errorMessage === "Login fehlgeschlagen") {
-      this.getUserToLogIn(errorMessage);
+      this.navigateToLogin(errorMessage);
     }
   }
 
   displayFavoritesFromCache() {
-    let cachedFavoritesArray = JSON.parse(localStorage.getItem("savedFavorites")) || [];
+
+    this.favoritePartners = [];
+    this.favoritePartnersPeek = [];
+    this.hasMoreFavoritePartners = false;
+    this.waitingForResults = false;
+
+    let cachedFavoritesArray = SavePartnersService.loadFavoritePartners();
     if (cachedFavoritesArray.length) {
       this.favoritesFromCache = true;
       for (let pfNumber of cachedFavoritesArray) {
-        let partner = JSON.parse(localStorage.getItem(pfNumber + "partner"));
-        partner.logoUrl = localStorage.getItem(pfNumber + "logo");
-        this.favoritePartners.push(partner);
+
+        let rawPartner = SavePartnersService.loadPartner(pfNumber);
+
+        if (rawPartner) {
+
+          let partner = JSON.parse(rawPartner.general);
+          partner.logoString = partner.logo;
+          this.favoritePartners.push(partner);
+
+        }
+
       }
-      this.firstFiveFavorites = this.favoritePartners.slice(0, 5);
+
+      this.favoritePartnersPeek = this.favoritePartners.slice(0, 5);
       if (this.favoritePartners.length > 5) {
-        this.moreThanFiveFavorites = true;
+        this.hasMoreFavoritePartners = true;
       }
     }
+
+    if (this.favoritePartners.length > 0) {
+      this.favoritesFromCache = true;
+    }
+
+    this.checkForDataOnHomeScreen();
+
   }
 
-  getLastVisitedPartners() {
-    let lastVisitedPartnersArray = JSON.parse(localStorage.getItem("savedLastVisitedPartners")) || [];
-    if (lastVisitedPartnersArray.length) {
+  loadRecentPartners() {
+
+    this.recentPartnersFromCache = false;
+
+    let lastVisitedPartnersArray = SavePartnersService.loadRecentPartners();
+
+    if (!lastVisitedPartnersArray || lastVisitedPartnersArray.length == 0) {
+      this.recentPartners = [];
+      this.recentPartnersPeek = [];
+      this.hasMoreRecentPartners = false;
+      this.waitingForResults = false;
+      return;
+    }
+
+    this.partnerService.getPartners(this.location, 0, "", false, "RELEVANCE", "DESC", 10000, lastVisitedPartnersArray).subscribe((res) => {
+        let partnersArray = res.json().contentEntities;
+        if (partnersArray) {
+
+          for (let pfNumber of lastVisitedPartnersArray) {
+            for (let partner of partnersArray) {
+              if (partner.number == pfNumber) {
+                this.recentPartners.push(partner);
+                break;
+              }
+            }
+          }
+
+          /* sort response based on stored partner order */
+          partnersArray.sort((a, b) => {
+            return lastVisitedPartnersArray.indexOf(b.number) - lastVisitedPartnersArray.indexOf(a.number);
+          });
+
+          this.recentPartners = partnersArray;
+          this.recentPartnersPeek = this.recentPartners.slice(0, 5);
+          if (this.recentPartners.length > 5) {
+            this.hasMoreRecentPartners = true;
+          }
+
+          this.waitingForResults = false;
+        }
+
+        this.checkForDataOnHomeScreen();
+
+      },
+      error => {
+        console.log(error);
+        this.showRecentPartnersFromCache();
+      })
+
+  }
+
+  showRecentPartnersFromCache() {
+
+    this.recentPartners = [];
+    this.recentPartnersPeek = [];
+    this.hasMoreRecentPartners = false;
+    this.waitingForResults = false;
+
+    let lastVisitedPartnersArray = SavePartnersService.loadRecentPartners();
+    if (lastVisitedPartnersArray.length && lastVisitedPartnersArray.length > 0) {
+
       let maxIndex = lastVisitedPartnersArray.length - 1;
       for (let i = maxIndex; i > -1; i--) {
         let pfNumber = lastVisitedPartnersArray[i];
-        let partner = JSON.parse(localStorage.getItem(pfNumber + "partner"));
-        partner.logoString = localStorage.getItem(pfNumber + "logo")
-        this.lastVisitedPartners.push(partner);
+
+        let rawPartner = SavePartnersService.loadPartner(pfNumber);
+
+        if (rawPartner) {
+
+          let partner = JSON.parse(rawPartner.general);
+          partner.logoString = partner.logo;
+          this.recentPartners.push(partner);
+
+        }
+
       }
-      this.lastVisitedFive = this.lastVisitedPartners.slice(0, 5);
+
+      /* sort response based on stored partner order */
+      this.recentPartners.sort((a, b) => {
+        return lastVisitedPartnersArray.indexOf(b.number) - lastVisitedPartnersArray.indexOf(a.number);
+      });
+
+      this.recentPartnersPeek = this.recentPartners.slice(0, 5);
+      this.recentPartnersFromCache = true;
     }
+
+    if (this.recentPartners.length > 0) {
+      this.recentPartnersFromCache = true;
+    }
+
     if (lastVisitedPartnersArray.length > 5) {
-      this.moreThanFiveLastVisitedPartners = true;
+      this.hasMoreRecentPartners = true;
     }
+
+    this.checkForDataOnHomeScreen();
+
   }
 
-  getUserToLogIn(errorMessage) {
+  navigateToLogin(errorMessage) {
     localStorage.removeItem("securityToken");
     this.navCtrl.setRoot(LoginPageComponent);
     console.log(errorMessage);
   }
 
-  checkIfGPSEnabled() {
-    if (localStorage.getItem("getLocationFromGPSEnabled") !== "false") {
-      this.getLocationSubscription = this.locationService.getLocation().subscribe(
-        (location) => {
-          this.location = location;
-          if (location.locationFound == true) {
-            localStorage.setItem("getLocationFromGPSEnabled", "true");
-            this.getPartners();
-          }
-          else {
-            localStorage.setItem("getLocationFromGPSEnabled", "false");
-          }
-        }, (error) => {
+  checkForDataOnHomeScreen() {
+
+    /* show message if no data was loaded and we are not waiting for a result */
+    let isDataAvailable = false;
+    isDataAvailable = isDataAvailable || (this.recentPartners && this.recentPartners.length > 0);
+    isDataAvailable = isDataAvailable || (this.favoritePartners && this.favoritePartners.length > 0);
+    isDataAvailable = isDataAvailable || (this.onlinePartners && this.onlinePartners.length > 0);
+    isDataAvailable = isDataAvailable || (this.offlinePartners && this.offlinePartners.length > 0);
+    isDataAvailable = isDataAvailable || this.bonusHasData;
+
+    this.noDataToDisplay = !this.waitingForResults && !isDataAvailable;
+
+    /* show cache message if any data is loaded from cache */
+    let isDataFromCache = false;
+    isDataFromCache = isDataFromCache || this.favoritesFromCache;
+    isDataFromCache = isDataFromCache || this.recentPartnersFromCache;
+    isDataFromCache = isDataFromCache || this.bonusFromCache;
+
+    this.dataFromCache = !this.waitingForResults && isDataAvailable && isDataFromCache;
+
+  }
+
+  subscribeForLocation() {
+
+    this.getLocationSubscription = this.locationService.getLocation().subscribe(
+      (location) => {
+        this.location = location;
+        if (location.locationFound == true) {
+          localStorage.setItem("getLocationFromGPSEnabled", "true");
+          this.loadPartners();
+        }
+        else {
           localStorage.setItem("getLocationFromGPSEnabled", "false");
         }
-      )
-    }
-    else {
-      this.getStoredLocationData()
-    }
-  }
+      }, (error) => {
+        localStorage.setItem("getLocationFromGPSEnabled", "false");
+      }
+    )
 
-  getStoredLocationData() {
-    if (localStorage.getItem("locationAvailable") === "true") {
-      this.location.latitude = localStorage.getItem("latitude");
-      this.location.longitude = localStorage.getItem("longitude");
-    }
-    else {
-      this.location.latitude = "52.5219";
-      this.location.longitude = "13.4132";
-      localStorage.setItem("latitude", "52.5219");
-      localStorage.setItem("longitude", "13.4132");
-      localStorage.setItem("locationAvailable", "false");
-      localStorage.setItem("locationExact", "false");
-      localStorage.setItem("locationName", "Berlin");
-    }
-    this.getPartners();
   }
-
 
   ngAfterViewChecked() {
     this.setFocus();
   }
 
 
-  getPartners() {
+  loadPartners() {
     this.getPartnersSubscription = this.partnerService.getPartners(this.location, 0, "", false, "RELEVANCE", "DESC")
       .subscribe(
         body => {
           let returnedObject = body.json();
-          this.getOnlineAndOfflinePartners(returnedObject);
+          this.extractOnlineAndOfflinePartners(returnedObject);
           this.waitingForResults = false;
         },
         error => this.errorMessage = <any>error);
   }
 
-  getOnlineAndOfflinePartners(returnedObject) {
+  extractOnlineAndOfflinePartners(returnedObject) {
     this.onlinePartners = returnedObject.originalSearchResults.bucketToSearchResult["ONLINEPARTNER"].contentEntities.slice(0, 5);
     let offlinePartnerArray = returnedObject.originalSearchResults.bucketToSearchResult["OFFLINEPARTNER"].contentEntities;
     if (offlinePartnerArray) {
       this.offlinePartners = offlinePartnerArray.slice(0, 5)
     }
+    this.checkForDataOnHomeScreen();
   }
 
-  showOfflinePartners() {
+  navigateToOfflinePartners() {
     this.navCtrl.push(PartnerPageComponent, {type: "offlinePartnerPageComponent", navigatedFromOverview: true});
   }
 
-
-  showOnlinePartners() {
+  navigateToOnlinePartners() {
     this.navCtrl.push(PartnerPageComponent, {type: "onlinePartnerPageComponent", navigatedFromOverview: true});
   }
 
-  loadPartnerPage(searchTerm) {
+  navigateToPartnersWithSearchTerm(searchTerm) {
+
     this.searchInterfaceOpen = false;
     this.navCtrl.push(PartnerPageComponent, {
       type: "searchPageComponent",
       searchTerm: searchTerm,
       navigatedFromOverview: true
     })
+
   }
 
-  showPartner(partner = 0) {
-    this.navCtrl.push(PartnerDetailComponent, {partner: partner})
+  navigateToPartnerDetail(partner = 0) {
+    this.navCtrl.push(PartnerDetailComponent, {partner: partner, cached: false})
   }
 
-  showCachedPartner(partner) {
-    let partnerDetails = JSON.parse(localStorage.getItem(partner.number + "partnerDetails"));
-    this.navCtrl.push(PartnerDetailComponent, {partner: partner, partnerDetails: partnerDetails})
+  navigateToCachedPartnerDetail(partner) {
+    let partnerDetails = JSON.parse(SavePartnersService.loadPartner(partner.number).detail);
+    this.navCtrl.push(PartnerDetailComponent, {partner: partner, partnerDetails: partnerDetails, cached: true})
   }
 
   loadUserSpecificPartnerTable(type) {
@@ -318,7 +489,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       this.navCtrl.push(UserSpecificPartnersComponent, {
         title: "Zuletzt besucht",
         fromCache: true,
-        partners: this.lastVisitedPartners
+        partners: this.recentPartners
       })
     }
   }
@@ -375,15 +546,15 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   heightBlueBarRedBar() {
     let heightOtherDiv;
-    if (this.balance > this.bonusThisYear) {
+    if (this.bonusBalance > this.bonusThisYear) {
       this.heightBalanceBarBonusBarBuffer[0] = this.maxHeightBarInVh + "vh";
-      heightOtherDiv = Math.max(Math.round((this.bonusThisYear / this.balance) * this.maxHeightBarInVh), 1);
+      heightOtherDiv = Math.max(Math.round((this.bonusThisYear / this.bonusBalance) * this.maxHeightBarInVh), 1);
       this.heightBalanceBarBonusBarBuffer[1] = heightOtherDiv + "vh";
       this.heightBalanceBarBonusBarBuffer[3] = this.maxHeightBarInVh - heightOtherDiv + "vh";
     }
     else {
       this.heightBalanceBarBonusBarBuffer[1] = this.maxHeightBarInVh + "vh";
-      heightOtherDiv = Math.max(Math.round((this.balance / this.bonusThisYear) * this.maxHeightBarInVh), 1);
+      heightOtherDiv = Math.max(Math.round((this.bonusBalance / this.bonusThisYear) * this.maxHeightBarInVh), 1);
       this.heightBalanceBarBonusBarBuffer[0] = heightOtherDiv + "vh";
       this.heightBalanceBarBonusBarBuffer[2] = this.maxHeightBarInVh - heightOtherDiv + "vh";
     }
@@ -396,7 +567,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       searchInputField.focus();
     }
   }
-
 
 }
 

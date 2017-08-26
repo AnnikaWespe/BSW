@@ -23,6 +23,7 @@ export class InitService {
   getWebViewUrlsFromApi() {
     let headers = new Headers({'Accept': 'application/json'});
     let url = this.envService.environment.BASE_URL + this.envService.environment.WEBVIEW_SERVICE + '?mandant_id=1'
+    //let url = 'http://localhost:8100/cms/bswAppWebviewUrls?mandant_id=1'
     this.createAuthorizationHeader(headers);
     return this.http.get(url, {
       headers: headers
@@ -32,6 +33,7 @@ export class InitService {
   getUserData(mitgliedId, securityToken) {
     securityToken = encodeURIComponent(securityToken);
     let url = this.envService.environment.BASE_URL + this.envService.environment.MEMBER_DATA + '?mitglied_id=' + mitgliedId + '&mandant_id=1&securityToken=' + securityToken;
+    //let url = 'http://localhost:8100/securityToken/getList/getMitgliedData?mitglied_id=' + mitgliedId + '&mandant_id=1&securityToken=' + securityToken;
     let headers = new Headers({ 'Accept': 'application/json' });
     this.createAuthorizationHeader(headers);
     return this.http.get(url, {

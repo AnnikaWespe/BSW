@@ -1,25 +1,37 @@
-import {OnInit, Directive, Output, EventEmitter, Input} from '@angular/core';
+import {OnInit, Directive, Output, EventEmitter, Input, OnDestroy} from '@angular/core';
 import { GoogleMapsAPIWrapper } from '@agm/core/services/google-maps-api-wrapper';
 import {MapMarkerService} from "../../../../services/map-marker-service";
+import {LocationService} from "../../../../services/location-service";
 declare let google: any;
 
 
 @Directive({
   selector: 'styled-map-partner-details',
 })
-export class StyledMapPartnerDetailsDirective implements OnInit {
+export class StyledMapPartnerDetailsDirective implements OnInit, OnDestroy {
 
   @Output() travelTimeCarUpdated = new EventEmitter();
   @Output() travelTimePublicUpdated = new EventEmitter();
   @Output() travelTimePedestrianUpdated = new EventEmitter();
   @Input() partner;
 
-
   map;
 
+  locationSubscription: any;
+  location: any;
 
   constructor(private googleMapsWrapper: GoogleMapsAPIWrapper,
-              private mapMarkerService: MapMarkerService) {
+              private mapMarkerService: MapMarkerService,
+              private locationService: LocationService) {
+
+    this.locationSubscription = locationService.getLocation().subscribe((location) => {
+      this.location = location;
+    })
+
+  }
+
+  ngOnDestroy() {
+    this.locationSubscription.unsubscribe();
   }
 
   ngOnInit() {
@@ -70,7 +82,7 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
   private initializeDirectionService() {
 
     let directionsService = new google.maps.DirectionsService();
-    let origin = new google.maps.LatLng(Number(localStorage.getItem("latitude")), Number(localStorage.getItem("longitude")));
+    let origin = new google.maps.LatLng(this.location.latitude, this.location.longitude);
     let destination = new google.maps.LatLng(this.partner.location.latitude, this.partner.location.longitude);
 
     let requestPublic = {origin: origin, destination: destination, travelMode: google.maps.TravelMode.TRANSIT};

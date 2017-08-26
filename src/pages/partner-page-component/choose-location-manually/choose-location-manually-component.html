@@ -25,37 +25,23 @@
 
 
 <ion-content>
-
   <ion-grid>
-
     <ion-row>
-
       <ion-col>
-
-        <p>Klicken Sie auf die Karte oder geben Sie unten einen Ort ein, um Ihren Suchort zu definieren.</p>
-
+        <p>Klicken Sie auf die Karte um Ihren Suchort zu definieren. Alternative können Sie Ihren gewünschten Ort unten manuell eingeben.</p>
       </ion-col>
-
     </ion-row>
-
     <ion-row class="input-row">
-
       <ion-col col-1>
         <ion-icon name="flag" color="grey"></ion-icon>
       </ion-col>
-
       <ion-col>
-
         <input id="searchLocation"
                (keyup) = "somethingTypedInInputField($event)"
-               [(ngModel)]="locationNameInInputField">
-
+               [(ngModel)]="locationName">
       </ion-col>
-
     </ion-row>
-
   </ion-grid>
-
   <agm-map
     [latitude]="latitudeCenter"
     [longitude]="longitudeCenter"

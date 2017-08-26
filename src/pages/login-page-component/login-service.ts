@@ -16,6 +16,7 @@ export class LoginService {
 
   login(username, password) {
     let loginUrl = this.envService.environment.BASE_URL + this.envService.environment.LOGIN;
+    //let loginUrl = 'http://localhost:8100/login';
     let headers = new Headers({'Content-Type': 'application/json'});
     this.createAuthorizationHeader(headers);
     let options = new RequestOptions({headers: headers});

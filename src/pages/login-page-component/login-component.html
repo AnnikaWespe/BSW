@@ -2,10 +2,10 @@
 
   <ion-grid>
 
-    <ion-row class="logo-row">
+    <ion-row class="logo-row" [style.height.px]="imageHolderHeight" [style.line-height.px]="imageHolderHeight">
       <ion-col class="logo-col">
 
-        <div id="imageHolder">
+        <div id="imageHolder" [style.height.px]="imageHolderHeight" [style.line-height.px]="imageHolderHeight">
           <img src='assets/icon/bsw-logo.png' class="logo" />
         </div>
 
@@ -13,7 +13,7 @@
 
     </ion-row>
 
-    <ion-row class="number-row">
+    <ion-row id="number-row" class="number-row">
 
       <ion-col>
 
@@ -23,7 +23,9 @@
                      (keypress)="checkForEnterButtonPressed($event)">
           </ion-input>
 
-          <ion-icon name="camera" tappable (click)="loadCameraPage()" color="primary" class="camera-icon"></ion-icon>
+          <button ion-button icon-only tappable (click)="loadCameraPage()" class="camera-icon" clear>
+            <ion-icon name="camera" color="primary" ></ion-icon>
+          </button>
 
         </div>
 
@@ -31,7 +33,7 @@
 
     </ion-row>
 
-    <ion-row class="password-row">
+    <ion-row id="password-row" class="password-row">
       <ion-col>
 
           <ion-input [(ngModel)]="password" type="password" placeholder="Passwort"
@@ -40,7 +42,7 @@
       </ion-col>
     </ion-row>
 
-    <ion-row>
+    <ion-row id="information-row" class="information-row">
       <ion-col class="center light-text">
 
         <div>
@@ -56,7 +58,7 @@
 
 </ion-content>
 
-<ion-footer>
+<ion-footer id="login-footer">
   <ion-toolbar transparent>
 
     <ion-grid>

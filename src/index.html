@@ -32,9 +32,16 @@
       e = e ||  window.event;
       var element = e.target || e.srcElement;
 
-      if (element.tagName == 'A' && window.cordova) {
-        window.cordova.InAppBrowser.open(element.href, "_system"); // does not workin in browser
-        return false; // prevent default action and stop event propagation
+      if (element && element.href && element.tagName === 'A' && window.cordova) {
+
+        if(element.href.indexOf("http://") === 0
+          || element.href.indexOf("https://") === 0
+          || element.href.indexOf("tel:") === 0
+          || element.href.indexOf("mailto:") === 0) {
+          window.cordova.InAppBrowser.open(element.href, "_system"); // does not work in browser
+          return false; // prevent default action and stop event propagation
+        }
+
       }
 
     };

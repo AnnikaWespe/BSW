@@ -9,6 +9,10 @@ webview {
   .displayCachedContent {
     background-color: map_get($colors, light);
     padding: 3vh 3vw;
+
+    .contentBottom {
+      display: none;
+    }
   }
 
   .superfill {

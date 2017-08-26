@@ -20,6 +20,7 @@ declare let cordova: any;
 export class PartnerDetailComponent implements OnDestroy {
 
   partner: any;
+  cached: any;
   pfNumber: string;
   partnerDetails: any;
   isInFavorites = false;
@@ -28,7 +29,7 @@ export class PartnerDetailComponent implements OnDestroy {
   showDetails = true;
   zmIcons = [];
   securityToken;
-
+  isLoading = true;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -45,8 +46,10 @@ export class PartnerDetailComponent implements OnDestroy {
     }
     else {
       this.getZmicons();
+      this.isLoading = false;
     }
     this.googleAnalyticsTrackingOpenDetailScreen();
+
   }
 
   ngOnDestroy() {
@@ -58,6 +61,7 @@ export class PartnerDetailComponent implements OnDestroy {
   setParameters() {
     this.partner = this.navParams.get("partner");
     this.partnerDetails = this.navParams.get("partnerDetails");
+    this.cached = this.navParams.get("cached");
     this.pfNumber = this.partner.number;
     this.securityToken = localStorage.getItem("securityToken");
     this.favoritesByPfArray = FavoritesData.favoritesByPfArray;
@@ -67,6 +71,7 @@ export class PartnerDetailComponent implements OnDestroy {
   }
 
   getPartnerDetails() {
+
     this.partnerDetailsSubscription = this.partnerDetailService.getDetails(this.pfNumber).subscribe((res) => {
       if (res.json().errors[0].beschreibung === "Erfolg") {
         this.partnerDetails = res.json().response;
@@ -76,11 +81,17 @@ export class PartnerDetailComponent implements OnDestroy {
           this.showDetails = false;
         }
         this.saveForOffline();
+        this.isLoading = false;
       }
       else {
+        this.isLoading = false;
         this.alertSomethingWentWrong();
       }
+    }, (error) => {
+      this.isLoading = false;
+      this.alertSomethingWentWrong();
     });
+
   }
 
   getZmicons() {
@@ -126,7 +137,7 @@ export class PartnerDetailComponent implements OnDestroy {
 
   googleAnalyticsTrackingGoToShop() {
     if (localStorage.getItem("disallowUserTracking") === "false") {
-      this.ga.trackEvent("Online Shop geöffnet", "pf-Nummer: " + this.pfNumber + ", Name: " + this.partner.nameOrigin)
+      this.ga.trackEvent("Online Shop geöffnet", "pf-Nummer: " + this.pfNumber + ", Name: " + this.partner.nameOrigin, localStorage.getItem("mitgliedId"))
     }
   }
 
@@ -146,7 +157,7 @@ export class PartnerDetailComponent implements OnDestroy {
       let openUrl: any;
       try {
         openUrl = cordova.InAppBrowser.open;
-      } catch (error){
+      } catch (error) {
         openUrl = open;
       }
       console.log(url)
@@ -204,8 +215,8 @@ export class PartnerDetailComponent implements OnDestroy {
         let message = res.json().errors[0].beschreibung;
         if (message === "Erfolg") {
           FavoritesData.deleteFavorite(this.pfNumber);
-          this.savePartnersService.togglePartnerType(this.pfNumber, "lastVisitedPartners");
           this.isInFavorites = false;
+          this.savePartnersService.removeFromFavorites(this.pfNumber);
         }
         else {
           this.showPromptSomethingWentWrong();
@@ -219,8 +230,8 @@ export class PartnerDetailComponent implements OnDestroy {
         let message = res.json().errors[0].beschreibung;
         if (message === "Erfolg") {
           FavoritesData.addFavorite(this.pfNumber);
-          this.savePartnersService.togglePartnerType(this.pfNumber, "favorites");
           this.isInFavorites = true;
+          this.savePartnersService.addToFavorites(this.pfNumber);
         }
         else {
           this.showPromptSomethingWentWrong();
@@ -232,16 +243,19 @@ export class PartnerDetailComponent implements OnDestroy {
   }
 
   saveForOffline() {
-    let partnerType = (this.isInFavorites) ? "favorites" : "lastVisitedPartners";
+
     if (this.partnerDetails.aktionen && this.partnerDetails.aktionen[0].bildUrl) {
       this.mapMarkerService.getImageAsBase64("PartnerDetailComponent", this.partnerDetails.aktionen[0].bildUrl, (imageAsBase64, validImage) => {
-        this.savePartnersService.saveCampaignImage(this.pfNumber, imageAsBase64);
+        SavePartnersService.saveCampaignImage(this.pfNumber, imageAsBase64);
       })
     }
+
     this.mapMarkerService.getImageAsBase64("PartnerDetailComponent", this.partner.logoUrl, (imageAsBase64, validImage) => {
-      this.savePartnersService.saveLogo(this.pfNumber, imageAsBase64);
+      SavePartnersService.saveLogo(this.pfNumber, imageAsBase64);
     })
-    this.savePartnersService.savePartnerAndPartnerDetails(this.pfNumber, this.partner, this.partnerDetails, partnerType)
+
+    this.savePartnersService.storePartnerAndPartnerDetails(this.pfNumber, this.partner, this.partnerDetails)
+
   }
 
 }
