@@ -7,48 +7,28 @@
   },
   "proxies": [
     {
-      "path": "/cms/bswAppWebviewUrls",
+      "path": "/proxy/cms/bswAppWebviewUrls",
       "proxyUrl": "https://vorsystem.avs.de/integ6/cms/bswAppWebviewUrls"
     },
     {
-      "path": "/login",
+      "path": "/proxy/login",
       "proxyUrl": "https://vorsystem.avs.de/integ6/login"
     },
     {
-      "path": "/appsearch",
-      "proxyUrl": "https://www.bsw.de/appsearch"
-    },
-    {
-      "path": "/securityToken/favorit/get",
-      "proxyUrl": "https://vorsystem.avs.de/integ6/securityToken/favorit/get"
-    },
-    {
-      "path": "/securityToken/bonus/summen",
-      "proxyUrl": "https://vorsystem.avs.de/integ6/securityToken/bonus/summen"
-    },
-    {
-      "path": "/securityToken/getList/getMitgliedData",
-      "proxyUrl": "https://vorsystem.avs.de/integ6/securityToken/getList/getMitgliedData"
-    },
-    {
-      "path": "/autocomplete/completephrasep",
+      "path": "/proxy/autocomplete/completephrasep",
       "proxyUrl": "https://www.bsw.de/autocomplete/completephrasep"
     },
     {
-      "path": "/cms/partnerfirmaProfil/pfnummer",
-      "proxyUrl": "https://vorsystem.avs.de/integ6/cms/partnerfirmaProfil/pfnummer"
+      "path": "/proxy/appsearch",
+      "proxyUrl": "https://www.bsw.de/appsearch"
     },
     {
-      "path": "/securityToken/favorit/merken.json",
-      "proxyUrl": "https://vorsystem.avs.de/integ6/securityToken/favorit/merken.json"
+      "path": "/proxy/integ6",
+      "proxyUrl": "https://vorsystem.avs.de/integ6"
     },
     {
-      "path": "/securityToken/favorit/loeschen.json",
-      "proxyUrl": "https://vorsystem.avs.de/integ6/securityToken/favorit/loeschen.json"
-    },
-    {
-      "path": "/securityToken/favorit/get",
-      "proxyUrl": "https://vorsystem.avs.de/integ6/securityToken/favorit/get"
+      "path": "/proxy/securityToken",
+      "proxyUrl": "https://vorsystem.avs.de/integ6/securityToken"
     }
   ]
 }

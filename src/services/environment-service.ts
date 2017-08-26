@@ -13,8 +13,8 @@ const environments = {
     BASE_URL_APP_SEARCH: "https://www.bsw.de"
   },
   dev: {
-    BASE_URL: "http://localhost:8100",
-    BASE_URL_APP_SEARCH: "http://localhost:8100",
+    BASE_URL: "/proxy/integ6",
+    BASE_URL_APP_SEARCH: "/proxy",
   },
   base: {
     WEBVIEW_SERVICE: "/cms/bswAppWebviewUrls",
