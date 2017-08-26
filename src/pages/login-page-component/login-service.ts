@@ -10,13 +10,11 @@ export class LoginService {
   }
 
   createAuthorizationHeader(headers: Headers) {
-    headers.append('Authorization', 'Basic ' +
-      btoa('BSW_App:ev1boio32fSrjSY9XwvcD9LkGr13J'));
+    headers.append('Authorization', this.envService.environment.AUTH_HEADER);
   }
 
   login(username, password) {
     let loginUrl = this.envService.environment.BASE_URL + this.envService.environment.LOGIN;
-    //let loginUrl = 'http://localhost:8100/login';
     let headers = new Headers({'Content-Type': 'application/json'});
     this.createAuthorizationHeader(headers);
     let options = new RequestOptions({headers: headers});

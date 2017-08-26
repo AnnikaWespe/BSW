@@ -15,14 +15,13 @@ export class FavoritesService {
     this.loadAuthData();
   }
 
-  private static createAuthorizationHeader(headers: Headers) {
-    headers.append('Authorization', 'Basic ' +
-      btoa('BSW_App:ev1boio32fSrjSY9XwvcD9LkGr13J'));
+  private createAuthorizationHeader(headers: Headers) {
+    headers.append('Authorization', this.envService.environment.AUTH_HEADER);
   }
 
   private get(url) {
     let headers = new Headers({ 'Accept': 'application/json' });
-    FavoritesService.createAuthorizationHeader(headers);
+    this.createAuthorizationHeader(headers);
     return this.http.get(url, {
       headers: headers
     });

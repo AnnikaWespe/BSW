@@ -1,15 +1,15 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers, RequestOptions} from "@angular/http";
+import {EnvironmentService} from "./environment-service";
 
 @Injectable()
 export class PushNotificationsService {
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private envService: EnvironmentService) {
   }
 
   createAuthorizationHeader(headers: Headers) {
-    headers.append('Authorization', 'Basic ' +
-      btoa('BSW_App:ev1boio32fSrjSY9XwvcD9LkGr13J'));
+    headers.append('Authorization', this.envService.environment.AUTH_HEADER);
   }
 
   sendPushNotificationsRequest(mitgliedId, securityToken,newToken, oldToken) {

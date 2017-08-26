@@ -7,14 +7,17 @@ const environments = {
   test: {
     BASE_URL: "https://vorsystem.avs.de/integ6",
     BASE_URL_APP_SEARCH: "https://www.bsw.de",
+    AUTH_HEADER: 'Basic ' + btoa('BSW_App:ev1boio32fSrjSY9XwvcD9LkGr13J')
   },
   prod: {
     BASE_URL: "https://vorsystem.avs.de/prod",
-    BASE_URL_APP_SEARCH: "https://www.bsw.de"
+    BASE_URL_APP_SEARCH: "https://www.bsw.de",
+    AUTH_HEADER: 'Basic ' + btoa('BSW_App:ev1boio32fSrjSY9XwvcD9LkGr13J')
   },
   dev: {
     BASE_URL: "/proxy/integ6",
     BASE_URL_APP_SEARCH: "/proxy",
+    AUTH_HEADER: 'Basic ' + btoa('BSW_App:ev1boio32fSrjSY9XwvcD9LkGr13J')
   },
   base: {
     WEBVIEW_SERVICE: "/cms/bswAppWebviewUrls",
