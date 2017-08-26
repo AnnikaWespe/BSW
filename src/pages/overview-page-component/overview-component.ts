@@ -13,6 +13,7 @@ import {LoginPageComponent} from "../login-page-component/login-component";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {BonusService} from "./bonus-service";
 import {WebviewComponent} from "../webview/webview";
+import {SavePartnersService} from "../partner-page-component/partner-detail-component/save-partners-service";
 
 
 @Component({
@@ -71,7 +72,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               private favoritesService: FavoritesService,
               private alertCtrl: AlertController,
               private ga: GoogleAnalytics,
-              private bonusService: BonusService) {
+              private bonusService: BonusService,
+              private savePartnersService: SavePartnersService) {
 
     if (navParams.data.login == true || localStorage.getItem('securityToken')) {
       this.id = navParams.data.id || localStorage.getItem('mitgliedId');
@@ -89,7 +91,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   ionViewWillEnter() {
 
-    this.cleanup();
+    this.savePartnersService.cleanup();
 
     this.loadFavorites(this.id, this.token);
     this.loadRecentPartners();
@@ -149,9 +151,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       this.bonusHasData = true;
       this.bonusThisYear = response.bonusGesamtJahr;
       this.bonusBalance = response.bonuskontostand;
-      localStorage.setItem("bonusThisYear", response.bonusGesamtJahr);
-      localStorage.setItem("bonusBalance", response.bonuskontostand);
-      localStorage.setItem("bonusDataTimeStamp", Date.now().toString());
+
+      SavePartnersService.storeBonus(this.bonusThisYear, this.bonusBalance);
 
       this.waitingForResults = false;
       this.checkForDataOnHomeScreen();
@@ -166,10 +167,12 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   showBonusDataFromCache() {
 
-    if (localStorage.getItem("bonusThisYear")) {
+    let bonus = SavePartnersService.loadBonus();
+
+    if (bonus) {
       this.bonusHasData = true;
-      this.bonusThisYear = Number(localStorage.getItem("bonusThisYear"));
-      this.bonusBalance = Number(localStorage.getItem("bonusBalance"));
+      this.bonusThisYear = bonus.benefit;
+      this.bonusBalance = bonus.balance;
       this.bonusFromCache = true;
     }
 
@@ -203,6 +206,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       let favoritesByPf = res.json().response.favoriten.map((obj) => {
         return obj.pfNummer;
       });
+      this.savePartnersService.saveFavoriteList(favoritesByPf);
       FavoritesData.favoritesByPfArray = favoritesByPf;
       this.partnerService.getPartners(this.location, 0, "", false, "RELEVANCE", "DESC", 10000, favoritesByPf).subscribe((res) => {
           let partnersArray = res.json().contentEntities;
@@ -243,15 +247,19 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     this.hasMoreFavoritePartners = false;
     this.waitingForResults = false;
 
-    let cachedFavoritesArray = JSON.parse(localStorage.getItem("savedFavorites")) || [];
+    let cachedFavoritesArray = SavePartnersService.loadFavoritePartners();
     if (cachedFavoritesArray.length) {
       this.favoritesFromCache = true;
       for (let pfNumber of cachedFavoritesArray) {
 
-        let partner = JSON.parse(localStorage.getItem(pfNumber + "partner"));
-        if (partner) {
-          partner.logoUrl = localStorage.getItem(pfNumber + "logo");
+        let rawPartner = SavePartnersService.loadPartner(pfNumber);
+
+        if (rawPartner) {
+
+          let partner = JSON.parse(rawPartner.general);
+          partner.logoString = partner.logo;
           this.favoritePartners.push(partner);
+
         }
 
       }
@@ -274,7 +282,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
     this.recentPartnersFromCache = false;
 
-    let lastVisitedPartnersArray = JSON.parse(localStorage.getItem("savedLastVisitedPartners")) || [];
+    let lastVisitedPartnersArray = SavePartnersService.loadRecentPartners();
 
     if (!lastVisitedPartnersArray || lastVisitedPartnersArray.length == 0) {
       this.recentPartners = [];
@@ -328,17 +336,21 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     this.hasMoreRecentPartners = false;
     this.waitingForResults = false;
 
-    let lastVisitedPartnersArray = JSON.parse(localStorage.getItem("savedLastVisitedPartners")) || [];
+    let lastVisitedPartnersArray = SavePartnersService.loadRecentPartners();
     if (lastVisitedPartnersArray.length && lastVisitedPartnersArray.length > 0) {
 
       let maxIndex = lastVisitedPartnersArray.length - 1;
       for (let i = maxIndex; i > -1; i--) {
         let pfNumber = lastVisitedPartnersArray[i];
-        let partner = JSON.parse(localStorage.getItem(pfNumber + "partner"));
 
-        if (partner) {
-          partner.logoString = localStorage.getItem(pfNumber + "logo")
+        let rawPartner = SavePartnersService.loadPartner(pfNumber);
+
+        if (rawPartner) {
+
+          let partner = JSON.parse(rawPartner.general);
+          partner.logoString = partner.logo;
           this.recentPartners.push(partner);
+
         }
 
       }
@@ -456,12 +468,12 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
   navigateToPartnerDetail(partner = 0) {
-    this.navCtrl.push(PartnerDetailComponent, {partner: partner})
+    this.navCtrl.push(PartnerDetailComponent, {partner: partner, cached: false})
   }
 
   navigateToCachedPartnerDetail(partner) {
-    let partnerDetails = JSON.parse(localStorage.getItem(partner.number + "partnerDetails"));
-    this.navCtrl.push(PartnerDetailComponent, {partner: partner, partnerDetails: partnerDetails})
+    let partnerDetails = JSON.parse(SavePartnersService.loadPartner(partner.number).detail);
+    this.navCtrl.push(PartnerDetailComponent, {partner: partner, partnerDetails: partnerDetails, cached: true})
   }
 
   loadUserSpecificPartnerTable(type) {
@@ -554,56 +566,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     if (searchInputField) {
       searchInputField.focus();
     }
-  }
-
-  /* ensures that no old data is displayed on the homescreen */
-  private cleanup() {
-    console.log("cleanup()");
-
-    let now = Date.now();
-    let cacheTime = 1000 * 60 * 60 * 24;
-
-    /* bonusdata - delete if older than 24 hours */
-    let bonusTime = Number(localStorage.getItem("bonusDataTimeStamp"));
-    if (bonusTime && bonusTime < (now - cacheTime)) {
-
-      localStorage.removeItem("bonusThisYear");
-      localStorage.removeItem("bonusBalance");
-      localStorage.removeItem("bonusDataTimeStamp");
-      console.log("Clearing cached bonus data");
-
-    }
-
-    /* partners - delete if older than 24 hours */
-    let lastVisited = JSON.parse(localStorage.getItem("savedLastVisitedPartners")) || [];
-    let lastVisitedComplete = JSON.parse(localStorage.getItem("savedLastVisitedPartnersComplete")) || [];
-    let favorites = JSON.parse(localStorage.getItem("savedFavorites")) || [];
-
-    let partnersToDelete = [];
-    let allPartners = lastVisited.concat(lastVisitedComplete, favorites);
-
-    for (let p in allPartners) {
-
-      let loadedPartner = JSON.parse(localStorage.getItem(allPartners[p] + "partnerDetails"));
-
-      if (loadedPartner && (!loadedPartner.fetchTime || loadedPartner.fetchTime < (now - cacheTime))) {
-        partnersToDelete.push(allPartners[p]);
-      }
-
-    }
-
-    for (let p in partnersToDelete) {
-
-      console.log("Deleting cache of: " + partnersToDelete[p]);
-
-      localStorage.removeItem(partnersToDelete[p] + "partnerDetails");
-      localStorage.removeItem(partnersToDelete[p] + "partner");
-      localStorage.removeItem(partnersToDelete[p] + "logo");
-      localStorage.removeItem(partnersToDelete[p] + "campaignImage");
-
-
-    }
-
   }
 
 }

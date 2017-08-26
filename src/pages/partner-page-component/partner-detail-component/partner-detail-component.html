@@ -125,7 +125,7 @@
 
   <div class="footer" *ngIf="partnerDetails?.fussnote" [innerHTML]="partnerDetails?.fussnote"></div>
 
-  <div class="footer offline" *ngIf="partnerDetails?.offline">
+  <div class="footer offline" *ngIf="cached">
     Die verwendeten Daten stammen aus einer früheren Sitzung und sind möglicherweise veraltet. Stellen Sie eine Internetverbindung her um die Daten zu aktualisieren.
   </div>
 

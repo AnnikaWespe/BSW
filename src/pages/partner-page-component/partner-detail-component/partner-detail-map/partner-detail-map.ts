@@ -73,8 +73,8 @@ export class PartnerDetailMap {
         let message = res.json().errors[0].beschreibung;
         if (message === "Erfolg") {
           FavoritesData.deleteFavorite(this.pfNumber);
-          this.savePartnersService.togglePartnerType(this.pfNumber, "lastVisitedPartners");
           this.isInFavorites = false;
+          this.savePartnersService.removeFromFavorites(this.pfNumber);
         }
         else {
           this.showPromptSomethingWentWrong();
@@ -86,8 +86,8 @@ export class PartnerDetailMap {
         let message = res.json().errors[0].beschreibung;
         if (message === "Erfolg") {
           FavoritesData.addFavorite(this.pfNumber);
-          this.savePartnersService.togglePartnerType(this.pfNumber, "favorites");
           this.isInFavorites = true;
+          this.savePartnersService.addToFavorites(this.pfNumber);
         }
         else {
           this.showPromptSomethingWentWrong();
