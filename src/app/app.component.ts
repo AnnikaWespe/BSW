@@ -18,6 +18,7 @@ import {StatusBar} from "@ionic-native/status-bar";
 import {PartnerDetailComponent} from "../pages/partner-page-component/partner-detail-component/partner-detail-component";
 import {PartnerService} from "../services/partner-service";
 import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
+import {SavePartnersService} from "../pages/partner-page-component/partner-detail-component/save-partners-service";
 
 
 @Component({
@@ -56,7 +57,8 @@ export class BSWBonusApp {
               public events: Events,
               private pushNotificationsService: PushNotificationsService,
               private statusBar: StatusBar,
-              private partnerService: PartnerService) {
+              private partnerService: PartnerService,
+              private savePartnerService: SavePartnersService) {
     events.subscribe("userLoggedIn", (id, token) => {
       this.userLoggedIn = true;
       this.mitgliedId = id;
@@ -200,9 +202,12 @@ export class BSWBonusApp {
   }
 
   logout() {
+
     if (this.userLoggedIn) {
-      //this.updateToken(localStorage.getItem("mitgliedId"), localStorage.getItem("securityToken"), null);
+      this.savePartnerService.clearRecentPartners();
+      this.savePartnerService.clearFavoritePartners();
     }
+
     localStorage.removeItem("securityToken");
     localStorage.removeItem("mitgliedId");
     localStorage.removeItem("userTitle");
@@ -211,7 +216,7 @@ export class BSWBonusApp {
     localStorage.removeItem("lastName");
     localStorage.removeItem("firebaseToken");
     localStorage.removeItem("mitgliedsnummer");
-
+    
     /* reset salutation field, therefore UI gets updated */
     this.salutation = null;
 
