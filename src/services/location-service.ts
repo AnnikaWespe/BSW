@@ -6,8 +6,10 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/observable/fromPromise';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+
 import {NativeGeocoder, NativeGeocoderForwardResult, NativeGeocoderReverseResult} from "@ionic-native/native-geocoder";
 
 
@@ -99,6 +101,7 @@ export class LocationService {
             handlePosition(position, resolve, reject);
             this.geoLocationSubscription = this.geolocation.watchPosition()
               .filter(position => position.coords !== undefined)
+              .debounceTime(1.5*60)              
               .subscribe(
                 (position) => handlePosition(position, () => {}, () => {}),
                 (error) => {
