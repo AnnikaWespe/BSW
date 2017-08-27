@@ -16,11 +16,11 @@ export class BonusService {
     headers.append('Authorization', this.envService.environment.AUTH_HEADER);
   }
 
-  getBonusData(id, token) {
-    token = encodeURIComponent(token);
+  getBonusData(id, securityToken) {
+    securityToken = encodeURIComponent(securityToken);
     let headers = new Headers({'Accept': 'application/json'});
     let url = this.envService.environment.BASE_URL + this.envService.environment.BONUS_SUM + "?mandant_id=1&mitglied_id="
-      + id + "&securityToken=" + token + "&fromDate=" + this.year + "-01-01&toDate=" + this.year + "-12-31&kontoauszugsArtId=73";
+      + id + "&securityToken=" + securityToken + "&fromDate=" + this.year + "-01-01&toDate=" + this.year + "-12-31&kontoauszugsArtId=73";
     this.createAuthorizationHeader(headers);
     return this.http.get(url, {
       headers: headers

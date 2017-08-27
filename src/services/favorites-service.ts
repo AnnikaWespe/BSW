@@ -23,18 +23,21 @@ export class FavoritesService {
     });
   }
 
-  getFavorites(id, token){
-    let url = this.favoritesUrlSnippet + 'get?mandant_id=1&mitglied_id=' + id + '&securityToken=' + encodeURIComponent(token);
+  getFavorites(id, securityToken){
+    securityToken = encodeURIComponent(securityToken);
+    let url = this.favoritesUrlSnippet + 'get?mandant_id=1&mitglied_id=' + id + '&securityToken=' + securityToken;
     return(this.get(url));
   }
 
   deleteFavorite(pfNumber){
-    let url = this.favoritesUrlSnippet + 'loeschen.json?mandant_id=1&mitglied_id=' + this.authService.getUser().mitgliedId + '&pfNummer=' + pfNumber +  '&securityToken=' + this.authService.getUser().securityToken;
+    let securityToken = encodeURIComponent(this.authService.getUser().securityToken)
+    let url = this.favoritesUrlSnippet + 'loeschen.json?mandant_id=1&mitglied_id=' + this.authService.getUser().mitgliedId + '&pfNummer=' + pfNumber +  '&securityToken=' + securityToken;
     return(this.get(url));
   }
 
   rememberFavorite(pfNumber){
-    let url = this.favoritesUrlSnippet + 'merken.json?mandant_id=1&mitglied_id=' + this.authService.getUser().mitgliedId + '&pfNummer=' + pfNumber + '&securityToken=' + this.authService.getUser().securityToken;
+    let securityToken = encodeURIComponent(this.authService.getUser().securityToken)
+    let url = this.favoritesUrlSnippet + 'merken.json?mandant_id=1&mitglied_id=' + this.authService.getUser().mitgliedId + '&pfNummer=' + pfNumber + '&securityToken=' + securityToken;
     return(this.get(url));
   }
 }
