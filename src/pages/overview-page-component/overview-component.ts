@@ -14,7 +14,7 @@ import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {BonusService} from "./bonus-service";
 import {WebviewComponent} from "../webview/webview";
 import {SavePartnersService} from "../partner-page-component/partner-detail-component/save-partners-service";
-
+import {AuthService} from "../../services/auth-service";
 
 @Component({
   providers: [],
@@ -73,11 +73,13 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               private alertCtrl: AlertController,
               private ga: GoogleAnalytics,
               private bonusService: BonusService,
+              public authService: AuthService,
               private savePartnersService: SavePartnersService) {
 
-    if (navParams.data.login == true || localStorage.getItem('securityToken')) {
-      this.id = navParams.data.id || localStorage.getItem('mitgliedId');
-      this.token = navParams.data.token || localStorage.getItem('securityToken');
+    let user = this.authService.getUser();
+    if (navParams.data.login == true || user.loggedIn) {
+      this.id = navParams.data.id || user.mitgliedId;
+      this.token = navParams.data.token || user.securityToken;
       this.userLoggedIn = true;
     }
 
@@ -377,6 +379,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
   navigateToLogin(errorMessage) {
+    // TODO JS: warum???
     localStorage.removeItem("securityToken");
     this.navCtrl.setRoot(LoginPageComponent);
     console.log(errorMessage);

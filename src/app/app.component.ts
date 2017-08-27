@@ -17,6 +17,7 @@ import {PushNotificationsService} from "../services/push-notifications-service";
 import {StatusBar} from "@ionic-native/status-bar";
 import {PartnerDetailComponent} from "../pages/partner-page-component/partner-detail-component/partner-detail-component";
 import {PartnerService} from "../services/partner-service";
+import {AuthService } from '../services/auth-service';
 import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
 import {SavePartnersService} from "../pages/partner-page-component/partner-detail-component/save-partners-service";
 
@@ -30,12 +31,11 @@ export class BSWBonusApp {
   rootPage: any;
   pages: Array<{ title: string, component: any, parameters: {} }>;
   userLoggedIn;
+  user;
   name;
   title;
   salutation;
   lastName;
-  mitgliedId;
-  securityToken;
   jsonObject = {
     'to': 'id',
     'notification': {
@@ -50,38 +50,30 @@ export class BSWBonusApp {
     }
   }
 
-  constructor(private platform: Platform,
-              private splashScreen: SplashScreen,
-              private ga: GoogleAnalytics,
-              private initService: InitService,
-              public events: Events,
-              private pushNotificationsService: PushNotificationsService,
-              private statusBar: StatusBar,
-              private partnerService: PartnerService,
-              private savePartnerService: SavePartnersService) {
-    events.subscribe("userLoggedIn", (id, token) => {
-      this.userLoggedIn = true;
-      this.mitgliedId = id;
-      this.securityToken = token;
-      this.getUserData(id, token);
-      this.setWebViewsUrls();
-      if (!DeviceService.isInBrowser) {
-        //this.managePushes(id, token);
+  constructor(
+    private platform: Platform,
+    private splashScreen: SplashScreen,
+    private ga: GoogleAnalytics,
+    private initService: InitService,
+    public events: Events,
+    private pushNotificationsService: PushNotificationsService,
+    private statusBar: StatusBar,
+    private partnerService: PartnerService,
+    private savePartnerService: SavePartnersService,
+    private authService: AuthService
+    ) {
+      this.user = this.authService.getUser();
+      this.setMenu();
+      this.initializeApp();
+      localStorage.setItem("locationExact", "false");
+
+      if (this.user.securityToken) {
+        let title = localStorage.getItem("userTitle");
+        this.title = (title == "null") ? "" : title;
+        this.salutation = localStorage.getItem("salutation");
+        this.lastName = localStorage.getItem("lastName");
       }
-    });
-    this.userLoggedIn = localStorage.getItem("securityToken") !== null;
-    this.mitgliedId = localStorage.getItem("mitgliedId");
-    this.securityToken = localStorage.getItem("securityToken");
-    this.setMenu();
-    this.initializeApp();
-    localStorage.setItem("locationExact", "false");
-    if (this.securityToken) {
-      let title = localStorage.getItem("userTitle");
-      this.title = (title == "null") ? "" : title;
-      this.salutation = localStorage.getItem("salutation");
-      this.lastName = localStorage.getItem("lastName");
-    }
-    this.setWebViewsUrls();
+      this.setWebViewsUrls();
   }
 
   initializeApp() {
@@ -115,32 +107,6 @@ export class BSWBonusApp {
     }
   }
 
-  getUserData(mitgliedId, securityToken) {
-    this.initService.getUserData(mitgliedId, securityToken).subscribe((res) => {
-        let result = res.json();
-        if (result.errors[0].beschreibung === "Erfolg") {
-          let data = result.response.list[0].row;
-          this.lastName = data.NAME;
-          this.salutation = data.ANREDE;
-          this.title = data.TITEL || "";
-          localStorage.setItem("userTitle", data.TITEL);
-          localStorage.setItem("salutation", data.ANREDE);
-          localStorage.setItem("firstName", data.VORNAME);
-          localStorage.setItem("lastName", data.NAME);
-        }
-        else {
-          console.log("in getUserData", result.errors[0].beschreibung);
-        }
-      },
-      (error) => {
-        let title = localStorage.getItem("userTitle");
-        this.title = (title == "null") ? "" : title;
-        this.lastName = localStorage.getItem("lastName");
-        this.salutation = localStorage.getItem("salutation");
-      }
-    )
-  }
-
   startGoogleAnalyticsTracker(id) {
     if (localStorage.getItem("disallowUserTracking") === null) {
       localStorage.setItem("disallowUserTracking", "false");
@@ -169,7 +135,7 @@ export class BSWBonusApp {
       console.log("isInBrowser");
     }
     else {
-      if (this.securityToken) {
+      if (this.user.securityToken) {
         //this.managePushes(this.mitgliedId, this.securityToken);
       }
       if (this.platform.is('ios')) {
@@ -202,29 +168,16 @@ export class BSWBonusApp {
   }
 
   logout() {
-
     if (this.userLoggedIn) {
       this.savePartnerService.clearRecentPartners();
       this.savePartnerService.clearFavoritePartners();
     }
-
-    localStorage.removeItem("securityToken");
-    localStorage.removeItem("mitgliedId");
-    localStorage.removeItem("userTitle");
-    localStorage.removeItem("salutation");
-    localStorage.removeItem("firstName");
-    localStorage.removeItem("lastName");
-    localStorage.removeItem("firebaseToken");
-    localStorage.removeItem("mitgliedsnummer");
     
     /* reset salutation field, therefore UI gets updated */
     this.salutation = null;
-
-    if (localStorage.getItem("disallowUserTracking") === "false") {
-      this.ga.trackEvent('Login/Logout', 'logout');
-    }
-    this.nav.setRoot(LoginPageComponent);
     this.userLoggedIn = false;
+
+    this.nav.setRoot(LoginPageComponent);
   }
 
 

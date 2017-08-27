@@ -2,6 +2,7 @@ import {Component, OnDestroy} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {WebviewComponent} from "../webview/webview";
 import {PushNotificationsService} from "../../services/push-notifications-service";
+import {AuthService} from "../../services/auth-service";
 
 @Component({
   selector: 'settings-page-component',
@@ -19,8 +20,9 @@ export class SettingsPageComponent implements OnDestroy {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
+              public authService: AuthService,
               private pushNotificationsService: PushNotificationsService) {
-    this.securityToken = localStorage.getItem("securityToken");
+    this.securityToken = this.authService.getUser().securityToken;
     if (this.securityToken) {
       this.favoritesPush = (localStorage.getItem("favoritesPush") == "false") ? false : true;
       this.accountInfoPush = (localStorage.getItem("accountInfoPush") == "false") ? false : true;

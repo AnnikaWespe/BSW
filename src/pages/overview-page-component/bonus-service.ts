@@ -2,17 +2,14 @@ import {Injectable} from "@angular/core";
 import {Http, Headers, RequestOptions} from "@angular/http";
 import { environment, urls } from '../../app/environment';
 import {EnvironmentService} from "../../services/environment-service";
+import {AuthService} from "../../services/auth-service";
 
 @Injectable()
 export class BonusService {
-
-  mitgliedId = localStorage.getItem("mitgliedId");
-  securityToken = encodeURIComponent(localStorage.getItem("securityToken"));
   date = new Date();
   year = this.date.getFullYear();
 
-
-  constructor(private http: Http, private envService: EnvironmentService) {
+  constructor(private http: Http, private envService: EnvironmentService, public authService: AuthService,) {
   }
 
   createAuthorizationHeader(headers: Headers) {

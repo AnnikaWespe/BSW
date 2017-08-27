@@ -8,7 +8,7 @@ import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {PartnerDetailService} from "./partner-detail-map/partner-detail-service";
 import {MapMarkerService} from "../../../services/map-marker-service";
 import {SavePartnersService} from "./save-partners-service";
-
+import {AuthService} from "../../../services/auth-service";
 
 declare let window: any;
 declare let cordova: any;
@@ -39,6 +39,7 @@ export class PartnerDetailComponent implements OnDestroy {
               private ga: GoogleAnalytics,
               private partnerDetailService: PartnerDetailService,
               private mapMarkerService: MapMarkerService,
+              public authService: AuthService,
               private savePartnersService: SavePartnersService) {
     this.setParameters();
     if (!this.partnerDetails) {
@@ -63,7 +64,7 @@ export class PartnerDetailComponent implements OnDestroy {
     this.partnerDetails = this.navParams.get("partnerDetails");
     this.cached = this.navParams.get("cached");
     this.pfNumber = this.partner.number;
-    this.securityToken = localStorage.getItem("securityToken");
+    this.securityToken = this.authService.getUser().securityToken;
     this.favoritesByPfArray = FavoritesData.favoritesByPfArray;
     if (this.favoritesByPfArray) {
       this.isInFavorites = FavoritesData.isInFavorites(this.pfNumber);
@@ -137,7 +138,7 @@ export class PartnerDetailComponent implements OnDestroy {
 
   googleAnalyticsTrackingGoToShop() {
     if (localStorage.getItem("disallowUserTracking") === "false") {
-      this.ga.trackEvent("Online Shop geöffnet", "pf-Nummer: " + this.pfNumber + ", Name: " + this.partner.nameOrigin, localStorage.getItem("mitgliedId"))
+      this.ga.trackEvent("Online Shop geöffnet", "pf-Nummer: " + this.pfNumber + ", Name: " + this.partner.nameOrigin, this.authService.getUser().mitgliedId)
     }
   }
 
@@ -146,7 +147,7 @@ export class PartnerDetailComponent implements OnDestroy {
   }
 
   goToPartnerShop(goEvenIfUserNotLoggedIn) {
-    if (localStorage.getItem("securityToken") || goEvenIfUserNotLoggedIn) {
+    if (this.authService.getUser().securityToken || goEvenIfUserNotLoggedIn) {
       let url = this.partnerDetails.trackingUrl
       if (!goEvenIfUserNotLoggedIn) {
         let mitgliedsnummer = localStorage.getItem("mitgliedsnummer");

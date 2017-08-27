@@ -22,16 +22,6 @@ export class InitService {
     });
   }
 
-  getUserData(mitgliedId, securityToken) {
-    securityToken = encodeURIComponent(securityToken);
-    let url = this.envService.environment.BASE_URL + this.envService.environment.MEMBER_DATA + '?mitglied_id=' + mitgliedId + '&mandant_id=1&securityToken=' + securityToken;
-    let headers = new Headers({ 'Accept': 'application/json' });
-    this.createAuthorizationHeader(headers);
-    return this.http.get(url, {
-      headers: headers
-    });
-  }
-
   setWebViewUrls(){
     this.getWebViewUrlsFromApi().subscribe((res) => {
       let result = res.json();

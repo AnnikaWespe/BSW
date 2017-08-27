@@ -3,6 +3,7 @@ import {AlertController, NavController, NavParams} from 'ionic-angular';
 import {FavoritesData} from "../../../../services/favorites-data";
 import {FavoritesService} from "../../../../services/favorites-service";
 import {SavePartnersService} from "../save-partners-service";
+import {AuthService} from "../../../../services/auth-service";
 
 declare let device: any;
 
@@ -34,10 +35,11 @@ export class PartnerDetailMap {
               public navParams: NavParams,
               public favoritesService: FavoritesService,
               public alertCtrl: AlertController,
+              public authService: AuthService,
               private savePartnersService: SavePartnersService) {
     this.partnerDetails = navParams.get("partnerDetails");
     this.partner = navParams.get("partner");
-    this.securityToken = localStorage.getItem("securityToken");
+    this.securityToken = this.authService.getUser().securityToken;
     this.favoritesByPfArray = FavoritesData.favoritesByPfArray;
     console.log(this.partnerDetails);
     if (localStorage.getItem("locationExact") === "true") {

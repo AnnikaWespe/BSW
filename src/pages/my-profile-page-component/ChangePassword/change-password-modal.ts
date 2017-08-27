@@ -1,7 +1,7 @@
 import {Component, trigger, state, style, OnInit} from '@angular/core';
 import {AlertController, NavController, NavParams, ViewController} from 'ionic-angular';
 import {FormGroup, Validators, FormBuilder} from "@angular/forms";
-import {ChangePasswordService} from "./changePasswordService";
+import {AuthService} from "../../../services/auth-service";
 
 
 @Component({
@@ -19,7 +19,7 @@ export class ChangePasswordModal {
               public navParams: NavParams,
               public viewCtrl: ViewController,
               private formBuilder: FormBuilder,
-              private changePasswordService: ChangePasswordService,
+              private authService: AuthService,
               private alertCtrl: AlertController) {
   }
 
@@ -42,20 +42,14 @@ export class ChangePasswordModal {
       this.presentAlertPleaseChangeInput('"Passwort" und "Passwort bestätigen" stimmen nicht überein')
     }
     else {
-      this.changePasswordService.changePassword(this.oldPassword, this.newPassword).subscribe((res) => {
-        let response = res.json();
-        if (response.errors[0].beschreibung === "Erfolg") {
-          localStorage.setItem("securityToken", response.response.securityToken)
+      this.authService.changePassword(this.oldPassword, this.newPassword).then(
+        () => {
           this.viewCtrl.dismiss({passwordChanged: true});
-        }
-        else {
-          console.log(response.errors[0].beschreibung);
+        },
+        () => {
           this.presentAlertPasswordNotChanged();
         }
-      },
-        (err) =>{
-          this.presentAlertPasswordNotChanged();
-        })
+      );
     }
   }
 

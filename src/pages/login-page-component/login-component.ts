@@ -7,7 +7,7 @@ import {
 import {OverviewPageComponent} from "../overview-page-component/overview-component";
 import {ConfirmScanPageComponent} from "./confirm-scan-page-component/confirm-scan-page-component";
 import {WebviewComponent} from "../webview/webview";
-import {LoginService} from "./login-service";
+import {AuthService} from "../../services/auth-service";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 
 declare let cordova: any;
@@ -32,7 +32,7 @@ export class LoginPageComponent {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public alertCtrl: AlertController,
-              public loginService: LoginService,
+              public authService: AuthService,
               public loadingCtrl: LoadingController,
               public viewCtrl: ViewController,
               private ga: GoogleAnalytics,
@@ -129,30 +129,20 @@ export class LoginPageComponent {
     //TODO get username and password from user input
     //let username = "0016744807"
     //let password = "muster01$$";
-    this.loginService.login(this.inputNumberOrEmail, this.password).subscribe((res) => {
-      //this.loginService.login(username, password).subscribe((res) => {
-      this.loading.dismiss();
-      let loginData = res.json();
-      if (loginData.errors[0].beschreibung === "Erfolg") {
-        let mitgliedsnummer = loginData.response.mitgliedsnummer + loginData.response.pruefziffer;
-        localStorage.setItem("securityToken", loginData.response.securityToken);
-        localStorage.setItem("mitgliedId", loginData.response.mitgliedId);
-        localStorage.setItem("mitgliedsnummer", mitgliedsnummer);
-
-        this.events.publish('userLoggedIn', loginData.response.mitgliedId, loginData.response.securityToken);
-        console.log("Login: " + loginData.errors[0].beschreibung);
-        if (localStorage.getItem("disallowUserTracking") === "false") {
-          this.ga.trackEvent('Login/Logout', 'login')
+    this.authService.login(this.inputNumberOrEmail, this.password).then(
+      (user) => {
+        this.loading.dismiss();
+        this.navigateToNextPageWithLoginSuccessful(user.mitgliedId, user.securityToken);
+      },
+      (error) => {
+        this.loading.dismiss();
+        if (error==='LoginFailed') {
+          this.showPromptLoginFailed();
+        } else {      
+          this.showPromptNoNetwork();
         }
-        this.navigateToNextPageWithLoginSuccessful(loginData.response.mitgliedId, loginData.response.securityToken);
       }
-      else {
-        this.showPromptLoginFailed();
-      }
-    }, (err) => {
-      this.loading.dismiss();
-      this.showPromptNoNetwork();
-    })
+    );
   }
 
   navigateToNextPageWithLoginSuccessful(id, token) {
@@ -276,7 +266,7 @@ export class LoginPageComponent {
   }
 
   sendPasswordResetRequest(loginString) {
-    this.loginService.forgotPassword(loginString)
+    this.authService.forgotPassword(loginString)
       .subscribe((res) => {
         let errorCode = res.json().errors[0].code;
         console.log(res.json().errors[0]);

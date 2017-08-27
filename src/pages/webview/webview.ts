@@ -5,6 +5,7 @@ import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {DeviceService} from "../../services/device-data";
 import {DomSanitizer} from "@angular/platform-browser";
 import {CachedContentService} from "./cached-content-data";
+import {AuthService} from "../../services/auth-service";
 
 declare let cordova: any;
 
@@ -36,6 +37,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
               private ga: GoogleAnalytics,
               private elementRef: ElementRef,
               private alertCtrl: AlertController,
+              public authService: AuthService,
               public loadingCtrl: LoadingController) {
     console.error(localStorage.getItem("noWebViewUrlsAvailable"));
     this.noWebViewUrlsAvailable = (localStorage.getItem("noWebViewUrlsAvailable") === "true");
@@ -74,16 +76,11 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
 
     }
 
-
-    let mitgliedId = localStorage.getItem("mitgliedId");
-    let securityToken = localStorage.getItem("securityToken");
-    console.log(urlType);
-
-
     this.showLoadingIndicator();
-
-    if (securityToken) {
-      this.url = urlRaw.replace("[MITGLIEDID]", mitgliedId).replace("[SECURITYTOKEN]", securityToken);
+    let user = this.authService.getUser();
+    if (user.loggedIn) {
+      // TODO JS: macht das sinn?
+      this.url = urlRaw.replace("[MITGLIEDID]", user.mitgliedId).replace("[SECURITYTOKEN]", user.securityToken);
     }
     else {
       this.url = urlRaw.replace("/[MITGLIEDID]", "").replace("/[SECURITYTOKEN]", "");

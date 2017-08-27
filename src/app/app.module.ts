@@ -39,14 +39,13 @@ import {LocationService} from "../services/location-service";
 import {LoginWebviewComponent} from "../pages/login-page-component/login-webview/login-webview";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {WebviewComponent} from "../pages/webview/webview";
-import {LoginService} from "../pages/login-page-component/login-service";
+import {AuthService} from "../services/auth-service";
 import {FavoritesService} from "../services/favorites-service";
 import {EnvironmentService} from "../services/environment-service";
 import {UserSpecificPartnersComponent} from "../pages/overview-page-component/user-specific-partners-page-component/user-specific-partners-component";
 import {MapMarkerService} from "../services/map-marker-service";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {ChangePasswordModal} from "../pages/my-profile-page-component/ChangePassword/change-password-modal";
-import {ChangePasswordService} from "../pages/my-profile-page-component/ChangePassword/changePasswordService";
 import {PartnerDetailService} from "../pages/partner-page-component/partner-detail-component/partner-detail-map/partner-detail-service";
 import {BonusService} from "../pages/overview-page-component/bonus-service";
 import {InitService} from "./init-service";
@@ -145,16 +144,14 @@ import {ZBar} from "@ionic-native/zbar";
     EnvironmentService,
     PartnerService,
     SearchCompletionService,
-    LoginService,
+    AuthService,
     FavoritesService,
     MapMarkerService,
-    ChangePasswordService,
     PartnerDetailService,
     SavePartnersService,
     BonusService,
     InitService,
     PushNotificationsService,
-    //GoogleMapsAPIWrapper,
     GoogleAnalytics,
     NativeGeocoder
   ]
