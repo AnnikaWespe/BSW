@@ -84,8 +84,8 @@ export class AuthService {
 
 
   getUserData(mitgliedId, securityToken) {
-    securityToken = encodeURIComponent(this.user.securityToken);
-    let url = this.envService.environment.BASE_URL + this.envService.environment.MEMBER_DATA + '?mitglied_id=' + this.user.mitgliedId + '&mandant_id=1&securityToken=' + this.user.securityToken;
+    securityToken = securityToken;
+    let url = this.envService.environment.BASE_URL + this.envService.environment.MEMBER_DATA + '?mitglied_id=' + mitgliedId + '&mandant_id=1&securityToken=' + securityToken;
     let headers = new Headers({ 'Accept': 'application/json' });
     this.createAuthorizationHeader(headers);
     return this.http.get(url, {
