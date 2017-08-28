@@ -60,13 +60,13 @@ export class AuthService {
       (user) => {
         return this.getUserData(user.mitgliedId, user.securityToken).then(
           (userData) => {
-            Object.assign(this.user, user, userData, {loggedIn: true}); 
+            Object.assign(this.user, user, userData, {loggedIn: true});
             localStorage.setItem('user', JSON.stringify(this.user));
             console.log("Login: " + this.user)
             if (localStorage.getItem("disallowUserTracking") === "false") {
               this.ga.trackEvent('Login/Logout', 'login')
             }
-            return this.user;      
+            return this.user;
           }
         )
       }
@@ -81,7 +81,6 @@ export class AuthService {
       this.ga.trackEvent('Login/Logout', 'logout');
     }
   }
-
 
   getUserData(mitgliedId, securityToken) {
     securityToken = encodeURIComponent(securityToken);
@@ -142,7 +141,7 @@ export class AuthService {
         let response = res.json();
         if (response.errors[0].beschreibung === "Erfolg") {
           this.user.security.Token = response.response.securityToken;
-          localStorage.setItem("user", JSON.stringify(this.user));          
+          localStorage.setItem("user", JSON.stringify(this.user));
         } else {
           throw 'PasswordNotChanged';
         }

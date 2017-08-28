@@ -158,14 +158,16 @@ export class BSWBonusApp {
       {title: "Abmelden", component: LoginPageComponent, parameters: {}}]
   }
 
-  logout() {
-    if (this.user.loggedIn) {
-      this.savePartnerService.clearRecentPartners();
-      this.savePartnerService.clearFavoritePartners();
-    }
+  logoutUser() {
+    this.savePartnerService.clearRecentPartners();
+    this.savePartnerService.clearFavoritePartners();
+    this.authService.logout();
     this.nav.setRoot(LoginPageComponent);
   }
 
+  loginUser(){
+    this.nav.setRoot(LoginPageComponent);
+  }
 
   loadContactPage() {
     this.nav.push(WebviewComponent, {urlType: "KontaktWebviewUrl", title: "Kontakt"})

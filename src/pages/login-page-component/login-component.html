@@ -20,7 +20,7 @@
         <div class="number-input-wrapper">
 
           <ion-input class="number-input" type="text" placeholder="Mitgliedsnummer / E-Mail" [(ngModel)]="inputNumberOrEmail"
-                     (keypress)="checkForEnterButtonPressed($event)">
+                     (keypress)="focusPassword($event)">
           </ion-input>
 
           <button ion-button icon-only tappable (click)="loadCameraPage()" class="camera-icon" clear>
@@ -36,7 +36,7 @@
     <ion-row id="password-row" class="password-row">
       <ion-col>
 
-          <ion-input [(ngModel)]="password" type="password" placeholder="Passwort"
+          <ion-input id="password-input" [(ngModel)]="password" type="password" placeholder="Passwort"
                      (keypress)="checkForEnterButtonPressed($event)"></ion-input>
 
       </ion-col>

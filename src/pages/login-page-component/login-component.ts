@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, Renderer} from '@angular/core';
 import {
   Nav, NavController, NavParams, AlertController, LoadingController, ViewController, Events,
   Keyboard
@@ -19,6 +19,7 @@ declare let cordova: any;
 export class LoginPageComponent {
 
   @ViewChild(Nav) nav: Nav;
+  @ViewChild('password-input') passwordInput;
 
   inputNumberOrEmail: any;
   password = "";
@@ -37,7 +38,8 @@ export class LoginPageComponent {
               public viewCtrl: ViewController,
               private ga: GoogleAnalytics,
               public events: Events,
-              public keyboard: Keyboard,) {
+              public keyboard: Keyboard,
+              private renderer: Renderer) {
     let loginNumberFromBarCode = navParams.get('loginNumberFromBarCode');
     this.inputNumberOrEmail = loginNumberFromBarCode || "";
     this.ga.trackView('Login Screen');
@@ -152,6 +154,12 @@ export class LoginPageComponent {
     }
     else {
       this.navCtrl.setRoot(OverviewPageComponent, {id: id, token: token, login: true});
+    }
+  }
+
+  focusPassword(event){
+    if (event.keyCode == 13) {
+      this.passwordInput.setFocus();
     }
   }
 
