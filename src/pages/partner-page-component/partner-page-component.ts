@@ -94,13 +94,18 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.resetPartnersArrays();
       this.getPartners();
     });
-  }
 
-  ionViewWillEnter() {
     this.location = this.locationService.getCurrentLocation();
     this.resetPartnersArrays();
     this.getPartners();
+
   }
+
+  /*
+  ionViewWillEnter() {
+
+  }
+  */
 
   public ngAfterViewChecked() {
     this.setFocus();
