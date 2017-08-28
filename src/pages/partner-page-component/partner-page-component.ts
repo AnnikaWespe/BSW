@@ -1,5 +1,5 @@
 import {Component, AfterViewChecked, ViewChild, OnDestroy, EventEmitter, Output} from '@angular/core';
-import {NavController, NavParams, Content, ModalController} from 'ionic-angular';
+import {NavController, NavParams, Content, ModalController, Platform} from 'ionic-angular';
 
 import {PartnerService} from "../../services/partner-service";
 import {ChooseLocationManuallyComponent} from "./choose-location-manually/choose-location-manually-component";
@@ -26,10 +26,8 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   title = "Partner";
   mode = "Observable";
   getPartnersSubscription: any;
-  //getLocationNameSubscription: any;
-  getLocationSubscription: any;
 
-  location: any;
+  location: any = {};
 
   showCustomBackButton = false;
   showDropdown = [false, false, false];
@@ -69,23 +67,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   sortByCriterion = "RELEVANCE";
   sortOrder = "DESC";
   sortByArray = [true, false, false, false, false, false, false]
-
-  public ngAfterViewChecked() {
-    this.setFocus();
-  }
-
-  ngOnDestroy() {
-    this.globallyUnsubscribe();
-  }
-
-  globallyUnsubscribe() {
-    if (this.getLocationSubscription) {
-      this.getLocationSubscription.unsubscribe();
-    }
-    if (this.getPartnersSubscription) {
-      this.getPartnersSubscription.unsubscribe();
-    }
-  }
+  platformSubscription: any;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -93,6 +75,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
               public alertCtrl: AlertController,
               public locationService: LocationService,
               private ga: GoogleAnalytics,
+              private platform: Platform,
               private modalCtrl: ModalController) {
 
     let pageType = navParams.get("type");
@@ -106,15 +89,31 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.gaTrackPageView();
     }
+    this.platformSubscription = this.platform.resume.subscribe(() => {
+      this.location = this.locationService.getCurrentLocation();
+      this.resetPartnersArrays();
+      this.getPartners();
+    });
+  }
 
-    this.getLocationSubscription = this.locationService.getLocation().subscribe(
-      (location) => {
-        this.location = location;
-        this.resetPartnersArrays();
-        this.getPartners();
-      }
-    )
+  ionViewWillEnter() {
+    this.location = this.locationService.getCurrentLocation();
+    this.resetPartnersArrays();
+    this.getPartners();
+  }
 
+  public ngAfterViewChecked() {
+    this.setFocus();
+  }
+
+  ngOnDestroy() {
+    this.globallyUnsubscribe();
+  }
+
+  globallyUnsubscribe() {
+    if (this.getPartnersSubscription) {
+      this.getPartnersSubscription.unsubscribe();
+    }
   }
 
   setParameters() {

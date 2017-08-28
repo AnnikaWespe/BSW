@@ -1,5 +1,5 @@
 import {Component, OnDestroy, AfterViewChecked} from '@angular/core';
-import {AlertController, NavController, NavParams} from 'ionic-angular';
+import {AlertController, NavController, Platform, NavParams} from 'ionic-angular';
 
 
 import {PartnerService} from "../../services/partner-service";
@@ -29,7 +29,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   id: string;
   token: string;
   userLoggedIn = null;
-  location = {latitude: "0", longitude: "0"};
+  location:any = {latitude: "0", longitude: "0"};
 
   heightBalanceBarBonusBarBuffer = ["0vh", "0vh", "0vh", "0vh"];
   maxHeightBarInVh = 14;
@@ -63,7 +63,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   searchInterfaceOpen = false;
 
   getPartnersSubscription: any;
-  getLocationSubscription: any;
+  platformSubscription: any;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -74,6 +74,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               private ga: GoogleAnalytics,
               private bonusService: BonusService,
               public authService: AuthService,
+              private platform: Platform,
               private savePartnersService: SavePartnersService) {
 
     let user = this.authService.getUser();
@@ -83,26 +84,23 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       this.userLoggedIn = true;
     }
 
-    this.subscribeForLocation();
-
     if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
       this.checkForPromptRateAppInStore()
     }
 
+    this.platformSubscription = this.platform.resume.subscribe(() => this.getLocation());
+
   }
 
   ionViewWillEnter() {
-
     this.savePartnersService.cleanup();
-
+    this.getLocation();
     this.loadFavorites(this.id, this.token);
     this.loadRecentPartners();
 
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView('Übersicht Screen')
     }
-
-    this.loadPartners();
     this.loadBonusData(this.id, this.token);
 
   }
@@ -111,9 +109,14 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     if (this.getPartnersSubscription) {
       this.getPartnersSubscription.unsubscribe();
     }
-    if (this.getLocationSubscription) {
-      this.getLocationSubscription.unsubscribe();
+    if (this.platformSubscription){
+      this.platformSubscription.unsubscribe();
     }
+  }
+
+  getLocation() {
+    this.location = this.locationService.getCurrentLocation();
+    this.loadPartners();
   }
 
   loadBonusData(id, token) {
@@ -404,25 +407,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     isDataFromCache = isDataFromCache || this.bonusFromCache;
 
     this.dataFromCache = !this.waitingForResults && isDataAvailable && isDataFromCache;
-
-  }
-
-  subscribeForLocation() {
-
-    this.getLocationSubscription = this.locationService.getLocation().subscribe(
-      (location) => {
-        this.location = location;
-        if (location.locationFound == true) {
-          localStorage.setItem("getLocationFromGPSEnabled", "true");
-          this.loadPartners();
-        }
-        else {
-          localStorage.setItem("getLocationFromGPSEnabled", "false");
-        }
-      }, (error) => {
-        localStorage.setItem("getLocationFromGPSEnabled", "false");
-      }
-    )
 
   }
 

@@ -1,5 +1,5 @@
 import {Component, Input, ViewChild, Output, EventEmitter, AfterViewChecked, OnChanges, OnInit, OnDestroy} from '@angular/core';
-import {NavParams, NavController} from "ionic-angular";
+import {NavParams, NavController, Platform} from "ionic-angular";
 import {StyledMapPartnersDirective} from "./styled-map-partners-directive";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {PartnerDetailComponent} from "../partner-detail-component/partner-detail-component";
@@ -16,8 +16,8 @@ export class PartnerMapComponent implements AfterViewChecked, OnDestroy{
   partnerListOpen = false;
   partners: any[];
   scrollTop = 0;
-  location: any;
-  locationSubscription: any;
+  location: any = {};
+  platformSubscription: any;
 
   @Input() partnersLong: any[];
   @Input() justPartnersWithCampaign$: EventEmitter<boolean>;
@@ -36,16 +36,19 @@ export class PartnerMapComponent implements AfterViewChecked, OnDestroy{
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private ga: GoogleAnalytics,
+              private platform: Platform,
               private locationService: LocationService) {
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView('Kartenansicht Partner Screen')
     }
-    this.locationSubscription = this.locationService.getLocation().subscribe(
-      (location) => {
-        this.location = location;
-        console.error(location);
-      }
-    )
+    this.location = this.locationService.getCurrentLocation();
+    this.platformSubscription = this.platform.resume.subscribe(() => {
+      this.location = this.locationService.getCurrentLocation();
+    });
+  }
+
+  ionViewWillEnter() {
+    this.location = this.locationService.getCurrentLocation();
   }
 
   ngAfterViewChecked(){
@@ -56,8 +59,8 @@ export class PartnerMapComponent implements AfterViewChecked, OnDestroy{
   }
 
   ngOnDestroy() {
-    if (this.locationSubscription) {
-      this.locationSubscription.unsubscribe();
+    if (this.platformSubscription){
+      this.platformSubscription.unsubscribe();
     }
   }
 
@@ -77,7 +80,6 @@ export class PartnerMapComponent implements AfterViewChecked, OnDestroy{
     if (this.partnerListOpen) return "53vh"
     else return "100vh";
   }
-
 
   closePartnerList() {
     this.partnerListOpen = false;
