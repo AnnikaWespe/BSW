@@ -98,7 +98,7 @@ export class AuthService {
           let data = result.response.list[0].row;
           return {
             lastName: data.NAME,
-            saluation: data.ANREDE,
+            salutation: data.ANREDE,
             title: data.TITEL || '',
             firstName: data.VORNAME
           }
