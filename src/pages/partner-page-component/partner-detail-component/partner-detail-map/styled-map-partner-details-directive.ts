@@ -25,13 +25,10 @@ export class StyledMapPartnerDetailsDirective implements OnInit, OnDestroy {
               private platform: Platform,
               private locationService: LocationService)
   {
+    this.location = this.locationService.getCurrentLocation();
     this.platformSubscription = this.platform.resume.subscribe(()=>{
       this.location = this.locationService.getCurrentLocation();
     });
-  }
-
-  ionViewWillEnter() {
-    this.location = this.locationService.getCurrentLocation();
   }
 
   ngOnDestroy() {

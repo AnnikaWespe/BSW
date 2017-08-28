@@ -16,7 +16,7 @@ export class PartnerMapComponent implements AfterViewChecked, OnDestroy{
   partnerListOpen = false;
   partners: any[];
   scrollTop = 0;
-  location: any;
+  location: any = {};
   platformSubscription: any;
 
   @Input() partnersLong: any[];
@@ -41,6 +41,7 @@ export class PartnerMapComponent implements AfterViewChecked, OnDestroy{
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView('Kartenansicht Partner Screen')
     }
+    this.location = this.locationService.getCurrentLocation();
     this.platformSubscription = this.platform.resume.subscribe(() => {
       this.location = this.locationService.getCurrentLocation();
     });
