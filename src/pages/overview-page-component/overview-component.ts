@@ -1,5 +1,5 @@
 import {Component, OnDestroy, AfterViewChecked} from '@angular/core';
-import {AlertController, NavController, NavParams} from 'ionic-angular';
+import {AlertController, NavController, Platform, NavParams} from 'ionic-angular';
 
 
 import {PartnerService} from "../../services/partner-service";
@@ -63,6 +63,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   searchInterfaceOpen = false;
 
   getPartnersSubscription: any;
+  platformSubscription: any;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -73,6 +74,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               private ga: GoogleAnalytics,
               private bonusService: BonusService,
               public authService: AuthService,
+              private platform: Platform,
               private savePartnersService: SavePartnersService) {
 
     let user = this.authService.getUser();
@@ -85,6 +87,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
       this.checkForPromptRateAppInStore()
     }
+
+    this.platformSubscription = this.platform.resume.subscribe(() => this.getLocation());
 
   }
 
@@ -105,6 +109,14 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     if (this.getPartnersSubscription) {
       this.getPartnersSubscription.unsubscribe();
     }
+    if (this.platformSubscription){
+      this.platformSubscription.unsubscribe();
+    }
+  }
+
+  getLocation() {
+    this.location = this.locationService.getCurrentLocation();
+    this.loadPartners();
   }
 
   loadBonusData(id, token) {
@@ -396,11 +408,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
     this.dataFromCache = !this.waitingForResults && isDataAvailable && isDataFromCache;
 
-  }
-
-  getLocation() {
-    this.location = this.locationService.getCurrentLocation;
-    this.loadPartners();
   }
 
   ngAfterViewChecked() {

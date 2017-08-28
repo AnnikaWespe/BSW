@@ -1,5 +1,5 @@
 import {Component, AfterViewChecked, ViewChild, OnDestroy, EventEmitter, Output} from '@angular/core';
-import {NavController, NavParams, Content, ModalController} from 'ionic-angular';
+import {NavController, NavParams, Content, ModalController, Platform} from 'ionic-angular';
 
 import {PartnerService} from "../../services/partner-service";
 import {ChooseLocationManuallyComponent} from "./choose-location-manually/choose-location-manually-component";
@@ -27,7 +27,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   mode = "Observable";
   getPartnersSubscription: any;
 
-  location: any;
+  location: any = {};
 
   showCustomBackButton = false;
   showDropdown = [false, false, false];
@@ -67,6 +67,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   sortByCriterion = "RELEVANCE";
   sortOrder = "DESC";
   sortByArray = [true, false, false, false, false, false, false]
+  platformSubscription: any;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -74,6 +75,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
               public alertCtrl: AlertController,
               public locationService: LocationService,
               private ga: GoogleAnalytics,
+              private platform: Platform,
               private modalCtrl: ModalController) {
 
     let pageType = navParams.get("type");
@@ -87,10 +89,14 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.gaTrackPageView();
     }
+    this.platformSubscription = this.platform.resume.subscribe(() => {
+      this.location = this.locationService.getCurrentLocation();
+      this.resetPartnersArrays();
+      this.getPartners();
+    });
   }
 
   ionViewWillEnter() {
-    console.error('ionViewWillEnter!!!!!!!')
     this.location = this.locationService.getCurrentLocation();
     this.resetPartnersArrays();
     this.getPartners();

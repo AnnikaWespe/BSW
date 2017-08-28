@@ -1,4 +1,7 @@
 import {OnInit, Directive, Output, EventEmitter, Input, OnDestroy} from '@angular/core';
+
+import {Platform} from 'ionic-angular';
+
 import { GoogleMapsAPIWrapper } from '@agm/core/services/google-maps-api-wrapper';
 import {MapMarkerService} from "../../../../services/map-marker-service";
 import {LocationService} from "../../../../services/location-service";
@@ -9,27 +12,32 @@ declare let google: any;
   selector: 'styled-map-partner-details',
 })
 export class StyledMapPartnerDetailsDirective implements OnInit, OnDestroy {
-
   @Output() travelTimeCarUpdated = new EventEmitter();
   @Output() travelTimePublicUpdated = new EventEmitter();
   @Output() travelTimePedestrianUpdated = new EventEmitter();
   @Input() partner;
-
   map;
-
-  locationSubscription: any;
   location: any;
+  platformSubscription;
 
   constructor(private googleMapsWrapper: GoogleMapsAPIWrapper,
               private mapMarkerService: MapMarkerService,
-              private locationService: LocationService) {}
+              private platform: Platform,
+              private locationService: LocationService)
+  {
+    this.platformSubscription = this.platform.resume.subscribe(()=>{
+      this.location = this.locationService.getCurrentLocation();
+    });
+  }
 
   ionViewWillEnter() {
     this.location = this.locationService.getCurrentLocation();
   }
 
   ngOnDestroy() {
-    this.locationSubscription.unsubscribe();
+    if (this.platformSubscription){
+      this.platformSubscription.unsubscribe();
+    }
   }
 
   ngOnInit() {

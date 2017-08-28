@@ -24,6 +24,7 @@ export class ChooseLocationManuallyComponent implements OnDestroy {
   mapClickedSubscription;
   nameEnteredSubscription;
   needsGeocoding = false;
+  platformSubscription: any;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
