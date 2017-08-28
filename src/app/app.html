@@ -4,11 +4,11 @@
 
     <div class="list-wrapper">
 
-      <div class="logo-wrapper" [class.logo-wrapper-bottom-padding]="!salutation" >
+      <div class="logo-wrapper" [class.logo-wrapper-bottom-padding]="!user.loggedIn || !user.lastName" >
         <div class="logo"></div>
       </div>
 
-      <ion-row class="salutation" *ngIf="salutation">
+      <ion-row class="salutation" *ngIf="user.loggedIn && user.lastName">
         <p>
           Hallo, {{user.salutation}} {{user.title}} {{user.lastName}}!
         </p>

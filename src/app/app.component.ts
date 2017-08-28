@@ -162,8 +162,6 @@ export class BSWBonusApp {
       this.savePartnerService.clearRecentPartners();
       this.savePartnerService.clearFavoritePartners();
     }
-    /* reset salutation field, therefore UI gets updated */
-    this.salutation = null;
     this.nav.setRoot(LoginPageComponent);
   }
 
