@@ -102,6 +102,7 @@ export class BSWBonusApp {
       localStorage.setItem("disallowUserTracking", "false");
     }
     if (localStorage.getItem("disallowUserTracking") === "false") {
+      this.ga.setAnonymizeIp(true);
       this.ga.startTrackerWithId(id)
         .then(() => {
           this.ga.trackEvent('Login/Logout', 'Start der App');
