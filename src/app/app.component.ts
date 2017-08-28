@@ -30,12 +30,8 @@ export class BSWBonusApp {
 
   rootPage: any;
   pages: Array<{ title: string, component: any, parameters: {} }>;
-  userLoggedIn;
   user;
-  name;
-  title;
-  salutation;
-  lastName;
+
   jsonObject = {
     'to': 'id',
     'notification': {
@@ -65,14 +61,8 @@ export class BSWBonusApp {
       this.user = this.authService.getUser();
       this.setMenu();
       this.initializeApp();
-      localStorage.setItem("locationExact", "false");
+      // localStorage.setItem("locationExact", "false");
 
-      if (this.user.securityToken) {
-        let title = localStorage.getItem("userTitle");
-        this.title = (title == "null") ? "" : title;
-        this.salutation = localStorage.getItem("salutation");
-        this.lastName = localStorage.getItem("lastName");
-      }
       this.setWebViewsUrls();
   }
 
@@ -99,7 +89,7 @@ export class BSWBonusApp {
 
 
   setRootPage() {
-    if (localStorage.getItem("securityToken")) {
+    if (this.user.loggedIn) {
       this.rootPage = OverviewPageComponent;
     }
     else {
@@ -168,15 +158,10 @@ export class BSWBonusApp {
   }
 
   logout() {
-    if (this.userLoggedIn) {
+    if (this.user.loggedIn) {
       this.savePartnerService.clearRecentPartners();
       this.savePartnerService.clearFavoritePartners();
     }
-    
-    /* reset salutation field, therefore UI gets updated */
-    this.salutation = null;
-    this.userLoggedIn = false;
-
     this.nav.setRoot(LoginPageComponent);
   }
 

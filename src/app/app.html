@@ -4,13 +4,13 @@
 
     <div class="list-wrapper">
 
-      <div class="logo-wrapper" [class.logo-wrapper-bottom-padding]="!salutation" >
+      <div class="logo-wrapper" [class.logo-wrapper-bottom-padding]="!user.loggedIn || !user.lastName" >
         <div class="logo"></div>
       </div>
 
-      <ion-row class="salutation" *ngIf="salutation">
+      <ion-row class="salutation" *ngIf="user.loggedIn && user.lastName">
         <p>
-          Hallo, {{salutation}} {{title}} {{lastName}}!
+          Hallo, {{user.salutation}} {{user.title}} {{user.lastName}}!
         </p>
       </ion-row>
 
@@ -47,7 +47,7 @@
         </ion-item>
       </ion-row>
 
-      <ion-row menuClose class="page" (click)="openPage(this.pages[3])" *ngIf="userLoggedIn">
+      <ion-row menuClose class="page" (click)="openPage(this.pages[3])" *ngIf="user.loggedIn">
         <ion-item tappable>
           <div item-left class="icon-col">
             <div class="icon add-purchase"></div>
@@ -58,7 +58,7 @@
         </ion-item>
       </ion-row>
 
-      <ion-row menuClose class="page" *ngIf="!userLoggedIn">
+      <ion-row menuClose class="page" *ngIf="!user.loggedIn">
         <ion-item class="inactive">
           <div item-left class="icon-col">
             <div class="icon add-purchase"></div>
@@ -69,8 +69,8 @@
         </ion-item>
       </ion-row>
 
-      <ion-row menuClose class="page get-large-distance" (click)="openPage(this.pages[4])" *ngIf="userLoggedIn">
-        <ion-item tappable [class.inactive]="!userLoggedIn">
+      <ion-row menuClose class="page get-large-distance" (click)="openPage(this.pages[4])" *ngIf="user.loggedIn">
+        <ion-item tappable [class.inactive]="!user.loggedIn">
           <div item-left class="icon-col">
             <div class="icon my-profile"></div>
           </div>
@@ -80,7 +80,7 @@
         </ion-item>
       </ion-row>
 
-      <ion-row class="page get-large-distance" *ngIf="!userLoggedIn">
+      <ion-row class="page get-large-distance" *ngIf="!user.loggedIn">
         <ion-item class="inactive">
           <div item-left class="icon-col">
             <div class="icon my-profile"></div>
@@ -138,7 +138,7 @@
         </ion-item>
       </ion-row>
 
-      <ion-row menuClose class="page" (click)="logout()" *ngIf="userLoggedIn">
+      <ion-row menuClose class="page" (click)="logout()" *ngIf="user.loggedIn">
         <ion-item tappable>
           <div item-left class="icon-col">
             <div class="icon sign-out"></div>
@@ -149,7 +149,7 @@
         </ion-item>
       </ion-row>
 
-      <ion-row menuClose class="page" (click)="logout()" *ngIf="!userLoggedIn">
+      <ion-row menuClose class="page" (click)="logout()" *ngIf="!user.loggedIn">
         <ion-item tappable>
           <div item-left class="icon-col">
             <div class="icon"></div>
