@@ -66,6 +66,7 @@ export class LoginPageComponent {
       this.imageHolderHeight = (screenHeight / 3);
     }
 
+    screenHeight = document.getElementById('main-content').clientHeight || screenHeight;
     let footerHeight = document.getElementById('login-footer').clientHeight || 0;
     let numberHeight = document.getElementById('number-row').clientHeight || 0;
     let passwordHeight = document.getElementById('password-row').clientHeight || 0;
