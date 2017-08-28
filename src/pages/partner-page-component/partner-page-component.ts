@@ -28,6 +28,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   getPartnersSubscription: any;
 
   location: any = {};
+  locationSubscription: any = {};
 
   showCustomBackButton = false;
   showDropdown = [false, false, false];
@@ -99,13 +100,24 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.resetPartnersArrays();
     this.getPartners();
 
+    this.locationSubscription = this.locationService.getLocation().subscribe(() => {
+
+      let loc = this.locationService.getCurrentLocation();
+      if(!this.location || loc.fromGps != this.location.fromGps || !loc.fromGps) {
+        this.location = loc;
+        this.resetPartnersArrays();
+        this.getPartners();
+      }
+
+    });
+
   }
 
-  /*
+
   ionViewWillEnter() {
 
   }
-  */
+
 
   public ngAfterViewChecked() {
     this.setFocus();
@@ -116,9 +128,15 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   }
 
   globallyUnsubscribe() {
+
     if (this.getPartnersSubscription) {
       this.getPartnersSubscription.unsubscribe();
     }
+
+    if (this.locationSubscription) {
+      this.locationSubscription.unsubscribe();
+    }
+
   }
 
   setParameters() {
@@ -318,12 +336,13 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
 
   chooseLocationManually() {
+
     event.stopPropagation();
     this.navCtrl.push(ChooseLocationManuallyComponent);
     this.showDropdown = [false, false, false];
     this.showDropdownForAnimation = ["false", "false", "false"];
-  }
 
+  }
 
   showPartner(partner = 0) {
     this.navCtrl.push(PartnerDetailComponent, {partner: partner});
@@ -364,7 +383,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.showMap = !this.showMap;
     this.showDropdown = [false, false, false];
     this.showDropdownForAnimation = ["false", "false", "false"];
-    this.globallyUnsubscribe();
   }
 
   toggleGetLocationFromGPSEnabled() {
@@ -379,12 +397,14 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
           this.waitingForGPSSignal = false;
           this.showDropdown = [false, false, false];
           this.showDropdownForAnimation = ["false", "false", "false"];
+
         },
         (currentLocation) => {
           this.showPromptGPSDisabled();
           this.waitingForGPSSignal = false;
           this.showDropdown = [false, false, false];
           this.showDropdownForAnimation = ["false", "false", "false"];
+
         }
       );
     }

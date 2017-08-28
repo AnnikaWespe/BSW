@@ -70,11 +70,13 @@ export class ChooseLocationManuallyComponent implements OnDestroy {
   }
 
   setLocationData() {
+
     this.locationService.setLocation({
       longitude: this.longitude,
       latitude: this.latitude,
       locationName: this.locationName
     })
+
   }
 
   somethingTypedInInputField(event) {

@@ -29,7 +29,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   id: string;
   token: string;
   userLoggedIn = null;
-  location:any = {latitude: "0", longitude: "0"};
+  location: any = {latitude: "0", longitude: "0"};
 
   heightBalanceBarBonusBarBuffer = ["0vh", "0vh", "0vh", "0vh"];
   maxHeightBarInVh = 14;
@@ -64,6 +64,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   getPartnersSubscription: any;
   platformSubscription: any;
+  locationSubscription: any;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -90,18 +91,37 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
     this.platformSubscription = this.platform.resume.subscribe(() => this.getLocation());
 
+    this.locationSubscription = this.locationService.getLocation().subscribe(() => {
+
+      let loc = this.locationService.getCurrentLocation();
+      if (!this.location || loc.fromGps != this.location.fromGps || !loc.fromGps) {
+        this.location = loc;
+        this.loadAllData();
+      }
+
+    });
+
   }
 
   ionViewWillEnter() {
-    this.savePartnersService.cleanup();
-    this.getLocation();
-    this.loadFavorites(this.id, this.token);
-    this.loadRecentPartners();
 
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView('Übersicht Screen')
     }
+
+    this.loadAllData();
+
+  }
+
+  loadAllData() {
+
+    this.savePartnersService.cleanup();
+    this.getLocation();
+
+    this.loadRecentPartners();
+    this.loadFavorites(this.id, this.token);
     this.loadBonusData(this.id, this.token);
+    this.loadPartners();
 
   }
 
@@ -109,8 +129,12 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     if (this.getPartnersSubscription) {
       this.getPartnersSubscription.unsubscribe();
     }
-    if (this.platformSubscription){
+    if (this.platformSubscription) {
       this.platformSubscription.unsubscribe();
+    }
+
+    if (this.locationSubscription) {
+      this.locationSubscription.unsubscribe();
     }
   }
 

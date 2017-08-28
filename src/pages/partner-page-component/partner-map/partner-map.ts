@@ -17,6 +17,8 @@ export class PartnerMapComponent implements AfterViewChecked, OnDestroy{
   partners: any[];
   scrollTop = 0;
   location: any = {};
+
+  locationSubscription: any;
   platformSubscription: any;
 
   @Input() partnersLong: any[];
@@ -41,10 +43,23 @@ export class PartnerMapComponent implements AfterViewChecked, OnDestroy{
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView('Kartenansicht Partner Screen')
     }
+
     this.location = this.locationService.getCurrentLocation();
+
     this.platformSubscription = this.platform.resume.subscribe(() => {
       this.location = this.locationService.getCurrentLocation();
     });
+
+    this.locationSubscription = this.locationService.getLocation().subscribe(() => {
+
+      let loc = this.locationService.getCurrentLocation();
+      if(!this.location || loc.fromGps != this.location.fromGps || !loc.fromGps) {
+        this.location = loc;
+      }
+
+    });
+
+
   }
 
   ionViewWillEnter() {
@@ -59,9 +74,15 @@ export class PartnerMapComponent implements AfterViewChecked, OnDestroy{
   }
 
   ngOnDestroy() {
-    if (this.platformSubscription){
+
+    if (this.locationSubscription){
       this.platformSubscription.unsubscribe();
     }
+
+    if (this.locationSubscription){
+      this.platformSubscription.unsubscribe();
+    }
+
   }
 
   stringToNumber(string) {

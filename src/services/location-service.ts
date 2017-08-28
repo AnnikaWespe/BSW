@@ -57,19 +57,27 @@ export class LocationService {
     if (!currentLocation.longitude || !currentLocation.latitude) {
       return;
     }
-    currentLocation.locationFound = true;
-    currentLocation.locationAvailable = currentLocation.locationAvailable || true;
-    currentLocation.locationExact = currentLocation.locationExact || true;
-    currentLocation.fromGPS = false;
-    this.getLocationName(currentLocation).subscribe((locationName) => {
-      currentLocation.locationName = locationName;
-      localStorage.setItem('location', JSON.stringify(currentLocation));
-      this.location.next(currentLocation);
+
+    this.currentLocation = currentLocation;
+
+    this.currentLocation.locationFound = true;
+    this.currentLocation.locationAvailable = currentLocation.locationAvailable || true;
+    this.currentLocation.locationExact = currentLocation.locationExact || true;
+    this.currentLocation.fromGPS = false;
+
+    this.getLocationName(this.currentLocation).subscribe((locationName) => {
+
+      this.currentLocation.locationName = locationName;
+      localStorage.setItem('location', JSON.stringify(this.currentLocation));
+      this.location.next(this.currentLocation);
+
       if (this.geoLocationSubscription) {
         this.geoLocationSubscription.unsubscribe();
         this.geoLocationSubscription = undefined;
       }
+
     })
+
   }
 
   updateLocation(watch: boolean = true): Promise<any> {
@@ -105,7 +113,7 @@ export class LocationService {
             handlePosition(position, resolve, reject);
             this.geoLocationSubscription = this.geolocation.watchPosition()
               .filter(position => position.coords !== undefined)
-              .debounceTime(1.5*60)              
+              .debounceTime(1.5*60)
               .subscribe(
                 (position) => handlePosition(position, () => {}, () => {}),
                 (error) => {
@@ -129,7 +137,7 @@ export class LocationService {
             reject({fromGPS: false});
           }
         )
-      } 
+      }
     })
     return promise;
 
