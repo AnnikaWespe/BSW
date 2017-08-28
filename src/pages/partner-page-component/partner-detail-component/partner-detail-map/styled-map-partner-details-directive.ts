@@ -22,12 +22,10 @@ export class StyledMapPartnerDetailsDirective implements OnInit, OnDestroy {
 
   constructor(private googleMapsWrapper: GoogleMapsAPIWrapper,
               private mapMarkerService: MapMarkerService,
-              private locationService: LocationService) {
+              private locationService: LocationService) {}
 
-    this.locationSubscription = locationService.getLocation().subscribe((location) => {
-      this.location = location;
-    })
-
+  ionViewWillEnter() {
+    this.location = this.locationService.getCurrentLocation();
   }
 
   ngOnDestroy() {

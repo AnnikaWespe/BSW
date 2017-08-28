@@ -34,13 +34,12 @@ export class ChooseLocationManuallyComponent implements OnDestroy {
               private keyboard: Keyboard,
               public loadingCtrl: LoadingController) {
 
-    this.locationService.getLocation().subscribe((location) => {
-      this.latitude = location.latitude;
-      this.longitude = location.longitude;
-      this.locationExact = location.locationExact;
-      this.locationNameInInputField = location.locationName;
-      this.locationName = location.locationName;
-    }).unsubscribe();
+    let location = this.locationService.getCurrentLocation();
+    this.latitude = location.latitude;
+    this.longitude = location.longitude;
+    this.locationExact = location.locationExact;
+    this.locationNameInInputField = location.locationName;
+    this.locationName = location.locationName;
   }
 
   ngOnDestroy() {

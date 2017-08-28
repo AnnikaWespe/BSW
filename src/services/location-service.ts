@@ -49,6 +49,10 @@ export class LocationService {
     return this.location;
   }
 
+  getCurrentLocation(): any {
+    return this.currentLocation;
+  }
+
   setLocation(currentLocation: any) {
     if (!currentLocation.longitude || !currentLocation.latitude) {
       return;

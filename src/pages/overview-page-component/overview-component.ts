@@ -29,7 +29,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   id: string;
   token: string;
   userLoggedIn = null;
-  location = {latitude: "0", longitude: "0"};
+  location:any = {latitude: "0", longitude: "0"};
 
   heightBalanceBarBonusBarBuffer = ["0vh", "0vh", "0vh", "0vh"];
   maxHeightBarInVh = 14;
@@ -63,7 +63,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   searchInterfaceOpen = false;
 
   getPartnersSubscription: any;
-  getLocationSubscription: any;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -83,8 +82,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       this.userLoggedIn = true;
     }
 
-    this.subscribeForLocation();
-
     if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
       this.checkForPromptRateAppInStore()
     }
@@ -92,17 +89,14 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
   ionViewWillEnter() {
-
     this.savePartnersService.cleanup();
-
+    this.getLocation();
     this.loadFavorites(this.id, this.token);
     this.loadRecentPartners();
 
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView('Übersicht Screen')
     }
-
-    this.loadPartners();
     this.loadBonusData(this.id, this.token);
 
   }
@@ -110,9 +104,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   ngOnDestroy() {
     if (this.getPartnersSubscription) {
       this.getPartnersSubscription.unsubscribe();
-    }
-    if (this.getLocationSubscription) {
-      this.getLocationSubscription.unsubscribe();
     }
   }
 
@@ -407,23 +398,9 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   }
 
-  subscribeForLocation() {
-
-    this.getLocationSubscription = this.locationService.getLocation().subscribe(
-      (location) => {
-        this.location = location;
-        if (location.locationFound == true) {
-          localStorage.setItem("getLocationFromGPSEnabled", "true");
-          this.loadPartners();
-        }
-        else {
-          localStorage.setItem("getLocationFromGPSEnabled", "false");
-        }
-      }, (error) => {
-        localStorage.setItem("getLocationFromGPSEnabled", "false");
-      }
-    )
-
+  getLocation() {
+    this.location = this.locationService.getCurrentLocation;
+    this.loadPartners();
   }
 
   ngAfterViewChecked() {

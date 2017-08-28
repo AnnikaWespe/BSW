@@ -26,8 +26,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   title = "Partner";
   mode = "Observable";
   getPartnersSubscription: any;
-  //getLocationNameSubscription: any;
-  getLocationSubscription: any;
 
   location: any;
 
@@ -70,23 +68,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   sortOrder = "DESC";
   sortByArray = [true, false, false, false, false, false, false]
 
-  public ngAfterViewChecked() {
-    this.setFocus();
-  }
-
-  ngOnDestroy() {
-    this.globallyUnsubscribe();
-  }
-
-  globallyUnsubscribe() {
-    if (this.getLocationSubscription) {
-      this.getLocationSubscription.unsubscribe();
-    }
-    if (this.getPartnersSubscription) {
-      this.getPartnersSubscription.unsubscribe();
-    }
-  }
-
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private partnerService: PartnerService,
@@ -106,15 +87,27 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.gaTrackPageView();
     }
+  }
 
-    this.getLocationSubscription = this.locationService.getLocation().subscribe(
-      (location) => {
-        this.location = location;
-        this.resetPartnersArrays();
-        this.getPartners();
-      }
-    )
+  ionViewWillEnter() {
+    console.error('ionViewWillEnter!!!!!!!')
+    this.location = this.locationService.getCurrentLocation();
+    this.resetPartnersArrays();
+    this.getPartners();
+  }
 
+  public ngAfterViewChecked() {
+    this.setFocus();
+  }
+
+  ngOnDestroy() {
+    this.globallyUnsubscribe();
+  }
+
+  globallyUnsubscribe() {
+    if (this.getPartnersSubscription) {
+      this.getPartnersSubscription.unsubscribe();
+    }
   }
 
   setParameters() {
