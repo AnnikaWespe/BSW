@@ -74,7 +74,7 @@ export class LoginPageComponent {
     /* if the sizes of the children can be determined, calculate the size precise */
     let totalHeight = footerHeight + numberHeight + passwordHeight + informationHeight;
     if(totalHeight > 0 && screenHeight > 0 && totalHeight < screenHeight){
-      this.imageHolderHeight = screenHeight - totalHeight;
+      this.imageHolderHeight = (screenHeight - totalHeight) * 0.9;
     }
 
   }
@@ -138,7 +138,7 @@ export class LoginPageComponent {
         this.loading.dismiss();
         if (error==='LoginFailed') {
           this.showPromptLoginFailed();
-        } else {      
+        } else {
           this.showPromptNoNetwork();
         }
       }
