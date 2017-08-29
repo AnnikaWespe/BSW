@@ -1,5 +1,5 @@
 import {NgModule, ErrorHandler} from '@angular/core';
-import {IonicApp, IonicModule, IonicErrorHandler, Animation} from 'ionic-angular';
+import {IonicApp, IonicModule, IonicErrorHandler, Animation, Keyboard} from 'ionic-angular';
 import {FormsModule} from '@angular/forms';
 import {HttpModule, JsonpModule} from '@angular/http';
 import {BrowserModule} from '@angular/platform-browser';
@@ -153,7 +153,8 @@ import {ZBar} from "@ionic-native/zbar";
     InitService,
     PushNotificationsService,
     GoogleAnalytics,
-    NativeGeocoder
+    NativeGeocoder,
+    Keyboard
   ]
 })
 export class AppModule {

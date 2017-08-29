@@ -134,8 +134,12 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
 
   }
 
-  ionViewWillLeave(){
+  ionViewDidLeave(){
+
+    this.url = "about:blank";
+    this.cachedContent = null;
     this.keyboard.close();
+
   }
 
   ngAfterViewInit() {
