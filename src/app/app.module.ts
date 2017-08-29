@@ -1,5 +1,5 @@
 import {NgModule, ErrorHandler} from '@angular/core';
-import {IonicApp, IonicModule, IonicErrorHandler, Animation, Keyboard} from 'ionic-angular';
+import {IonicApp, IonicModule, IonicErrorHandler, Animation} from 'ionic-angular';
 import {FormsModule} from '@angular/forms';
 import {HttpModule, JsonpModule} from '@angular/http';
 import {BrowserModule} from '@angular/platform-browser';
@@ -8,6 +8,7 @@ import {SplashScreen} from '@ionic-native/splash-screen';
 import {StatusBar} from '@ionic-native/status-bar';
 import {Camera} from '@ionic-native/camera';
 import {Geolocation} from '@ionic-native/geolocation';
+import {Keyboard} from '@ionic-native/keyboard';
 
 import {AgmCoreModule} from '@agm/core';
 //import { GoogleMapsAPIWrapper } from '@agm/core/services/google-maps-api-wrapper';

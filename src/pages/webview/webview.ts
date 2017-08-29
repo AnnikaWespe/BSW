@@ -1,11 +1,12 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {NavController, NavParams, LoadingController, AlertController, Nav, Keyboard} from "ionic-angular";
+import {NavController, NavParams, LoadingController, AlertController, Nav} from "ionic-angular";
 import {Http} from "@angular/http";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {DeviceService} from "../../services/device-data";
 import {DomSanitizer} from "@angular/platform-browser";
 import {CachedContentService} from "./cached-content-data";
 import {AuthService} from "../../services/auth-service";
+import { Keyboard } from '@ionic-native/keyboard';
 
 declare let cordova: any;
 
@@ -134,6 +135,10 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
 
   }
 
+  ionViewDidEnter(){
+    this.keyboard.disableScroll(true)
+  }
+
   ionViewDidLeave(){
 
     this.url = "about:blank";
@@ -146,11 +151,15 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
 
     if (this.iframe) {
 
-      this.timeoutHandle = setTimeout(this.errorLoad, 5000);
+      this.timeoutHandle = setTimeout(() => {this.errorLoad()}, 5000);
       this.iframe.nativeElement.onload = () => {
         clearTimeout(this.timeoutHandle);
         this.dismissLoadingIndicator();
       }
+
+      this.iframe.nativeElement.onerror = (error) => {
+        console.error("iframe: " + error);
+      };
 
     }
 
