@@ -1,6 +1,7 @@
 import {Component, OnDestroy} from '@angular/core';
 import {NavParams, NavController, AlertController} from "ionic-angular";
 import {Camera} from "@ionic-native/camera";
+import {AuthService} from "../../../services/auth-service";
 
 declare let window: any;
 
@@ -16,7 +17,8 @@ export class PictureScreenComponent implements OnDestroy{
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private camera: Camera,
-              public alertCtrl: AlertController) {
+              public alertCtrl: AlertController,
+              public authService: AuthService) {
     this.base64Image = navParams.get('base64Image');
   }
 
@@ -38,7 +40,7 @@ export class PictureScreenComponent implements OnDestroy{
 
   sendEmail() {
     window.plugins.socialsharing.shareViaEmail(
-      'Sehr geehrte Damen und Herren, bitte tragen Sie meinen Einkauf nach. Meine Mitgliedsnummer lautet ' + localStorage.getItem("mitgliedsnummer") + '.',
+      'Sehr geehrte Damen und Herren, bitte tragen Sie meinen Einkauf nach. Meine Mitgliedsnummer lautet ' + this.authService.getUser().mitgliedsnummer + '.',
       'Vor-Ort Einkauf nacherfassen',
       ['dialog@bsw.de'],
       null,

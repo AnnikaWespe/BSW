@@ -150,7 +150,7 @@ export class PartnerDetailComponent implements OnDestroy {
     if (this.authService.getUser().securityToken || goEvenIfUserNotLoggedIn) {
       let url = this.partnerDetails.trackingUrl
       if (!goEvenIfUserNotLoggedIn) {
-        let mitgliedsnummer = localStorage.getItem("mitgliedsnummer");
+        let mitgliedsnummer = this.authService.getUser().mitgliedsnummer;
         url = url
           .replace("#MGNUMMER#", mitgliedsnummer)
           .replace("AVS9StAVS1St", mitgliedsnummer)

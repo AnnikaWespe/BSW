@@ -60,9 +60,9 @@ export class StyledMapPartnerDetailsDirective implements OnInit, OnDestroy {
     bounds.extend({lat: this.partner.location.latitude, lng: this.partner.location.longitude});
 
     /* if we have an exact position, zoom the map to bounds of my position and target */
-    if (localStorage.getItem("locationExact") === "true") {
+    if (this.location) {
       console.log("location Exact is so true");
-      bounds.extend({lat: Number(localStorage.getItem("latitude")), lng: Number(localStorage.getItem("longitude"))});
+      bounds.extend({lat: this.location.latitude, lon: this.location.longitude});
       map.fitBounds(bounds);
 
     } else {

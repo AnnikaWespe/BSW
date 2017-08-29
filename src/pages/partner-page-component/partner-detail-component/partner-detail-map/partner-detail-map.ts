@@ -4,6 +4,7 @@ import {FavoritesData} from "../../../../services/favorites-data";
 import {FavoritesService} from "../../../../services/favorites-service";
 import {SavePartnersService} from "../save-partners-service";
 import {AuthService} from "../../../../services/auth-service";
+import {LocationService} from "../../../../services/location-service";
 
 declare let device: any;
 
@@ -19,6 +20,7 @@ export class PartnerDetailMap {
   travelTimePedestrian: string;
   travelTimeAvailable = false;
 
+  location: any;
   currentLatitude: number;
   currentLongitude: number;
   locationExact = false;
@@ -36,17 +38,21 @@ export class PartnerDetailMap {
               public favoritesService: FavoritesService,
               public alertCtrl: AlertController,
               public authService: AuthService,
-              private savePartnersService: SavePartnersService) {
+              private savePartnersService: SavePartnersService,
+              private locationService: LocationService) {
     this.partnerDetails = navParams.get("partnerDetails");
     this.partner = navParams.get("partner");
     this.securityToken = this.authService.getUser().securityToken;
     this.favoritesByPfArray = FavoritesData.favoritesByPfArray;
     console.log(this.partnerDetails);
-    if (localStorage.getItem("locationExact") === "true") {
-      this.currentLatitude = parseFloat(localStorage.getItem("latitude"));
-      this.currentLongitude = parseFloat(localStorage.getItem("longitude"));
+
+    this.location = this.locationService.getLocation();
+    if (this.location) {
+      this.currentLatitude = this.location.latitude;
+      this.currentLongitude = this.location.longitude;
       this.locationExact = true;
     }
+
     console.log("PartnerDetailMap: ", this.currentLatitude + " " + this.currentLongitude);
     this.pfNumber = this.partnerDetails.pfNummer;
     console.log(this.pfNumber);
