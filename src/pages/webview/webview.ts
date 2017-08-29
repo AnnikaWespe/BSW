@@ -145,6 +145,10 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
     this.cachedContent = null;
     this.keyboard.close();
 
+    if(this.timeoutHandle) {
+      clearTimeout(this.timeoutHandle);
+    }
+
   }
 
   ngAfterViewInit() {
