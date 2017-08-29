@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {NavController, NavParams, LoadingController, AlertController, Nav} from "ionic-angular";
+import {NavController, NavParams, LoadingController, AlertController, Nav, Keyboard} from "ionic-angular";
 import {Http} from "@angular/http";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {DeviceService} from "../../services/device-data";
@@ -38,7 +38,9 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
               private elementRef: ElementRef,
               private alertCtrl: AlertController,
               public authService: AuthService,
-              public loadingCtrl: LoadingController) {
+              public loadingCtrl: LoadingController,
+              private keyboard: Keyboard) {
+
     console.error(localStorage.getItem("noWebViewUrlsAvailable"));
     this.noWebViewUrlsAvailable = (localStorage.getItem("noWebViewUrlsAvailable") === "true");
     this.title = navParams.get('title');
@@ -130,6 +132,10 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
     this.disallowUserTracking = (localStorage.getItem("disallowUserTracking") == "true");
     this.allowUserTracking = !this.disallowUserTracking;
 
+  }
+
+  ionViewWillLeave(){
+    this.keyboard.close();
   }
 
   ngAfterViewInit() {
