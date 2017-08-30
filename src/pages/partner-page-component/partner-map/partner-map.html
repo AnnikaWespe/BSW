@@ -1,9 +1,11 @@
 <div class="map-container" [style.height]="getMapHeight()" style="overflow: hidden">
+  <div *ngIf="partnerListOpen" class = "click-layer" [style.height]="getMapHeight()" (click)="closePartnerList()"></div>
   <agm-map
     [latitude]="location.latitude"
     [longitude]="location.longitude"
     [zoomControl]="false"
-    [zoom]="15">
+    [zoom]="15"
+    (mapClick)="closePartnerList()">
     <agm-circle [latitude]="location.latitude"
                 [longitude]="location.longitude"
                 [fillColor]="'red'"

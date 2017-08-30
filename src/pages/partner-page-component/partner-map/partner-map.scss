@@ -15,7 +15,7 @@ partner-map {
     font-size: 150%;
     background-color: map_get($colors, light);
     z-index: 200;
-    ion-icon{
+    ion-icon {
       z-index: 200;
     }
   }
@@ -36,6 +36,11 @@ partner-map {
     ion-spinner {
       margin-top: 30vh;
     }
+  }
+
+  div.click-layer {
+    position: absolute;
+    background-color: transparent;
   }
 
 }
