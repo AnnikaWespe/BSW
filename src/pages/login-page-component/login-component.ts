@@ -136,6 +136,7 @@ export class LoginPageComponent {
       (user) => {
         this.loading.dismiss();
         this.navigateToNextPageWithLoginSuccessful(user.mitgliedId, user.securityToken);
+
       },
       (error) => {
         this.loading.dismiss();

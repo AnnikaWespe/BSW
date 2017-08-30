@@ -56,9 +56,10 @@ export class BSWBonusApp {
     private statusBar: StatusBar,
     private partnerService: PartnerService,
     private savePartnerService: SavePartnersService,
-    private authService: AuthService
+    private authService: AuthService,
     ) {
       this.user = this.authService.getUser();
+      this.registerForUserLogInEvent();
       this.setMenu();
       this.initializeApp();
       // localStorage.setItem("locationExact", "false");
@@ -171,6 +172,17 @@ export class BSWBonusApp {
 
   loadContactPage() {
     this.nav.push(WebviewComponent, {urlType: "KontaktWebviewUrl", title: "Kontakt"})
+  }
+
+  registerForUserLogInEvent(){
+    this.events.subscribe('user:loggedOut', () => {
+      this.user = {loggedIn: false};
+      console.log(this.user);
+    });
+    this.events.subscribe('user:loggedIn', (user) => {
+      this.user = user;
+      console.log(this.user);
+    });
   }
 
 
