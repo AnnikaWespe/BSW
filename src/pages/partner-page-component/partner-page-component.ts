@@ -86,6 +86,9 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this[pageType] = true;
     this.pageType = pageType;
     this.searchTerm = navParams.get("searchTerm") || "";
+    this.location = this.locationService.getCurrentLocation();
+    this.resetPartnersArrays();
+
     this.setParameters();
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.gaTrackPageView();
@@ -95,10 +98,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.resetPartnersArrays();
       this.getPartners();
     });
-
-    this.location = this.locationService.getCurrentLocation();
-    this.resetPartnersArrays();
-    this.getPartners();
 
     this.locationSubscription = this.locationService.getLocation().subscribe(() => {
 
@@ -167,7 +166,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
 
   //subscribeForLocation() {
-    // wird eigentlich nicht mehr gebraucht, weil alles im Subsribe gehandelt wird.
+    // wird eigentlich nicht mehr gebraucht, weil alles im Subscribe gehandelt wird.
   //}
 
   showPromptGPSDisabled() {
@@ -185,7 +184,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     prompt.present();
   }
 
-  getPartnersWithSearchTerm(searchTerm) {
+  /*getPartnersWithSearchTerm(searchTerm) {
     this.searchInterfaceOpen = false;
     this.searchTerm = searchTerm + " ";
     this.title = searchTerm;
@@ -197,7 +196,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     }
     this.resetPartnersArrays();
     this.getPartners();
-  }
+  }*/
 
   sortBy(indexInSortByArray, criterion, order) {
     this.sortByArray = [false, false, false, false, false, false, false];
@@ -216,7 +215,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
     this.searchInterfaceOpen = false;
     this.navCtrl.push(PartnerPageComponent, {
-      type: "searchPageComponent",
+      type: this.pageType,
       searchTerm: searchTerm
     })
 
