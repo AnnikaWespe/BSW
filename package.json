@@ -58,7 +58,6 @@
         "ionic-plugin-keyboard": "~2.2.1",
         "ionicons": "3.0.0",
         "js-marker-clusterer": "1.0.0",
-        "phonegap-plugin-barcodescanner": "~6.0.6",
         "rxjs": "5.1.1",
         "sw-toolbox": "3.6.0",
         "web-animations-js": "2.3.1",
@@ -145,9 +144,6 @@
             "cordova-plugin-whitelist": {},
             "cordova-plugin-x-socialsharing": {},
             "ionic-plugin-keyboard": {},
-            "phonegap-plugin-barcodescanner": {
-                "CAMERA_USAGE_DESCRIPTION": " "
-            },
             "cordova-plugin-inappbrowser": {}
         },
         "platforms": [
