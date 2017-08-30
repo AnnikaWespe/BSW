@@ -1,5 +1,5 @@
 import {Component, AfterViewChecked, ViewChild, OnDestroy, EventEmitter, Output} from '@angular/core';
-import {NavController, NavParams, Content, ModalController} from 'ionic-angular';
+import {NavController, NavParams, Content, ModalController, Platform} from 'ionic-angular';
 
 import {PartnerService} from "../../services/partner-service";
 import {ChooseLocationManuallyComponent} from "./choose-location-manually/choose-location-manually-component";
@@ -26,10 +26,9 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   title = "Partner";
   mode = "Observable";
   getPartnersSubscription: any;
-  //getLocationNameSubscription: any;
-  getLocationSubscription: any;
 
-  location: any;
+  location: any = {};
+  locationSubscription: any = {};
 
   showCustomBackButton = false;
   showDropdown = [false, false, false];
@@ -65,15 +64,60 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   onlinePartnerPageComponent = false;
   offlinePartnerPageComponent = false;
   searchPageComponent = false;
-
-  //getLocationFromGPSEnabled = false;
-  cityName = "manuell gewählter Ort";
-
   searchInterfaceOpen = false;
-
   sortByCriterion = "RELEVANCE";
   sortOrder = "DESC";
   sortByArray = [true, false, false, false, false, false, false]
+  platformSubscription: any;
+
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              private partnerService: PartnerService,
+              public alertCtrl: AlertController,
+              public locationService: LocationService,
+              private ga: GoogleAnalytics,
+              private platform: Platform,
+              private modalCtrl: ModalController) {
+
+    let pageType = navParams.get("type");
+    if (navParams.get('navigatedFromOverview')) {
+      this.navigatedFromOverview = true;
+    }
+    this[pageType] = true;
+    this.pageType = pageType;
+    this.searchTerm = navParams.get("searchTerm") || "";
+    this.setParameters();
+    if (localStorage.getItem("disallowUserTracking") === "false") {
+      this.gaTrackPageView();
+    }
+    this.platformSubscription = this.platform.resume.subscribe(() => {
+      this.location = this.locationService.getCurrentLocation();
+      this.resetPartnersArrays();
+      this.getPartners();
+    });
+
+    this.location = this.locationService.getCurrentLocation();
+    this.resetPartnersArrays();
+    this.getPartners();
+
+    this.locationSubscription = this.locationService.getLocation().subscribe(() => {
+
+      let loc = this.locationService.getCurrentLocation();
+      if(!this.location || loc.fromGps != this.location.fromGps || !loc.fromGps) {
+        this.location = loc;
+        this.resetPartnersArrays();
+        this.getPartners();
+      }
+
+    });
+
+  }
+
+
+  ionViewWillEnter() {
+
+  }
+
 
   public ngAfterViewChecked() {
     this.setFocus();
@@ -84,43 +128,14 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   }
 
   globallyUnsubscribe() {
-    if (this.getLocationSubscription) {
-      this.getLocationSubscription.unsubscribe();
-    }
+
     if (this.getPartnersSubscription) {
       this.getPartnersSubscription.unsubscribe();
     }
-  }
 
-  constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              private partnerService: PartnerService,
-              public alertCtrl: AlertController,
-              public locationService: LocationService,
-              private ga: GoogleAnalytics,
-              private modalCtrl: ModalController) {
-
-    let pageType = navParams.get("type");
-    if (navParams.get('navigatedFromOverview')) {
-      this.navigatedFromOverview = true;
+    if (this.locationSubscription) {
+      this.locationSubscription.unsubscribe();
     }
-    this[pageType] = true;
-    this.pageType = pageType;
-    this.searchTerm = navParams.get("searchTerm") || "";
-    // this.getLocationFromGPSEnabled = (localStorage.getItem("getLocationFromGPSEnabled") === "true");
-    this.cityName = localStorage.getItem("cityName");
-    this.setParameters();
-    if (localStorage.getItem("disallowUserTracking") === "false") {
-      this.gaTrackPageView();
-    }
-
-    this.getLocationSubscription = this.locationService.getLocation().subscribe(
-      (location) => {
-        this.location = location;
-        this.resetPartnersArrays();
-        this.getPartners();
-      }
-    )
 
   }
 
@@ -129,8 +144,8 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     if (this.offlinePartnerPageComponent) {
       this.showOfflinePartners = true;
       this.displayedPartners = this.offlinePartners;
-      this.title = "Vor-Ort-Partner";
-      // this.checkIfGPSEnabled();
+      this.title = "Vor Ort Partner";
+      // this.subscribeForLocation();
       this.sortByArray = [false, false, false, false, false, false, true]
       this.sortByCriterion = "DISTANCE";
       this.sortOrder = "ASC";
@@ -146,12 +161,12 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.showOfflinePartners = this.navParams.get("showOfflinePartners") || true;
       this.displayedPartners = this.allPartners;
       this.title = this.searchTerm;
-      // this.checkIfGPSEnabled();
+      // this.subscribeForLocation();
     }
   }
 
 
-  //checkIfGPSEnabled() {
+  //subscribeForLocation() {
     // wird eigentlich nicht mehr gebraucht, weil alles im Subsribe gehandelt wird.
   //}
 
@@ -195,6 +210,16 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.showDropdownForAnimation = ["false", "false", "false"];
     this.content.scrollToTop(0);
     this.getPartners();
+  }
+
+  loadPartnerPage(searchTerm) {
+
+    this.searchInterfaceOpen = false;
+    this.navCtrl.push(PartnerPageComponent, {
+      type: "searchPageComponent",
+      searchTerm: searchTerm
+    })
+
   }
 
 
@@ -289,7 +314,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       return;
     }
     if (this.showOfflinePartners && !this.showOnlinePartners) {
-      this.title = this.searchTerm || "Vor-Ort-Partner";
+      this.title = this.searchTerm || "Vor Ort Partner";
       localStorage.setItem("title", "Vor Ort Partner");
       this.displayedPartners = this.offlinePartners;
     }
@@ -311,26 +336,13 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
 
   chooseLocationManually() {
-    event.stopPropagation();
-    let chooseLocationManuallyModal = this.modalCtrl.create(ChooseLocationManuallyComponent);
-    chooseLocationManuallyModal.present();
-    chooseLocationManuallyModal.onDidDismiss((data) => {
 
-      if (data) {
-        let location = {
-          latitude: data.latitude,
-          longitude: data.longitude,
-          cityName: data.name,
-          fromGPS: false
-        }
-        this.locationService.setLocation(location);
-        //this.getLocationFromGPSEnabled = location.fromGPS;
-      }
-    })
+    event.stopPropagation();
+    this.navCtrl.push(ChooseLocationManuallyComponent);
     this.showDropdown = [false, false, false];
     this.showDropdownForAnimation = ["false", "false", "false"];
-  }
 
+  }
 
   showPartner(partner = 0) {
     this.navCtrl.push(PartnerDetailComponent, {partner: partner});
@@ -339,7 +351,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   askForValidCategories() {
     let prompt = this.alertCtrl.create({
-      title: 'Bitte wählen Sie entweder "Vor-Ort-Partner" oder "Online Partner" aus.',
+      title: 'Bitte wählen Sie entweder "Vor Ort Partner" oder "Online Partner" aus.',
       buttons: [
         {
           text: 'OK',
@@ -371,13 +383,12 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.showMap = !this.showMap;
     this.showDropdown = [false, false, false];
     this.showDropdownForAnimation = ["false", "false", "false"];
-    this.globallyUnsubscribe();
   }
 
   toggleGetLocationFromGPSEnabled() {
     let newValueGetLocationFromGPSEnabled = !this.location.fromGPS;
     if (newValueGetLocationFromGPSEnabled) {
-      this.waitingForGPSSignal = true;      
+      this.waitingForGPSSignal = true;
       this.locationService.updateLocation().then(
         (currentLocation) => {
           if (!currentLocation.locationFound || !currentLocation.fromGPS) {
@@ -385,13 +396,15 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
           }
           this.waitingForGPSSignal = false;
           this.showDropdown = [false, false, false];
-          this.showDropdownForAnimation = ["false", "false", "false"];          
+          this.showDropdownForAnimation = ["false", "false", "false"];
+
         },
         (currentLocation) => {
           this.showPromptGPSDisabled();
           this.waitingForGPSSignal = false;
           this.showDropdown = [false, false, false];
-          this.showDropdownForAnimation = ["false", "false", "false"];          
+          this.showDropdownForAnimation = ["false", "false", "false"];
+
         }
       );
     }

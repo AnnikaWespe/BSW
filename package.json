@@ -4,6 +4,9 @@
     "author": "Ionic Framework",
     "homepage": "http://ionicframework.com/",
     "private": true,
+    "config": {
+        "ionic_webpack": "./config/webpack.config.js"
+    },
     "scripts": {
         "clean": "ionic-app-scripts clean",
         "build": "ionic-app-scripts build",
@@ -30,21 +33,23 @@
         "@angular/platform-browser-dynamic": "4.1.0",
         "@angular/platform-server": "4.1.0",
         "@angular/router": "4.1.0",
-        "@ionic-native/barcode-scanner": "^3.12.1",
         "@ionic-native/camera": "^3.4.4",
         "@ionic-native/core": "3.6.1",
         "@ionic-native/geolocation": "^3.4.4",
         "@ionic-native/google-analytics": "^3.10.3",
+        "@ionic-native/keyboard": "^4.2.0",
         "@ionic-native/native-geocoder": "^3.12.1",
         "@ionic-native/social-sharing": "^3.12.1",
         "@ionic-native/splash-screen": "3.6.1",
         "@ionic-native/status-bar": "3.6.1",
+        "@ionic-native/zbar": "^4.1.0",
         "@ionic/storage": "2.0.1",
-        "cordova-android": "~6.0.0",
-        "cordova-ios": "~4.3.1",
+        "cordova-android": "^6.2.3",
+        "cordova-ios": "^4.4.0",
         "cordova-plugin-camera": "~2.4.1",
         "cordova-plugin-console": "1.0.5",
         "cordova-plugin-crosswalk-webview": "~2.3.0",
+        "cordova-plugin-cszbar": "git+https://github.com/mfussi/csZBar.git",
         "cordova-plugin-device": "1.1.4",
         "cordova-plugin-google-analytics": "^1.8.3",
         "cordova-plugin-inappbrowser": "^1.7.1",
@@ -55,7 +60,7 @@
         "cordova-plugin-x-socialsharing": "~5.1.8",
         "intl": "^1.2.5",
         "ionic-angular": "3.2.0",
-        "ionic-plugin-keyboard": "~2.2.1",
+        "ionic-plugin-keyboard": "^2.2.1",
         "ionicons": "3.0.0",
         "js-marker-clusterer": "1.0.0",
         "rxjs": "5.1.1",
@@ -71,7 +76,7 @@
         "angular2-template-loader": "0.6.2",
         "codelyzer": "3.1.2",
         "html-loader": "0.4.5",
-        "ionic": "3.7.0",
+        "ionic": "3.9.2",
         "jasmine-core": "2.5.2",
         "jasmine-spec-reporter": "2.7.0",
         "karma": "1.2.0",
@@ -94,7 +99,6 @@
         "webpack": "2.3.2"
     },
     "cordovaPlugins": [
-        "ionic-plugin-keyboard",
         "cordova-plugin-whitelist",
         "cordova-plugin-console",
         "cordova-plugin-statusbar",
@@ -105,16 +109,13 @@
         "cordova-plugin-compat",
         "cordova-plugin-geolocation",
         "cordova-plugin-x-socialsharing",
-        "cordova-plugin-keyboard",
         "cordova-plugin-add-swift-support",
-        "cordova-plugin-barcodescanner",
         "cordova-plugin-compat",
         "cordova-plugin-google-analytics",
         "cordova-plugin-image-picker",
         "cordova-plugin-inappbrowser",
         "cordova-plugin-nativegeocoder",
-        "cordova-plugin-x-socialsharing",
-        "phonegap-plugin-barcodescanner"
+        "cordova-plugin-x-socialsharing"
     ],
     "cordovaPlatforms": [
         {
@@ -143,8 +144,9 @@
             "cordova-plugin-statusbar": {},
             "cordova-plugin-whitelist": {},
             "cordova-plugin-x-socialsharing": {},
-            "ionic-plugin-keyboard": {},
-            "cordova-plugin-inappbrowser": {}
+            "cordova-plugin-inappbrowser": {},
+            "cordova-plugin-cszbar": {},
+            "ionic-plugin-keyboard": {}
         },
         "platforms": [
             "android",

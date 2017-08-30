@@ -1,9 +1,27 @@
+typeahead .searchbar {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.platform-ios typeahead .searchbar {
+  padding-top: 28px;
+}
+
 typeahead {
+
+  .small-button {
+    font-size: 1.2rem;
+  }
+
   input#mySearchInputField{
     background-color: transparent;
     width: 100%;
     border: none;
+    font-size: medium;
+    padding-left: 10px;
+    padding-right: 10px;
   }
+
   div.suggestions-wrapper{
     position: absolute;
     left: 0;
@@ -13,13 +31,28 @@ typeahead {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     background-color: white;
   }
+
+  div.backdrop {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    background-color: rgba(9, 9, 9, .2);
+  }
+
   div.suggestion{
-    padding: 1.5vh 0 1.5vh 4vw;
+
+    font-size: medium;
+    padding: 1.5rem 2rem 1.5rem 2rem;
+
     &:first-child{
-      padding-top: 3vh;
+      padding-top: 2rem;
     };
     &:last-child{
-      padding-bottom: 3vh;
+      padding-bottom: 2rem;
     }
+
+
   }
+
 }

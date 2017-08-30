@@ -1,25 +1,40 @@
-import {OnInit, Directive, Output, EventEmitter, Input} from '@angular/core';
+import {OnInit, Directive, Output, EventEmitter, Input, OnDestroy} from '@angular/core';
+
+import {Platform} from 'ionic-angular';
+
 import { GoogleMapsAPIWrapper } from '@agm/core/services/google-maps-api-wrapper';
 import {MapMarkerService} from "../../../../services/map-marker-service";
+import {LocationService} from "../../../../services/location-service";
 declare let google: any;
 
 
 @Directive({
   selector: 'styled-map-partner-details',
 })
-export class StyledMapPartnerDetailsDirective implements OnInit {
-
+export class StyledMapPartnerDetailsDirective implements OnInit, OnDestroy {
   @Output() travelTimeCarUpdated = new EventEmitter();
   @Output() travelTimePublicUpdated = new EventEmitter();
   @Output() travelTimePedestrianUpdated = new EventEmitter();
   @Input() partner;
-
-
   map;
-
+  location: any;
+  platformSubscription;
 
   constructor(private googleMapsWrapper: GoogleMapsAPIWrapper,
-              private mapMarkerService: MapMarkerService) {
+              private mapMarkerService: MapMarkerService,
+              private platform: Platform,
+              private locationService: LocationService)
+  {
+    this.location = this.locationService.getCurrentLocation();
+    this.platformSubscription = this.platform.resume.subscribe(()=>{
+      this.location = this.locationService.getCurrentLocation();
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.platformSubscription){
+      this.platformSubscription.unsubscribe();
+    }
   }
 
   ngOnInit() {
@@ -45,9 +60,9 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
     bounds.extend({lat: this.partner.location.latitude, lng: this.partner.location.longitude});
 
     /* if we have an exact position, zoom the map to bounds of my position and target */
-    if (localStorage.getItem("locationExact") === "true") {
+    if (this.location) {
       console.log("location Exact is so true");
-      bounds.extend({lat: Number(localStorage.getItem("latitude")), lng: Number(localStorage.getItem("longitude"))});
+      bounds.extend({lat: this.location.latitude, lng: this.location.longitude});
       map.fitBounds(bounds);
 
     } else {
@@ -70,7 +85,7 @@ export class StyledMapPartnerDetailsDirective implements OnInit {
   private initializeDirectionService() {
 
     let directionsService = new google.maps.DirectionsService();
-    let origin = new google.maps.LatLng(Number(localStorage.getItem("latitude")), Number(localStorage.getItem("longitude")));
+    let origin = new google.maps.LatLng(this.location.latitude, this.location.longitude);
     let destination = new google.maps.LatLng(this.partner.location.latitude, this.partner.location.longitude);
 
     let requestPublic = {origin: origin, destination: destination, travelMode: google.maps.TravelMode.TRANSIT};

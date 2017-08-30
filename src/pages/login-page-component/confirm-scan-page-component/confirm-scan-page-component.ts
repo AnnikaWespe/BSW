@@ -1,10 +1,10 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams, AlertController} from 'ionic-angular';
-import {BarcodeScanner} from '@ionic-native/barcode-scanner';
+import { ZBar, ZBarOptions } from '@ionic-native/zbar';
 
-import {BarcodeData} from "./BarcodeData";
 import {LoginPageComponent} from "../login-component";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
+
 
 @Component({
   selector: 'scan-number-page-component',
@@ -15,35 +15,63 @@ export class ConfirmScanPageComponent {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public alertCtrl: AlertController,
-              private barcodeScanner: BarcodeScanner,
-              private ga: GoogleAnalytics,) {
+              private ga: GoogleAnalytics,
+              private zbar: ZBar) {
     if (localStorage.getItem("disallowUserTracking") === "false") {
       this.ga.trackView("Scan Screen")
     }
   }
 
   loadScanPage() {
-    this.barcodeScanner.scan()
-      .then((result) => {
-        if (!result.cancelled) {
-          let numberFromCard = result.text;
-          let mutilatedNumberFromCard = '928' + numberFromCard.slice(0, -1);
-          let verificationNumber = this.verificationNumber(mutilatedNumberFromCard);
-          let logInNumber = numberFromCard.slice(-10, -1) + verificationNumber;
-          if (logInNumber.length === 10) {
-            this.backToLoginPage(logInNumber);
-            if (localStorage.getItem("disallowUserTracking") === "false") {
-              this.ga.trackEvent("Mitgliedskarte", "Mitgliedskarte gescannt")
-            }
-          }
-          else {
-            this.showPromptIncorrectBarcode();
-          }
-        }
+
+    let options: ZBarOptions = {
+      flash: 'off',
+      drawSight: true,
+      camera: 'back',
+      text_title: "",
+      text_instructions: ""
+    };
+
+    this.zbar.scan(options)
+      .then(result => {
+        this.handleScanResult(result);
       })
-      .catch((err) => {
-        alert(err);
+      .catch(error => {
+        this.handleScanError(error);
       });
+
+  }
+
+  handleScanResult(numberFromCard){
+
+    if(!numberFromCard || numberFromCard.length != 16){
+      this.showPromptIncorrectBarcode();
+      return;
+    }
+
+    let mutilatedNumberFromCard = '928' + numberFromCard.slice(0, -1);
+    let verificationNumber = this.verificationNumber(mutilatedNumberFromCard);
+    let logInNumber = numberFromCard.slice(-10, -1) + verificationNumber;
+    if (logInNumber.length === 10) {
+
+      this.backToLoginPage(logInNumber);
+      if (localStorage.getItem("disallowUserTracking") === "false") {
+        this.ga.trackEvent("Mitgliedskarte", "Mitgliedskarte gescannt")
+      }
+
+    } else {
+      this.showPromptIncorrectBarcode();
+      return;
+    }
+
+  }
+
+  handleScanError(error){
+
+    if(error && error != "cancelled") {
+      this.showPromptIncorrectBarcode();
+    }
+
   }
 
   verificationNumber(inputNumber) {

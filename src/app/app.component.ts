@@ -17,7 +17,9 @@ import {PushNotificationsService} from "../services/push-notifications-service";
 import {StatusBar} from "@ionic-native/status-bar";
 import {PartnerDetailComponent} from "../pages/partner-page-component/partner-detail-component/partner-detail-component";
 import {PartnerService} from "../services/partner-service";
+import {AuthService } from '../services/auth-service';
 import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
+import {SavePartnersService} from "../pages/partner-page-component/partner-detail-component/save-partners-service";
 
 
 @Component({
@@ -28,13 +30,8 @@ export class BSWBonusApp {
 
   rootPage: any;
   pages: Array<{ title: string, component: any, parameters: {} }>;
-  userLoggedIn;
-  name;
-  title;
-  salutation;
-  lastName;
-  mitgliedId;
-  securityToken;
+  user;
+
   jsonObject = {
     'to': 'id',
     'notification': {
@@ -49,37 +46,24 @@ export class BSWBonusApp {
     }
   }
 
-  constructor(private platform: Platform,
-              private splashScreen: SplashScreen,
-              private ga: GoogleAnalytics,
-              private initService: InitService,
-              public events: Events,
-              private pushNotificationsService: PushNotificationsService,
-              private statusBar: StatusBar,
-              private partnerService: PartnerService) {
-    events.subscribe("userLoggedIn", (id, token) => {
-      this.userLoggedIn = true;
-      this.mitgliedId = id;
-      this.securityToken = token;
-      this.getUserData(id, token);
+  constructor(
+    private platform: Platform,
+    private splashScreen: SplashScreen,
+    private ga: GoogleAnalytics,
+    private initService: InitService,
+    public events: Events,
+    private pushNotificationsService: PushNotificationsService,
+    private statusBar: StatusBar,
+    private partnerService: PartnerService,
+    private savePartnerService: SavePartnersService,
+    private authService: AuthService
+    ) {
+      this.user = this.authService.getUser();
+      this.setMenu();
+      this.initializeApp();
+      // localStorage.setItem("locationExact", "false");
+
       this.setWebViewsUrls();
-      if (!DeviceService.isInBrowser) {
-        //this.managePushes(id, token);
-      }
-    });
-    this.userLoggedIn = localStorage.getItem("securityToken") !== null;
-    this.mitgliedId = localStorage.getItem("mitgliedId");
-    this.securityToken = localStorage.getItem("securityToken");
-    this.setMenu();
-    this.initializeApp();
-    localStorage.setItem("locationExact", "false");
-    if (this.securityToken) {
-      let title = localStorage.getItem("userTitle");
-      this.title = (title == "null") ? "" : title;
-      this.salutation = localStorage.getItem("salutation");
-      this.lastName = localStorage.getItem("lastName");
-    }
-    this.setWebViewsUrls();
   }
 
   initializeApp() {
@@ -87,8 +71,15 @@ export class BSWBonusApp {
       .then(() => {
           this.splashScreen.hide();
           this.setRootPage();
-          this.statusBar.overlaysWebView(false);
-          this.statusBar.backgroundColorByHexString('#929395');
+
+          if(this.platform.is("android")) {
+            this.statusBar.overlaysWebView(false);
+            this.statusBar.backgroundColorByHexString('#929395');
+          } else {
+            this.statusBar.overlaysWebView(true);
+            this.statusBar.styleDefault();
+          }
+
           this.getDevice();
         },
         (err) => {
@@ -98,7 +89,7 @@ export class BSWBonusApp {
 
 
   setRootPage() {
-    if (localStorage.getItem("securityToken")) {
+    if (this.user.loggedIn) {
       this.rootPage = OverviewPageComponent;
     }
     else {
@@ -106,37 +97,12 @@ export class BSWBonusApp {
     }
   }
 
-  getUserData(mitgliedId, securityToken) {
-    this.initService.getUserData(mitgliedId, securityToken).subscribe((res) => {
-        let result = res.json();
-        if (result.errors[0].beschreibung === "Erfolg") {
-          let data = result.response.list[0].row;
-          this.lastName = data.NAME;
-          this.salutation = data.ANREDE;
-          this.title = data.TITEL || "";
-          localStorage.setItem("userTitle", data.TITEL);
-          localStorage.setItem("salutation", data.ANREDE);
-          localStorage.setItem("firstName", data.VORNAME);
-          localStorage.setItem("lastName", data.NAME);
-        }
-        else {
-          console.log("in getUserData", result.errors[0].beschreibung);
-        }
-      },
-      (error) => {
-        let title = localStorage.getItem("userTitle");
-        this.title = (title == "null") ? "" : title;
-        this.lastName = localStorage.getItem("lastName");
-        this.salutation = localStorage.getItem("salutation");
-      }
-    )
-  }
-
   startGoogleAnalyticsTracker(id) {
     if (localStorage.getItem("disallowUserTracking") === null) {
       localStorage.setItem("disallowUserTracking", "false");
     }
     if (localStorage.getItem("disallowUserTracking") === "false") {
+      this.ga.setAnonymizeIp(true);
       this.ga.startTrackerWithId(id)
         .then(() => {
           this.ga.trackEvent('Login/Logout', 'Start der App');
@@ -160,7 +126,7 @@ export class BSWBonusApp {
       console.log("isInBrowser");
     }
     else {
-      if (this.securityToken) {
+      if (this.user.securityToken) {
         //this.managePushes(this.mitgliedId, this.securityToken);
       }
       if (this.platform.is('ios')) {
@@ -192,25 +158,17 @@ export class BSWBonusApp {
       {title: "Abmelden", component: LoginPageComponent, parameters: {}}]
   }
 
-  logout() {
-    if (this.userLoggedIn) {
-      //this.updateToken(localStorage.getItem("mitgliedId"), localStorage.getItem("securityToken"), null);
-    }
-    localStorage.removeItem("securityToken");
-    localStorage.removeItem("mitgliedId");
-    localStorage.removeItem("userTitle");
-    localStorage.removeItem("salutation");
-    localStorage.removeItem("firstName");
-    localStorage.removeItem("lastName");
-    localStorage.removeItem("firebaseToken");
-    localStorage.removeItem("mitgliedsnummer");
-    if (localStorage.getItem("disallowUserTracking") === "false") {
-      this.ga.trackEvent('Login/Logout', 'logout');
-    }
+  logoutUser() {
+    this.savePartnerService.clearRecentPartners() ;
+      //this.savePartnerService.clearFavoritePartners() ;
+      this.authService.logout();
+
     this.nav.setRoot(LoginPageComponent);
-    this.userLoggedIn = false;
   }
 
+  loginUser(){
+    this.nav.setRoot(LoginPageComponent);
+  }
 
   loadContactPage() {
     this.nav.push(WebviewComponent, {urlType: "KontaktWebviewUrl", title: "Kontakt"})

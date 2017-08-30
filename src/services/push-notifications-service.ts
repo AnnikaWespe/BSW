@@ -1,16 +1,16 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers, RequestOptions} from "@angular/http";
-
+import {EnvironmentService} from "./environment-service";
+import {AuthService} from "./auth-service";
 
 @Injectable()
 export class PushNotificationsService {
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private envService: EnvironmentService, public authService: AuthService,) {
   }
 
   createAuthorizationHeader(headers: Headers) {
-    headers.append('Authorization', 'Basic ' +
-      btoa('BSW_App:ev1boio32fSrjSY9XwvcD9LkGr13J'));
+    headers.append('Authorization', this.envService.environment.AUTH_HEADER);
   }
 
   sendPushNotificationsRequest(mitgliedId, securityToken,newToken, oldToken) {
@@ -20,7 +20,7 @@ export class PushNotificationsService {
     /*
      * disabled until firebase and pushes getting reimplemented
      *
-    let pushUrl = 'https://vorsystem.avs.de/integ6/securityToken/saveFirebaseToken';
+    let pushUrl = environment.BASE_URL + urls.SAVE_FIREBASE_TOKEN;
     let headers = new Headers({'Content-Type': 'application/json'});
 
     this.createAuthorizationHeader(headers);
@@ -59,7 +59,7 @@ export class PushNotificationsService {
     /*
      * disabled until firebase and pushes getting reimplemented
      *
-    let pushUrl = 'https://vorsystem.avs.de/integ6/securityToken/saveFirebaseToken';
+    let pushUrl = environment.BASE_URL + urls.SAVE_FIREBASE_TOKEN;
     let headers = new Headers({'Content-Type': 'application/json'});
 
     this.createAuthorizationHeader(headers);
@@ -72,8 +72,8 @@ export class PushNotificationsService {
   }
 
   private createBodyNewSettings(favoritesPush, accountInfoPush, enablePushesInGeneral) {
-    let securityToken = encodeURI(localStorage.getItem("securityToken"));
-    let mitgliedId = localStorage.getItem("mitgliedId");
+    let securityToken = this.authService.getUser().securityToken;
+    let mitgliedId = this.authService.getUser().mitgliedId;
     let token = localStorage.getItem("firebaseToken");
     let body = {
       "mandantId": "1",

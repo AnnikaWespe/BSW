@@ -9,5 +9,40 @@ webview {
   .displayCachedContent {
     background-color: map_get($colors, light);
     padding: 3vh 3vw;
+
+    .contentBottom {
+      display: none;
+    }
   }
+
+  .superfill {
+    display: table;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    height: 100%;
+    width: 100%;
+  }
+
+  .middle {
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+  .center {
+    display: table;
+    margin: auto;
+  }
+
+  ion-content, iframe {
+    background: #f7f7f7;
+  }
+
+  .displayCachedContent, .scroll-content {
+    background: #f7f7f7;
+  }
+
 }

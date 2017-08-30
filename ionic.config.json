@@ -4,5 +4,31 @@
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
-  }
+  },
+  "proxies": [
+    {
+      "path": "/proxy/cms/bswAppWebviewUrls",
+      "proxyUrl": "https://vorsystem.avs.de/integ6/cms/bswAppWebviewUrls"
+    },
+    {
+      "path": "/proxy/login",
+      "proxyUrl": "https://vorsystem.avs.de/integ6/login"
+    },
+    {
+      "path": "/proxy/autocomplete/completephrasep",
+      "proxyUrl": "https://www.bsw.de/autocomplete/completephrasep"
+    },
+    {
+      "path": "/proxy/appsearch",
+      "proxyUrl": "https://www.bsw.de/appsearch"
+    },
+    {
+      "path": "/proxy/integ6",
+      "proxyUrl": "https://vorsystem.avs.de/integ6"
+    },
+    {
+      "path": "/proxy/securityToken",
+      "proxyUrl": "https://vorsystem.avs.de/integ6/securityToken"
+    }
+  ]
 }

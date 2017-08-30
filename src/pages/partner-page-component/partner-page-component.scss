@@ -112,7 +112,7 @@ partner-page-component {
             text-decoration: underline;
             margin-bottom: 2vw;
           }
-          &.cityName {
+          &.locationName {
             line-height: 4vh;
             font-size: medium;
 
@@ -216,6 +216,10 @@ partner-page-component {
   div.wrapper-div {
     height: 100%;
     margin-top: 54px;
+  }
+
+  .error-text ion-label {
+    font-size: small;
   }
 
 }

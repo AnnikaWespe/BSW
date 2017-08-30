@@ -1,178 +1,170 @@
 <ion-menu [content]="content">
 
+  <ion-content class="side-menu">
 
-  <ion-content>
+    <div class="list-wrapper">
 
+      <div class="logo-wrapper" [class.logo-wrapper-bottom-padding]="!user.loggedIn || !user.lastName" >
+        <div class="logo"></div>
+      </div>
 
-      <ion-scroll scrollY="true" class="list-wrapper">
+      <ion-row class="salutation" *ngIf="user.loggedIn && user.lastName">
+        <p>
+          Hallo, {{user.salutation}} {{user.title}} {{user.lastName}}!
+        </p>
+      </ion-row>
 
-        <div class="logo-wrapper">
-          <div class="logo"></div>
-          <ion-row class="page salutation" *ngIf="salutation">
-            <ion-item  class="salutation">
-              <div item-left class="icon-col">
-                <div class="icon salutation"></div>
-              </div>
-              <ion-label class="page-title">
-                Hallo, {{salutation}} {{title}} {{lastName}}!
-              </ion-label>
-            </ion-item>
+      <ion-row menuClose class="page" (click)="openPage(this.pages[0])">
+        <ion-item tappable>
+          <div item-left class="icon-col">
+            <div class="icon overview"></div>
+          </div>
+          <ion-label class="page-title">
+            Übersicht
+          </ion-label>
+        </ion-item>
+      </ion-row>
 
-          </ion-row>
-        </div>
+      <ion-row menuClose class="page" (click)="openPage(this.pages[1])">
+        <ion-item tappable>
+          <div item-left class="icon-col">
+            <div class="icon offline"></div>
+          </div>
+          <ion-label class="page-title">
+            Vor Ort Partner
+          </ion-label>
+        </ion-item>
+      </ion-row>
 
-        <ion-row menuClose class="page" (click)="openPage(this.pages[0])">
-          <ion-item tappable>
-            <div item-left class="icon-col">
-              <div class="icon overview"></div>
-            </div>
-            <ion-label class="page-title">
-              Übersicht
-            </ion-label>
-          </ion-item>
-        </ion-row>
+      <ion-row menuClose class="page" (click)="openPage(this.pages[2])">
+        <ion-item tappable>
+          <div item-left class="icon-col">
+            <div class="icon online"></div>
+          </div>
+          <ion-label class="page-title">
+            Online Partner
+          </ion-label>
+        </ion-item>
+      </ion-row>
 
-        <ion-row menuClose class="page" (click)="openPage(this.pages[1])">
-          <ion-item tappable>
-            <div item-left class="icon-col">
-              <div class="icon offline"></div>
-            </div>
-            <ion-label class="page-title">
-              Vor Ort Partner
-            </ion-label>
-          </ion-item>
-        </ion-row>
+      <ion-row menuClose class="page" (click)="openPage(this.pages[3])" *ngIf="user.loggedIn">
+        <ion-item tappable>
+          <div item-left class="icon-col">
+            <div class="icon add-purchase"></div>
+          </div>
+          <ion-label class="page-title">
+            Einkauf nacherfassen
+          </ion-label>
+        </ion-item>
+      </ion-row>
 
-        <ion-row menuClose class="page" (click)="openPage(this.pages[2])">
-          <ion-item tappable>
-            <div item-left class="icon-col">
-              <div class="icon online"></div>
-            </div>
-            <ion-label class="page-title">
-              Online Partner
-            </ion-label>
-          </ion-item>
-        </ion-row>
+      <ion-row menuClose class="page" *ngIf="!user.loggedIn">
+        <ion-item class="inactive">
+          <div item-left class="icon-col">
+            <div class="icon add-purchase"></div>
+          </div>
+          <ion-label class="page-title inactive">
+            Einkauf nacherfassen
+          </ion-label>
+        </ion-item>
+      </ion-row>
 
-        <ion-row menuClose class="page" (click)="openPage(this.pages[3])"  *ngIf="userLoggedIn">
-          <ion-item tappable>
-            <div item-left class="icon-col">
-              <div class="icon add-purchase"></div>
-            </div>
-            <ion-label class="page-title">
-              Einkauf nacherfassen
-            </ion-label>
-          </ion-item>
-        </ion-row>
+      <ion-row menuClose class="page get-large-distance" (click)="openPage(this.pages[4])" *ngIf="user.loggedIn">
+        <ion-item tappable [class.inactive]="!user.loggedIn">
+          <div item-left class="icon-col">
+            <div class="icon my-profile"></div>
+          </div>
+          <ion-label class="page-title">
+            Mein Profil
+          </ion-label>
+        </ion-item>
+      </ion-row>
 
-        <ion-row menuClose class="page" *ngIf="!userLoggedIn">
-          <ion-item class="inactive">
-            <div item-left class="icon-col">
-              <div class="icon add-purchase"></div>
-            </div>
-            <ion-label class="page-title inactive">
-              Einkauf nacherfassen
-            </ion-label>
-          </ion-item>
-        </ion-row>
+      <ion-row class="page get-large-distance" *ngIf="!user.loggedIn">
+        <ion-item class="inactive">
+          <div item-left class="icon-col">
+            <div class="icon my-profile"></div>
+          </div>
+          <ion-label class="page-title inactive">
+            Mein Profil
+          </ion-label>
+        </ion-item>
+      </ion-row>
 
+      <!--
+       Currently we do not use the Settings page anymore, as we do not have any settings until geofences are back
+      <ion-row menuClose class="page" (click)="openPage(this.pages[5])">
+        <ion-item tappable>
+          <div item-left class="icon-col">
+            <div class="icon settings"></div>
+          </div>
+          <ion-label class="page-title">
+            Einstellungen
+          </ion-label>
+        </ion-item>
+      </ion-row>
+      -->
 
-        <ion-row menuClose class="page get-large-distance" (click)="openPage(this.pages[4])" *ngIf="userLoggedIn">
-          <ion-item tappable [class.inactive] = "!userLoggedIn">
-            <div item-left class="icon-col">
-              <div class="icon my-profile"></div>
-            </div>
-            <ion-label class="page-title">
-              Mein Profil
-            </ion-label>
-          </ion-item>
-        </ion-row>
+      <ion-row menuClose class="page" (click)="getWebView('ImpressumWebviewUrl', 'Impressum', true)">
+        <ion-item tappable>
+          <div item-left class="icon-col">
+            <div class="icon imprint"></div>
+          </div>
+          <ion-label class="page-title">
+            Impressum
+          </ion-label>
+        </ion-item>
+      </ion-row>
 
-        <ion-row class="page get-large-distance" *ngIf="!userLoggedIn">
-          <ion-item class="inactive">
-            <div item-left class="icon-col">
-              <div class="icon my-profile"></div>
-            </div>
-            <ion-label class="page-title inactive">
-              Mein Profil
-            </ion-label>
-          </ion-item>
-        </ion-row>
+      <ion-row menuClose class="page" (click)="getWebView('DatenschutzWebviewUrl', 'Datenschutz', true)">
+        <ion-item tappable>
+          <div item-left class="icon-col">
+            <div class="icon dataprivacy"></div>
+          </div>
+          <ion-label class="page-title">
+            Datenschutz
+          </ion-label>
+        </ion-item>
+      </ion-row>
 
+      <ion-row menuClose class="page get-small-distance" (click)="loadContactPage()">
+        <ion-item tappable>
+          <div item-left class="icon-col">
+            <div class="icon contact"></div>
+          </div>
+          <ion-label class="page-title">
+            Kontakt
+          </ion-label>
+        </ion-item>
+      </ion-row>
 
-        <!--
-         Currently we do not use the Settings page anymore, as we do not have any settings until geofences are back
-        <ion-row menuClose class="page" (click)="openPage(this.pages[5])">
-          <ion-item tappable>
-            <div item-left class="icon-col">
-              <div class="icon settings"></div>
-            </div>
-            <ion-label class="page-title">
-              Einstellungen
-            </ion-label>
-          </ion-item>
-        </ion-row>
-        -->
+      <ion-row menuClose class="page" (click)="logoutUser()" *ngIf="user.loggedIn">
+        <ion-item tappable>
+          <div item-left class="icon-col">
+            <div class="icon sign-out"></div>
+          </div>
+          <ion-label class="page-title">
+            Abmelden
+          </ion-label>
+        </ion-item>
+      </ion-row>
 
-        <ion-row menuClose class="page" (click)="getWebView('ImpressumWebviewUrl', 'Impressum', true)">
-          <ion-item tappable>
-            <div item-left class="icon-col">
-              <div class="icon imprint"></div>
-            </div>
-            <ion-label class="page-title">
-              Impressum
-            </ion-label>
-          </ion-item>
-        </ion-row>
+      <ion-row menuClose class="page" (click)="loginUser()" *ngIf="!user.loggedIn">
+        <ion-item tappable>
+          <div item-left class="icon-col">
+            <div class="icon"></div>
+          </div>
+          <ion-label class="page-title">
+            Einloggen / anmelden
+          </ion-label>
+        </ion-item>
+      </ion-row>
 
-        <ion-row menuClose class="page" (click)="getWebView('DatenschutzWebviewUrl', 'Datenschutz', true)">
-          <ion-item tappable>
-            <div item-left class="icon-col">
-              <div class="icon dataprivacy"></div>
-            </div>
-            <ion-label class="page-title">
-              Datenschutz
-            </ion-label>
-          </ion-item>
-        </ion-row>
-
-        <ion-row menuClose class="page get-small-distance" (click) = "loadContactPage()">
-          <ion-item tappable>
-            <div item-left class="icon-col">
-              <div class="icon contact"></div>
-            </div>
-            <ion-label class="page-title">
-              Kontakt
-            </ion-label>
-          </ion-item>
-        </ion-row>
-
-
-        <ion-row menuClose class="page" (click)="logout()" *ngIf="userLoggedIn">
-          <ion-item tappable>
-            <div item-left class="icon-col">
-              <div class="icon sign-out"></div>
-            </div>
-            <ion-label class="page-title">
-              Abmelden
-            </ion-label>
-          </ion-item>
-        </ion-row>
-
-        <ion-row menuClose class="page" (click)="logout()" *ngIf="!userLoggedIn">
-          <ion-item tappable>
-            <div item-left class="icon-col">
-              <div class="icon"></div>
-            </div>
-            <ion-label class="page-title">
-              Einloggen oder anmelden
-            </ion-label>
-          </ion-item>
-        </ion-row>
+    </div>
 
 
-      </ion-scroll>
   </ion-content>
+
 </ion-menu>
 
 <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

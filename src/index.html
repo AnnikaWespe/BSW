@@ -13,6 +13,8 @@
   <!--<meta http-equiv="Content-Security-Policy" content="default-src gap://ready file://* *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src 'self' 'unsafe-inline' *">-->
   <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' http: https:;">
 
+  <!-- https://stackoverflow.com/questions/36283445/filereader-not-firing-onloadend-in-ionic-2/43703344 -->
+  <script src="build/polyfills.js"></script>
   <script src="cordova.js"></script>
 
   <!-- un-comment this code to enable service worker
@@ -26,12 +28,33 @@
 
   <link href="build/main.css" rel="stylesheet">
 
+  <script>
+
+    document.onclick = function (e) {
+      e = e ||  window.event;
+      var element = e.target || e.srcElement;
+
+      if (element && element.href && element.tagName === 'A' && window.cordova) {
+
+        if(element.href.indexOf("http://") === 0
+          || element.href.indexOf("https://") === 0
+          || element.href.indexOf("tel:") === 0
+          || element.href.indexOf("mailto:") === 0) {
+          window.cordova.InAppBrowser.open(element.href, "_system"); // does not work in browser
+          return false; // prevent default action and stop event propagation
+        }
+
+      }
+
+    };
+
+  </script>
+
 </head>
 <body>
   <ion-app></ion-app>
   <script src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-  <script src="build/polyfills.js"></script>
   <script src="build/main.js"></script>
 
 </body>

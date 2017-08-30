@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, Renderer} from '@angular/core';
 import {
   Nav, NavController, NavParams, AlertController, LoadingController, ViewController, Events,
   Keyboard
@@ -7,7 +7,7 @@ import {
 import {OverviewPageComponent} from "../overview-page-component/overview-component";
 import {ConfirmScanPageComponent} from "./confirm-scan-page-component/confirm-scan-page-component";
 import {WebviewComponent} from "../webview/webview";
-import {LoginService} from "./login-service";
+import {AuthService} from "../../services/auth-service";
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 
 declare let cordova: any;
@@ -19,25 +19,67 @@ declare let cordova: any;
 export class LoginPageComponent {
 
   @ViewChild(Nav) nav: Nav;
+  @ViewChild('password-input') passwordInput;
+
   inputNumberOrEmail: any;
   password = "";
   loading;
+
+  /* default image height */
+  imageHolderHeight = 140;
 
   navigatedFromPartnerDetail;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public alertCtrl: AlertController,
-              public loginService: LoginService,
+              public authService: AuthService,
               public loadingCtrl: LoadingController,
               public viewCtrl: ViewController,
               private ga: GoogleAnalytics,
               public events: Events,
-              public keyboard: Keyboard,) {
+              public keyboard: Keyboard,
+              private renderer: Renderer) {
     let loginNumberFromBarCode = navParams.get('loginNumberFromBarCode');
     this.inputNumberOrEmail = loginNumberFromBarCode || "";
     this.ga.trackView('Login Screen');
     this.navigatedFromPartnerDetail = navParams.get("navigatedFromPartnerDetail");
+
+  }
+
+  ionViewWillEnter(){
+    this.dynamicallyAdaptHeaderImage();
+  }
+
+  /*
+   * Adapt the header height so that the content
+   * completely fills the screen, ensures:
+   * - bottom based layout on larger devices
+   * - no cropped content on smaller devices
+   */
+  private dynamicallyAdaptHeaderImage(){
+
+    /* default - set it to 140px */
+    this.imageHolderHeight = 140;
+
+    /* if there is a screen height, set it to a third of it */
+    let screenHeight = window.screen.height;
+    if(screenHeight > 0) {
+      this.imageHolderHeight = (screenHeight / 3);
+    }
+
+    screenHeight = document.getElementById('main-content').clientHeight || screenHeight;
+    let footerHeight = document.getElementById('login-footer').clientHeight || 0;
+    let numberHeight = document.getElementById('number-row').clientHeight || 0;
+    let passwordHeight = document.getElementById('password-row').clientHeight || 0;
+    let informationHeight = document.getElementById('information-row').clientHeight || 0;
+
+    /* if the sizes of the children can be determined, calculate the size precise */
+    let totalHeight = footerHeight + numberHeight + passwordHeight + informationHeight;
+    if(totalHeight > 0 && screenHeight > 0 && totalHeight < screenHeight){
+      this.imageHolderHeight = (screenHeight - totalHeight) * 0.9;
+    }
+
   }
 
   loadCameraPage() {
@@ -61,24 +103,24 @@ export class LoginPageComponent {
     //this.presentLoading();
     //this.login();
     this.presentLoading();
-     if (isNaN(this.inputNumberOrEmail)) {
-     if (this.emailAdressProperlyFormatted()) {
-     this.login();
-     }
-     else {
-     this.showPromptNoValidEmail();
-     this.loading.dismiss();
-     }
-     }
-     else {
-     if (this.inputNumberOrEmail.length == 10) {
-     this.login();
-     }
-     else {
-     this.showPromptNoValidNumber();
-     this.loading.dismiss();
-     }
-     }
+    if (isNaN(this.inputNumberOrEmail)) {
+      if (this.emailAdressProperlyFormatted()) {
+        this.login();
+      }
+      else {
+        this.showPromptNoValidEmail();
+        this.loading.dismiss();
+      }
+    }
+    else {
+      if (this.inputNumberOrEmail.length == 10) {
+        this.login();
+      }
+      else {
+        this.showPromptNoValidNumber();
+        this.loading.dismiss();
+      }
+    }
   }
 
   emailAdressProperlyFormatted() {
@@ -90,30 +132,20 @@ export class LoginPageComponent {
     //TODO get username and password from user input
     //let username = "0016744807"
     //let password = "muster01$$";
-    this.loginService.login(this.inputNumberOrEmail, this.password).subscribe((res) => {
-    //this.loginService.login(username, password).subscribe((res) => {
-      this.loading.dismiss();
-      let loginData = res.json();
-      if (loginData.errors[0].beschreibung === "Erfolg") {
-        let mitgliedsnummer = loginData.response.mitgliedsnummer + loginData.response.pruefziffer;
-        localStorage.setItem("securityToken", loginData.response.securityToken);
-        localStorage.setItem("mitgliedId", loginData.response.mitgliedId);
-        localStorage.setItem("mitgliedsnummer", mitgliedsnummer);
-
-        this.events.publish('userLoggedIn', loginData.response.mitgliedId, loginData.response.securityToken);
-        console.log("Login: " + loginData.errors[0].beschreibung);
-        if (localStorage.getItem("disallowUserTracking") === "false") {
-          this.ga.trackEvent('Login/Logout', 'login')
+    this.authService.login(this.inputNumberOrEmail, this.password).then(
+      (user) => {
+        this.loading.dismiss();
+        this.navigateToNextPageWithLoginSuccessful(user.mitgliedId, user.securityToken);
+      },
+      (error) => {
+        this.loading.dismiss();
+        if (error==='LoginFailed') {
+          this.showPromptLoginFailed();
+        } else {
+          this.showPromptNoNetwork();
         }
-        this.navigateToNextPageWithLoginSuccessful(loginData.response.mitgliedId, loginData.response.securityToken);
       }
-      else {
-        this.showPromptLoginFailed();
-      }
-    }, (err) => {
-      this.loading.dismiss();
-      this.showPromptNoNetwork();
-    })
+    );
   }
 
   navigateToNextPageWithLoginSuccessful(id, token) {
@@ -125,12 +157,17 @@ export class LoginPageComponent {
     }
   }
 
+  focusPassword(event){
+    if (event.keyCode == 13) {
+      this.passwordInput.setFocus();
+    }
+  }
+
   checkForEnterButtonPressed(event) {
     if (event.keyCode == 13) {
       this.checkForValidInput();
     }
   }
-
 
   showPromptNoValidEmail() {
     let prompt = this.alertCtrl.create({
@@ -238,7 +275,7 @@ export class LoginPageComponent {
   }
 
   sendPasswordResetRequest(loginString) {
-    this.loginService.forgotPassword(loginString)
+    this.authService.forgotPassword(loginString)
       .subscribe((res) => {
         let errorCode = res.json().errors[0].code;
         console.log(res.json().errors[0]);
@@ -292,7 +329,7 @@ export class LoginPageComponent {
     let openUrl: any;
     try {
       openUrl = cordova.InAppBrowser.open;
-    } catch (error){
+    } catch (error) {
       openUrl = open;
     }
     console.log(url)

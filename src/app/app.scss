@@ -2,14 +2,13 @@ ion-content {
   background-color: map-get($colors, light);
 }
 
-button{
+button {
   text-transform: none !important;
 }
 
-  .back-button {
-    color: map_get($colors, grey) !important;
-  }
-
+.back-button {
+  color: map_get($colors, grey) !important;
+}
 
 ion-icon.back-button-icon:before {
   font-size: 3rem;
@@ -24,7 +23,7 @@ ion-icon.back-button-icon:before {
   overflow-y: auto !important;
 }
 
-[tappable]:active{
+[tappable]:active {
   outline-color: initial;
   outline-style: none;
   outline-width: initial;
@@ -34,6 +33,7 @@ ion-icon.back-button-icon:before {
 }
 
 ion-header {
+
   button {
     background: transparent;
   }
@@ -45,6 +45,7 @@ ion-header {
     font-size: 2em;
     margin: 0 3vw;
   }
+
 }
 
 ion-header .toolbar-title-md {
@@ -55,7 +56,7 @@ ion-header .toolbar-title-md {
   color: map-get($colors, grey) !important;
 }
 
-.bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default{
+.bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default {
   color: map-get($colors, grey) !important;
 }
 
@@ -63,37 +64,59 @@ ion-navbar.toolbar.toolbar-md {
   background-color: map-get($colors, light);
 }
 
+ion-content.side-menu {
+  background-color: map-get($colors, light) !important;
+}
+
+/* little bit ugly, but it works */
+.menu-inner > ion-content.statusbar-padding:first-child .scroll-content, .ios ion-menu > .menu-inner > ion-header > ion-content.statusbar-padding:first-child .scroll-content {
+  padding-top: 0 !important;
+}
+
 ion-menu {
-  background-color: white !important;
+
   div.logo {
+
     background: url('../assets/icon/bsw-logo.png') no-repeat;
-    height: 20vh;
-    width: 40vh;
-    overflow: hidden;
+    background-position: center center;
     background-size: contain;
-    margin-left: 4.5vw;
-    max-height: 250px;
-    max-width: 250px;
+
+    height: 140px;
+    width: 100%;
+    overflow: hidden;
+
   }
+
   div.logo-wrapper {
-    padding: 5vh 0 1vh 0;
+
     background-color: white;
-    ion-row.salutation{
+    padding: 24px 24px 0 24px;
+
+    ion-row.salutation {
+
       display: flex;
       justify-content: center;
       color: map_get($colors, font-color-for-filter-dropdown);
       margin-bottom: 1vh;
       max-height: 4vh !important;
-      ion-item{
+
+      ion-item {
         font-size: small;
         max-height: 4vh !important;
         background-color: white;
       }
+
     }
+
   }
+
+  div.logo-wrapper-bottom-padding {
+    padding-bottom: 24px;
+  }
+
   .item-md {
     background-color: inherit;
-    padding-left: 3vw!important;
+    padding-left: 3vw !important;
   }
   div.scroll-content {
     overflow-y: hidden;
@@ -110,15 +133,17 @@ ion-menu {
     padding: 1vh 0 1vh 1vw;
     margin-left: 2vw;
   }
+
   .menu-title-icon, .menu-title {
     display: inline-block;
     color: grey;
   }
+
   .list-wrapper {
-    padding-top: 3vh;
+
     overflow-y: scroll;
-    background-color: map-get($colors, light);
     height: 100%;
+
     div.icon {
       &.offline {
         background: url('../assets/icon/vorortpartner.svg') no-repeat;
@@ -140,24 +165,24 @@ ion-menu {
         background: url('../assets/icon/profil.svg') no-repeat;
         background-size: contain;
       }
-      &.settings{
-        background: url('../assets/icon/einstellungen.svg')no-repeat;
+      &.settings {
+        background: url('../assets/icon/einstellungen.svg') no-repeat;
         background-size: contain;
       }
-      &.imprint{
-        background: url('../assets/icon/impressum.svg')no-repeat;
+      &.imprint {
+        background: url('../assets/icon/impressum.svg') no-repeat;
         background-size: contain;
       }
-      &.dataprivacy{
-        background: url('../assets/icon/datenschutz.svg')no-repeat;
+      &.dataprivacy {
+        background: url('../assets/icon/datenschutz.svg') no-repeat;
         background-size: contain;
       }
-      &.contact{
-        background: url('../assets/icon/kontakt.svg')no-repeat;
+      &.contact {
+        background: url('../assets/icon/kontakt.svg') no-repeat;
         background-size: contain;
       }
-      &.sign-out{
-        background: url('../assets/icon/logout.svg')no-repeat;
+      &.sign-out {
+        background: url('../assets/icon/logout.svg') no-repeat;
         background-size: contain;
       }
       height: 11vw;
@@ -166,24 +191,40 @@ ion-menu {
       max-width: 30px;
     }
     .page-title {
-      font-size: 120%;
+      font-size: 100%;
       color: map_get($colors, font-color-for-filter-dropdown);
-      &.inactive{
+      &.inactive {
         color: darkgrey;
       }
     }
-    ion-row.page{
-      &.get-large-distance{
+    ion-row.page {
+      &.get-large-distance {
         margin-bottom: 4vh !important;
       }
-      &.get-small-distance{
+      &.get-small-distance {
         margin-bottom: 3vh !important;
       }
     }
-    ion-item{
+    ion-item {
       max-height: 1.8vh !important;
       background-color: map-get($colors, light);
     }
+  }
+
+  .salutation {
+
+    color: map-get($colors, font-grey-dark);
+    font-size: medium;
+    background-color: white;
+    padding: 10px 14px 20px 14px;
+
+    p {
+      width: 100%;
+      padding: 0;
+      margin: 0;
+      text-align: center;
+    }
+
   }
 
 

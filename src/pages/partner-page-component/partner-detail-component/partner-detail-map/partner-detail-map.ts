@@ -3,6 +3,8 @@ import {AlertController, NavController, NavParams} from 'ionic-angular';
 import {FavoritesData} from "../../../../services/favorites-data";
 import {FavoritesService} from "../../../../services/favorites-service";
 import {SavePartnersService} from "../save-partners-service";
+import {AuthService} from "../../../../services/auth-service";
+import {LocationService} from "../../../../services/location-service";
 
 declare let device: any;
 
@@ -18,6 +20,7 @@ export class PartnerDetailMap {
   travelTimePedestrian: string;
   travelTimeAvailable = false;
 
+  location: any;
   currentLatitude: number;
   currentLongitude: number;
   locationExact = false;
@@ -34,17 +37,22 @@ export class PartnerDetailMap {
               public navParams: NavParams,
               public favoritesService: FavoritesService,
               public alertCtrl: AlertController,
-              private savePartnersService: SavePartnersService) {
+              public authService: AuthService,
+              private savePartnersService: SavePartnersService,
+              private locationService: LocationService) {
     this.partnerDetails = navParams.get("partnerDetails");
     this.partner = navParams.get("partner");
-    this.securityToken = localStorage.getItem("securityToken");
+    this.securityToken = this.authService.getUser().securityToken;
     this.favoritesByPfArray = FavoritesData.favoritesByPfArray;
     console.log(this.partnerDetails);
-    if (localStorage.getItem("locationExact") === "true") {
-      this.currentLatitude = parseFloat(localStorage.getItem("latitude"));
-      this.currentLongitude = parseFloat(localStorage.getItem("longitude"));
+
+    this.location = this.locationService.getLocation();
+    if (this.location) {
+      this.currentLatitude = this.location.latitude;
+      this.currentLongitude = this.location.longitude;
       this.locationExact = true;
     }
+
     console.log("PartnerDetailMap: ", this.currentLatitude + " " + this.currentLongitude);
     this.pfNumber = this.partnerDetails.pfNummer;
     console.log(this.pfNumber);
@@ -73,8 +81,8 @@ export class PartnerDetailMap {
         let message = res.json().errors[0].beschreibung;
         if (message === "Erfolg") {
           FavoritesData.deleteFavorite(this.pfNumber);
-          this.savePartnersService.togglePartnerType(this.pfNumber, "lastVisitedPartners");
           this.isInFavorites = false;
+          this.savePartnersService.removeFromFavorites(this.pfNumber);
         }
         else {
           this.showPromptSomethingWentWrong();
@@ -86,8 +94,8 @@ export class PartnerDetailMap {
         let message = res.json().errors[0].beschreibung;
         if (message === "Erfolg") {
           FavoritesData.addFavorite(this.pfNumber);
-          this.savePartnersService.togglePartnerType(this.pfNumber, "favorites");
           this.isInFavorites = true;
+          this.savePartnersService.addToFavorites(this.pfNumber);
         }
         else {
           this.showPromptSomethingWentWrong();

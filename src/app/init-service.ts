@@ -1,37 +1,21 @@
 import {Injectable} from "@angular/core";
 import {Http, Headers, RequestOptions} from "@angular/http";
+import {EnvironmentService} from "../services/environment-service";
 
 @Injectable()
 export class InitService {
-
-  //mitgliedId = localStorage.getItem("mitgliedId");
-  //securityToken = encodeURIComponent(localStorage.getItem("securityToken"));
   date = new Date();
   year = this.date.getFullYear();
 
-
-  constructor(private http: Http) {
-
-  }
+  constructor(private http: Http, private envService: EnvironmentService) {}
 
   createAuthorizationHeader(headers: Headers) {
-    headers.append('Authorization', 'Basic ' +
-      btoa('BSW_App:ev1boio32fSrjSY9XwvcD9LkGr13J'));
+    headers.append('Authorization', this.envService.environment.AUTH_HEADER);
   }
 
   getWebViewUrlsFromApi() {
     let headers = new Headers({'Accept': 'application/json'});
-    let url = 'https://vorsystem.avs.de/integ6/cms/bswAppWebviewUrls?mandant_id=1'
-    this.createAuthorizationHeader(headers);
-    return this.http.get(url, {
-      headers: headers
-    });
-  }
-
-  getUserData(mitgliedId, securityToken) {
-    securityToken = encodeURIComponent(securityToken);
-    let url = 'https://vorsystem.avs.de/integ6/securityToken/getList/getMitgliedData?mitglied_id=' + mitgliedId + '&mandant_id=1&securityToken=' + securityToken;
-    let headers = new Headers({ 'Accept': 'application/json' });
+    let url = this.envService.environment.BASE_URL + this.envService.environment.WEBVIEW_SERVICE + '?mandant_id=1'
     this.createAuthorizationHeader(headers);
     return this.http.get(url, {
       headers: headers

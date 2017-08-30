@@ -1,16 +1,22 @@
 <ion-header *ngIf="searchInterfaceOpen">
   <typeahead
     (closeSearchInterfaceEmitter)="closeSearchInterface($event)"
-    (getPartnersWithSearchTermEmitter)="getPartnersWithSearchTerm($event)"
+    (getPartnersWithSearchTermEmitter)="loadPartnerPage($event)"
     (toggleMapAndListEmitter)="toggleMapAndList()"
     [mapIcon]='activeFilterFromMenu == "OFFLINEPARTNER"  && !showTryAgainToGetPartnersButton'>
   </typeahead>
   <ion-toolbar>
     <ion-row *ngIf="!showMap" class="filter-button-row" [class.dropdownOpen]="showDropdown[2]">
       <ion-col tappable class="filter-button left-button" (click)="toggleVisibilityDropdowns(0)">
-        <div class="filter-button-text" [class.notActive]="showDropdown[1]">Filter
-          <ion-icon name="arrow-dropdown" [class.singleButton]="showMap"></ion-icon>
+
+        <div class="filter-button-text" *ngIf="!onlinePartnerPageComponent" [class.notActive]="showDropdown[1]">Ort & Filter
+          <ion-icon name="arrow-dropdown"></ion-icon>
         </div>
+
+        <div class="filter-button-text" *ngIf="onlinePartnerPageComponent" [class.notActive]="showDropdown[1]">Filter
+          <ion-icon name="arrow-dropdown"></ion-icon>
+        </div>
+
       </ion-col>
       <ion-col tappable class="filter-button" (click)="toggleVisibilityDropdowns(1)">
         <div class="filter-button-text" [class.notActive]="showDropdown[0]">Sortieren
@@ -21,9 +27,15 @@
 
     <ion-row class="filter-button-row" *ngIf="showMap" [class.dropdownOpen]="showDropdown[2]">
       <ion-col tappable class="filter-button left-button singleButton" (click)="toggleVisibilityDropdowns(0)">
-        <div class="filter-button-text" [class.notActive]="showDropdown[1]">Filter
+
+        <div class="filter-button-text" *ngIf="!onlinePartnerPageComponent" [class.notActive]="showDropdown[1]">Ort & Filter
           <ion-icon name="arrow-dropdown"></ion-icon>
         </div>
+
+        <div class="filter-button-text" *ngIf="onlinePartnerPageComponent" [class.notActive]="showDropdown[1]">Filter
+          <ion-icon name="arrow-dropdown"></ion-icon>
+        </div>
+
       </ion-col>
     </ion-row>
   </ion-toolbar>
@@ -39,7 +51,7 @@
 
     <ion-buttons left *ngIf="showCustomBackButton" (click)="customBackButtonClicked()">
       <button>
-        <ion-icon name="ios-arrow-round-back" color="grey" class="menu-button-header"></ion-icon>
+        <ion-icon name="arrow-back" color="grey" class="menu-button-header"></ion-icon>
       </button>
     </ion-buttons>
 
@@ -66,9 +78,15 @@
   <ion-toolbar>
     <ion-row *ngIf="!showMap" class="filter-button-row" [class.dropdownOpen]="showDropdown[2]">
       <ion-col tappable class="filter-button left-button" (click)="toggleVisibilityDropdowns(0)">
-        <div class="filter-button-text" [class.notActive]="showDropdown[1]">Filter
-          <ion-icon name="arrow-dropdown" [class.singleButton]="showMap"></ion-icon>
+
+        <div class="filter-button-text" *ngIf="!onlinePartnerPageComponent" [class.notActive]="showDropdown[1]">Ort & Filter
+          <ion-icon name="arrow-dropdown"></ion-icon>
         </div>
+
+        <div class="filter-button-text" *ngIf="onlinePartnerPageComponent" [class.notActive]="showDropdown[1]">Filter
+          <ion-icon name="arrow-dropdown"></ion-icon>
+        </div>
+
       </ion-col>
       <ion-col tappable class="filter-button" (click)="toggleVisibilityDropdowns(1)">
         <div class="filter-button-text" [class.notActive]="showDropdown[0]">Sortieren
@@ -79,9 +97,15 @@
 
     <ion-row class="filter-button-row" *ngIf="showMap" [class.dropdownOpen]="showDropdown[2]">
       <ion-col tappable class="filter-button left-button singleButton" (click)="toggleVisibilityDropdowns(0)">
-        <div class="filter-button-text" [class.notActive]="showDropdown[1]">Filter
+
+        <div class="filter-button-text" *ngIf="!onlinePartnerPageComponent" [class.notActive]="showDropdown[1]">Ort & Filter
           <ion-icon name="arrow-dropdown"></ion-icon>
         </div>
+
+        <div class="filter-button-text" *ngIf="onlinePartnerPageComponent" [class.notActive]="showDropdown[1]">Filter
+          <ion-icon name="arrow-dropdown"></ion-icon>
+        </div>
+
       </ion-col>
     </ion-row>
   </ion-toolbar>
@@ -90,22 +114,21 @@
 <ion-content>
   <div class="filter-wrapper" [@show]="showDropdownForAnimation[2]">
     <div class="filter-menu" [style.display]="showDropdown[0]?'block':'none'">
-      <ion-row class="currentLocation" *ngIf="(offlinePartnerPageComponent || searchPageComponent) && !showMap ">
+      <ion-row class="currentLocation" *ngIf="(offlinePartnerPageComponent || searchPageComponent)">
         <ion-col class="currentPosition getLocationFromGPS" *ngIf="location.fromGPS" (click)="chooseLocationManually()">
-          <p class="cityName">Aktueller Standort</p>
+          <p class="locationName">Aktueller Standort</p>
           <p class="changeLocation">Ort ändern</p>
         </ion-col>
 
         <ion-col class="currentPosition chooseLocationManually" *ngIf="!location.fromGPS"
                  (click)="chooseLocationManually()">
-          <p class="cityName" *ngIf="cityName">{{cityName}}</p>
-          <p class="cityName" *ngIf="!cityName">zuletzt verfügbarer Standort</p>
+          <p class="locationName">{{location.locationName}}</p>
           <p class="changeLocation">Ort ändern</p>
         </ion-col>
 
         <ion-col tappable class="getLocationFromGPS map-icon icon-column" (click)="toggleGetLocationFromGPSEnabled()"
                  *ngIf="!waitingForGPSSignal">
-          <div [class.manually]="!getLocationFromGPSEnabled"></div>
+          <div [class.manually]="!location.fromGPS"></div>
         </ion-col>
         <ion-col>
           <ion-spinner *ngIf="waitingForGPSSignal" class="waitingForGPSSignalSpinner"></ion-spinner>
@@ -115,7 +138,7 @@
       <ion-item color="secondary-grey"
                 tappable
                 *ngIf="searchPageComponent">
-        <ion-label item-content class="toggle-text">Vor-Ort-Partner</ion-label>
+        <ion-label item-content class="toggle-text">Vor Ort Partner</ion-label>
         <ion-toggle item-right
                     [(ngModel)]="showOfflinePartners"
                     color="light-blue"
@@ -178,11 +201,11 @@
     Wir können Ihnen leider derzeit keine Partner anzeigen. Überprüfen Sie Ihr Netzwerk.
   </ion-item>
 
-  <ion-item *ngIf="noPartnersToDisplayBecauseOfParameters" text-wrap>
+  <ion-item *ngIf="noPartnersToDisplayBecauseOfParameters && !showMap" text-wrap>
     Wir können Ihnen leider derzeit keine Partner anzeigen. Versuchen Sie gegebenenfalls andere Suchparameter.
   </ion-item>
 
-  <div *ngIf="showTryAgainToGetPartnersButton">
+  <div class="error-text" *ngIf="showTryAgainToGetPartnersButton">
     <ion-item text-wrap>
       Der Aufruf hat einen Fehler zurückgegeben. Überprüfen Sie bitte Ihr Netzwerk.
       <button ion-button item-right (click)="getPartners(); showTryAgainToGetPartnersButton = false">Erneut versuchen
