@@ -11,7 +11,6 @@ import {GoogleAnalytics} from "@ionic-native/google-analytics";
 import {Http} from "@angular/http";
 import {InitService} from "./init-service";
 import {PushNotificationsService} from "../services/push-notifications-service";
-import {Firebase} from "@ionic-native/firebase";
 
 class NavMock {
   setRoot() {}

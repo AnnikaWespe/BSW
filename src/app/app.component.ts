@@ -14,7 +14,6 @@ import {DeviceService} from "../services/device-data";
 import {WebviewComponent} from "../pages/webview/webview";
 import {InitService} from "./init-service";
 import {PushNotificationsService} from "../services/push-notifications-service";
-import {Firebase} from "@ionic-native/firebase";
 import {StatusBar} from "@ionic-native/status-bar";
 import {PartnerDetailComponent} from "../pages/partner-page-component/partner-detail-component/partner-detail-component";
 import {PartnerService} from "../services/partner-service";
@@ -55,7 +54,6 @@ export class BSWBonusApp {
               private ga: GoogleAnalytics,
               private initService: InitService,
               public events: Events,
-              private firebase: Firebase,
               private pushNotificationsService: PushNotificationsService,
               private statusBar: StatusBar,
               private partnerService: PartnerService) {
@@ -66,7 +64,7 @@ export class BSWBonusApp {
       this.getUserData(id, token);
       this.setWebViewsUrls();
       if (!DeviceService.isInBrowser) {
-        this.managePushes(id, token);
+        //this.managePushes(id, token);
       }
     });
     this.userLoggedIn = localStorage.getItem("securityToken") !== null;
@@ -163,7 +161,7 @@ export class BSWBonusApp {
     }
     else {
       if (this.securityToken) {
-        this.managePushes(this.mitgliedId, this.securityToken);
+        //this.managePushes(this.mitgliedId, this.securityToken);
       }
       if (this.platform.is('ios')) {
         DeviceService.isIos = true;
@@ -196,7 +194,7 @@ export class BSWBonusApp {
 
   logout() {
     if (this.userLoggedIn) {
-      this.updateToken(localStorage.getItem("mitgliedId"), localStorage.getItem("securityToken"), null);
+      //this.updateToken(localStorage.getItem("mitgliedId"), localStorage.getItem("securityToken"), null);
     }
     localStorage.removeItem("securityToken");
     localStorage.removeItem("mitgliedId");
@@ -216,77 +214,6 @@ export class BSWBonusApp {
 
   loadContactPage() {
     this.nav.push(WebviewComponent, {urlType: "KontaktWebviewUrl", title: "Kontakt"})
-  }
-
-
-  managePushes(id, securityToken) {
-    this.firebase.getToken()
-      .then(token => {
-        if (token) {
-          this.updateToken(id, securityToken, token);
-          console.log(token);
-        }
-      })
-    this.firebase.onTokenRefresh()
-      .subscribe((token) => {
-        this.updateToken(id, securityToken, token)
-      });
-
-    // Currently removed as firebase pushes will be implemented in the near future
-    //this.firebase.grantPermission();
-
-    if (localStorage.getItem("updatePushNotificationsNextTime") == "true") {
-      let token = localStorage.getItem("firebaseToken");
-      this.updateToken(id, securityToken, token);
-    }
-    this.firebase.onNotificationOpen()
-      .subscribe((jsonObject) => {
-        console.log(jsonObject);
-        //let jsonObject = this.jsonObject;
-        if (jsonObject && jsonObject.data) {
-          if (jsonObject.data.typ == "promotion") {
-            let pfNummerArray = jsonObject.data.pfNummer;
-            let numberOfPartners = pfNummerArray.length;
-            if (numberOfPartners == 1) {
-              this.nav.push(PartnerDetailComponent, {partner: {number: pfNummerArray[0]}});
-            }
-            else {
-              let location = {latitude: localStorage.getItem("latitude"), longitude: localStorage.getItem("longitude")};
-              this.partnerService.getPartners(location, 0, "", false, "RELEVANCE", "DESC", 10000, pfNummerArray).subscribe((res) => {
-                  let partnersArray = [];
-                  res.json().contentEntities.forEach((partner) => {
-                    if (partner && partner.number) {
-                      partnersArray.push(partner);
-                    }
-                  })
-                  if (partnersArray) {
-                    this.nav.push(PushesListPageComponent, {partners: partnersArray})
-                  }
-                },
-                error => {
-                })
-            }
-          }
-          else if (jsonObject.data.typ == "bonus") {
-            this.nav.push(WebviewComponent, {urlType: 'VorteilsuebersichtWebviewUrl', title: 'Vorteilsübersicht'})
-          }
-        }
-
-      })
-  }
-
-  updateToken(mitgliedId, securityToken, fireBaseToken) {
-
-    /*
-    let oldToken = localStorage.getItem("firebaseToken") || "";
-    localStorage.setItem("firebaseToken", fireBaseToken);
-    this.pushNotificationsService.sendPushNotificationsRequest(mitgliedId, securityToken, fireBaseToken, oldToken).subscribe((res) => {
-      console.log("result from Firebase API request", res.json().errors[0])
-    });
-    */
-
-    console.log("push notification service currently disabled!");
-
   }
 
   /* copied from settings page */
