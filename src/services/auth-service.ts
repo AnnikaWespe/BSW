@@ -140,7 +140,7 @@ export class AuthService {
       (res) => {
         let response = res.json();
         if (response.errors[0].beschreibung === "Erfolg") {
-          this.user.security.Token = response.response.securityToken;
+          this.user.securityToken = response.response.securityToken;
           localStorage.setItem("user", JSON.stringify(this.user));
         } else {
           throw 'PasswordNotChanged';
