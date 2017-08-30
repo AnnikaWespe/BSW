@@ -32,6 +32,7 @@ export class PartnerDetailMap {
   isInFavorites = true;
   securityToken;
   favoritesByPfArray;
+  cached: any;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -42,6 +43,7 @@ export class PartnerDetailMap {
               private locationService: LocationService) {
     this.partnerDetails = navParams.get("partnerDetails");
     this.partner = navParams.get("partner");
+    this.cached = this.navParams.get("cached");
     this.securityToken = this.authService.getUser().securityToken;
     this.favoritesByPfArray = FavoritesData.favoritesByPfArray;
     console.log(this.partnerDetails);
