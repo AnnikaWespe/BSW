@@ -5,13 +5,17 @@ import 'rxjs/add/operator/toPromise';
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
 
 import {EnvironmentService} from "./environment-service";
+import {Events} from "ionic-angular";
 
 @Injectable()
 export class AuthService {
 
   user: any = {};
 
-  constructor(private http: Http, private envService: EnvironmentService, private ga: GoogleAnalytics,) {
+  constructor(private http: Http,
+              private envService: EnvironmentService,
+              private ga: GoogleAnalytics,
+              public events: Events) {
     this.user = JSON.parse(localStorage.getItem('user')) || {loggedIn: false};
   }
 
@@ -66,6 +70,7 @@ export class AuthService {
             if (localStorage.getItem("disallowUserTracking") === "false") {
               this.ga.trackEvent('Login/Logout', 'login')
             }
+            this.events.publish('user:loggedIn', this.user);
             return this.user;
           }
         )
@@ -75,6 +80,7 @@ export class AuthService {
 
   logout() {
     this.user = {loggedIn: false};
+    this.events.publish('user:loggedOut');
     localStorage.setItem('user', JSON.stringify(this.user));
 
     if (localStorage.getItem("disallowUserTracking") === "false") {

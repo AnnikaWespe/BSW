@@ -22,7 +22,7 @@
 </ion-header>
 
 <ion-content>
-  <div class="bars" *ngIf="userLoggedIn && bonusBalance && bonusThisYear" tappable (click) = "navigateToBonusOverview()">
+  <div class="bars" *ngIf="bonusBalance && bonusThisYear" tappable (click) = "navigateToBonusOverview()">
     <ion-row>
       <ion-col>
         <div class="buffer" [style.height]="heightBlueBarRedBar()[2]"></div>
@@ -37,7 +37,7 @@
     </ion-row>
   </div>
 
-  <div class="moneyDetailsAccount" *ngIf="userLoggedIn && bonusBalance && bonusThisYear" tappable (click) = "navigateToBonusOverview()">
+  <div class="moneyDetailsAccount" *ngIf="bonusBalance && bonusThisYear" tappable (click) = "navigateToBonusOverview()">
 
     <ion-row class="money-detail-row balance-row">
       <ion-col class="icon-col">
