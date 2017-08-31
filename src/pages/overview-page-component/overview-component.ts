@@ -26,9 +26,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   title: string = "Übersicht";
 
   /* user information */
-  id: string;
-  token: string;
-  userLoggedIn = null;
   location: any = {latitude: "0", longitude: "0"};
 
   heightBalanceBarBonusBarBuffer = ["0vh", "0vh", "0vh", "0vh"];
@@ -78,13 +75,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               private platform: Platform,
               private savePartnersService: SavePartnersService) {
 
-    let user = this.authService.getUser();
-    if (navParams.data.login == true || user.loggedIn) {
-      this.id = navParams.data.id || user.mitgliedId;
-      this.token = navParams.data.token || user.securityToken;
-      this.userLoggedIn = true;
-    }
-
     if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
       this.checkForPromptRateAppInStore()
     }
@@ -119,9 +109,12 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     this.getLocation();
 
     this.loadRecentPartners();
-    this.loadFavorites(this.id, this.token);
-    this.loadBonusData(this.id, this.token);
     this.loadPartners();
+
+    if(this.authService.getUser().loggedIn) {
+      this.loadFavorites(this.authService.getUser().mitgliedId, this.authService.getUser().securityToken);
+      this.loadBonusData(this.authService.getUser().mitgliedId, this.authService.getUser().securityToken);
+    }
 
   }
 
