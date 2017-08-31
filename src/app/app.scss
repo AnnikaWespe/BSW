@@ -1,3 +1,16 @@
+.platform-ios ion-menu .list-wrapper .page-title {
+  font-size: 100%;
+}
+
+/* larger menu text in android */
+.platform-android ion-menu .list-wrapper .page-title {
+  font-size: 120%;
+}
+
+ion-menu .list-wrapper .page-title {
+  font-size: 100%;
+}
+
 ion-content {
   background-color: map-get($colors, light);
 }
@@ -191,7 +204,6 @@ ion-menu {
       max-width: 30px;
     }
     .page-title {
-      font-size: 100%;
       color: map_get($colors, font-color-for-filter-dropdown);
       &.inactive {
         color: darkgrey;
@@ -226,7 +238,6 @@ ion-menu {
     }
 
   }
-
 
 }
 

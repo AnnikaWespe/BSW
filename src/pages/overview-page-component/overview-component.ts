@@ -448,7 +448,12 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
           this.extractOnlineAndOfflinePartners(returnedObject);
           this.waitingForResults = false;
         },
-        error => this.errorMessage = <any>error);
+        (error) => {
+
+          this.waitingForResults = false;
+          this.checkForDataOnHomeScreen();
+
+        });
   }
 
   extractOnlineAndOfflinePartners(returnedObject) {

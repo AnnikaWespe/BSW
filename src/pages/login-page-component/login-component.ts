@@ -12,6 +12,9 @@ import {GoogleAnalytics} from "@ionic-native/google-analytics";
 
 declare let cordova: any;
 
+class authService {
+}
+
 @Component({
   selector: 'page-login-component',
   templateUrl: 'login-component.html',
@@ -39,6 +42,7 @@ export class LoginPageComponent {
               private ga: GoogleAnalytics,
               public events: Events,
               public keyboard: Keyboard,
+              private auth: AuthService,
               private renderer: Renderer) {
     let loginNumberFromBarCode = navParams.get('loginNumberFromBarCode');
     this.inputNumberOrEmail = loginNumberFromBarCode || "";
@@ -91,12 +95,15 @@ export class LoginPageComponent {
   }
 
   loadNextPageWithoutLogin() {
+
+    this.auth.logout();
     if (this.navigatedFromPartnerDetail) {
       this.viewCtrl.dismiss();
     }
     else {
       this.navCtrl.setRoot(OverviewPageComponent);
     }
+
   }
 
   checkForValidInput() {

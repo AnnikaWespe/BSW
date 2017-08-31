@@ -72,7 +72,7 @@
   <div class="initialSpinner" *ngIf="waitingForResults && favoritePartners.length == 0 && recentPartners.length == 0 && !noDataToDisplay">
     <ion-spinner class="initialSpinner"></ion-spinner>
   </div>
-  <ion-item *ngIf="noDataToDisplay" text-wrap>
+  <ion-item class="no-data" *ngIf="noDataToDisplay" text-wrap>
     Wir können Ihnen leider derzeit keine Daten anzeigen. Bitte verbinden Sie sich mit dem Internet.
   </ion-item>
 
