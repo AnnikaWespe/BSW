@@ -97,13 +97,14 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     });
 
     this.location = this.locationService.getCurrentLocation();
+
     this.resetPartnersArrays();
     this.getPartners();
 
     this.locationSubscription = this.locationService.getLocation().subscribe(() => {
 
       let loc = this.locationService.getCurrentLocation();
-      if(!this.location || loc.fromGps != this.location.fromGps || !loc.fromGps) {
+      if(!this.location || loc.fromGPS != this.location.fromGPS || !loc.fromGPS) {
         this.location = loc;
         this.resetPartnersArrays();
         this.getPartners();

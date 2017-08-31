@@ -94,7 +94,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     this.locationSubscription = this.locationService.getLocation().subscribe(() => {
 
       let loc = this.locationService.getCurrentLocation();
-      if (!this.location || loc.fromGps != this.location.fromGps || !loc.fromGps) {
+      if (!this.location || loc.fromGPS != this.location.fromGPS || !loc.fromGPS) {
         this.location = loc;
         this.loadAllData();
       }
