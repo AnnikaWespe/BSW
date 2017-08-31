@@ -101,6 +101,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
     });
 
+    this.waitingForResults = true;
   }
 
   ionViewWillEnter() {
@@ -154,6 +155,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     }
 
     this.bonusService.getBonusData(id, token).subscribe((res) => {
+
+      this.waitingForResults = false;
       if (res.json().errors[0].beschreibung === "Erfolg") {
 
         console.log("success with bonus data");
@@ -168,6 +171,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     }, () => {
 
       console.error("error with bonus data");
+      this.waitingForResults = false;
       this.showBonusDataFromCache();
 
     })
@@ -184,7 +188,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
       SavePartnersService.storeBonus(this.bonusThisYear, this.bonusBalance);
 
-      this.waitingForResults = false;
       this.checkForDataOnHomeScreen();
 
     } else {
@@ -206,7 +209,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       this.bonusFromCache = true;
     }
 
-    this.waitingForResults = false;
     this.checkForDataOnHomeScreen();
 
   }
@@ -254,14 +256,16 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
             if (this.favoritePartners.length > 5) {
               this.hasMoreFavoritePartners = true;
             }
-            this.waitingForResults = false;
+
           }
 
+          this.waitingForResults = false;
           this.checkForDataOnHomeScreen();
 
         },
         error => {
           console.log(error);
+          this.waitingForResults = false;
           this.displayFavoritesFromCache();
         })
     }
@@ -275,7 +279,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     this.favoritePartners = [];
     this.favoritePartnersPeek = [];
     this.hasMoreFavoritePartners = false;
-    this.waitingForResults = false;
 
     let cachedFavoritesArray = SavePartnersService.loadFavoritePartners();
     if (cachedFavoritesArray.length) {
@@ -318,7 +321,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       this.recentPartners = [];
       this.recentPartnersPeek = [];
       this.hasMoreRecentPartners = false;
-      this.waitingForResults = false;
       return;
     }
 
@@ -346,14 +348,16 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
             this.hasMoreRecentPartners = true;
           }
 
-          this.waitingForResults = false;
+
         }
 
+        this.waitingForResults = false;
         this.checkForDataOnHomeScreen();
 
       },
       error => {
         console.log(error);
+        this.waitingForResults = false;
         this.showRecentPartnersFromCache();
       })
 
@@ -364,7 +368,6 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     this.recentPartners = [];
     this.recentPartnersPeek = [];
     this.hasMoreRecentPartners = false;
-    this.waitingForResults = false;
 
     let lastVisitedPartnersArray = SavePartnersService.loadRecentPartners();
     if (lastVisitedPartnersArray.length && lastVisitedPartnersArray.length > 0) {
@@ -445,8 +448,10 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       .subscribe(
         body => {
           let returnedObject = body.json();
-          this.extractOnlineAndOfflinePartners(returnedObject);
-          this.waitingForResults = false;
+          if(returnedObject) {
+            this.extractOnlineAndOfflinePartners(returnedObject);
+            this.waitingForResults = false;
+          }
         },
         (error) => {
 

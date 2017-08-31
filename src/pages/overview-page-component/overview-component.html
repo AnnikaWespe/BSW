@@ -69,7 +69,7 @@
 
   </div>
 
-  <div class="initialSpinner" *ngIf="waitingForResults && favoritePartners.length == 0 && recentPartners.length == 0 && !noDataToDisplay">
+  <div class="initialSpinner" *ngIf="waitingForResults">
     <ion-spinner class="initialSpinner"></ion-spinner>
   </div>
   <ion-item class="no-data" *ngIf="noDataToDisplay" text-wrap>
