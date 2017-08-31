@@ -1,19 +1,18 @@
-import {Component} from '@angular/core';
-import {AlertController, NavController, NavParams} from 'ionic-angular';
+import {Component, OnDestroy} from '@angular/core';
+import {AlertController, NavController, NavParams, Platform} from 'ionic-angular';
 import {FavoritesData} from "../../../../services/favorites-data";
 import {FavoritesService} from "../../../../services/favorites-service";
 import {SavePartnersService} from "../save-partners-service";
 import {AuthService} from "../../../../services/auth-service";
 import {LocationService} from "../../../../services/location-service";
 
-declare let device: any;
 
 
 @Component({
   selector: 'page-partner-detail-map',
   templateUrl: 'partner-detail-map.html'
 })
-export class PartnerDetailMap {
+export class PartnerDetailMap implements OnDestroy {
 
   travelTimePublic: string;
   travelTimeCar: string;
@@ -21,9 +20,6 @@ export class PartnerDetailMap {
   travelTimeAvailable = false;
 
   location: any;
-  currentLatitude: number;
-  currentLongitude: number;
-  locationExact = false;
 
 
   partnerDetails: any;
@@ -32,6 +28,7 @@ export class PartnerDetailMap {
   isInFavorites = true;
   securityToken;
   favoritesByPfArray;
+  locationSubscriber;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -39,25 +36,30 @@ export class PartnerDetailMap {
               public alertCtrl: AlertController,
               public authService: AuthService,
               private savePartnersService: SavePartnersService,
-              private locationService: LocationService) {
+              private locationService: LocationService,
+              public plt: Platform) {
     this.partnerDetails = navParams.get("partnerDetails");
     this.partner = navParams.get("partner");
     this.securityToken = this.authService.getUser().securityToken;
     this.favoritesByPfArray = FavoritesData.favoritesByPfArray;
     console.log(this.partnerDetails);
 
-    this.location = this.locationService.getLocation();
-    if (this.location) {
-      this.currentLatitude = this.location.latitude;
-      this.currentLongitude = this.location.longitude;
-      this.locationExact = true;
-    }
+    this.locationSubscriber = this.locationService.getLocation().subscribe((loc) => {
+      this.location = loc;
+    });
 
-    console.log("PartnerDetailMap: ", this.currentLatitude + " " + this.currentLongitude);
+
     this.pfNumber = this.partnerDetails.pfNummer;
     console.log(this.pfNumber);
     this.isInFavorites = FavoritesData.isInFavorites(this.pfNumber);
   }
+
+  ngOnDestroy() {
+    if (this.locationSubscriber) {
+      this.locationSubscriber.unsubscribe();
+    }
+  }
+
 
   showPromptSomethingWentWrong() {
     let prompt = this.alertCtrl.create({
@@ -105,17 +107,23 @@ export class PartnerDetailMap {
   }
 
   openExternalMapApp() {
-    if (device.platform == "Android") {
-      let link = "geo:" + this.currentLatitude + "," + this.currentLongitude + "?q=" + this.partnerDetails.latitude + "," + this.partnerDetails.longitude + "(" + this.partnerDetails.nameInternet + ")";
+    if (this.plt.is('android')) {
+      let link = "geo:" + this.location.latitude + "," + this.location.longitude + "?q=" + this.partnerDetails.latitude + "," + this.partnerDetails.longitude + "(" + this.partnerDetails.nameInternet + ")";
       console.log(link);
       window.open(link, '_system', 'location=yes');
     }
-    else {
+    else if (this.plt.is('ios')) {
       let currentLocationString = "";
-      if(this.locationExact){
-        currentLocationString = "saddr=" + this.currentLatitude + "," + this.currentLongitude + "&";
+      if (this.location.locationExact) {
+        currentLocationString = "saddr=" + this.location.latitude + "," + this.location.longitude + "&";
       }
       window.open("http://maps.apple.com/?" + currentLocationString + "daddr=" + this.partnerDetails.latitude + "," + this.partnerDetails.longitude, '_system', 'location=yes');
+
+    }
+    else{
+      let link = "geo:" + this.location.latitude + "," + this.location.longitude + "?q=" + this.partnerDetails.latitude + "," + this.partnerDetails.longitude + "(" + this.partnerDetails.nameInternet + ")";
+      console.log(link);
+      window.open(link, '_system', 'location=yes');
     }
   }
 
