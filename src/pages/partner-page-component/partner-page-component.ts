@@ -16,8 +16,8 @@ import {GoogleAnalytics} from "@ionic-native/google-analytics";
     trigger('show', [
       state('false', style({height: '0', display: 'none'})),
       state('true', style({height: '100%', display: 'block'})),
-    transition('false <=> true', animate('500ms ease-in-out'))
-  ])]
+      transition('false <=> true', animate('500ms ease-in-out'))
+    ])]
 })
 export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   @ViewChild(Content) content: Content;
@@ -104,7 +104,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.locationSubscription = this.locationService.getLocation().subscribe(() => {
 
       let loc = this.locationService.getCurrentLocation();
-      if(!this.location || loc.fromGPS != this.location.fromGPS || !loc.fromGPS) {
+      if (!this.location || loc.fromGPS != this.location.fromGPS || !loc.fromGPS) {
         this.location = loc;
         this.resetPartnersArrays();
         this.getPartners();
@@ -168,7 +168,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
 
   //subscribeForLocation() {
-    // wird eigentlich nicht mehr gebraucht, weil alles im Subsribe gehandelt wird.
+  // wird eigentlich nicht mehr gebraucht, weil alles im Subsribe gehandelt wird.
   //}
 
   showPromptGPSDisabled() {
@@ -190,9 +190,6 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.searchInterfaceOpen = false;
     this.searchTerm = searchTerm + " ";
     this.title = searchTerm;
-    if (this.navigatedFromOverview) {
-      this.showCustomBackButton = true;
-    }
     if (this.showMap) {
       this.searchTerm$.emit(searchTerm);
     }
@@ -214,7 +211,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   }
 
   loadPartnerPage(searchTerm) {
-
+    this.showCustomBackButton = false;
     this.searchInterfaceOpen = false;
     this.navCtrl.push(PartnerPageComponent, {
       type: "searchPageComponent",
@@ -330,7 +327,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.displayedPartners = this.allPartners;
     }
     console.log(this.displayedPartners);
-    if (this.displayedPartners.length === 0){
+    if (this.displayedPartners.length === 0) {
       this.noPartnersToDisplayBecauseOfParameters = true;
     }
   }
