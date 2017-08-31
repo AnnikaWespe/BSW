@@ -28,6 +28,7 @@ export class PartnerDetailMap implements OnDestroy {
   isInFavorites = true;
   securityToken;
   favoritesByPfArray;
+  cached: any;
   locationSubscriber;
 
   constructor(public navCtrl: NavController,
@@ -40,6 +41,7 @@ export class PartnerDetailMap implements OnDestroy {
               public plt: Platform) {
     this.partnerDetails = navParams.get("partnerDetails");
     this.partner = navParams.get("partner");
+    this.cached = this.navParams.get("cached");
     this.securityToken = this.authService.getUser().securityToken;
     this.favoritesByPfArray = FavoritesData.favoritesByPfArray;
     console.log(this.partnerDetails);

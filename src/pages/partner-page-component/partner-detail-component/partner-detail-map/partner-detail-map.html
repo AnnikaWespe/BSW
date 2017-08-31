@@ -13,6 +13,11 @@
 </ion-header>
 
 <ion-content>
+
+  <div class="footer offline" *ngIf="cached">
+    Die verwendeten Daten stammen aus einer früheren Sitzung und sind möglicherweise veraltet. Stellen Sie eine Internetverbindung her um die Daten zu aktualisieren.
+  </div>
+
   <agm-map
     [latitude]="49"
     [longitude]="11"
@@ -68,8 +73,8 @@
 
   <div class="address">
     <h3>{{partnerDetails?.nameInternet}}</h3>
-    <p>{{partnerDetails?.kurzBeschreibung}}</p>
-    <p>{{partnerDetails?.strasse}} {{partnerDetails?.hausnummer}}, {{partnerDetails?.ort}}</p>
+    <p>{{partnerDetails?.strasse}} {{partnerDetails?.hausnummer}}, {{partnerDetails?.plz}} {{partnerDetails?.ort}}</p>
+    <p *ngIf="partnerDetails?.tel">Tel.: {{partnerDetails?.tel}}</p>
   </div>
 
 </ion-content>

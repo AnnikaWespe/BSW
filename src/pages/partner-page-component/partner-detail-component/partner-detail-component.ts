@@ -143,7 +143,7 @@ export class PartnerDetailComponent implements OnDestroy {
   }
 
   goToPartnerDetailMap() {
-    this.navCtrl.push(PartnerDetailMap, {partnerDetails: this.partnerDetails, partner: this.partner});
+    this.navCtrl.push(PartnerDetailMap, {partnerDetails: this.partnerDetails, partner: this.partner, cached: this.cached});
   }
 
   goToPartnerShop(goEvenIfUserNotLoggedIn) {
