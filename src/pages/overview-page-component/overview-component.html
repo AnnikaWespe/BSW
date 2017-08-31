@@ -36,7 +36,7 @@
         <p>{{bonusBalance| currency:'EUR':true:'1.2-2'}}</p>
         <div class="blue bar" [style.height]="heightBlueBarRedBar()[0] + 'vh'">
 
-          <div class="piggyBank icon-inner" *ngIf="heightBlueBarRedBar()[0] > 8"></div>
+          <div class="piggyBank icon-inner" *ngIf="heightBlueBarRedBar()[0] > 6"></div>
 
         </div>
       </ion-col>
@@ -45,7 +45,7 @@
         <p>{{bonusThisYear | currency:'EUR':true:'1.2-2'}}</p>
         <div class="red bar" [style.height]="heightBlueBarRedBar()[1] + 'vh'">
 
-          <div class="coins icon-inner" *ngIf="heightBlueBarRedBar()[1] > 8"></div>
+          <div class="coins icon-inner" *ngIf="heightBlueBarRedBar()[1] > 6"></div>
 
         </div>
       </ion-col>
