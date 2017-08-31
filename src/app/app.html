@@ -47,7 +47,7 @@
         </ion-item>
       </ion-row>
 
-      <ion-row menuClose class="page" (click)="openPage(this.pages[3])" *ngIf="user.loggedIn">
+      <ion-row menuClose class="page" (click)="openPage(this.pages[3])" *ngIf="!user.loggedIn">
         <ion-item tappable>
           <div item-left class="icon-col">
             <div class="icon add-purchase"></div>
@@ -58,7 +58,7 @@
         </ion-item>
       </ion-row>
 
-      <ion-row menuClose class="page" *ngIf="!user.loggedIn">
+      <ion-row menuClose class="page" *ngIf="user.loggedIn">
         <ion-item class="inactive">
           <div item-left class="icon-col">
             <div class="icon add-purchase"></div>

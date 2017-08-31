@@ -101,14 +101,17 @@
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <engine name="android" spec="^6.2.3" />
     <engine name="ios" spec="^4.4.0" />
-    <plugin name="cordova-plugin-camera" spec="~2.4.1">
-        <variable name="CAMERA_USAGE_DESCRIPTION" value=" " />
-        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value=" " />
+    <plugin name="cordova-plugin-camera" spec="^2.4.1">
+        <variable name="CAMERA_USAGE_DESCRIPTION" value="Aufnehmen von Kassabons" />
+        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Auswahl eines Kassabons" />
     </plugin>
     <plugin name="cordova-plugin-console" spec="1.0.5" />
     <plugin name="cordova-plugin-crosswalk-webview" spec="~2.3.0" />
     <plugin name="cordova-plugin-cszbar" spec="git+https://github.com/mfussi/csZBar.git" />
     <plugin name="cordova-plugin-device" spec="1.1.4" />
+    <plugin name="cordova-plugin-geolocation" spec="^2.4.3">
+        <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="Anzeige von Vor Ort Partnern" />
+    </plugin>
     <plugin name="cordova-plugin-google-analytics" spec="^1.8.3" />
     <plugin name="cordova-plugin-inappbrowser" spec="^1.7.1" />
     <plugin name="cordova-plugin-nativegeocoder" spec="~1.0.2" />

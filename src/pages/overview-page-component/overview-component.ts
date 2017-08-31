@@ -109,6 +109,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       this.ga.trackView('Übersicht Screen')
     }
 
+    this.locationService.startLocationService();
     this.loadAllData();
 
   }

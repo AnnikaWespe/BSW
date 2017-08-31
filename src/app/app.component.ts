@@ -20,6 +20,7 @@ import {PartnerService} from "../services/partner-service";
 import {AuthService } from '../services/auth-service';
 import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
 import {SavePartnersService} from "../pages/partner-page-component/partner-detail-component/save-partners-service";
+import {LocationService} from "../services/location-service";
 
 
 @Component({
@@ -56,7 +57,8 @@ export class BSWBonusApp {
     private statusBar: StatusBar,
     private partnerService: PartnerService,
     private savePartnerService: SavePartnersService,
-    private authService: AuthService
+    private authService: AuthService,
+    private locationService: LocationService
     ) {
       this.user = this.authService.getUser();
       this.setMenu();
@@ -81,6 +83,7 @@ export class BSWBonusApp {
           }
 
           this.getDevice();
+
         },
         (err) => {
           this.setRootPage()

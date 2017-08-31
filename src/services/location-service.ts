@@ -15,14 +15,19 @@ import {NativeGeocoder, NativeGeocoderForwardResult, NativeGeocoderReverseResult
 
 @Injectable()
 export class LocationService {
+
   private geoLocationSubscription: any;
   private currentLocation: any;
   private location: BehaviorSubject<any>;
+  private updateOnStart: any;
 
   constructor(private http: Http, private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder) {
+
     let currentLocation = JSON.parse(localStorage.getItem('location'));
-    let updateLocation = false;
+    this.updateOnStart = false;
+
     if (!currentLocation) {
+
       currentLocation = {
         latitude: 52.5219,
         longitude: 13.4132,
@@ -32,17 +37,26 @@ export class LocationService {
         locationName: 'Berlin',
         fromGPS: false
       };
-      updateLocation = true;
+      this.updateOnStart = true;
+
     } else {
       if (currentLocation.fromGPS) {
-        updateLocation = true;
+        this.updateOnStart = true;
       }
     }
+
     this.currentLocation = currentLocation;
     this.location = new BehaviorSubject(currentLocation);
-    if (updateLocation) {
+
+  }
+
+  public startLocationService() {
+
+    if (this.updateOnStart) {
       this.updateLocation();
+      this.updateOnStart = false;
     }
+
   }
 
   getLocation(): Observable<any> {
@@ -82,7 +96,7 @@ export class LocationService {
 
   updateLocation(watch: boolean = true): Promise<any> {
 
-    const handlePosition = (position, resolve, reject)=> {
+    const handlePosition = (position, resolve, reject) => {
       let currentLocation = {
         latitude: parseFloat(position.coords.latitude.toFixed(4)),
         longitude: parseFloat(position.coords.longitude.toFixed(4)),
@@ -93,8 +107,8 @@ export class LocationService {
         locationName: '',
       };
       if (this.currentLocation.latitude === currentLocation.latitude &&
-          this.currentLocation.longitude === currentLocation.longitude) {
-          resolve(currentLocation);
+        this.currentLocation.longitude === currentLocation.longitude) {
+        resolve(currentLocation);
       } else {
         this.getLocationName(currentLocation).subscribe((locationName) => {
           currentLocation.locationName = locationName;
@@ -111,11 +125,17 @@ export class LocationService {
         this.geolocation.getCurrentPosition({timeout: 5000}).then(
           (position) => {
             handlePosition(position, resolve, reject);
-            this.geoLocationSubscription = this.geolocation.watchPosition()
+            this.geoLocationSubscription = this.geolocation.watchPosition({
+              maximumAge: 30000,
+              timeout: 5000,
+              enableHighAccuracy: false
+            })
               .filter(position => position.coords !== undefined)
-              .debounceTime(1.5*60)
+              .debounceTime(1.5 * 60)
               .subscribe(
-                (position) => handlePosition(position, () => {}, () => {}),
+                (position) => handlePosition(position, () => {
+                }, () => {
+                }),
                 (error) => {
                   console.error(error);
                   resolve({fromGPS: false});
@@ -149,7 +169,7 @@ export class LocationService {
         let locationName = result.city;
         return locationName;
       }).catch(() => {
-        return location.latitude+ " / " + location.longitude;
+        return location.latitude + " / " + location.longitude;
       }))
 
   }
