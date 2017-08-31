@@ -28,7 +28,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   /* user information */
   location: any = {latitude: "0", longitude: "0"};
 
-  heightBalanceBarBonusBarBuffer = ["0vh", "0vh", "0vh", "0vh"];
+  heightBalanceBarBonusBarBuffer = [0, 0, 0, 0];
   maxHeightBarInVh = 14;
   errorMessage: string;
 
@@ -580,16 +580,16 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   heightBlueBarRedBar() {
     let heightOtherDiv;
     if (this.bonusBalance > this.bonusThisYear) {
-      this.heightBalanceBarBonusBarBuffer[0] = this.maxHeightBarInVh + "vh";
+      this.heightBalanceBarBonusBarBuffer[0] = this.maxHeightBarInVh;
       heightOtherDiv = Math.max(Math.round((this.bonusThisYear / this.bonusBalance) * this.maxHeightBarInVh), 1);
-      this.heightBalanceBarBonusBarBuffer[1] = heightOtherDiv + "vh";
-      this.heightBalanceBarBonusBarBuffer[3] = this.maxHeightBarInVh - heightOtherDiv + "vh";
+      this.heightBalanceBarBonusBarBuffer[1] = heightOtherDiv;
+      this.heightBalanceBarBonusBarBuffer[3] = this.maxHeightBarInVh - heightOtherDiv;
     }
     else {
-      this.heightBalanceBarBonusBarBuffer[1] = this.maxHeightBarInVh + "vh";
+      this.heightBalanceBarBonusBarBuffer[1] = this.maxHeightBarInVh;
       heightOtherDiv = Math.max(Math.round((this.bonusBalance / this.bonusThisYear) * this.maxHeightBarInVh), 1);
-      this.heightBalanceBarBonusBarBuffer[0] = heightOtherDiv + "vh";
-      this.heightBalanceBarBonusBarBuffer[2] = this.maxHeightBarInVh - heightOtherDiv + "vh";
+      this.heightBalanceBarBonusBarBuffer[0] = heightOtherDiv;
+      this.heightBalanceBarBonusBarBuffer[2] = this.maxHeightBarInVh - heightOtherDiv;
     }
     return this.heightBalanceBarBonusBarBuffer;
   }

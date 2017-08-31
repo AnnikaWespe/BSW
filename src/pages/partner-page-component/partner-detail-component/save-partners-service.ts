@@ -166,7 +166,7 @@ export class SavePartnersService {
 
   public static clearBonus(){
     localStorage.removeItem(config.storageKeyBonusBenefit);
-    localStorage.removeItem(config.storageKeyBonusBenefit);
+    localStorage.removeItem(config.storageKeyBonusBalance);
     localStorage.removeItem(config.storageKeyBonusTime);
   }
 
@@ -177,7 +177,7 @@ export class SavePartnersService {
       let bonus :any;
       bonus = {};
       bonus.benefit = Number(localStorage.getItem(config.storageKeyBonusBenefit));
-      bonus.balance = Number(localStorage.getItem(config.storageKeyBonusBenefit));
+      bonus.balance = Number(localStorage.getItem(config.storageKeyBonusBalance));
       return bonus;
 
     }
