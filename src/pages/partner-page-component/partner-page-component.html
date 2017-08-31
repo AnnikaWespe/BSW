@@ -178,11 +178,11 @@
     </div>
 
     <div class="filter-menu" [style.display]="showDropdown[1]?'block':'none'">
-      <ion-item tappable class="sort-by" (click)="sortBy(4, 'SHORTNAME', 'ASC')">
+      <ion-item tappable class="sort-by" (click)="sortBy(4, 'SHORTNAME', 'ASC')" *ngIf="!offlinePartnerPageComponent">
         Alphabet (A-Z)
         <ion-icon name="checkmark" item-end color="primary" item-end *ngIf="sortByArray[4]"></ion-icon>
       </ion-item>
-      <ion-item tappable class="sort-by" (click)="sortBy(5, 'SHORTNAME', 'DESC')">
+      <ion-item tappable class="sort-by" (click)="sortBy(5, 'SHORTNAME', 'DESC')" *ngIf="!offlinePartnerPageComponent">
         Alphabet (Z-A)
         <ion-icon name="checkmark" item-end color="primary" item-end *ngIf="sortByArray[5]"></ion-icon>
       </ion-item>
