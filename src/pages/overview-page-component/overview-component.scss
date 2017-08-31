@@ -78,10 +78,6 @@ page-overview {
     border-top: 1px solid grey;
   }
 
-  div.initialSpinner{
-    padding-top: 21vh;
-    text-align: center;
-  }
   ion-row.title-row{
     background-color: map-get($colors, light-grey);
     height: 8vh;
@@ -116,6 +112,11 @@ page-overview {
 
   .no-data {
     text-align: center;
+  }
+
+  ion-row.initialSpinner.row {
+    text-align: center;
+    padding: 20px;
   }
 
 }

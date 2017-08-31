@@ -69,9 +69,6 @@
 
   </div>
 
-  <div class="initialSpinner" *ngIf="waitingForResults">
-    <ion-spinner class="initialSpinner"></ion-spinner>
-  </div>
   <ion-item class="no-data" *ngIf="noDataToDisplay" text-wrap>
     Wir können Ihnen leider derzeit keine Daten anzeigen. Bitte verbinden Sie sich mit dem Internet.
   </ion-item>
@@ -143,6 +140,11 @@
     </ion-col>
   </ion-row>
 
+  <ion-row  class="initialSpinner" *ngIf="activeRequests > 0"> <!--  -->
+    <ion-col>
+        <ion-spinner></ion-spinner>
+    </ion-col>
+  </ion-row>
 
 </ion-content>
 

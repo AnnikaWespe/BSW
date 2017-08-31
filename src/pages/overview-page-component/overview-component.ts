@@ -66,6 +66,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   platformSubscription: any;
   locationSubscription: any;
 
+  activeRequests = 0;
+
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private partnerService: PartnerService,
@@ -154,8 +156,10 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       return;
     }
 
+    this.activeRequests += 1;
     this.bonusService.getBonusData(id, token).subscribe((res) => {
 
+      this.activeRequests -= 1;
       this.waitingForResults = false;
       if (res.json().errors[0].beschreibung === "Erfolg") {
 
@@ -171,6 +175,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     }, () => {
 
       console.error("error with bonus data");
+      this.activeRequests -= 1;
       this.waitingForResults = false;
       this.showBonusDataFromCache();
 
@@ -219,11 +224,14 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
     if (id && token) {
 
+      this.activeRequests += 1;
       this.favoritesService.getFavorites(id, token).subscribe((res) => {
+          this.activeRequests -= 1;
           this.loadFavoritesByPfArray(res);
         },
         error => {
           console.log(error);
+          this.activeRequests -= 1;
           this.displayFavoritesFromCache();
         });
 
@@ -324,6 +332,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
       return;
     }
 
+    this.activeRequests += 1;
     this.partnerService.getPartners(this.location, 0, "", false, "RELEVANCE", "DESC", 10000, lastVisitedPartnersArray).subscribe((res) => {
         let partnersArray = res.json().contentEntities;
         if (partnersArray) {
@@ -351,12 +360,14 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
         }
 
+        this.activeRequests -= 1;
         this.waitingForResults = false;
         this.checkForDataOnHomeScreen();
 
       },
       error => {
         console.log(error);
+        this.activeRequests -= 1;
         this.waitingForResults = false;
         this.showRecentPartnersFromCache();
       })
@@ -444,9 +455,12 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
 
   loadPartners() {
+    this.activeRequests += 1;
     this.getPartnersSubscription = this.partnerService.getPartners(this.location, 0, "", false, "RELEVANCE", "DESC")
       .subscribe(
         body => {
+
+          this.activeRequests -= 1;
           let returnedObject = body.json();
           if(returnedObject) {
             this.extractOnlineAndOfflinePartners(returnedObject);
@@ -455,6 +469,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
         },
         (error) => {
 
+          this.activeRequests -= 1;
           this.waitingForResults = false;
           this.checkForDataOnHomeScreen();
 
