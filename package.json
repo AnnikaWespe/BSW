@@ -149,7 +149,7 @@
                 "PHOTOLIBRARY_USAGE_DESCRIPTION": "Auswahl eines Kassabons"
             },
             "cordova-plugin-geolocation": {
-                "GEOLOCATION_USAGE_DESCRIPTION": "Anzeige von Vor Ort Partnern"
+                "GEOLOCATION_USAGE_DESCRIPTION": "Anzeige von Vor-Ort-Partnern"
             }
         },
         "platforms": [

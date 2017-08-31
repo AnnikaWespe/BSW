@@ -110,7 +110,7 @@
     <plugin name="cordova-plugin-cszbar" spec="git+https://github.com/mfussi/csZBar.git" />
     <plugin name="cordova-plugin-device" spec="1.1.4" />
     <plugin name="cordova-plugin-geolocation" spec="^2.4.3">
-        <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="Anzeige von Vor Ort Partnern" />
+        <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="Anzeige von Vor-Ort-Partnern" />
     </plugin>
     <plugin name="cordova-plugin-google-analytics" spec="^1.8.3" />
     <plugin name="cordova-plugin-inappbrowser" spec="^1.7.1" />

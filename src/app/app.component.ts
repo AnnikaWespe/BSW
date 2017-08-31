@@ -153,8 +153,8 @@ export class BSWBonusApp {
   setMenu() {
     this.pages = [
       {title: 'Übersicht', component: OverviewPageComponent, parameters: {}},
-      {title: 'Vor Ort Partner', component: PartnerPageComponent, parameters: {type: "offlinePartnerPageComponent"}},
-      {title: 'Online Partner', component: PartnerPageComponent, parameters: {type: "onlinePartnerPageComponent"}},
+      {title: 'Vor-Ort-Partner', component: PartnerPageComponent, parameters: {type: "offlinePartnerPageComponent"}},
+      {title: 'Online-Partner', component: PartnerPageComponent, parameters: {type: "onlinePartnerPageComponent"}},
       {title: 'Einkauf nachtragen', component: AddPurchasePageComponent, parameters: {}},
       {title: 'Mein Profil', component: MyProfilePageComponent, parameters: {}},
       {title: 'Einstellungen', component: SettingsPageComponent, parameters: {}},

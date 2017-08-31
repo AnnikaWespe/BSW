@@ -145,7 +145,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     if (this.offlinePartnerPageComponent) {
       this.showOfflinePartners = true;
       this.displayedPartners = this.offlinePartners;
-      this.title = "Vor Ort Partner";
+      this.title = "Vor-Ort-Partner";
       // this.subscribeForLocation();
       this.sortByArray = [false, false, false, false, false, false, true]
       this.sortByCriterion = "DISTANCE";
@@ -315,13 +315,13 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       return;
     }
     if (this.showOfflinePartners && !this.showOnlinePartners) {
-      this.title = this.searchTerm || "Vor Ort Partner";
-      localStorage.setItem("title", "Vor Ort Partner");
+      this.title = this.searchTerm || "Vor-Ort-Partner";
+      localStorage.setItem("title", "Vor-Ort-Partner");
       this.displayedPartners = this.offlinePartners;
     }
     else if (!this.showOfflinePartners && this.showOnlinePartners) {
       this.title = this.searchTerm || "Online-Partner";
-      localStorage.setItem("title", "Online Partner");
+      localStorage.setItem("title", "Online-Partner");
       this.displayedPartners = this.onlinePartners;
     }
     else if (this.showOfflinePartners && this.showOnlinePartners) {
@@ -352,7 +352,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
   askForValidCategories() {
     let prompt = this.alertCtrl.create({
-      title: 'Bitte wählen Sie entweder "Vor Ort Partner" oder "Online Partner" aus.',
+      title: 'Bitte wählen Sie entweder "Vor-Ort-Partner" oder "Online-Partner" aus.',
       buttons: [
         {
           text: 'OK',
@@ -415,10 +415,10 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   gaTrackPageView() {
     let trackingName;
     if (this.pageType === "onlinePartnerPageComponent") {
-      trackingName = "Online Partner"
+      trackingName = "Online-Partner"
     }
     else if (this.pageType === "offlinePartnerPageComponent") {
-      trackingName = "Vor Ort Partner"
+      trackingName = "Vor-Ort-Partner"
     }
     else if (this.pageType === "searchPageComponent") {
       trackingName = "Alle Partner"

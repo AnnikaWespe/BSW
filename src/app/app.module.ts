@@ -93,6 +93,7 @@ import {ZBar} from "@ionic-native/zbar";
     IonicModule.forRoot(BSWBonusApp, {
       "platforms": {
         "ios": {
+          "backButtonText": "Zurück",
           "backButtonColor": "grey"
         },
         "android": {
