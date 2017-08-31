@@ -131,7 +131,7 @@ export class LocationService {
               enableHighAccuracy: false
             })
               .filter(position => position.coords !== undefined)
-              .debounceTime(1.5 * 60)
+              .debounceTime(1000 * 5)
               .subscribe(
                 (position) => handlePosition(position, () => {
                 }, () => {
