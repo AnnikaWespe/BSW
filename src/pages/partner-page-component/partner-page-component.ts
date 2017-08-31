@@ -78,6 +78,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
               private ga: GoogleAnalytics,
               private platform: Platform,
               private modalCtrl: ModalController) {
+    console.log(this.navParams);
 
     let pageType = navParams.get("type");
     if (navParams.get('navigatedFromOverview')) {
@@ -157,8 +158,8 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
       this.getPartners();
     }
     if (this.searchPageComponent) {
-      this.showOnlinePartners = this.navParams.get("showOnlinePartners") || true;
-      this.showOfflinePartners = this.navParams.get("showOfflinePartners") || true;
+      this.showOnlinePartners = this.navParams.get("showOnlinePartners");
+      this.showOfflinePartners = this.navParams.get("showOfflinePartners");
       this.displayedPartners = this.allPartners;
       this.title = this.searchTerm;
       // this.subscribeForLocation();
@@ -217,10 +218,14 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     this.searchInterfaceOpen = false;
     this.navCtrl.push(PartnerPageComponent, {
       type: "searchPageComponent",
-      searchTerm: searchTerm
+      searchTerm: searchTerm,
+      "showOnlinePartners": (this.pageType == "onlinePartnerPageComponent"),
+      "showOfflinePartners": (this.pageType == "offlinePartnerPageComponent")
     })
 
   }
+
+
 
 
   getPartners() {

@@ -407,6 +407,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
   navigateToLogin(errorMessage) {
     // TODO JS: warum???
+    // Antwort AW wenn das Passwort im Browser geändert wurde, muss der User automatisch ausgeloggt werden
     localStorage.removeItem("securityToken");
     this.navCtrl.setRoot(LoginPageComponent);
     console.log(errorMessage);
@@ -473,7 +474,9 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     this.navCtrl.push(PartnerPageComponent, {
       type: "searchPageComponent",
       searchTerm: searchTerm,
-      navigatedFromOverview: true
+      navigatedFromOverview: true,
+      showOnlinePartners: true,
+      showOfflinePartners: true
     })
 
   }
