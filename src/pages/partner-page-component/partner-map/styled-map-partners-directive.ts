@@ -73,7 +73,6 @@ export class StyledMapPartnersDirective implements OnDestroy{
         );
         google.maps.event.addListener(this.markerClusterer, 'clusterclick', (cluster) => {
           this.fillList.emit(cluster.getMarkers());
-          google.maps.event.trigger(map, 'resize');
         });
         const idle$ = Observable.create(observer => {
           map.addListener('idle', () => {
