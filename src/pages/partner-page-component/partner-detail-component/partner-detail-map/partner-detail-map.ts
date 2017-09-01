@@ -120,27 +120,6 @@ export class PartnerDetailMap implements OnDestroy {
     }
   }
 
-  /*openExternalMapApp() {
-    if (this.plt.is('android')) {
-      let link = "geo:" + this.location.latitude + "," + this.location.longitude + "?q=" + this.partnerDetails.latitude + "," + this.partnerDetails.longitude + "(" + this.partnerDetails.nameInternet + ")";
-      console.log(link);
-      window.open(link, '_system', 'location=yes');
-    }
-    else if (this.plt.is('ios')) {
-      let currentLocationString = "";
-      if (this.location.locationExact) {
-        currentLocationString = "saddr=" + this.location.latitude + "," + this.location.longitude + "&";
-      }
-      window.open("http://maps.apple.com/?" + currentLocationString + "daddr=" + this.partnerDetails.latitude + "," + this.partnerDetails.longitude, '_system', 'location=yes');
-
-    }
-    else{
-      let link = "geo:" + this.location.latitude + "," + this.location.longitude + "?q=" + this.partnerDetails.latitude + "," + this.partnerDetails.longitude + "(" + this.partnerDetails.nameInternet + ")";
-      console.log(link);
-      window.open(link, '_system', 'location=yes');
-    }
-  }*/
-
   handleTravelTimePublicUpdated(travelTimePublic) {
     this.travelTimeAvailable = true;
     this.travelTimePublic = travelTimePublic;
