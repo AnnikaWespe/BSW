@@ -24,14 +24,17 @@ export class LoginPageComponent {
   @ViewChild(Nav) nav: Nav;
   @ViewChild('password-input') passwordInput;
 
-  inputNumberOrEmail: any;
-  password = "";
   loading;
+
+  loginData : any;
 
   /* default image height */
   imageHolderHeight = 140;
 
   navigatedFromPartnerDetail;
+
+  inputNumberOrEmail : any;
+  password : any;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -52,7 +55,15 @@ export class LoginPageComponent {
   }
 
   ionViewWillEnter(){
+
+  }
+
+  ionViewDidEnter(){
     this.dynamicallyAdaptHeaderImage();
+  }
+
+  submitLogin(data) {
+    alert(data);
   }
 
   /*
@@ -73,13 +84,14 @@ export class LoginPageComponent {
     }
 
     screenHeight = document.getElementById('main-content').clientHeight || screenHeight;
-    let footerHeight = document.getElementById('login-footer').clientHeight || 0;
     let numberHeight = document.getElementById('number-row').clientHeight || 0;
     let passwordHeight = document.getElementById('password-row').clientHeight || 0;
     let informationHeight = document.getElementById('information-row').clientHeight || 0;
+    let loginHeight = document.getElementById('login-row').clientHeight || 0;
+    let wloginHeight = document.getElementById('wlogin-row').clientHeight || 0;
 
     /* if the sizes of the children can be determined, calculate the size precise */
-    let totalHeight = footerHeight + numberHeight + passwordHeight + informationHeight;
+    let totalHeight = numberHeight + passwordHeight + informationHeight + loginHeight + wloginHeight;
     if(totalHeight > 0 && screenHeight > 0 && totalHeight < screenHeight){
       this.imageHolderHeight = (screenHeight - totalHeight) * 0.9;
     }
@@ -137,8 +149,6 @@ export class LoginPageComponent {
 
   login() {
     //TODO get username and password from user input
-    //let username = "0016744807"
-    //let password = "muster01$$";
     this.authService.login(this.inputNumberOrEmail, this.password).then(
       (user) => {
         this.loading.dismiss();
@@ -345,5 +355,3 @@ export class LoginPageComponent {
   }
 
 }
-
-

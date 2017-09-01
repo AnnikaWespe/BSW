@@ -13,17 +13,18 @@
 
     </ion-row>
 
+
+<form name="loginForm">
     <ion-row id="number-row" class="number-row">
 
       <ion-col>
 
         <div class="number-input-wrapper">
 
-          <ion-input class="number-input" type="text" placeholder="Mitgliedsnummer / E-Mail" [(ngModel)]="inputNumberOrEmail"
-                     (keypress)="focusPassword($event)">
+          <ion-input name="inputNumberOrEmail" class="number-input" type="text" placeholder="Mitgliedsnummer / E-Mail" [(ngModel)]="inputNumberOrEmail">
           </ion-input>
 
-          <button ion-button icon-only tappable (click)="loadCameraPage()" class="camera-icon" clear>
+          <button name="scanButton" ion-button icon-only tappable (click)="loadCameraPage()" class="camera-icon" clear type="button">
             <ion-icon name="camera" color="primary" ></ion-icon>
           </button>
 
@@ -36,11 +37,11 @@
     <ion-row id="password-row" class="password-row">
       <ion-col>
 
-          <ion-input id="password-input" [(ngModel)]="password" type="password" placeholder="Passwort"
-                     (keypress)="checkForEnterButtonPressed($event)"></ion-input>
+          <ion-input name="password" id="password-input" [(ngModel)]="password" type="password" placeholder="Passwort"></ion-input>
 
       </ion-col>
     </ion-row>
+
 
     <ion-row id="information-row" class="information-row">
       <ion-col class="center light-text">
@@ -54,29 +55,20 @@
       </ion-col>
     </ion-row>
 
+    <ion-row id="login-row">
+      <ion-col>
+        <button ion-button type="submit" block color="primary" class="login" (click)="checkForValidInput()">Login</button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row id="wlogin-row" class="without-login-row">
+      <ion-col class="center light-text" tappable (click)="loadNextPageWithoutLogin()">
+        Ohne Login fortfahren
+      </ion-col>
+    </ion-row>
+
+    </form>
+
   </ion-grid>
 
 </ion-content>
-
-<ion-footer id="login-footer">
-  <ion-toolbar transparent>
-
-    <ion-grid>
-
-      <ion-row>
-        <ion-col>
-          <button ion-button block color="primary" (click)="checkForValidInput()" class="login">Login</button>
-        </ion-col>
-      </ion-row>
-
-      <ion-row class="without-login-row">
-        <ion-col class="center light-text" tappable (click)="loadNextPageWithoutLogin()">
-          Ohne Login fortfahren
-        </ion-col>
-      </ion-row>
-
-    </ion-grid>
-
-
-  </ion-toolbar>
-</ion-footer>
