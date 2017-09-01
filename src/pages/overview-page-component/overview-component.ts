@@ -550,8 +550,12 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
           text: 'Ja',
           role: 'cancel',
           handler: () => {
-            //TODO real link to app store
-            window.open('http://example.com/login/{{user._id}}', '_system', 'location=yes');
+            if (this.platform.is('android')) {
+              window.open('https://play.google.com/store/apps/details?id=de.avs.bswapp', '_system', 'location=yes');
+            } else {
+              window.open('itms://itunes.apple.com/de/app/apple-store/id597383984?mt=8', '_system', 'location=yes');
+            }
+
             localStorage.setItem("showPromptForRatingAppDisabled", "true");
           }
         },
@@ -602,4 +606,3 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
 }
-
