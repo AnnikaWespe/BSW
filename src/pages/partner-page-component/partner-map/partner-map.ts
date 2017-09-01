@@ -103,9 +103,13 @@ export class PartnerMapComponent implements AfterViewChecked, OnDestroy{
   }
 
   closePartnerList() {
-    this.partnerListOpen = false;
-    this.map.resizeMap();
+    if(this.partnerListOpen){
+      this.partnerListOpen = false;
+      this.map.resizeMap();
+    }
+
   }
+
 
   unsubscribeFromGetPartnersRequest(){
     this.map.unsubscribeFromGetPartnersRequest();
