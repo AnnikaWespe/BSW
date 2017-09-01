@@ -57,7 +57,7 @@ import {PushNotificationsService} from "../services/push-notifications-service";
 import {FormatTelephoneNumberPipe} from "../pages/partner-page-component/partner-detail-component/format.pipe";
 import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
 import {ZBar} from "@ionic-native/zbar";
-
+import { GermanCurrencyPipe } from '../pipes/german-currency/german-currency';
 
 @NgModule({
   declarations: [
@@ -88,6 +88,7 @@ import {ZBar} from "@ionic-native/zbar";
     ChangePasswordModal,
     PartnerTableCachedComponent,
     PushesListPageComponent,
+    GermanCurrencyPipe,
   ],
   imports: [
     IonicModule.forRoot(BSWBonusApp, {

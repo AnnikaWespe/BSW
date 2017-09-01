@@ -1,4 +1,4 @@
-import {Component, ViewChild, OnInit} from '@angular/core';
+import {Component, ViewChild, OnInit, Pipe, PipeTransform} from '@angular/core';
 import {Events, Nav, Platform} from 'ionic-angular';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {GoogleAnalytics} from "@ionic-native/google-analytics";
@@ -26,6 +26,7 @@ import {LocationService} from "../services/location-service";
 @Component({
   templateUrl: 'app.html'
 })
+
 export class BSWBonusApp {
   @ViewChild(Nav) nav: Nav;
 
@@ -46,6 +47,7 @@ export class BSWBonusApp {
       'pfNummer': ["asdf", "1234", "62750000", "35280000", "34880000", "30080000", "30010000", "61310001", "11015201", "68700000", "72010000", "77230051", "77990000", "72790000", "72800000", "72910000", "72970000", "73260000", "81700000", "30010374", "73620000", "73440031", "34150448", "77000060", "89420999", "11047828", "34730000", "35460128", "74000033", "74000038", "11051103", "11052211", "37182081", "11036374", "74000104", "74000105", "74000199", "74000433", "38192039", "74000752"]
     }
   }
+
 
   constructor(
     private platform: Platform,
