@@ -5,8 +5,9 @@ import {FavoritesService} from "../../../../services/favorites-service";
 import {SavePartnersService} from "../save-partners-service";
 import {AuthService} from "../../../../services/auth-service";
 import {LocationService} from "../../../../services/location-service";
+import {DeviceService} from "../../../../services/device-data";
 
-
+declare let device: any;
 
 @Component({
   selector: 'page-partner-detail-map',
@@ -109,6 +110,17 @@ export class PartnerDetailMap implements OnDestroy {
   }
 
   openExternalMapApp() {
+    if (DeviceService.isAndroid || DeviceService.isInBrowser) {
+      let link = "https://maps.google.com/maps?q=" + this.partnerDetails.strasse + "+" + this.partnerDetails.hausnummer + ",+" + this.partnerDetails.plz + "+" + this.partnerDetails.ort;
+      window.open(link, '_system', 'location=yes');
+    }
+    else {
+      let link = "http://maps.apple.com/?daddr=" + this.partnerDetails.strasse + "+" + this.partnerDetails.hausnummer + ",+" + this.partnerDetails.plz + "+" + this.partnerDetails.ort;
+      window.open("http://maps.apple.com/?daddr=" + this.partnerDetails.latitude + "," + this.partnerDetails.longitude, '_system', 'location=yes');
+    }
+  }
+
+  /*openExternalMapApp() {
     if (this.plt.is('android')) {
       let link = "geo:" + this.location.latitude + "," + this.location.longitude + "?q=" + this.partnerDetails.latitude + "," + this.partnerDetails.longitude + "(" + this.partnerDetails.nameInternet + ")";
       console.log(link);
@@ -127,7 +139,7 @@ export class PartnerDetailMap implements OnDestroy {
       console.log(link);
       window.open(link, '_system', 'location=yes');
     }
-  }
+  }*/
 
   handleTravelTimePublicUpdated(travelTimePublic) {
     this.travelTimeAvailable = true;
