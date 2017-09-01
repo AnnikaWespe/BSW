@@ -49,7 +49,11 @@ export class LoginPageComponent {
               private renderer: Renderer) {
     let loginNumberFromBarCode = navParams.get('loginNumberFromBarCode');
     this.inputNumberOrEmail = loginNumberFromBarCode || "";
-    this.ga.trackView('Login Screen');
+
+    if (localStorage.getItem("disallowUserTracking") === "false") {
+      this.ga.trackView('Login Screen');
+    }
+
     this.navigatedFromPartnerDetail = navParams.get("navigatedFromPartnerDetail");
 
   }

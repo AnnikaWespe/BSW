@@ -428,7 +428,11 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
     else if (this.pageType === "searchPageComponent") {
       trackingName = "Alle Partner"
     }
-    this.ga.trackView(trackingName + " Screen")
+
+    if (localStorage.getItem("disallowUserTracking") === "false") {
+      this.ga.trackView(trackingName + " Screen")
+    }
+
   }
 
 //pure DOM methods
