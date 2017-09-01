@@ -58,7 +58,7 @@
     <ion-title>
       {{title}}
     </ion-title>
-    <input id="mySearchInputField"
+    <input id="mySearchInputField" autocomplete="false" autocorrect="false"
            placeholder="Geben Sie einen Suchbegriff ein"
            (keyup)="inputToSuggestions($event)"
            [(ngModel)]="searchTerm"

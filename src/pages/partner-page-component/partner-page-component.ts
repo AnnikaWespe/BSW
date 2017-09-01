@@ -99,10 +99,8 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
     this.location = this.locationService.getCurrentLocation();
 
-    if(!this.searchTerm){
-      this.resetPartnersArrays();
-      this.getPartners();
-    }
+    this.resetPartnersArrays();
+    this.getPartners();
 
     this.locationSubscription = this.locationService.getLocation().subscribe(() => {
 
