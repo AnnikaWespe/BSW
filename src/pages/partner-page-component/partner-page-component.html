@@ -64,7 +64,7 @@
            [(ngModel)]="searchTerm"
            *ngIf="searchInterfaceOpen">
     <ion-buttons end>
-      <button (click)="searchInterfaceOpen = true" *ngIf="this.pageType != 'searchPageComponent'">
+      <button (click)="searchInterfaceOpen = this.pageType != 'searchPageComponent'" [ngClass]="this.pageType == 'searchPageComponent' ? 'hidden' : ''">
         <ion-icon name="ios-search-outline" color="grey" class="search-button-header"></ion-icon>
       </button>
     </ion-buttons>
@@ -235,4 +235,3 @@
   ></partner-map>
 
 </ion-content>
-
