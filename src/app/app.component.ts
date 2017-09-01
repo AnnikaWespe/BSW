@@ -104,17 +104,23 @@ export class BSWBonusApp {
   }
 
   startGoogleAnalyticsTracker(id) {
+
     if (localStorage.getItem("disallowUserTracking") === null) {
       localStorage.setItem("disallowUserTracking", "false");
     }
+
     if (localStorage.getItem("disallowUserTracking") === "false") {
+      this.ga.setOptOut(false);
       this.ga.setAnonymizeIp(true);
       this.ga.startTrackerWithId(id)
         .then(() => {
           this.ga.trackEvent('Login/Logout', 'Start der App');
         })
         .catch(e => console.log('Error starting GoogleAnalytics', e))
+    } else {
+      this.ga.setOptOut(true);
     }
+
   }
 
   setWebViewsUrls() {
@@ -197,7 +203,3 @@ export class BSWBonusApp {
   }
 
 }
-
-
-
-

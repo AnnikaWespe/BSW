@@ -171,15 +171,22 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     this.disallowUserTracking = !this.allowUserTracking;
+
     localStorage.setItem("disallowUserTracking", this.disallowUserTracking.toString());
     if (!this.disallowUserTracking) {
+
+      this.ga.setOptOut(false);
       if (DeviceService.isAndroid) {
         this.ga.startTrackerWithId("UA-64402282-2");
       }
       else if (DeviceService.isIos) {
         this.ga.startTrackerWithId("UA-64402282-1");
       }
+
+    } else {
+      this.ga.setOptOut(true);
     }
+
     this.dismissLoadingIndicator();
   }
 
