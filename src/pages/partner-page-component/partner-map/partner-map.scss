@@ -37,6 +37,17 @@ partner-map {
       margin-top: 30vh;
     }
   }
+  div.click-layer {
+    background-color: transparent;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    z-index: 4000;
+  }
+
+
 
   div.click-layer {
     position: absolute;
