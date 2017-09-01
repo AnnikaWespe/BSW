@@ -92,6 +92,8 @@ import { GermanCurrencyPipe } from '../pipes/german-currency/german-currency';
   ],
   imports: [
     IonicModule.forRoot(BSWBonusApp, {
+      scrollAssist: false,
+      autoFocusAssist: false,
       "platforms": {
         "ios": {
           "backButtonText": "Zurück",
