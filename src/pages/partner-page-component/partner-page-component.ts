@@ -99,8 +99,10 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
 
     this.location = this.locationService.getCurrentLocation();
 
-    this.resetPartnersArrays();
-    this.getPartners();
+    if(!this.searchTerm){
+      this.resetPartnersArrays();
+      this.getPartners();
+    }
 
     this.locationSubscription = this.locationService.getLocation().subscribe(() => {
 
@@ -188,6 +190,7 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   }
 
   getPartnersWithSearchTerm(searchTerm) {
+
     this.searchInterfaceOpen = false;
     this.searchTerm = searchTerm + " ";
     this.title = searchTerm;
@@ -491,8 +494,3 @@ export class PartnerPageComponent implements AfterViewChecked, OnDestroy {
   }
 
 }
-
-
-
-
-
