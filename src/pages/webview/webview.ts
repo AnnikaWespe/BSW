@@ -35,6 +35,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
 
   urlType: any;
   title: string;
+  urlLoading = false;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -50,11 +51,11 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
       this.title = navParams.get('title');
       this.urlType = navParams.get('urlType');
 
-      this.loadWebPage();
-
-      if(!localStorage.getItem(this.urlType)){
+      if (!localStorage.getItem(this.urlType)) {
         this.loadWebViewUrls();
       }
+
+      this.loadWebPage();
 
   }
 
@@ -214,7 +215,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
 
   errorLoad() {
 
-    if (this.alert) {
+    if (this.alert || this.urlLoading) {
       return;
     }
 
@@ -246,11 +247,20 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
 
   loadWebViewUrls(){
 
+    this.urlLoading = true;
+
     this.initService.setWebViewUrls()
       .then(() => {
+
+        this.urlLoading = false;
         this.loadWebPage();
+
       }, (error) => {
+
         console.error("cannot load webview urls");
+        this.urlLoading = false;
+        this.loadWebPage();
+
       });
 
   }
