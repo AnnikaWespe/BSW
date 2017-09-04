@@ -7,6 +7,7 @@ import {DomSanitizer} from "@angular/platform-browser";
 import {CachedContentService} from "./cached-content-data";
 import {AuthService} from "../../services/auth-service";
 import { Keyboard } from '@ionic-native/keyboard';
+import {InitService} from "../../app/init-service";
 
 declare let cordova: any;
 
@@ -17,7 +18,7 @@ declare let cordova: any;
 })
 export class WebviewComponent implements OnDestroy, AfterViewInit {
 
-  title: string;
+
   url;
   disallowUserTracking;
   allowUserTracking;
@@ -32,6 +33,10 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
 
   @ViewChild('iframe') iframe: ElementRef;
 
+  urlType: any;
+  title: string;
+  urlLoading = false;
+
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public http: Http,
@@ -40,30 +45,46 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
               private alertCtrl: AlertController,
               public authService: AuthService,
               public loadingCtrl: LoadingController,
-              private keyboard: Keyboard) {
+              private keyboard: Keyboard,
+              private initService: InitService) {
+
+      this.title = navParams.get('title');
+      this.urlType = navParams.get('urlType');
+
+      if (!localStorage.getItem(this.urlType)) {
+        this.loadWebViewUrls();
+      }
+
+      this.loadWebPage();
+
+  }
+
+  loadWebPage(){
 
     console.error(localStorage.getItem("noWebViewUrlsAvailable"));
     this.noWebViewUrlsAvailable = (localStorage.getItem("noWebViewUrlsAvailable") === "true");
-    this.title = navParams.get('title');
-    let urlType = navParams.get('urlType');
-    let urlRaw = localStorage.getItem(urlType);
+
+    let urlRaw = localStorage.getItem(this.urlType);
     console.log(urlRaw);
 
+    this.dataProtectionScreen = (this.urlType === "DatenschutzWebviewUrl");
+    this.disallowUserTracking = (localStorage.getItem("disallowUserTracking") == "true");
+    this.allowUserTracking = !this.disallowUserTracking;
 
     /* No urls available */
     if (!urlRaw) {
 
       /* show cached content, if it is impressum or datanschutz */
-      if (urlType === "ImpressumWebviewUrl" || urlType === "DatenschutzWebviewUrl") {
+      if (this.urlType === "ImpressumWebviewUrl" || this.urlType === "DatenschutzWebviewUrl") {
 
-        let content = localStorage.getItem(urlType + "CachedContent");
+        let content = localStorage.getItem(this.urlType + "CachedContent");
         if (content) {
           this.cachedContent = content;
         } else {
 
           /* no content cached yet, store it and load it */
-          content = CachedContentService[urlType];
-          localStorage.setItem(urlType + "CachedContent", content);
+          content = CachedContentService[this.urlType];
+          localStorage.setItem(this.urlType + "CachedContent", content);
           this.cachedContent = content;
 
         }
@@ -89,22 +110,22 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
       this.url = urlRaw.replace("/[MITGLIEDID]", "").replace("/[SECURITYTOKEN]", "");
     }
 
-    if (urlType === "ImpressumWebviewUrl" || urlType === "DatenschutzWebviewUrl") {
+    if (this.urlType === "ImpressumWebviewUrl" || this.urlType === "DatenschutzWebviewUrl") {
 
-      let content = localStorage.getItem(urlType + "CachedContent");
+      let content = localStorage.getItem(this.urlType + "CachedContent");
       if (content) {
         this.cachedContent = content;
         this.dismissLoadingIndicator();
       }
       else {
-        this.cachedContent = CachedContentService[urlType];
+        this.cachedContent = CachedContentService[this.urlType];
         this.dismissLoadingIndicator();
       }
 
       this.http.get(this.url).subscribe((result) => {
         let entirePageHTML = result["_body"];
         let bodyHtml = /<body.*?>([\s\S]*)<\/body>/.exec(entirePageHTML)[1].replace(/<script[\s\S]*?<\/script>/g, "");
-        localStorage.setItem(urlType + "CachedContent", bodyHtml)
+        localStorage.setItem(this.urlType + "CachedContent", bodyHtml)
         this.cachedContent = bodyHtml;
         this.dismissLoadingIndicator();
       }, (err) => {
@@ -128,11 +149,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
 
     }
 
-
-    console.log(this.url);
-    this.dataProtectionScreen = (urlType === "DatenschutzWebviewUrl");
-    this.disallowUserTracking = (localStorage.getItem("disallowUserTracking") == "true");
-    this.allowUserTracking = !this.disallowUserTracking;
+  console.log(this.url);
 
   }
 
@@ -171,29 +188,34 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy() {
-    this.disallowUserTracking = !this.allowUserTracking;
 
-    localStorage.setItem("disallowUserTracking", this.disallowUserTracking.toString());
-    if (!this.disallowUserTracking) {
+    if(this.dataProtectionScreen){
+      this.disallowUserTracking = !this.allowUserTracking;
 
-      this.ga.setOptOut(false);
-      if (DeviceService.isAndroid) {
-        this.ga.startTrackerWithId("UA-64402282-2");
+      localStorage.setItem("disallowUserTracking", this.disallowUserTracking.toString());
+      if (!this.disallowUserTracking) {
+
+        this.ga.setOptOut(false);
+        if (DeviceService.isAndroid) {
+          this.ga.startTrackerWithId("UA-64402282-2");
+        }
+        else if (DeviceService.isIos) {
+          this.ga.startTrackerWithId("UA-64402282-1");
+        }
+
+      } else {
+        this.ga.setOptOut(true);
       }
-      else if (DeviceService.isIos) {
-        this.ga.startTrackerWithId("UA-64402282-1");
-      }
 
-    } else {
-      this.ga.setOptOut(true);
     }
 
     this.dismissLoadingIndicator();
+
   }
 
   errorLoad() {
 
-    if (this.alert) {
+    if (this.alert || this.urlLoading) {
       return;
     }
 
@@ -222,5 +244,26 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
   dismissLoadingIndicator() {
     this.isLoading = false;
   }
+
+  loadWebViewUrls(){
+
+    this.urlLoading = true;
+
+    this.initService.setWebViewUrls()
+      .then(() => {
+
+        this.urlLoading = false;
+        this.loadWebPage();
+
+      }, (error) => {
+
+        console.error("cannot load webview urls");
+        this.urlLoading = false;
+        this.loadWebPage();
+
+      });
+
+  }
+
 
 }

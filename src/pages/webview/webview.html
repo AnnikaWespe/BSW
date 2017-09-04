@@ -23,7 +23,7 @@
                 [class.checked]="allowUserTracking"></ion-toggle>
   </ion-item>
 
-  <div class="superfill" *ngIf="isLoading">
+  <div class="superfill" *ngIf="isLoading || urlLoading">
     <div class="middle">
       <div class="center">
         <ion-spinner class="loadingSpinner"></ion-spinner>
@@ -47,4 +47,3 @@
   </ion-row>
 
 </ion-content>
-

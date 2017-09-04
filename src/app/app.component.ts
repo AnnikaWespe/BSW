@@ -125,9 +125,14 @@ export class BSWBonusApp {
   }
 
   setWebViewsUrls() {
-    this.initService.setWebViewUrls();
-  }
 
+    this.initService.setWebViewUrls()
+    .then(
+      () => {console.log("webview urls loaded")},
+      (error) => {console.error("Cannot load webview urls")}
+    );
+
+  }
 
   openPage(page) {
     this.nav.setRoot(page.component, page.parameters);
