@@ -58,6 +58,7 @@ import {FormatTelephoneNumberPipe} from "../pages/partner-page-component/partner
 import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
 import {ZBar} from "@ionic-native/zbar";
 import { GermanCurrencyPipe } from '../pipes/german-currency/german-currency';
+import {ExternalSiteService} from "../services/external-site-service";
 
 @NgModule({
   declarations: [
@@ -156,6 +157,7 @@ import { GermanCurrencyPipe } from '../pipes/german-currency/german-currency';
     BonusService,
     InitService,
     PushNotificationsService,
+    ExternalSiteService,
     GoogleAnalytics,
     NativeGeocoder,
     Keyboard

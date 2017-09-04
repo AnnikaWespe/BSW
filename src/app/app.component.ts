@@ -17,11 +17,13 @@ import {PushNotificationsService} from "../services/push-notifications-service";
 import {StatusBar} from "@ionic-native/status-bar";
 import {PartnerDetailComponent} from "../pages/partner-page-component/partner-detail-component/partner-detail-component";
 import {PartnerService} from "../services/partner-service";
-import {AuthService } from '../services/auth-service';
+import {AuthService} from '../services/auth-service';
 import {PushesListPageComponent} from "../pages/pushes-list/pushes-list";
 import {SavePartnersService} from "../pages/partner-page-component/partner-detail-component/save-partners-service";
 import {LocationService} from "../services/location-service";
+import {ExternalSiteService} from "../services/external-site-service";
 
+declare let cordova: any;
 
 @Component({
   templateUrl: 'app.html'
@@ -49,26 +51,25 @@ export class BSWBonusApp {
   }
 
 
-  constructor(
-    private platform: Platform,
-    private splashScreen: SplashScreen,
-    private ga: GoogleAnalytics,
-    private initService: InitService,
-    public events: Events,
-    private pushNotificationsService: PushNotificationsService,
-    private statusBar: StatusBar,
-    private partnerService: PartnerService,
-    private savePartnerService: SavePartnersService,
-    private authService: AuthService,
-    private locationService: LocationService
-    ) {
-      this.user = this.authService.getUser();
-      this.registerForUserLogInEvent();
-      this.setMenu();
-      this.initializeApp();
-      // localStorage.setItem("locationExact", "false");
+  constructor(private platform: Platform,
+              private splashScreen: SplashScreen,
+              private ga: GoogleAnalytics,
+              private initService: InitService,
+              public events: Events,
+              private pushNotificationsService: PushNotificationsService,
+              private statusBar: StatusBar,
+              private partnerService: PartnerService,
+              private savePartnerService: SavePartnersService,
+              private authService: AuthService,
+              private locationService: LocationService,
+              private externalSiteService: ExternalSiteService) {
+    this.user = this.authService.getUser();
+    this.registerForUserLogInEvent();
+    this.setMenu();
+    this.initializeApp();
+    // localStorage.setItem("locationExact", "false");
 
-      this.setWebViewsUrls();
+    this.setWebViewsUrls();
   }
 
   initializeApp() {
@@ -77,7 +78,7 @@ export class BSWBonusApp {
           this.splashScreen.hide();
           this.setRootPage();
 
-          if(this.platform.is("android")) {
+          if (this.platform.is("android")) {
             this.statusBar.overlaysWebView(false);
             this.statusBar.backgroundColorByHexString('#929395');
           } else {
@@ -171,22 +172,22 @@ export class BSWBonusApp {
   }
 
   logoutUser() {
-    this.savePartnerService.clearRecentPartners() ;
-      //this.savePartnerService.clearFavoritePartners() ;
-      this.authService.logout();
+    this.savePartnerService.clearRecentPartners();
+    //this.savePartnerService.clearFavoritePartners() ;
+    this.authService.logout();
 
     this.nav.setRoot(LoginPageComponent);
   }
 
-  loginUser(){
+  loginUser() {
     this.nav.setRoot(LoginPageComponent);
   }
 
   loadContactPage() {
-    this.nav.push(WebviewComponent, {urlType: "KontaktWebviewUrl", title: "Kontakt"})
+    this.externalSiteService.gotToExternalSite("KontaktWebviewUrl");
   }
 
-  registerForUserLogInEvent(){
+  registerForUserLogInEvent() {
     this.events.subscribe('user:loggedOut', () => {
       this.user = {loggedIn: false};
       console.log(this.user);
@@ -201,5 +202,7 @@ export class BSWBonusApp {
   getWebView(urlType, title, dataProtectionScreen, cacheContent) {
     this.nav.push(WebviewComponent, {urlType: urlType, title: title, cacheContent: cacheContent})
   }
+
+
 
 }

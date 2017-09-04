@@ -128,6 +128,7 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
 
     }
 
+
     console.log(this.url);
     this.dataProtectionScreen = (urlType === "DatenschutzWebviewUrl");
     this.disallowUserTracking = (localStorage.getItem("disallowUserTracking") == "true");

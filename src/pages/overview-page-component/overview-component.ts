@@ -15,6 +15,7 @@ import {BonusService} from "./bonus-service";
 import {WebviewComponent} from "../webview/webview";
 import {SavePartnersService} from "../partner-page-component/partner-detail-component/save-partners-service";
 import {AuthService} from "../../services/auth-service";
+import {ExternalSiteService} from "../../services/external-site-service";
 
 @Component({
   providers: [],
