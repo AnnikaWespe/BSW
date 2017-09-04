@@ -49,6 +49,9 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
     let urlRaw = localStorage.getItem(urlType);
     console.log(urlRaw);
 
+    this.dataProtectionScreen = (urlType === "DatenschutzWebviewUrl");
+    this.disallowUserTracking = (localStorage.getItem("disallowUserTracking") == "true");
+    this.allowUserTracking = !this.disallowUserTracking;
 
     /* No urls available */
     if (!urlRaw) {
@@ -129,9 +132,6 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
     }
 
     console.log(this.url);
-    this.dataProtectionScreen = (urlType === "DatenschutzWebviewUrl");
-    this.disallowUserTracking = (localStorage.getItem("disallowUserTracking") == "true");
-    this.allowUserTracking = !this.disallowUserTracking;
 
   }
 
@@ -170,24 +170,29 @@ export class WebviewComponent implements OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy() {
-    this.disallowUserTracking = !this.allowUserTracking;
 
-    localStorage.setItem("disallowUserTracking", this.disallowUserTracking.toString());
-    if (!this.disallowUserTracking) {
+    if(this.dataProtectionScreen){
+      this.disallowUserTracking = !this.allowUserTracking;
 
-      this.ga.setOptOut(false);
-      if (DeviceService.isAndroid) {
-        this.ga.startTrackerWithId("UA-64402282-2");
+      localStorage.setItem("disallowUserTracking", this.disallowUserTracking.toString());
+      if (!this.disallowUserTracking) {
+
+        this.ga.setOptOut(false);
+        if (DeviceService.isAndroid) {
+          this.ga.startTrackerWithId("UA-64402282-2");
+        }
+        else if (DeviceService.isIos) {
+          this.ga.startTrackerWithId("UA-64402282-1");
+        }
+
+      } else {
+        this.ga.setOptOut(true);
       }
-      else if (DeviceService.isIos) {
-        this.ga.startTrackerWithId("UA-64402282-1");
-      }
 
-    } else {
-      this.ga.setOptOut(true);
     }
 
     this.dismissLoadingIndicator();
+
   }
 
   errorLoad() {
