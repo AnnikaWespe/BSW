@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Http, Headers, RequestOptions} from "@angular/http";
 import {EnvironmentService} from "../services/environment-service";
+import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class InitService {
@@ -23,23 +24,31 @@ export class InitService {
   }
 
   setWebViewUrls(){
-    this.getWebViewUrlsFromApi().subscribe((res) => {
-      let result = res.json();
-      if (result.errors[0].beschreibung === "Erfolg") {
-        console.log(result.response);
-        let resultArray = result.response.bswAppWebviewUrl;
-        for (let item of resultArray){
-          localStorage.setItem(item.viewname + "WebviewUrl", item.webviewUrl)
+
+    let promise = new Promise((resolve, reject) => {
+
+      this.getWebViewUrlsFromApi().subscribe((res) => {
+
+        let result = res.json();
+        if (result.errors[0].beschreibung === "Erfolg") {
+          console.log(result.response);
+          let resultArray = result.response.bswAppWebviewUrl;
+          for (let item of resultArray){
+            localStorage.setItem(item.viewname + "WebviewUrl", item.webviewUrl)
+          }
+
+          resolve();
+
+        } else {
+          reject("unknown error!");
         }
-      }
-      else {
-        localStorage.setItem("noWebViewUrlsAvailable", "true");
-      }
+
+      }, () => {reject("unknown error!");});
+
     });
+
+    return promise;
+
   }
 
 }
-
-
-
-
