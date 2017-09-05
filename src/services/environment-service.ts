@@ -12,7 +12,7 @@ const environments = {
   prod: {
     BASE_URL: "https://vorsystem.avs.de/prod",
     BASE_URL_APP_SEARCH: "https://www.bsw.de",
-    AUTH_HEADER: 'Basic ' + btoa('BSW_App:ev1boio32fSrjSY9XwvcD9LkGr13J')
+    AUTH_HEADER: 'Basic ' + btoa('BSW_App:Dk8ejHf4vJrL2zuOkl89isvDf5gAifgDtH')
   },
   dev: {
     BASE_URL: "/proxy/integ6",
