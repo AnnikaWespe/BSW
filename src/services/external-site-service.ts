@@ -11,7 +11,7 @@ export class ExternalSiteService {
   }
 
 
-  gotToExternalSite(urlType) {
+  gotToExternalSite(urlType, title) {
     let urlRaw = localStorage.getItem(urlType);
     let user = this.authService.getUser();
     let url;
@@ -29,7 +29,7 @@ export class ExternalSiteService {
     }
     console.log(url);
 
-    let inAppBrowserRef = openUrl(url, '_blank', 'location=no,closebuttoncaption=Zurück,toolbarposition=top');
+    let inAppBrowserRef = openUrl(url, '_blank', 'location=no,closebuttoncaption='+title+',toolbarposition=top');
     inAppBrowserRef.addEventListener('loaderror', (event)=>{this.loadErrorCallBack(event, inAppBrowserRef)});
     inAppBrowserRef.addEventListener('loadstart', (event)=>{this.loadStartCallBack(event, inAppBrowserRef)});
 

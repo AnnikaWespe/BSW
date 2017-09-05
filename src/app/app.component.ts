@@ -189,7 +189,7 @@ export class BSWBonusApp {
   }
 
   loadContactPage() {
-    this.externalSiteService.gotToExternalSite("KontaktWebviewUrl");
+    this.externalSiteService.gotToExternalSite("KontaktWebviewUrl", "Kontakt");
   }
 
   registerForUserLogInEvent() {

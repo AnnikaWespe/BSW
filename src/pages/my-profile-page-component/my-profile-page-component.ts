@@ -33,8 +33,8 @@ export class MyProfilePageComponent {
 
 
 
-  gotToExternalSite(urlType) {
-    this.externalSiteService.gotToExternalSite(urlType);
+  gotToExternalSite(urlType, title) {
+    this.externalSiteService.gotToExternalSite(urlType, title);
   }
 
   presentChangePasswordModal(){

@@ -578,7 +578,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
   navigateToBonusOverview() {
-    this.externalSiteService.gotToExternalSite('VorteilsuebersichtWebviewUrl');
+    this.externalSiteService.gotToExternalSite('VorteilsuebersichtWebviewUrl', 'Vorteilsübersicht');
   }
 
 //pure DOM method(s)

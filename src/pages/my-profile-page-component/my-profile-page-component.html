@@ -50,7 +50,7 @@
 
 <div class="profile-header-wrapper">
 
-  <ion-row tappable ble class="profile-header" (click) = "gotToExternalSite('ProfildatenWebviewUrl')">
+  <ion-row tappable ble class="profile-header" (click) = "gotToExternalSite('ProfildatenWebviewUrl', 'Persönliche Daten')">
     <ion-col class="icon-col">
       <div class="page personal-data"></div>
     </ion-col>
@@ -61,7 +61,7 @@
     </ion-col>
   </ion-row>
 
-  <ion-row tappable class="profile-header" (click) = "gotToExternalSite('BankdatenWebviewUrl')">
+  <ion-row tappable class="profile-header" (click) = "gotToExternalSite('BankdatenWebviewUrl', 'Bankdaten')">
     <ion-col class="icon-col">
       <div class="page bank-data"></div>
     </ion-col>
@@ -72,7 +72,7 @@
     </ion-col>
   </ion-row>
 
-  <ion-row tappable class="profile-header" (click) = "gotToExternalSite('VorteilsuebersichtWebviewUrl')">
+  <ion-row tappable class="profile-header" (click) = "gotToExternalSite('VorteilsuebersichtWebviewUrl', 'Vorteilsübersicht')">
     <ion-col class="icon-col">
       <div class="page bonus-overview"></div>
     </ion-col>
@@ -86,4 +86,3 @@
 </div>
 
 </ion-content>
-
