@@ -76,7 +76,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               private bonusService: BonusService,
               public authService: AuthService,
               private platform: Platform,
-              private savePartnersService: SavePartnersService) {
+              private savePartnersService: SavePartnersService,
+              private externalSiteService: ExternalSiteService) {
 
     if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
       this.checkForPromptRateAppInStore()
@@ -577,7 +578,7 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
   }
 
   navigateToBonusOverview() {
-    this.navCtrl.push(WebviewComponent, {urlType: 'VorteilsuebersichtWebviewUrl', title: 'Vorteilsübersicht'})
+    this.externalSiteService.gotToExternalSite('VorteilsuebersichtWebviewUrl');
   }
 
 //pure DOM method(s)

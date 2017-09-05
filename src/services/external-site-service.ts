@@ -1,11 +1,13 @@
 import {Injectable} from "@angular/core";
 import {AuthService} from "./auth-service";
+import {AlertController} from "ionic-angular";
+
 declare let cordova: any;
 
 @Injectable()
 export class ExternalSiteService {
 
-  constructor(public authService: AuthService) {
+  constructor(public authService: AuthService, private alertCtrl: AlertController) {
   }
 
 
@@ -26,6 +28,36 @@ export class ExternalSiteService {
       openUrl = open;
     }
     console.log(url);
-    openUrl(url, '_blank', 'location=no');
+
+    let inAppBrowserRef = openUrl(url, '_blank', 'location=no,closebuttoncaption=Zurück,toolbarposition=top');
+    inAppBrowserRef.addEventListener('loaderror', (event)=>{this.loadErrorCallBack(event, inAppBrowserRef)});
+    inAppBrowserRef.addEventListener('loadstart', (event)=>{this.loadStartCallBack(event, inAppBrowserRef)});
+
   }
+
+  loadStartCallBack(event, inAppBrowserRef){
+    //alert("start")
+  }
+
+  loadErrorCallBack(event, inAppBrowserRef) {
+
+    inAppBrowserRef.close();
+
+    let alert = this.alertCtrl.create({
+      title: 'Fehler',
+      message: 'Leider konnte die Seite nicht geladen werden.',
+      buttons: [
+        {
+          text: 'OK',
+          role: 'cancel',
+          handler: () => {
+
+          }
+        }
+      ]
+    });
+    alert.present();
+
+  }
+
 }
