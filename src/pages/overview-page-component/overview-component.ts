@@ -183,8 +183,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
     if (response) {
 
       this.bonusHasData = true;
-      this.bonusThisYear = response.bonusGesamtJahr;
-      this.bonusBalance = response.bonuskontostand;
+      this.bonusThisYear = response.bonuskontostand;
+      this.bonusBalance = response.bonusGesamtJahr;
 
       SavePartnersService.storeBonus(this.bonusThisYear, this.bonusBalance);
 
