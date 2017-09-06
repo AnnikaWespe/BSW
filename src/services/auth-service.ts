@@ -20,8 +20,7 @@ export class AuthService {
   }
 
   createAuthorizationHeader(headers: Headers) {
-    headers.append('Authorization', 'Basic ' +
-      btoa('BSW_App:ev1boio32fSrjSY9XwvcD9LkGr13J'));
+    headers.append('Authorization', this.envService.environment.AUTH_HEADER);
   }
 
   setUser(user: any) {
@@ -160,5 +159,3 @@ export class AuthService {
 
 
 }
-
-
