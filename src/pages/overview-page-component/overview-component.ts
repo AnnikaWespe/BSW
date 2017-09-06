@@ -16,6 +16,7 @@ import {WebviewComponent} from "../webview/webview";
 import {SavePartnersService} from "../partner-page-component/partner-detail-component/save-partners-service";
 import {AuthService} from "../../services/auth-service";
 import {ExternalSiteService} from "../../services/external-site-service";
+import {InitService} from "../../app/init-service";
 
 @Component({
   providers: [],
@@ -77,7 +78,8 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
               public authService: AuthService,
               private platform: Platform,
               private savePartnersService: SavePartnersService,
-              private externalSiteService: ExternalSiteService) {
+              private externalSiteService: ExternalSiteService,
+              private initService: InitService) {
 
     if (localStorage.getItem("showPromptForRatingAppDisabled") === null) {
       this.checkForPromptRateAppInStore()
@@ -95,7 +97,15 @@ export class OverviewPageComponent implements OnDestroy, AfterViewChecked {
 
     });
 
+    this.initService.setWebViewUrls()
+      .then(() => {
+        console.log("webview urls loaded");
+      }, (error) => {
+        console.error("cannot load webview urls");
+      });
+
     this.waitingForResults = true;
+    
   }
 
   ionViewWillEnter() {
