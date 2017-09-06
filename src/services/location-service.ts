@@ -122,12 +122,12 @@ export class LocationService {
 
     const promise = new Promise((resolve, reject) => {
       if (watch && !this.geoLocationSubscription) {
-        this.geolocation.getCurrentPosition({timeout: 5000}).then(
+        this.geolocation.getCurrentPosition({timeout: 1000 * 60}).then(
           (position) => {
             handlePosition(position, resolve, reject);
             this.geoLocationSubscription = this.geolocation.watchPosition({
               maximumAge: 30000,
-              timeout: 5000,
+              timeout: 1000 * 60,
               enableHighAccuracy: false
             })
               .filter(position => position.coords !== undefined)
@@ -150,7 +150,7 @@ export class LocationService {
       } else if (watch && this.geoLocationSubscription) {
         resolve(this.currentLocation);
       } else {
-        this.geolocation.getCurrentPosition({timeout: 5000}).then(
+        this.geolocation.getCurrentPosition({timeout: 1000 * 60}).then(
           (position) => handlePosition(position, resolve, reject),
           (error) => {
             console.error(error);
