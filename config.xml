@@ -112,7 +112,7 @@
     <plugin name="cordova-plugin-geolocation" spec="^2.4.3">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="Anzeige von Vor-Ort-Partnern" />
     </plugin>
-    <plugin name="cordova-plugin-google-analytics" spec="^1.8.3" />
+    <plugin name="cordova-plugin-google-analytics" spec="git+https://github.com/mfussi/google-analytics-plugin.git" />
     <plugin name="cordova-plugin-inappbrowser" spec="git+https://github.com/mfussi/cordova-plugin-inappbrowser.git" />
     <plugin name="cordova-plugin-nativegeocoder" spec="~1.0.2" />
     <plugin name="cordova-plugin-splashscreen" spec="~4.0.1" />

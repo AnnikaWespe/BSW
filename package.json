@@ -52,7 +52,7 @@
         "cordova-plugin-cszbar": "git+https://github.com/mfussi/csZBar.git",
         "cordova-plugin-device": "1.1.4",
         "cordova-plugin-geolocation": "^2.4.3",
-        "cordova-plugin-google-analytics": "^1.8.3",
+        "cordova-plugin-google-analytics": "git+https://github.com/mfussi/google-analytics-plugin.git",
         "cordova-plugin-inappbrowser": "git+https://github.com/mfussi/cordova-plugin-inappbrowser.git",
         "cordova-plugin-nativegeocoder": "~1.0.2",
         "cordova-plugin-splashscreen": "~4.0.1",
@@ -132,7 +132,6 @@
     ],
     "cordova": {
         "plugins": {
-            "cordova-plugin-google-analytics": {},
             "cordova-plugin-console": {},
             "cordova-plugin-crosswalk-webview": {},
             "cordova-plugin-device": {},
@@ -150,7 +149,8 @@
             },
             "cordova-plugin-geolocation": {
                 "GEOLOCATION_USAGE_DESCRIPTION": "Anzeige von Vor-Ort-Partnern"
-            }
+            },
+            "cordova-plugin-google-analytics": {}
         },
         "platforms": [
             "android",
